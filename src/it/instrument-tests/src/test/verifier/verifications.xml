@@ -21,7 +21,7 @@ under the License.
 <verifications>
   <files>
     <file>
-      <location>target/site/clover/all-classes.html</location>
+      <location>target/site/clover/pkg-test.html</location>
       <contains>SimpleTest</contains>
     </file>
   </files>

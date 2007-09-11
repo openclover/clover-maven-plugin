@@ -117,6 +117,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
         getLog().info( "Checking for coverage of [" + targetPercentage + "] for database [" + database + "]");
 
         CloverPassTask cloverPassTask = (CloverPassTask) antProject.createTask( "clover-check" );
+        cloverPassTask.init();
         cloverPassTask.setInitString( database );
         cloverPassTask.setHaltOnFailure( true );
         cloverPassTask.setTarget( new Percentage( this.targetPercentage ) );

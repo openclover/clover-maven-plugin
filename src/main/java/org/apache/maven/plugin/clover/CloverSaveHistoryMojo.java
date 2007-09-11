@@ -95,6 +95,7 @@ public class CloverSaveHistoryMojo extends AbstractCloverMojo
             + this.historyDir + "]" );
 
         HistoryPointTask cloverHistoryTask = (HistoryPointTask) antProject.createTask( "clover-historypoint" );
+        cloverHistoryTask.init();
         cloverHistoryTask.setInitString( database );
         cloverHistoryTask.setHistoryDir( new File( this.historyDir ) );
         cloverHistoryTask.execute();

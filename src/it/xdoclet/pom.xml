@@ -19,7 +19,7 @@ under the License.
 
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.apache.maven.plugins</groupId>
+  <groupId>com.atlassian.maven.plugins</groupId>
   <artifactId>maven-clover-plugin-sample-xdoclet</artifactId>
   <packaging>jar</packaging>
   <name>Maven Clover Plugin XDoclet Sample</name>
@@ -36,8 +36,11 @@ under the License.
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
+        <groupId>com.atlassian.maven.plugins</groupId>
         <artifactId>maven-clover-plugin</artifactId>
+          <configuration>
+              <licenseLocation>../../../clover.license.txt</licenseLocation>              
+          </configuration>
         <executions>
           <execution>
             <phase>package</phase>
@@ -66,6 +69,13 @@ under the License.
             </configuration>
           </execution>
         </executions>
+          <dependencies>
+                    <dependency>
+                        <groupId>ant</groupId>
+                        <artifactId>ant</artifactId>
+                        <version>1.6.5</version>
+                    </dependency>
+                </dependencies>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

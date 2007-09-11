@@ -19,7 +19,7 @@ under the License.
 
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.apache.maven.plugins</groupId>
+  <groupId>com.atlassian.maven.plugins</groupId>
   <artifactId>maven-clover-plugin-sample-simple</artifactId>
   <packaging>jar</packaging>
   <name>Maven Clover Plugin Contexts Sample</name>
@@ -37,11 +37,12 @@ under the License.
     <excludeDefaults>true</excludeDefaults>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
+        <groupId>com.atlassian.maven.plugins</groupId>
         <artifactId>maven-clover-plugin</artifactId>
         <configuration>
           <!-- Verify that context filters work -->
           <contextFilters>try</contextFilters>
+           <licenseLocation>../../../clover.license.txt</licenseLocation>
         </configuration>
       </plugin>
     </plugins>
@@ -49,12 +50,13 @@ under the License.
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
+        <groupId>com.atlassian.maven.plugins</groupId>
         <artifactId>maven-clover-plugin</artifactId>
         <configuration>
           <!-- Without the block filter the TPC is 50% and with it it's 57,1%. Thus we check for a TPC above of
                55% to verify the filter has been applied correctly -->
           <targetPercentage>55%</targetPercentage>
+            <licenseLocation>../../../clover.license.txt</licenseLocation>
         </configuration>
         <executions>
           <execution>

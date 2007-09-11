@@ -26,6 +26,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Taskdef;
 import org.codehaus.plexus.resource.ResourceManager;
+import org.codehaus.plexus.resource.loader.FileResourceLoader;
 
 import java.io.File;
 
@@ -64,7 +65,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo
     /**
      * The <a href="http://cenqua.com/clover/doc/adv/flushpolicies.html">Clover flush policy</a> to use.
      * Valid values are <code>directed</code>, <code>interval</code> and <code>threaded</code>.
-     *  
+     *
      * @parameter default-value="threaded"
      */
     private String flushPolicy;
@@ -80,12 +81,12 @@ public abstract class AbstractCloverMojo extends AbstractMojo
     /**
      * If true we'll wait 2*flushInterval to ensure coverage data is flushed to the Clover database before running
      * any query on it.
-     * 
+     *
      * <p>Note: The only use case where you would want to turn this off is if you're running your tests in a separate
      * JVM. In that case the coverage data will be flushed by default upon the JVM shutdown and there would be no need
      * to wait for the data to be flushed. As we can't control whether users want to fork their tests or not, we're
      * offering this parameter to them.</p>
-     * 
+     *
      * @parameter default-value="true"
      */
     private boolean waitForFlush;
@@ -135,7 +136,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo
 
     protected void registerLicenseFile() throws MojoExecutionException
     {
-        AbstractCloverMojo.registerLicenseFile(getResourceManager(), this.licenseLocation, getLog(),
+        AbstractCloverMojo.registerLicenseFile(this.project, getResourceManager(), this.licenseLocation, getLog(),
             this.getClass().getClassLoader());
     }
 
@@ -151,30 +152,35 @@ public abstract class AbstractCloverMojo extends AbstractMojo
      *
      * @throws MojoExecutionException when the license file cannot be found
      */
-    public static void registerLicenseFile(ResourceManager resourceManager, String licenseLocation, Log logger,
-        ClassLoader classloader) throws MojoExecutionException
+    public static void registerLicenseFile(MavenProject project, ResourceManager resourceManager, String licenseLocation, Log logger,
+                                           ClassLoader classloader) throws MojoExecutionException
     {
         String license;
+        ClassLoader origLoader = Thread.currentThread().getContextClassLoader();
+        resourceManager.addSearchPath( "url", "" );
+        resourceManager.addSearchPath( FileResourceLoader.ID, project.getFile().getParentFile().getAbsolutePath() );
 
-        if (licenseLocation != null)
-        {
-            try
-            {
-                license = resourceManager.getResourceAsFile(licenseLocation).getPath();
-                logger.debug("Loading license from classpath [" + license + "]");
-            }
-            catch (Exception e)
-            {
-                throw new MojoExecutionException("Failed to load license file [" + licenseLocation + "]", e);
-            }
-        }
-        else
-        {
-            license = classloader.getResource("/clover.license").getFile();
-        }
+        try {
+            Thread.currentThread().setContextClassLoader(classloader);
 
-        logger.debug("Using license file [" + license + "]");
-        System.setProperty("clover.license.path", license);
+            if (licenseLocation != null) {
+                try {
+                    license = resourceManager.getResourceAsFile(licenseLocation).getPath();
+                    logger.debug("Loading license from classpath [" + license + "]");
+                }
+                catch (Exception e) {
+                    throw new MojoExecutionException("Failed to load license file [" + licenseLocation + "]", e);
+                }
+            } else {
+               throw new MojoExecutionException("You need to configure a license file location for Clover. You can create an evaluation license at http://www.atlassian.com/my");
+            }
+
+            logger.debug("Using license file [" + license + "]");
+            System.setProperty("clover.license.path", license);
+        }
+        finally {
+            Thread.currentThread().setContextClassLoader( origLoader );
+        }
     }
 
     /**
@@ -193,7 +199,8 @@ public abstract class AbstractCloverMojo extends AbstractMojo
         antProject.init();
 
         Taskdef taskdef = (Taskdef) antProject.createTask( "taskdef" );
-        taskdef.setResource( "clovertasks" );
+        taskdef.init();
+        taskdef.setResource( "cloverlib.xml" );
         taskdef.execute();
 
         return antProject;
@@ -201,9 +208,9 @@ public abstract class AbstractCloverMojo extends AbstractMojo
 
     /**
      * Wait 2*'flush interval' milliseconds to ensure that the coverage data have been flushed to the Clover database.
-     * 
+     *
      * TODO: This method should not be static but we need it static here because we cannot share code
-     * between non report mojos and main build mojos. See http://jira.codehaus.org/browse/MNG-1886 
+     * between non report mojos and main build mojos. See http://jira.codehaus.org/browse/MNG-1886
      */
     public static void waitForFlush(boolean waitForFlush, int flushInterval)
     {
@@ -242,7 +249,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo
     protected void setLicenseLocation(String licenseLocation)
     {
         this.licenseLocation = licenseLocation;
-    }  
+    }
 
     public MavenProject getProject()
     {
@@ -277,5 +284,9 @@ public abstract class AbstractCloverMojo extends AbstractMojo
     public String getFlushPolicy()
     {
         return this.flushPolicy;
+    }
+
+    public void setProject(MavenProject project) {
+        this.project = project;
     }
 }

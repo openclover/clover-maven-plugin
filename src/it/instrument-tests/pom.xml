@@ -19,7 +19,7 @@ under the License.
 
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.apache.maven.plugins</groupId>
+  <groupId>com.atlassian.maven.plugins</groupId>
   <artifactId>maven-clover-plugin-sample-simple</artifactId>
   <packaging>jar</packaging>
   <name>Maven Clover Plugin Instrument Tests Sample</name>
@@ -36,18 +36,22 @@ under the License.
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
+        <groupId>com.atlassian.maven.plugins</groupId>
         <artifactId>maven-clover-plugin</artifactId>
+          <configuration>
+          <licenseLocation>../../../clover.license.txt</licenseLocation>
+          </configuration>
       </plugin>
     </plugins>
   </reporting>
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
+        <groupId>com.atlassian.maven.plugins</groupId>
         <artifactId>maven-clover-plugin</artifactId>
         <configuration>
           <includesTestSourceRoots>true</includesTestSourceRoots>
+            <licenseLocation>../../../clover.license.txt</licenseLocation>
         </configuration>
         <executions>
           <execution>

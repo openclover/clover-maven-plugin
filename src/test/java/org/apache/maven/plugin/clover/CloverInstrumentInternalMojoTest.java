@@ -80,7 +80,7 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase
     public void testFindCloverArtifactWhenCorrectIds()
     {
         Mock mockArtifact = mock(Artifact.class);
-        mockArtifact.stubs().method( "getArtifactId" ).will( returnValue( "clover" ) );
+        mockArtifact.stubs().method( "getArtifactId" ).will( returnValue( "clover-ant" ) );
         mockArtifact.stubs().method( "getGroupId" ).will( returnValue( "com.cenqua.clover" ) );
 
         Artifact clover = this.mojo.findCloverArtifact( Collections.singletonList( mockArtifact.proxy() ) );

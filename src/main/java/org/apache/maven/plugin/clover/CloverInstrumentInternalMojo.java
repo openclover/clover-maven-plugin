@@ -116,7 +116,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     /**
      * Whether the Clover plugin should instrument test source roots.
-     * @parameter default-value="false"
+     * @parameter default-value="true"
      */
     private boolean includesTestSourceRoots;
 
@@ -307,7 +307,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
             // We identify the clover JAR by checking the groupId and artifactId.
             if ( "com.cenqua.clover".equals( artifact.getGroupId() )
-                && "clover".equals( artifact.getArtifactId() ) )
+                && "clover-ant".equals( artifact.getArtifactId() ) )
             {
                 cloverArtifact = artifact;
             }
@@ -322,7 +322,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         if ( cloverArtifact == null )
         {
             throw new MojoExecutionException(
-                "Couldn't find [com.cenqua.cover:clover] artifact in plugin dependencies" );
+                "Couldn't find [com.cenqua.clover:clover] artifact in plugin dependencies" );
         }
 
         cloverArtifact = artifactFactory.createArtifact( cloverArtifact.getGroupId(), cloverArtifact.getArtifactId(),

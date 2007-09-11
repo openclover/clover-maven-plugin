@@ -19,7 +19,7 @@ under the License.
 
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.apache.maven.plugins</groupId>
+  <groupId>com.atlassian.maven.plugins</groupId>
   <artifactId>maven-clover-plugin-sample-license</artifactId>
   <packaging>pom</packaging>
   <name>Maven Clover Plugin License Sample</name>

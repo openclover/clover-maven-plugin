@@ -29,6 +29,7 @@ import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.Project;
+import org.apache.tools.ant.types.FileSet;
 import org.codehaus.plexus.resource.ResourceManager;
 
 import java.io.File;
@@ -75,6 +76,13 @@ public class CloverReportMojo extends AbstractMavenReport
      */
     private File outputDirectory;
 
+   /**
+     * Base directory where all reports are written to.
+     *
+     * @parameter expression="${project.build.directory}/clover/surefire-reports"
+     */
+    private File surefireReportsDirectory;
+
     /**
      * The location where historical Clover data will be saved.
      *
@@ -109,27 +117,33 @@ public class CloverReportMojo extends AbstractMavenReport
 
     /**
      * Decide whether to generate an HTML report or not.
-     * @parameter default-value="true"
+     * @parameter default-value="true" expression="${generateHtml}"
      */
     private boolean generateHtml;
 
     /**
      * Decide whether to generate a PDF report or not.
-     * @parameter default-value="false"
+     * @parameter default-value="false" expression="${generatePdf}"
      */
     private boolean generatePdf;
 
     /**
      * Decide whether to generate a XML report or not.
-     * @parameter default-value="false"
+     * @parameter default-value="false" expression="${generateXml}"
      */
     private boolean generateXml;
 
     /**
      * Decide whether to generate a Clover historical report or not.
-     * @parameter default-value="false"
+     * @parameter default-value="false" expression="${generateHistorical}"
      */
     private boolean generateHistorical;
+
+    /**
+     * How to order coverage tables.
+     * @parameter default-value="PcCoveredAsc" expression="${orderBy}"
+     */
+    private String orderBy;
 
     /**
      * Comma or space separated list of Clover contexts (block, statement or method filers) to exclude when
@@ -188,7 +202,7 @@ public class CloverReportMojo extends AbstractMavenReport
         // Register the Clover license
         try
         {
-            AbstractCloverMojo.registerLicenseFile(this.resourceManager, this.licenseLocation, getLog(),
+            AbstractCloverMojo.registerLicenseFile(this.project, this.resourceManager, this.licenseLocation, getLog(),
                 this.getClass().getClassLoader());
         }
         catch (MojoExecutionException e)
@@ -202,13 +216,13 @@ public class CloverReportMojo extends AbstractMavenReport
         File singleModuleCloverDatabase = new File( this.cloverDatabase );
         if ( singleModuleCloverDatabase.exists() )
         {
-            createAllReportTypes( this.cloverDatabase, "Maven Clover" );
+            createAllReportTypes( this.cloverDatabase, project.getName() );
         }
 
         File mergedCloverDatabase = new File ( this.cloverMergeDatabase );
         if ( mergedCloverDatabase.exists() )
         {
-            createAllReportTypes( this.cloverMergeDatabase, "Maven Aggregated Clover" );
+            createAllReportTypes( this.cloverMergeDatabase, project.getName() + "(Aggregated)" );
         }
     }
 
@@ -222,14 +236,14 @@ public class CloverReportMojo extends AbstractMavenReport
         if ( this.generateHtml )
         {
             createReport( database,
-                createCurrentReportForCloverReportTask( titlePrefix + " report", this.outputDirectory, false ),
+                createCurrentReportForCloverReportTask( titlePrefix, this.outputDirectory, false ),
                 createHistoricalReportForCloverReportTask( titlePrefix + " historical report", historyDir ),
                 createFormatTypeForCloverReportTask( "html" ) );
         }
         if ( this.generatePdf )
         {
             // Note: PDF reports only support summary reports
-            createReport( database, createCurrentReportForCloverReportTask( titlePrefix + "report",
+            createReport( database, createCurrentReportForCloverReportTask( titlePrefix,
                 new File( this.outputDirectory, "clover.pdf" ), true ),
                 createHistoricalReportForCloverReportTask( titlePrefix + "Historical report",
                     new File( historyDir, "clover-history.pdf" ) ),
@@ -239,7 +253,7 @@ public class CloverReportMojo extends AbstractMavenReport
         {
             // No historical reports for XML outputs
             createReport( database,
-                createCurrentReportForCloverReportTask( titlePrefix + "report",
+                createCurrentReportForCloverReportTask( titlePrefix,
                     new File( this.outputDirectory, "clover.xml" ), false ),
                 null,
                 createFormatTypeForCloverReportTask( "xml" ) );
@@ -256,6 +270,7 @@ public class CloverReportMojo extends AbstractMavenReport
         Project antProject = AbstractCloverMojo.registerCloverAntTasks();
 
         CloverReportTask cloverReportTask = (CloverReportTask) antProject.createTask( "clover-report" );
+        cloverReportTask.init();
         cloverReportTask.setInitString( database );
 
         // Add current report definition
@@ -281,6 +296,12 @@ public class CloverReportMojo extends AbstractMavenReport
         currentEx.setOutFile( outFile );
         currentEx.setSummary( isSummaryReport );
 
+        if (surefireReportsDirectory.exists())
+        {
+            FileSet set = new FileSet();
+            set.setDir(surefireReportsDirectory);
+            currentEx.addTestResults(set);
+        }
         return currentEx;
     }
 

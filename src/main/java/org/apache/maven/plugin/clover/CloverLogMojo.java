@@ -77,6 +77,7 @@ public class CloverLogMojo extends AbstractCloverMojo
         Project antProject = AbstractCloverMojo.registerCloverAntTasks();
 
         CloverLogTask cloverLogTask = (CloverLogTask) antProject.createTask( "clover-log" );
+        cloverLogTask.init();
         cloverLogTask.setInitString( database );
         cloverLogTask.setOutputProperty( "cloverlogproperty" );
         cloverLogTask.execute();

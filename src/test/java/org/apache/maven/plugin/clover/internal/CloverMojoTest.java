@@ -20,7 +20,8 @@ package org.apache.maven.plugin.clover.internal;
  */
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.clover.internal.AbstractCloverMojo;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.model.Model;
 import org.jmock.MockObjectTestCase;
 import org.jmock.Mock;
 import org.codehaus.plexus.resource.ResourceManager;
@@ -54,9 +55,19 @@ public class CloverMojoTest extends MockObjectTestCase
         System.setProperty( "clover.license.path", "" );
 
         mojo.setLicenseLocation( "build-tools/clover.license" );
+        mockResourceManager.expects(atLeastOnce()).method("addSearchPath");
         mockResourceManager.expects( once() ).method( "getResourceAsFile" )
             .with( eq( "build-tools/clover.license" ) )
             .will( returnValue( new File( "targetFile" ) ) );
+
+        MavenProject dummyProject = new MavenProject((Model) null) {
+
+            public File getFile() {
+                return new File("./pom.xml");
+            }
+        };
+
+        mojo.setProject(dummyProject);
 
         mojo.registerLicenseFile();
 

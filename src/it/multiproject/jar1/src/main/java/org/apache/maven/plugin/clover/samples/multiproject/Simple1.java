@@ -22,6 +22,7 @@ public class Simple1
         int i = 0;
         if (i > 0)
         {
+            int x = i;
             i = i + 1;
         }
     }
