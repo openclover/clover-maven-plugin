@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.maven.plugin.clover.samples.xdoclet;
+package com.atlassian.maven.plugin.clover.samples.xdoclet;
 
 import junit.framework.TestCase;
 import java.util.Properties;

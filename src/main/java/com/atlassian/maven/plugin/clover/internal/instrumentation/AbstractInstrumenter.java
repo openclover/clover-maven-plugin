@@ -1,4 +1,4 @@
-package org.apache.maven.plugin.clover.internal.instrumentation;
+package com.atlassian.maven.plugin.clover.internal.instrumentation;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,8 +19,8 @@ package org.apache.maven.plugin.clover.internal.instrumentation;
  * under the License.
  */
 
-import org.apache.maven.plugin.clover.internal.scanner.CloverSourceScanner;
-import org.apache.maven.plugin.clover.internal.CloverConfiguration;
+import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
+import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.FileUtils;
 

@@ -1,4 +1,4 @@
-package org.apache.maven.plugin.clover.internal.scanner;
+package com.atlassian.maven.plugin.clover.internal.scanner;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -23,7 +23,7 @@ import org.codehaus.plexus.compiler.util.scan.SourceInclusionScanner;
 import org.codehaus.plexus.compiler.util.scan.SimpleSourceInclusionScanner;
 import org.codehaus.plexus.compiler.util.scan.InclusionScanException;
 import org.codehaus.plexus.compiler.util.scan.mapping.SuffixMapping;
-import org.apache.maven.plugin.clover.internal.CloverConfiguration;
+import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
 
 import java.util.*;
 import java.io.File;

@@ -1,4 +1,4 @@
-package org.apache.maven.plugin.clover.internal.scanner;
+package com.atlassian.maven.plugin.clover.internal.scanner;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

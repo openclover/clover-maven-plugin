@@ -1,4 +1,4 @@
-package org.apache.maven.plugin.clover;
+package com.atlassian.maven.plugin.clover;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -22,7 +22,7 @@ package org.apache.maven.plugin.clover;
 import com.cenqua.clover.cfg.Percentage;
 import com.cenqua.clover.tasks.CloverPassTask;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.clover.internal.AbstractCloverMojo;
+import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 
@@ -65,7 +65,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
 
     /**
      * {@inheritDoc}
-     * @see org.apache.maven.plugin.clover.internal.AbstractCloverMojo#execute()
+     * @see com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo#execute()
      * @throws MojoExecutionException when the TPC is below the threshold
      */
     public void execute()

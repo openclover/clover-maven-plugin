@@ -1,4 +1,4 @@
-package org.apache.maven.plugin.clover.internal.instrumentation;
+package com.atlassian.maven.plugin.clover.internal.instrumentation;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,9 +19,9 @@ package org.apache.maven.plugin.clover.internal.instrumentation;
  * under the License.
  */
 
-import org.apache.maven.plugin.clover.internal.scanner.CloverSourceScanner;
-import org.apache.maven.plugin.clover.internal.scanner.MainCloverSourceScanner;
-import org.apache.maven.plugin.clover.internal.CloverConfiguration;
+import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
+import com.atlassian.maven.plugin.clover.internal.scanner.MainCloverSourceScanner;
+import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
 
 import java.util.List;
 

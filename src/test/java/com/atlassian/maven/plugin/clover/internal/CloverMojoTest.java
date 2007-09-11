@@ -1,4 +1,4 @@
-package org.apache.maven.plugin.clover.internal;
+package com.atlassian.maven.plugin.clover.internal;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -29,7 +29,7 @@ import org.codehaus.plexus.resource.ResourceManager;
 import java.io.File;
 
 /**
- * Unit tests for {@link org.apache.maven.plugin.clover.internal.AbstractCloverMojo}.
+ * Unit tests for {@link com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo}.
  * 
  * @author <a href="mailto:vmassol@apache.org">Vincent Massol</a>
  * @version $Id: CloverMojoTest.java 555822 2007-07-13 00:03:28Z vsiveton $

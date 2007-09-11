@@ -1,4 +1,4 @@
-package org.apache.maven.plugin.clover;
+package com.atlassian.maven.plugin.clover;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -27,10 +27,10 @@ import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.clover.internal.AbstractCloverMojo;
-import org.apache.maven.plugin.clover.internal.CloverConfiguration;
-import org.apache.maven.plugin.clover.internal.instrumentation.MainInstrumenter;
-import org.apache.maven.plugin.clover.internal.instrumentation.TestInstrumenter;
+import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
+import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
+import com.atlassian.maven.plugin.clover.internal.instrumentation.MainInstrumenter;
+import com.atlassian.maven.plugin.clover.internal.instrumentation.TestInstrumenter;
 
 import java.io.File;
 import java.util.*;
@@ -122,7 +122,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     /**
      * {@inheritDoc}
-     * @see org.apache.maven.plugin.clover.internal.AbstractCloverMojo#execute()
+     * @see com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo#execute()
      */
     public void execute()
         throws MojoExecutionException

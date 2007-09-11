@@ -1,4 +1,4 @@
-package org.apache.maven.plugin.clover;
+package com.atlassian.maven.plugin.clover;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,7 +21,7 @@ package org.apache.maven.plugin.clover;
 
 import com.cenqua.clover.tasks.CloverLogTask;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.clover.internal.AbstractCloverMojo;
+import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.tools.ant.Project;
 
 import java.io.File;

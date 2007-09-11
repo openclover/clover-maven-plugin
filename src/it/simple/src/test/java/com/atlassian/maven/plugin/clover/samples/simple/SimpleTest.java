@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.maven.plugin.clover.samples.simple;
+package com.atlassian.maven.plugin.clover.samples.simple;
 
 import junit.framework.TestCase;
 import java.util.Properties;
@@ -27,7 +27,7 @@ public class SimpleTest extends TestCase
         
         // Verify that we can load resource files from tess when using the clover plugin
         Properties props = new Properties();
-        props.load(getClass().getResourceAsStream("/org/apache/maven/plugin/clover/samples/simple/test.properties"));
+        props.load(getClass().getResourceAsStream("/com/atlassian/maven/plugin/clover/samples/simple/test.properties"));
     }
 }
  

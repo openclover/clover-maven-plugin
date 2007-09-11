@@ -1,4 +1,4 @@
-package org.apache.maven.plugin.clover;
+package com.atlassian.maven.plugin.clover;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,7 +19,7 @@ package org.apache.maven.plugin.clover;
  * under the License.
  */
 
-import org.apache.maven.plugin.clover.internal.AbstractCloverMojo;
+import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.Project;
 import com.cenqua.clover.tasks.HistoryPointTask;
@@ -48,7 +48,7 @@ public class CloverSaveHistoryMojo extends AbstractCloverMojo
 
     /**
      * {@inheritDoc}
-     * @see org.apache.maven.plugin.clover.internal.AbstractCloverMojo#execute()
+     * @see com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo#execute()
      */
     public void execute()
         throws MojoExecutionException

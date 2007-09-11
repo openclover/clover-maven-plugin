@@ -1,4 +1,4 @@
-package org.apache.maven.plugin.clover;
+package com.atlassian.maven.plugin.clover;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,7 +21,7 @@ package org.apache.maven.plugin.clover;
 
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.clover.internal.AbstractCloverMojo;
+import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 
 import java.io.File;
 import java.util.*;
@@ -51,7 +51,7 @@ public class CloverAggregateMojo extends AbstractCloverMojo
 
     /**
      * {@inheritDoc}
-     * @see org.apache.maven.plugin.clover.internal.AbstractCloverMojo#execute()
+     * @see com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo#execute()
      */
     public void execute()
         throws MojoExecutionException
