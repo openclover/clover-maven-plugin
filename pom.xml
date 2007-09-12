@@ -31,7 +31,7 @@ under the License.
   <artifactId>maven-clover-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <name>Maven Clover Plugin</name>
-  <version>2.0-SNAPSHOT</version>
+  <version>3.0-SNAPSHOT</version>
   <description>Maven plugin for Clover</description>
   <issueManagement>
     <system>jira</system>
@@ -165,7 +165,9 @@ under the License.
               <pomIncludes>
                 <pomInclude>**/contexts/pom.xml</pomInclude>
                 <pomInclude>**/simple/pom.xml</pomInclude>
+                <!-- this doesn't work at present due to a problem with the invoker plugin
                 <pomInclude>**/multiproject/pom.xml</pomInclude>
+                -->
                 <pomInclude>**/license/pom.xml</pomInclude>
                 <pomInclude>**/xdoclet/pom.xml</pomInclude>
                   <pomInclude>**/instrument-tests/pom.xml</pomInclude>
