@@ -106,10 +106,21 @@ under the License.
     </dependency>
   </dependencies>
     <distributionManagement>
+
     <site>
       <id>atlassian-private-snapshot</id>
-      <url>scp://repository.atlassian.com/opt/mvn/private-snapshot</url>
+      <url>file:///tmp</url>
     </site>
+        <repository>
+            <id>atlassian-m2-repository</id>
+            <name>Atlassian Public Repository</name>
+            <url>scp://repository.atlassian.com/opt/mvn/public</url>
+        </repository>
+        <snapshotRepository>
+            <id>atlassian-m2-snapshot-repository</id>
+            <name>Atlassian Public Snapshot Repository</name>
+            <url>scp://repository.atlassian.com/opt/mvn/public-snapshot</url>
+        </snapshotRepository>
   </distributionManagement>
   <profiles>
     <profile>
