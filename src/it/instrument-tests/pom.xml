@@ -39,7 +39,7 @@ under the License.
         <groupId>com.atlassian.maven.plugins</groupId>
         <artifactId>maven-clover-plugin</artifactId>
           <configuration>
-          <licenseLocation>../../../clover.license.txt</licenseLocation>
+           <licenseLocation>${clover.licenseLocation}</licenseLocation>
           </configuration>
       </plugin>
     </plugins>
@@ -51,7 +51,7 @@ under the License.
         <artifactId>maven-clover-plugin</artifactId>
         <configuration>
           <includesTestSourceRoots>true</includesTestSourceRoots>
-            <licenseLocation>../../../clover.license.txt</licenseLocation>
+            <licenseLocation>${clover.licenseLocation}</licenseLocation>
         </configuration>
         <executions>
           <execution>

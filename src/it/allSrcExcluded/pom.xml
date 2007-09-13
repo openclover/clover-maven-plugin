@@ -21,8 +21,8 @@
         <groupId>com.atlassian.maven.plugins</groupId>
         <artifactId>maven-clover-plugin</artifactId>
           <configuration>
-             <licenseLocation>../../../clover.license.txt</licenseLocation>
-        </configuration>
+                <licenseLocation>${clover.licenseLocation}</licenseLocation>
+          </configuration>
       </plugin>
     </plugins>
   </reporting>
@@ -32,7 +32,7 @@
         <groupId>com.atlassian.maven.plugins</groupId>
         <artifactId>maven-clover-plugin</artifactId>
         <configuration>
-             <licenseLocation>../../../clover.license.txt</licenseLocation>
+              <licenseLocation>${clover.licenseLocation}</licenseLocation>
           <excludes><exclude>**/*.java</exclude></excludes>
         </configuration>
         <executions>

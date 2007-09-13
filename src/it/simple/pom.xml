@@ -54,7 +54,7 @@ under the License.
           <!-- We ask the Clover plugin to generate a historical report but we don't have any historical data saved.
                This is to verify it doesn't error out when this is the case. -->
           <generateHistorical>true</generateHistorical>
-            <licenseLocation>../../../clover.license.txt</licenseLocation>
+             <licenseLocation>${clover.licenseLocation}</licenseLocation>
         </configuration>
       </plugin>
     </plugins>
@@ -85,7 +85,7 @@ under the License.
             <exclude>**/*Dummy*.java</exclude>
           </excludes>
 
-            <licenseLocation>../../../clover.license.txt</licenseLocation>
+             <licenseLocation>${clover.licenseLocation}</licenseLocation>
         </configuration>
         <executions>
           <execution>
