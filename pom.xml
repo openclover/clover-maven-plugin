@@ -105,6 +105,12 @@ under the License.
       <scope>test</scope>
     </dependency>
   </dependencies>
+    <distributionManagement>
+    <site>
+      <id>atlassian-private-snapshot</id>
+      <url>scp://repository.atlassian.com/opt/mvn/private-snapshot</url>
+    </site>
+  </distributionManagement>
   <profiles>
     <profile>
       <id>integration-tests</id>
@@ -172,6 +178,7 @@ under the License.
                 <pomInclude>**/xdoclet/pom.xml</pomInclude>
                   <pomInclude>**/instrument-tests/pom.xml</pomInclude>
                   <pomInclude>**/allSrcExcluded/pom.xml</pomInclude>
+                  <pomInclude>**/mclover80/pom.xml</pomInclude>
               </pomIncludes>
               <postBuildHookScript>verify.bsh</postBuildHookScript>
             </configuration>
