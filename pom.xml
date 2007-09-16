@@ -147,7 +147,7 @@ under the License.
         <reporting>
         <excludeDefaults>true</excludeDefaults>
         <plugins>
-            <plugin>
+            <!--plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-clover-plugin</artifactId>
                 <version>3.0-SNAPSHOT</version>
@@ -155,7 +155,7 @@ under the License.
                     <generateHistorical>true</generateHistorical>
                      <licenseLocation>${clover.licenseLocation}</licenseLocation>
                 </configuration>
-            </plugin>
+            </plugin-->
         </plugins>
     </reporting>
       <build>
@@ -218,7 +218,7 @@ under the License.
             </executions>
           </plugin>
 
-      <plugin>
+      <!--plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
         <artifactId>maven-clover-plugin</artifactId>
         <version>3.0-SNAPSHOT</version>
@@ -235,7 +235,7 @@ under the License.
             </goals>
           </execution>
         </executions>
-      </plugin>
+      </plugin-->
     
         </plugins>
       </build>
