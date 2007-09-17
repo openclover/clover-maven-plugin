@@ -31,7 +31,7 @@ under the License.
   <artifactId>maven-clover-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <name>Maven Clover Plugin</name>
-  <version>3.0b1</version>
+  <version>3.1-SNAPSHOT</version>
   <description>Maven plugin for Clover</description>
   
   <dependencies>
@@ -218,10 +218,4 @@ under the License.
       </build>
     </profile>
   </profiles>
-
-  <scm>
-    <connection>scm:svn:https://svn.atlassian.com/svn/public/atlassian/pom/public/tags/maven-clover-plugin-3.0b1</connection>
-    <developerConnection>scm:svn:https://svn.atlassian.com/svn/public/atlassian/pom/public/tags/maven-clover-plugin-3.0b1</developerConnection>
-    <url>https://svn.atlassian.com/svn/public/atlassian/pom/public/tags/maven-clover-plugin-3.0b1</url>
-  </scm>
 </project>
