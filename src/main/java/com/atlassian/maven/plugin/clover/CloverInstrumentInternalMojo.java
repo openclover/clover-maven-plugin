@@ -307,7 +307,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
             // We identify the clover JAR by checking the groupId and artifactId.
             if ( "com.cenqua.clover".equals( artifact.getGroupId() )
-                && "clover-ant".equals( artifact.getArtifactId() ) )
+                && "clover".equals( artifact.getArtifactId() ) )
             {
                 cloverArtifact = artifact;
             }
