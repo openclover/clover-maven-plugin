@@ -222,10 +222,4 @@ under the License.
       </build>
     </profile>
   </profiles>
-
-  <scm>
-    <connection>scm:svn:https://svn.apache.org/repos/asf/maven/plugins/tags/maven-clover-plugin-3.0b1</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/plugins/tags/maven-clover-plugin-3.0b1</developerConnection>
-    <url>https://svn.apache.org/repos/asf/maven/plugins/tags/maven-clover-plugin-3.0b1</url>
-  </scm>
 </project>
