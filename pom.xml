@@ -18,11 +18,11 @@ under the License.
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <parent>
-    <artifactId>maven-plugins</artifactId>
-    <groupId>org.apache.maven.plugins</groupId>
-    <version>8</version>
-  </parent>
+   <parent>
+        <artifactId>atlassian-public-pom</artifactId>
+        <groupId>com.atlassian.pom</groupId>
+        <version>3</version>
+    </parent>
   <prerequisites>
     <maven>2.0.1</maven>
   </prerequisites>
@@ -31,7 +31,7 @@ under the License.
   <artifactId>maven-clover-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <name>Maven Clover Plugin</name>
-  <version>3.0b1</version>
+  <version>3.0-SNAPSHOT</version>
   <description>Maven plugin for Clover</description>
   
   <dependencies>
@@ -88,23 +88,6 @@ under the License.
       <scope>test</scope>
     </dependency>
   </dependencies>
-    <scm>
-        <connection>scm:svn:https://svn.apache.org/repos/asf/maven/plugins/tags/maven-clover-plugin-3.0b1</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/plugins/tags/maven-clover-plugin-3.0b1</developerConnection>
-        <url>https://svn.apache.org/repos/asf/maven/plugins/tags/maven-clover-plugin-3.0b1</url>
-  </scm>
-    <distributionManagement>
-        <repository>
-            <id>atlassian-m2-repository</id>
-            <name>Atlassian Public Repository</name>
-            <url>scp://repository.atlassian.com/opt/mvn/public</url>
-        </repository>
-        <snapshotRepository>
-            <id>atlassian-private-snapshot</id>
-            <name>Atlassian Public Snapshot Repository</name>
-            <url>scp://repository.atlassian.com/opt/mvn/private-snapshot</url>
-        </snapshotRepository>
-  </distributionManagement>
   <profiles>
     <profile>
       <id>integration-tests</id>
@@ -146,7 +129,6 @@ under the License.
                 <plugins>
                     <plugin>
                         <artifactId>maven-release-plugin</artifactId>
-                        <version>2.0-beta-4</version>                        
                         <configuration>
                             <tagBase>https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/tags</tagBase>
                         </configuration>
