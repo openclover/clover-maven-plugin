@@ -142,13 +142,18 @@ under the License.
         </plugins>
     </reporting>
       <build>
-        <plugins>
-            <plugin>
-          <artifactId>maven-release-plugin</artifactId>
-          <configuration>
-            <tagBase>https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/tags</tagBase>
-          </configuration>
-        </plugin>
+          <pluginManagement>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-release-plugin</artifactId>
+                        <configuration>
+                            <tagBase>https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/tags</tagBase>
+                        </configuration>
+                    </plugin>
+            </plugins>              
+          </pluginManagement>
+
+            <plugins>
           <plugin>
             <artifactId>maven-clean-plugin</artifactId>
             <configuration>
