@@ -172,7 +172,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo
                     throw new MojoExecutionException("Failed to load license file [" + licenseLocation + "]", e);
                 }
             } else {
-               throw new MojoExecutionException("You need to configure a license file location for Clover. You can create an evaluation license at http://www.atlassian.com/ex/GenerateLicense.jspa?product=JIRA&version=3.6.3&build=104&edition=professional&sid=AD8F-2SD4-FK2B-3LKE&ref=prod");
+               throw new MojoExecutionException("You need to configure a license file location for Clover. You can create an evaluation license at http://www.atlassian.com/ex/GenerateLicense.jspa?product=Clover&version=2");
             }
 
             logger.debug("Using license file [" + license + "]");
