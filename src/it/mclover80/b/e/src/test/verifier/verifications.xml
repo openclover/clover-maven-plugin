@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<verifications>
+  <files>
+      <file>
+        <location>target/site/clover/pkg-summary.html</location>
+          <contains>100%</contains>
+      </file>
+      <file>
+        <location>target/site/clover/agg-pkgs.html</location>
+          <contains>com.atlassian.maven.plugin.clover.it.e</contains>
+      </file>
+      <file>
+        <location>target/site/clover/com/atlassian/maven/plugin/clover/it/p/pkg-results.html</location>
+          <exists>false</exists>
+      </file>
+      <file>
+        <location>target/site/clover/com/atlassian/maven/plugin/clover/it/d/pkg-results.html</location>
+          <exists>false</exists>
+      </file>
+  </files>
+</verifications>
+
+

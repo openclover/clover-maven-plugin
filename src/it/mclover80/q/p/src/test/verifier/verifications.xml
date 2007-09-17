@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<verifications>
+  <files>
+      <file>
+        <location>target/site/clover/pkg-summary.html</location>
+          <contains>63.2%</contains>
+      </file>
+      <file>
+        <location>target/site/clover/org/apache/maven/plugin/clover/samples/multiproject/pkg-summary.html</location>
+          <contains>Simple1</contains>
+          <contains>Simple2</contains>
+      </file>
+  </files>
+</verifications>
+

@@ -1,0 +1,17 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.atlassian.maven.plugins</groupId>
+    <artifactId>maven-clover-plugin-it-mclover80</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>maven-clover-plugin-it-mclover80-b</artifactId>
+  <packaging>pom</packaging>
+    <name>b</name>
+    <description>b</description>
+  <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>c</module>
+        <module>e</module>
+    </modules>
+</project>
