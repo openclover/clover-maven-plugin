@@ -3,12 +3,11 @@
   <files>
       <file>
         <location>target/site/clover/pkg-summary.html</location>
-          <contains>63.2%</contains>
+          <contains>100%</contains>
       </file>
       <file>
-        <location>target/site/clover/org/apache/maven/plugin/clover/samples/multiproject/pkg-summary.html</location>
-          <contains>Simple1</contains>
-          <contains>Simple2</contains>
+        <location>target/site/clover/com/atlassian/maven/plugin/clover/it/s/pkg-summary.html</location>
+        <contains>ClassQPS</contains>
       </file>
   </files>
 </verifications>

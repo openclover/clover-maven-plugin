@@ -3,12 +3,26 @@
   <files>
       <file>
         <location>target/site/clover/pkg-summary.html</location>
-          <contains>63.2%</contains>
+          <contains>100%</contains>
+          <contains>com.atlassian.maven.plugin.clover.it.r</contains>
+          <contains>com.atlassian.maven.plugin.clover.it.s</contains>
+      </file>
+      <!-- should not include d or e packages -->
+      <file>
+        <location>target/site/clover/com/atlassian/maven/plugin/clover/it/d/pkg-results.html</location>
+          <exists>false</exists>
       </file>
       <file>
-        <location>target/site/clover/org/apache/maven/plugin/clover/samples/multiproject/pkg-summary.html</location>
-          <contains>Simple1</contains>
-          <contains>Simple2</contains>
+        <location>target/site/clover/com/atlassian/maven/plugin/clover/it/e/pkg-results.html</location>
+          <exists>false</exists>
+      </file>
+      <file>
+        <location>target/site/clover/com/atlassian/maven/plugin/clover/it/r/pkg-results.html</location>
+          <exists>true</exists>
+      </file>
+      <file>
+        <location>target/site/clover/com/atlassian/maven/plugin/clover/it/s/pkg-results.html</location>
+          <exists>true</exists>
       </file>
   </files>
 </verifications>

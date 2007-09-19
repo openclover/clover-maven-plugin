@@ -24,6 +24,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 import com.cenqua.clover.CloverMerge;
@@ -48,7 +49,7 @@ public class CloverAggregateMojo extends AbstractCloverMojo
      * @readonly
      */
     private List reactorProjects;
-
+    
     /**
      * {@inheritDoc}
      * @see com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo#execute()
@@ -57,7 +58,7 @@ public class CloverAggregateMojo extends AbstractCloverMojo
         throws MojoExecutionException
     {
         // If we're in a module with children modules, then aggregate the children clover databases.
-        if ( getProject().getModules().size() > 0 )
+        if ( getProject().getModules() != null && getProject().getModules().size() > 0 )
         {
             super.execute();
 
@@ -81,34 +82,155 @@ public class CloverAggregateMojo extends AbstractCloverMojo
 
     private List getChildrenCloverDatabases()
     {
-        // Ideally we'd need to find out where each module stores its Clover database. However that's not
-        // currently possible in m2 (see http://jira.codehaus.org/browse/MNG-2180). Thus we'll assume for now
-        // that all modules use the cloverDatabase configuration from the top level module.
-
+        // Ideally we'd need to find out where each module stores its Clover
+        // database. However that's not
+        // currently possible in m2 (see
+        // http://jira.codehaus.org/browse/MNG-2180). Thus we'll assume for now
+        // that all modules use the cloverDatabase configuration from the top
+        // level module.
+        
         // Find out the location of the clover DB relative to the root module.
-        // Note: This is a pretty buggy algorithm and we really need a proper solution (see MNG-2180)
-        String relativeCloverDatabasePath =
-            getCloverDatabase().substring( getProject().getBasedir().getPath().length() );
-
+        // Note: This is a pretty buggy algorithm and we really need a proper
+        // solution (see MNG-2180)
+        
+        String relativeCloverDatabasePath = getCloverDatabase().substring(
+                getProject().getBasedir().getPath().length());
+        
         List dbFiles = new ArrayList();
-        for ( Iterator projects = this.reactorProjects.iterator(); projects.hasNext(); )
+        
+        List projects = getDescendentModuleProjects(getProject());
+        
+        for (Iterator i = projects.iterator(); i.hasNext();)
         {
-            MavenProject project = (MavenProject) projects.next();
-
-            File cloverDb = new File(project.getBasedir(), relativeCloverDatabasePath);
+            MavenProject childProject = (MavenProject) i.next();
+            
+            File cloverDb = new File(childProject.getBasedir(),
+                    relativeCloverDatabasePath);
+            
             if (cloverDb.exists())
             {
                 dbFiles.add(cloverDb.getPath());
             }
-            else
+        }
+        
+        return dbFiles;
+    }
+    
+    /**
+     * returns all the projects that are in the reactor build as
+     * direct or indirect modules of the specified project. 
+     * 
+     * @param project the project to search beneath
+     * @return the list of modules that are direct or indirect module descendents
+     * of the specified project
+     */
+    private List getDescendentModuleProjects( MavenProject project )
+    {
+        return getModuleProjects( project, -1 );
+    }
+    
+    /**
+     * Returns all the projects that are modules, or modules of modules, of the 
+     * specified project found witin the reactor. 
+     * 
+     * The searchLevel parameter controls how many descendent levels of modules
+     * are returned. With a searchLevels equals to 1, only the immediate modules 
+     * of the specified project are returned. 
+     * 
+     * A searchLevel equals to 2 returns those module's modules as well. 
+     * 
+     * A searchLevel equals to -1 returns the entire module hierarchy beneath the
+     * specified project. Note that this is simply the equivalent to the entire reactor
+     * if the specified project is the root execution project.
+     * 
+     * @param project the project to search under
+     * @param levels the number of descendent levels to return
+     * @return the list of module projects.
+     */
+    private List getModuleProjects( final MavenProject project, final int levels )
+    {
+        List projects = new ArrayList();
+        
+        boolean infinite = (levels == -1);
+        
+        if ((reactorProjects != null) && (infinite || levels > 0))
+        {            
+            for (Iterator i = reactorProjects.iterator(); i.hasNext();)
             {
-                getLog().debug("Skipping [" + cloverDb.getPath() + "] as it doesn't exist.");
+                MavenProject reactorProject = (MavenProject) i.next();
+                
+                if (isModuleOfProject(project, reactorProject))
+                {
+                    projects.add(reactorProject);
+                    
+                    // recurse to find the modules of this project
+                    
+                    projects.addAll(getModuleProjects(reactorProject,
+                            infinite ? levels : levels - 1));
+                }
+            }
+        }
+        
+        return projects;
+    }  
+
+    /**
+     * Returns true if the supplied potentialModule project is a module
+     * of the specified parentProject.
+     * 
+     * @param parentProject
+     *            the parent project.
+     * @param potentialModule
+     *            the potential moduleproject.
+     * 
+     * @return true if the potentialModule is indeed a module of the specified
+     *         parent project.
+     */
+    private boolean isModuleOfProject( MavenProject parentProject,
+            MavenProject potentialModule )
+    {
+        boolean result = false;
+        
+        List modules = parentProject.getModules();
+        
+        if ( modules != null )
+        {
+            File parentBaseDir = parentProject.getBasedir();
+
+            for (Iterator i = modules.iterator(); i.hasNext();)
+            {
+                String module = (String) i.next();
+                
+                File moduleBaseDir = new File( parentBaseDir, module );
+                
+                try
+                {
+                    // need these to be canonical paths so we can perform a true equality
+                    // operation and remember <module> is a path and for flat multimodule project
+                    // structures they will be like this: <module>../a-project<module>
+                    
+                    String lhs = potentialModule.getBasedir().getCanonicalPath();
+                    String rhs = moduleBaseDir.getCanonicalPath();
+                    
+                    if ( lhs.equals( rhs ))
+                    {
+                        result = true;
+                        break;
+                    }
+                }
+                catch (IOException e)
+                {
+                    // surpress the exception (?)
+                    
+                    getLog().error(
+                            "error encountered trying to resolve canonical module paths" );
+                }                
             }
         }
 
-        return dbFiles;
+        return result;
     }
-
+    
     private void mergeCloverDatabases() throws MojoExecutionException
     {
         List dbFiles = getChildrenCloverDatabases();
