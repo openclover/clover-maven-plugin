@@ -33,7 +33,11 @@ under the License.
   <name>Maven Clover Plugin</name>
   <version>3.1-SNAPSHOT</version>
   <description>Maven plugin for Clover</description>
-  
+  <scm>
+    <connection>scm:svn:https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/trunk/</connection>
+    <developerConnection>scm:svn:https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/trunk/</developerConnection>
+    <url>https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/</url>
+  </scm>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -125,17 +129,6 @@ under the License.
         </plugins>
     </reporting>
       <build>
-          <pluginManagement>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-release-plugin</artifactId>
-                        <configuration>
-                            <tagBase>https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/tags</tagBase>
-                        </configuration>
-                    </plugin>
-            </plugins>              
-          </pluginManagement>
-
             <plugins>
           <plugin>
             <artifactId>maven-clean-plugin</artifactId>
