@@ -101,11 +101,11 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase
     public void testSwizzleCloverDependenciesWhenCloveredVersionOfDependencyIsNewerThanOriginal()
     {
         // Ensure that the original artifact is older than the clovered artifact so that the clovered artifact
-        // is picked. Note that that we use -500/-1000 to ensure not to set the time in the future as maybe
+        // is picked. Note that that we use -5000/-10000 to ensure not to set the time in the future as maybe
         // this could cause some problems on some OS.
         long now = System.currentTimeMillis();
-        File artifactFile = new MockFile( "some/file/artifact", now - 1000L );
-        File cloveredArtifactFile = new MockFile( "some/file/cloveredArtifact", now - 500L );
+        File artifactFile = new MockFile( "some/file/artifact", now - 10000L );
+        File cloveredArtifactFile = new MockFile( "some/file/cloveredArtifact", now - 5000L );
 
         Artifact artifact = setUpMockArtifact( "some.groupId", "someArtifactId", "1.0", "jar", "compile", null,
             artifactFile );
@@ -121,11 +121,11 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase
     public void testSwizzleCloverDependenciesWhenOriginalVersionOfDependencyIsNewerThanCloveredOne()
     {
         // Ensure that the clovered artifact is older than the original artifact so that the original artifact
-        // is picked. Note that that we use -500/-1000 to ensure not to set the time in the future as maybe
+        // is picked. Note that that we use -5000/-10000 to ensure not to set the time in the future as maybe
         // this could cause some problems on some OS.
         long now = System.currentTimeMillis();
-        File artifactFile = new MockFile( "some/file/artifact", now - 500L );
-        File cloveredArtifactFile = new MockFile( "some/file/cloveredArtifact", now - 1000L );
+        File artifactFile = new MockFile( "some/file/artifact", now - 5000L );
+        File cloveredArtifactFile = new MockFile( "some/file/cloveredArtifact", now - 10000L );
 
         Artifact artifact = setUpMockArtifact( "some.groupId", "someArtifactId", "1.0", "jar", "compile", null,
             artifactFile );

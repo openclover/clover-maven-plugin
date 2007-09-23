@@ -173,6 +173,8 @@ under the License.
                 <pomInclude>**/xdoclet/pom.xml</pomInclude>
                   <pomInclude>**/instrument-tests/pom.xml</pomInclude>
                   <pomInclude>**/allSrcExcluded/pom.xml</pomInclude>
+                  <pomInclude>**/mclover77a/pom.xml</pomInclude>
+                  <pomInclude>**/mclover77b/pom.xml</pomInclude>
                   <!--<pomInclude>**/mclover80/pom.xml</pomInclude>-->
               </pomIncludes>
               <postBuildHookScript>verify.bsh</postBuildHookScript>

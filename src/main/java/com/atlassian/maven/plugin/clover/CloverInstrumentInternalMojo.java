@@ -267,7 +267,9 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
                     // - You make modifications on A such that B would fail if not built with the latest version of A
                     // - You try to run the Clover plugin on B. The build would fail if we didn't pick the latest
                     //   version between the original A version and the clovered version.
-                    if ( cloveredArtifact.getFile().lastModified() < artifact.getFile().lastModified() )
+                    //
+                    // We provide a 'fudge-factor' of 2 seconds, as the clover artifact is created first.
+                    if ( cloveredArtifact.getFile().lastModified() + 2000l < artifact.getFile().lastModified() )
                     {
                         getLog().warn( "Using [" + artifact.getId() + "] even though a Clovered version exists "
                             + "but it's older and could fail the build. Please consider running Clover again on that "
