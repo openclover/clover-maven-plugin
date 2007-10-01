@@ -180,8 +180,8 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         }
         else
         {
-            getLog().info( "Not instrumenting sources with Clover as this is not a Java project." );
-            isJavaProject = false;
+            getLog().warn( "The reported language of this project is " + artifactHandler.getLanguage() + ", attempting to instrument sources anyway.");
+            isJavaProject = true;
         }
 
         return isJavaProject;
