@@ -21,7 +21,7 @@ under the License.
    <parent>
         <artifactId>atlassian-public-pom</artifactId>
         <groupId>com.atlassian.pom</groupId>
-        <version>3</version>
+        <version>5</version>
     </parent>
   <prerequisites>
     <maven>2.0.1</maven>
