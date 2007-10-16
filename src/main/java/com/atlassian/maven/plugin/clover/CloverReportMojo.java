@@ -76,13 +76,6 @@ public class CloverReportMojo extends AbstractMavenReport
      */
     private File outputDirectory;
 
-   /**
-     * Base directory where all reports are written to.
-     *
-     * @parameter expression="${project.build.directory}/clover/surefire-reports"
-     */
-    private File surefireReportsDirectory;
-
     /**
      * The location where historical Clover data will be saved.
      *
@@ -146,7 +139,7 @@ public class CloverReportMojo extends AbstractMavenReport
     private String orderBy;
 
     /**
-     * Comma or space separated list of Clover contexts (block, statement or method filers) to exclude when
+     * Comma or space separated list of Clover somesrcexcluded (block, statement or method filers) to exclude when
      * generating coverage reports.
      * @parameter
      */
@@ -295,13 +288,6 @@ public class CloverReportMojo extends AbstractMavenReport
         currentEx.setAlwaysReport( true );
         currentEx.setOutFile( outFile );
         currentEx.setSummary( isSummaryReport );
-
-        if (surefireReportsDirectory.exists())
-        {
-            FileSet set = new FileSet();
-            set.setDir(surefireReportsDirectory);
-            currentEx.addTestResults(set);
-        }
         return currentEx;
     }
 
