@@ -2,7 +2,7 @@
 <verifications>
   <files>
     <file>
-      <location>target/site/clover/pkgs-summary.html</location>
+      <location>target/site/clover/pkg-summary.html</location>
         <exists>false</exists>
     </file>
   </files>
