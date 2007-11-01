@@ -121,6 +121,13 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     private boolean includesTestSourceRoots;
 
     /**
+     * Use the fully qualified package name for java.lang.* classes.
+     *
+     * @parameter expression="${useFullyQualifiedJavaLang}" default-value="true"
+     */
+    private boolean useFullyQualifiedJavaLang;
+
+    /**
      * {@inheritDoc}
      * @see com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo#execute()
      */
@@ -380,5 +387,9 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     public boolean includesAllSourceRoots()
     {
         return this.includesAllSourceRoots;
+    }
+
+    public boolean isUseFullyQualifiedJavaLang() {
+        return useFullyQualifiedJavaLang;
     }
 }

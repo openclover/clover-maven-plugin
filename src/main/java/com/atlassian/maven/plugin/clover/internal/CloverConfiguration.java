@@ -49,4 +49,6 @@ public interface CloverConfiguration
     int getFlushInterval();
 
     String getCloverDatabase();
+
+    boolean isUseFullyQualifiedJavaLang();    
 }

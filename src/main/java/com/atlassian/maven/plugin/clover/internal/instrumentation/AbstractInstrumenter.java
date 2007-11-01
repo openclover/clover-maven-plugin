@@ -212,6 +212,11 @@ public abstract class AbstractInstrumenter
             }
         }
 
+        if (!getConfiguration().isUseFullyQualifiedJavaLang())
+        {
+            parameters.add("--dontFullyQualifyJavaLang");
+        }
+
         for ( Iterator sourceRoots = filesToInstrument.keySet().iterator(); sourceRoots.hasNext(); )
         {
             Set filesInSourceRoot = (Set) filesToInstrument.get( (String) sourceRoots.next() );
