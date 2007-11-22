@@ -197,13 +197,15 @@ public abstract class AbstractInstrumenter
 
         if ( getConfiguration().getJdk() != null )
         {
-            if ( getConfiguration().getJdk().equals( "1.4" ) )
+           if ( getConfiguration().getJdk().equals( "1.4" ) )
             {
-                parameters.add( "-jdk14" );
+                parameters.add( "--source" );
+                parameters.add( "1.4" );
             }
             else if ( getConfiguration().getJdk().equals( "1.5" ) )
             {
-                parameters.add( "-jdk15" );
+                parameters.add( "--source" );
+                parameters.add( "1.5" );
             }
             else
             {
