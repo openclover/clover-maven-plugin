@@ -109,7 +109,10 @@ public abstract class AbstractInstrumenter
             {
                 addCompileSourceRoot( getSourceDirectory() );
             }
-            else
+            // ignore the generated sources directory, because a new clover/generated-sources directory has been created by a plugin
+            // during the clover forked lifecycle, which means that we will end up with the same classes included twice
+            // if we use the generated-classes directory added originally
+            else if (!isGeneratedSourcesDirectory(sourceRoot))
             {
                 addCompileSourceRoot( sourceRoot );
             }
@@ -117,6 +120,11 @@ public abstract class AbstractInstrumenter
 
         getConfiguration().getLog().debug( "Clover main source directories after change:" );
         logSourceDirectories();
+    }
+
+    private boolean isGeneratedSourcesDirectory(String sourceRoot) {
+        String generatedSourcesDirectoryName = File.separator + "target" + File.separator + "generated-sources";
+        return sourceRoot.indexOf(generatedSourcesDirectoryName) != -1;
     }
 
     private void logSourceDirectories()
