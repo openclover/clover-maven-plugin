@@ -19,21 +19,25 @@ package com.atlassian.maven.plugin.clover;
  * under the License.
  */
 
-import com.cenqua.clover.tasks.CloverReportTask;
-import com.cenqua.clover.tasks.CloverFormatType;
-
-import org.apache.maven.project.MavenProject;
-import org.apache.maven.reporting.MavenReportException;
-import org.apache.maven.reporting.AbstractMavenReport;
-import org.apache.maven.doxia.siterenderer.Renderer;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
+import com.cenqua.clover.tasks.CloverFormatType;
+import com.cenqua.clover.tasks.CloverReportTask;
+import org.apache.maven.doxia.siterenderer.Renderer;
+import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.reporting.AbstractMavenReport;
+import org.apache.maven.reporting.MavenReportException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
 import org.codehaus.plexus.resource.ResourceManager;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 import java.io.File;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * Generate a <a href="http://cenqua.com/clover">Clover</a> report from existing Clover databases. The generated report
@@ -55,7 +59,7 @@ public class CloverReportMojo extends AbstractMavenReport
     /**
      * The location of the <a href="http://cenqua.com/clover/doc/adv/database.html">Clover database</a>.
      *
-     * @parameter expression="${project.build.directory}/clover/clover.db"
+     * @parameter expression="${maven.clover.cloverDatabase}" default-value="${project.build.directory}/clover/clover.db"
      * @required
      */
     private String cloverDatabase;
@@ -63,7 +67,7 @@ public class CloverReportMojo extends AbstractMavenReport
     /**
      * The location of the merged clover database to create when running a report in a multimodule build.
      *
-     * @parameter expression="${project.build.directory}/clover/cloverMerge.db"
+     * @parameter expression="${maven.clover.cloverMergeDatabase}" default-value="${project.build.directory}/clover/cloverMerge.db"
      * @required
      */
     private String cloverMergeDatabase;
@@ -71,7 +75,7 @@ public class CloverReportMojo extends AbstractMavenReport
     /**
      * The directory where the Clover report will be generated.
      *
-     * @parameter expression="${project.reporting.outputDirectory}/clover"
+     * @parameter expression="${maven.clover.outputDirectory}" default-value="${project.reporting.outputDirectory}/clover"
      * @required
      */
     private File outputDirectory;
@@ -82,7 +86,7 @@ public class CloverReportMojo extends AbstractMavenReport
      * <p>Note: It's recommended to modify the location of this directory so that it points to a more permanent
      * location as the <code>${project.build.directory}</code> directory is erased when the project is cleaned.</p>
      *
-     * @parameter default-value="${project.build.directory}/clover/history"
+     * @parameter expression="${maven.clover.historyDir}" default-value="${project.build.directory}/clover/history"
      * @required
      */
     private String historyDir;
@@ -91,7 +95,7 @@ public class CloverReportMojo extends AbstractMavenReport
      * When the Clover Flush Policy is set to "interval" or threaded this value is the minimum
      * period between flush operations (in milliseconds).
      *
-     * @parameter default-value="500"
+     * @parameter expression="${maven.clover.flushInterval}" default-value="500"
      */
     private int flushInterval;
 
@@ -104,9 +108,17 @@ public class CloverReportMojo extends AbstractMavenReport
      * to wait for the data to be flushed. As we can't control whether users want to fork their tests or not, we're
      * offering this parameter to them.</p>
      *
-     * @parameter default-value="true"
+     * @parameter expression="${maven.clover.waitForFlush}" default-value="true"
      */
     private boolean waitForFlush;
+
+     /**
+     * If true we won't instrument the tests to record results, and will get test results from the
+     * surefire test results instead.
+     *
+      * @parameter expression="${maven.clover.useSurefireTestResults}" default-value="false"
+     */
+    private boolean useSurefireTestResults;
 
     /**
      * Decide whether to generate an HTML report or not.
@@ -141,7 +153,7 @@ public class CloverReportMojo extends AbstractMavenReport
     /**
      * Comma or space separated list of Clover somesrcexcluded (block, statement or method filers) to exclude when
      * generating coverage reports.
-     * @parameter
+     * @parameter expression="${maven.clover.contextFilters}"
      */
     private String contextFilters;
 
@@ -177,7 +189,7 @@ public class CloverReportMojo extends AbstractMavenReport
      * A Clover license file to be used by the plugin. The plugin tries to resolve this parameter first as a resource,
      * then as a URL, and then as a file location on the filesystem.
      *
-     * @parameter
+     * @parameter expression="${maven.clover.licenseLocation}"
      */
     private String licenseLocation;
 
@@ -222,8 +234,7 @@ public class CloverReportMojo extends AbstractMavenReport
     /**
      * Example of title prefixes: "Maven Clover", "Maven Aggregated Clover"
      */
-    private void createAllReportTypes( String database, String titlePrefix )
-    {
+    private void createAllReportTypes( String database, String titlePrefix ) throws MavenReportException {
         File historyDir = new File( this.outputDirectory, "history" );
 
         if ( this.generateHtml )
@@ -281,14 +292,61 @@ public class CloverReportMojo extends AbstractMavenReport
     }
 
     private CloverReportTask.CurrentEx createCurrentReportForCloverReportTask( String title, File outFile,
-        boolean isSummaryReport )
-    {
+        boolean isSummaryReport ) throws MavenReportException {
         CloverReportTask.CurrentEx currentEx = new CloverReportTask.CurrentEx();
         currentEx.setTitle( title );
         currentEx.setAlwaysReport( true );
         currentEx.setOutFile( outFile );
         currentEx.setSummary( isSummaryReport );
+        if (useSurefireTestResults) {
+            Plugin surefirePlugin = (Plugin) project.getBuild().getPluginsAsMap().get("org.apache.maven.plugins:maven-surefire-plugin");
+            if (surefirePlugin == null)
+            {
+                throw new MavenReportException("The surefire plugin is not installed, you can't set 'useSurefireTestResults' to true");                
+            }
+            File surefireReports = new File(project.getBuild().getDirectory() + File.separator + "surefire-reports");;
+            Object config = surefirePlugin.getConfiguration();
+            if (config != null)
+            {
+                String reportsDirectory = getNodeValue((Xpp3Dom) config, "reportsDirectory");
+                if (reportsDirectory != null)
+                {
+                    if (reportsDirectory.indexOf("${") != -1)
+                    {
+                        throw new MavenReportException(
+                                "You cannot use the maven-clover plugin with a surefire configuration which explicitly sets the reportsDirectory using a maven variable -- the string '"
+                                        + reportsDirectory + "' appears to include a variable.");
+                    }
+                    surefireReports = new File(reportsDirectory);
+                }
+            }
+            FileSet testResultReports = new FileSet();
+            testResultReports.setDir(surefireReports);
+            currentEx.addTestResults(testResultReports);
+        }
+
         return currentEx;
+    }
+
+    private String getNodeValue(Xpp3Dom tree, String nodeName)
+    {
+        if (nodeName.equals(tree.getName()))
+        {
+            return tree.getValue();
+        }
+        else
+        {
+            Xpp3Dom[] children = tree.getChildren();
+            for (int i = 0; i < children.length; ++i)
+            {
+                String s = getNodeValue(children[i], nodeName);
+                if (s != null)
+                {
+                    return s;
+                }
+            }
+            return null;
+        }
     }
 
     private CloverReportTask.HistoricalEx createHistoricalReportForCloverReportTask( String title, File outFile)

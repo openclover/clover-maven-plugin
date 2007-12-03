@@ -41,15 +41,14 @@ public abstract class AbstractCloverMojo extends AbstractMojo
     /**
      * The location of the <a href="http://cenqua.com/clover/doc/adv/database.html">Clover database</a>.
      *
-     * @parameter expression="${project.build.directory}/clover/clover.db"
-     * @required
+     * @parameter expression="${maven.clover.cloverDatabase}" default-value="${project.build.directory}/clover/clover.db"
      */
     private String cloverDatabase;
 
     /**
      * The location of the merged clover database to create when running a report in a multimodule build.
      *
-     * @parameter expression="${project.build.directory}/clover/cloverMerge.db"
+     * @parameter expression="${maven.clover.cloverMergeDatabase}" default-value="${project.build.directory}/clover/cloverMerge.db"
      * @required
      */
     private String cloverMergeDatabase;
@@ -58,7 +57,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo
      * A Clover license file to be used by the plugin. The plugin tries to resolve this parameter first as a resource,
      * then as a URL, and then as a file location on the filesystem.
      *
-     * @parameter
+     * @parameter expression="${maven.clover.licenseLocation}"
      */
     private String licenseLocation;
 
@@ -66,7 +65,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo
      * The <a href="http://cenqua.com/clover/doc/adv/flushpolicies.html">Clover flush policy</a> to use.
      * Valid values are <code>directed</code>, <code>interval</code> and <code>threaded</code>.
      *
-     * @parameter default-value="threaded"
+     * @parameter expression="${maven.clover.flushPolicy}" default-value="threaded"
      */
     private String flushPolicy;
 
@@ -74,7 +73,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo
      * When the Clover Flush Policy is set to "interval" or threaded this value is the minimum period between flush
      * operations (in milliseconds).
      *
-     * @parameter default-value="500"
+     * @parameter expression="${maven.clover.flushInterval}" default-value="500"
      */
     private int flushInterval;
 
@@ -87,15 +86,23 @@ public abstract class AbstractCloverMojo extends AbstractMojo
      * to wait for the data to be flushed. As we can't control whether users want to fork their tests or not, we're
      * offering this parameter to them.</p>
      *
-     * @parameter default-value="true"
+     * @parameter expression="${maven.clover.waitForFlush}" default-value="true"
      */
     private boolean waitForFlush;
+
+    /**
+     * If true we won't instrument the tests to record results, and will get test results from the
+     * surefire test results instead.
+     *
+     * @parameter expression="${maven.clover.useSurefireTestResults}" default-value="false"
+     */
+    private boolean useSurefireTestResults;
 
     /**
      * Whether the Clover instrumentation should use the Clover <code>jdk14</code> or <code>jdk15</code> flags to
      * parse sources.
      *
-     * @parameter
+     * @parameter expression="${maven.clover.jdk}"
      */
     private String jdk;
 
@@ -288,5 +295,9 @@ public abstract class AbstractCloverMojo extends AbstractMojo
 
     public void setProject(MavenProject project) {
         this.project = project;
+    }
+
+    public boolean isUseSurefireTestResults() {
+        return useSurefireTestResults;
     }
 }

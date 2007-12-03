@@ -44,7 +44,7 @@ under the License.
           <!-- Verify that we can modify the location of the Clover database and that the directory is created if
                it doesn't exist. Note: we're putting the configuration here and not in the build section because the
                build section inherits from the reporting section but not the other way around... -->
-          <cloverDatabase>${project.build.directory}/customclover/myclover.db</cloverDatabase>
+          <!--cloverDatabase>${project.build.directory}/customclover/myclover.db</cloverDatabase-->
 
           <!-- Verify that we can generate all types of Clover reports -->
           <generateHtml>true</generateHtml>
@@ -74,7 +74,7 @@ under the License.
         <groupId>com.atlassian.maven.plugins</groupId>
         <artifactId>maven-clover-plugin</artifactId>
         <configuration>
-
+			<!--includesTestSourceRoots>false</includesTestSourceRoots-->
           <targetPercentage>1%</targetPercentage>
 
           <!-- Verify that we can specify the JDK version for Clover's instrumentation -->

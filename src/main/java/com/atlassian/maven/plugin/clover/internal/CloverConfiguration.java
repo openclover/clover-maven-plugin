@@ -50,5 +50,7 @@ public interface CloverConfiguration
 
     String getCloverDatabase();
 
-    boolean isUseFullyQualifiedJavaLang();    
+    boolean isUseFullyQualifiedJavaLang();
+
+    boolean isUseSurefireTestResults();
 }

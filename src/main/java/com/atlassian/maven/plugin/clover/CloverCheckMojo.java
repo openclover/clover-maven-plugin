@@ -42,7 +42,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
     /**
      * The Test Percentage Coverage (TPC) threshold under which the plugin will report an error and fail the build.
      *
-     * @parameter default-value="70%"
+     * @parameter expression="${maven.clover.targetPercentage}" default-value="70%" 
      * @required
      */
     private String targetPercentage;
@@ -50,7 +50,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
     /**
      * Comma or space separated list of Clover contexts (block, statement or method filers) to exclude when
      * generating coverage reports.
-     * @parameter
+     * @parameter expression="${maven.clover.contextFilters}"
      */
     private String contextFilters;
 

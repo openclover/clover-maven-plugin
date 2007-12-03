@@ -25,10 +25,10 @@ under the License.
         <id>validate</id>
         <executions>
           <execution>
-            <configuration>
+            <!--configuration>
               <cloverOutputDirectory>${project.build.directory}/clover</cloverOutputDirectory>
               <cloverDatabase>${project.build.directory}/clover/clover.db</cloverDatabase>
-            </configuration>
+            </configuration-->
             <goals>
               <goal>instrumentInternal</goal>
             </goals>

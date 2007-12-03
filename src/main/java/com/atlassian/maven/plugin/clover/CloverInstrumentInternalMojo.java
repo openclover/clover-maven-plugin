@@ -54,7 +54,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      * The directory where the Clover plugin will put all the files it generates during the build process. For
      * example the Clover plugin will put instrumented sources somewhere inside this directory.
      *  
-     * @parameter
+     * @parameter default-value="${project.build.directory}/clover"
      * @required
      */
     private String cloverOutputDirectory;
@@ -110,13 +110,13 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      * Whether the Clover plugin should instrument all source roots (ie even
      * generated sources) or whether it should only instrument the main source
      * root.
-     * @parameter default-value="false"
+     * @parameter expression="${maven.clover.includesAllSourceRoots}" default-value="false"
      */
     private boolean includesAllSourceRoots;
 
     /**
      * Whether the Clover plugin should instrument test source roots.
-     * @parameter default-value="true"
+     * @parameter  expression="${maven.clover.includesTestSourceRoots}" default-value="true"
      */
     private boolean includesTestSourceRoots;
 
@@ -177,21 +177,13 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     private boolean isJavaProject()
     {
-        boolean isJavaProject;
-
         ArtifactHandler artifactHandler = getProject().getArtifact().getArtifactHandler();
 
-        if ( "java".equals( artifactHandler.getLanguage() ) )
-        {
-            isJavaProject = true;
-        }
-        else
+        if ( !"java".equals( artifactHandler.getLanguage() ) )
         {
             getLog().warn( "The reported language of this project is " + artifactHandler.getLanguage() + ", attempting to instrument sources anyway.");
-            isJavaProject = true;
         }
-
-        return isJavaProject;
+        return true;
     }
 
     private void redirectOutputDirectories()

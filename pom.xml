@@ -165,7 +165,8 @@ under the License.
               <projectsDirectory>src/it</projectsDirectory>
               <pomIncludes>
                 <pomInclude>**/contexts/pom.xml</pomInclude>
-                <pomInclude>**/simple/pom.xml</pomInclude>
+                  <pomInclude>**/simple/pom.xml</pomInclude>
+                  <pomInclude>**/clmvn7/pom.xml</pomInclude>
                 <!-- this doesn't work at present due to a problem with the invoker plugin
                 <pomInclude>**/multiproject/pom.xml</pomInclude>
                 -->
