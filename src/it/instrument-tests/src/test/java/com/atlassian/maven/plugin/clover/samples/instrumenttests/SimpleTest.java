@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 The Apache Software Foundation.
+ * Copyright 2005 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.atlassian.maven.plugin.clover.samples.contexts;
+package com.atlassian.maven.plugin.clover.samples.instrumenttests;
 
 import junit.framework.TestCase;
+import java.util.Properties;
 
 public class SimpleTest extends TestCase
 {
-    public void testSomeMethod()
-    {        
+    public void testSomeMethod() throws Exception
+    {
         Simple simple = new Simple();
-        simple.someMethod1();
-        simple.someMethod2(1);
+        simple.someMethod();
     }
-} 
+}
+ 
