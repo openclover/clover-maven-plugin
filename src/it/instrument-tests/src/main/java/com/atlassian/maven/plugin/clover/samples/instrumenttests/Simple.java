@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.atlassian.maven.plugin.clover.samples.tests;
+package com.atlassian.maven.plugin.clover.samples.instrumenttests;
 
 public class Simple
 {
