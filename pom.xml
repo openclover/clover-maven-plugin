@@ -38,6 +38,9 @@ under the License.
     <developerConnection>scm:svn:https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/trunk/</developerConnection>
     <url>https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/</url>
   </scm>
+  <properties>
+	<clover.version>2.1.0</clover.version>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -77,7 +80,7 @@ under the License.
     <dependency>
       <groupId>com.cenqua.clover</groupId>
       <artifactId>clover</artifactId>
-      <version>2.1.0</version>
+      <version>${clover.version}</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
