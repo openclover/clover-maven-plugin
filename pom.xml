@@ -39,7 +39,7 @@ under the License.
     <url>https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/</url>
   </scm>
   <properties>
-	<clover.version>2.1.0</clover.version>
+	<cloverVersion>2.1.0</cloverVersion>
   </properties>
   <dependencies>
     <dependency>
@@ -80,7 +80,7 @@ under the License.
     <dependency>
       <groupId>com.cenqua.clover</groupId>
       <artifactId>clover</artifactId>
-      <version>${clover.version}</version>
+      <version>${cloverVersion}</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
