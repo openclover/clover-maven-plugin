@@ -158,8 +158,13 @@ public abstract class AbstractCloverMojo extends AbstractMojo
 
     protected void registerLicenseFile() throws MojoExecutionException
     {
-        AbstractCloverMojo.registerLicenseFile(this.project, getResourceManager(), this.licenseLocation, getLog(),
-            this.getClass().getClassLoader(), this.license);
+        AbstractCloverMojo.registerLicenseFile(
+                    this.project,
+                    getResourceManager(),
+                    this.licenseLocation,
+                    getLog(),
+                    this.getClass().getClassLoader(),
+                    this.license);
     }
 
     /**
@@ -191,28 +196,30 @@ public abstract class AbstractCloverMojo extends AbstractMojo
         
         logger.debug("Using licenseLocation '" + licenseLocation +"'");
 
-        String license;
-        ClassLoader origLoader = Thread.currentThread().getContextClassLoader();
         resourceManager.addSearchPath( "url", "" );
         resourceManager.addSearchPath( FileResourceLoader.ID, project.getFile().getParentFile().getAbsolutePath() );
+
+        String licenseFile;
+        ClassLoader origLoader = Thread.currentThread().getContextClassLoader();        
         try {
             Thread.currentThread().setContextClassLoader(classloader);
-
-            if (licenseLocation != null) {
-                try {
-                    license = resourceManager.getResourceAsFile(licenseLocation).getPath();
-                    logger.debug("Loading license from classpath [" + license + "]");
-                }
-                catch (Exception e) {
-                    throw new MojoExecutionException("Failed to load license file [" + licenseLocation + "]", e);
-                }
-            } else {
-
-               throw new MojoExecutionException("You need to configure a license file location for Clover. You can create an evaluation license at http://www.atlassian.com/ex/GenerateLicense.jspa?product=Clover&version=2");
+            if (licenseLocation == null) {
+                logger.info("No 'maven.clover.licenseLocation' configured. Using default evaluation license.");
+                licenseLocation = "/clover.license";
             }
 
-            logger.debug("Using license file [" + license + "]");
-            System.setProperty(CloverNames.PROP_LICENSE_PATH, license);
+            try {
+                logger.debug("Loading license from classpath [" + licenseLocation + "] ...");
+                licenseFile = resourceManager.getResourceAsFile(licenseLocation).getPath();
+                logger.info("License loaded from: '"+ licenseFile + "'");
+
+            }
+            catch (Exception e) {
+                throw new MojoExecutionException("Failed to load license file [" + licenseLocation + "]", e);
+            }
+
+            logger.debug("Using license file [" + licenseFile + "]");
+            System.setProperty(CloverNames.PROP_LICENSE_PATH, licenseFile);
         }
         finally {
             Thread.currentThread().setContextClassLoader( origLoader );
