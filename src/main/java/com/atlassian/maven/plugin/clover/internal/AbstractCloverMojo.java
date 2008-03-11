@@ -209,12 +209,10 @@ public abstract class AbstractCloverMojo extends AbstractMojo
             }
 
             try {
-                logger.debug("Loading license from classpath [" + licenseLocation + "] ...");
+                logger.debug("Attempting to load license from [" + licenseLocation + "] ...");
                 licenseFile = resourceManager.getResourceAsFile(licenseLocation).getPath();
                 logger.info("License loaded from: '"+ licenseFile + "'");
-
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new MojoExecutionException("Failed to load license file [" + licenseLocation + "]", e);
             }
 
