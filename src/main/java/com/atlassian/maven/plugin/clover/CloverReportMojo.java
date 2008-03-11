@@ -186,12 +186,16 @@ public class CloverReportMojo extends AbstractMavenReport
     private List reactorProjects;
 
     /**
-     * A Clover license file to be used by the plugin. The plugin tries to resolve this parameter first as a resource,
-     * then as a URL, and then as a file location on the filesystem.
-     *
+     * @see com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo#licenseLocation
      * @parameter expression="${maven.clover.licenseLocation}"
      */
     private String licenseLocation;
+
+    /**
+     * @see com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo#license
+     * @parameter expression="${maven.clover.license}"
+     */
+    private String license;
 
     /**
      * Resource manager used to locate any Clover license file provided by the user.
@@ -208,7 +212,7 @@ public class CloverReportMojo extends AbstractMavenReport
         try
         {
             AbstractCloverMojo.registerLicenseFile(this.project, this.resourceManager, this.licenseLocation, getLog(),
-                this.getClass().getClassLoader());
+                this.getClass().getClassLoader(), this.license);
         }
         catch (MojoExecutionException e)
         {

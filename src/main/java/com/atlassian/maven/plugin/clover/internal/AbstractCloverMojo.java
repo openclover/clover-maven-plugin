@@ -30,6 +30,8 @@ import org.codehaus.plexus.resource.loader.FileResourceLoader;
 
 import java.io.File;
 
+import com.cenqua.clover.CloverNames;
+
 /**
  * Common code for all Clover plugin build Mojos.
  *
@@ -57,9 +59,22 @@ public abstract class AbstractCloverMojo extends AbstractMojo
      * A Clover license file to be used by the plugin. The plugin tries to resolve this parameter first as a resource,
      * then as a URL, and then as a file location on the filesystem.
      *
+     * A trial Clover license can be generated <a href="http://www.atlassian.com/ex/GenerateLicense.jspa?product=Clover&version=2">here</a>.
+     * @see #license
      * @parameter expression="${maven.clover.licenseLocation}"
      */
-    private String licenseLocation;
+    protected String licenseLocation;
+
+    /**
+     * The full Clover license String to use. If supplied, this certificate will be used over {@link #licenseLocation}.
+     * NB. newline chars must be preserved.
+     * A trial Clover license can be generated <a href="http://www.atlassian.com/ex/GenerateLicense.jspa?product=Clover&version=2">here</a>.
+     *
+     * @see #licenseLocation
+     * @parameter expression="${maven.clover.license}"
+     */
+    protected String license;
+
 
     /**
      * The <a href="http://cenqua.com/clover/doc/adv/flushpolicies.html">Clover flush policy</a> to use.
@@ -144,7 +159,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo
     protected void registerLicenseFile() throws MojoExecutionException
     {
         AbstractCloverMojo.registerLicenseFile(this.project, getResourceManager(), this.licenseLocation, getLog(),
-            this.getClass().getClassLoader());
+            this.getClass().getClassLoader(), this.license);
     }
 
     /**
@@ -159,14 +174,27 @@ public abstract class AbstractCloverMojo extends AbstractMojo
      *
      * @throws MojoExecutionException when the license file cannot be found
      */
-    public static void registerLicenseFile(MavenProject project, ResourceManager resourceManager, String licenseLocation, Log logger,
-                                           ClassLoader classloader) throws MojoExecutionException
+    public static void registerLicenseFile(MavenProject project,
+                                           ResourceManager resourceManager,
+                                           String licenseLocation,
+                                           Log logger,
+                                           ClassLoader classloader,
+                                           String licenseCert) throws MojoExecutionException
     {
+
+        if (licenseCert != null) {
+            logger.debug("Full license supplied '" + licenseCert +
+                        "'. License location: '" + licenseLocation + "' will be ignored.");            
+            System.setProperty(CloverNames.PROP_LICENSE_CERT, licenseCert);
+            return;
+        }
+        
+        logger.debug("Using licenseLocation '" + licenseLocation +"'");
+
         String license;
         ClassLoader origLoader = Thread.currentThread().getContextClassLoader();
         resourceManager.addSearchPath( "url", "" );
         resourceManager.addSearchPath( FileResourceLoader.ID, project.getFile().getParentFile().getAbsolutePath() );
-
         try {
             Thread.currentThread().setContextClassLoader(classloader);
 
@@ -179,11 +207,12 @@ public abstract class AbstractCloverMojo extends AbstractMojo
                     throw new MojoExecutionException("Failed to load license file [" + licenseLocation + "]", e);
                 }
             } else {
+
                throw new MojoExecutionException("You need to configure a license file location for Clover. You can create an evaluation license at http://www.atlassian.com/ex/GenerateLicense.jspa?product=Clover&version=2");
             }
 
             logger.debug("Using license file [" + license + "]");
-            System.setProperty("clover.license.path", license);
+            System.setProperty(CloverNames.PROP_LICENSE_PATH, license);
         }
         finally {
             Thread.currentThread().setContextClassLoader( origLoader );
@@ -253,11 +282,6 @@ public abstract class AbstractCloverMojo extends AbstractMojo
         return shouldRun;
     }
 
-    protected void setLicenseLocation(String licenseLocation)
-    {
-        this.licenseLocation = licenseLocation;
-    }
-
     public MavenProject getProject()
     {
         return this.project;
@@ -299,5 +323,13 @@ public abstract class AbstractCloverMojo extends AbstractMojo
 
     public boolean isUseSurefireTestResults() {
         return useSurefireTestResults;
+    }
+
+    public void setLicenseLocation(String licenseLocation) {
+        this.licenseLocation = licenseLocation;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
     }
 }

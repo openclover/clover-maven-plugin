@@ -28,6 +28,8 @@ import org.codehaus.plexus.resource.ResourceManager;
 
 import java.io.File;
 
+import com.cenqua.clover.CloverNames;
+
 /**
  * Unit tests for {@link com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo}.
  * 
@@ -36,6 +38,18 @@ import java.io.File;
  */
 public class CloverMojoTest extends MockObjectTestCase
 {
+    private MavenProject dummyProject;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        dummyProject = new MavenProject((Model) null) {
+
+            public File getFile() {
+                return new File("./pom.xml");
+            }
+        };
+    }
+
     public class TestableAbstractCloverMojo extends AbstractCloverMojo
     {
         public void execute() throws MojoExecutionException
@@ -47,30 +61,51 @@ public class CloverMojoTest extends MockObjectTestCase
     public void testRegisterLicenseFile() throws MojoExecutionException
     {
         TestableAbstractCloverMojo mojo = new TestableAbstractCloverMojo();
-
         Mock mockResourceManager = mock( ResourceManager.class );
         mojo.setResourceManager( (ResourceManager) mockResourceManager.proxy() );
 
         // Ensure that the system property is not already set
-        System.setProperty( "clover.license.path", "" );
+        System.setProperty( CloverNames.PROP_LICENSE_PATH, "" );
 
-        mojo.setLicenseLocation( "build-tools/clover.license" );
-        mockResourceManager.expects(atLeastOnce()).method("addSearchPath");
-        mockResourceManager.expects( once() ).method( "getResourceAsFile" )
-            .with( eq( "build-tools/clover.license" ) )
-            .will( returnValue( new File( "targetFile" ) ) );
+        try {
+            mojo.setLicenseLocation( "build-tools/clover.license" );
+            mockResourceManager.expects(atLeastOnce()).method("addSearchPath");
+            mockResourceManager.expects( once() ).method( "getResourceAsFile" )
+                .with( eq( "build-tools/clover.license" ) )
+                .will( returnValue( new File( "targetFile" ) ) );
 
-        MavenProject dummyProject = new MavenProject((Model) null) {
 
-            public File getFile() {
-                return new File("./pom.xml");
-            }
-        };
-
-        mojo.setProject(dummyProject);
-
-        mojo.registerLicenseFile();
-
-        assertEquals( "targetFile", System.getProperty( "clover.license.path" ) );
+            mojo.setProject(dummyProject);
+            mojo.registerLicenseFile();
+            assertEquals( "targetFile", System.getProperty( CloverNames.PROP_LICENSE_PATH ) );
+        } finally {
+            System.getProperties().remove( CloverNames.PROP_LICENSE_PATH );            
+        }
     }
+
+
+    public void testRegisterLicense() throws MojoExecutionException
+    {
+        TestableAbstractCloverMojo mojo = new TestableAbstractCloverMojo();
+        // Ensure that the system property is not already set
+        System.setProperty( CloverNames.PROP_LICENSE_CERT, "" );
+
+        final String license = "fu11l1c3nc3str1ngg03sh3r3\n" +
+                               "w1thn3wl1n3s4ndf0rm4tt1ng.";
+        mojo.setLicense(license);
+
+        try {
+            mojo.setProject(dummyProject);
+            mojo.registerLicenseFile();
+            assertNull("", System.getProperty(CloverNames.PROP_LICENSE_PATH) );
+            assertEquals(license, System.getProperty(CloverNames.PROP_LICENSE_CERT) );
+        } finally {
+            System.getProperties().remove( CloverNames.PROP_LICENSE_PATH );
+            System.getProperties().remove( CloverNames.PROP_LICENSE_CERT);            
+
+        }
+
+
+    }
+
 }
