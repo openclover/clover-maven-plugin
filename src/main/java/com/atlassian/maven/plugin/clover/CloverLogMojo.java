@@ -38,6 +38,11 @@ public class CloverLogMojo extends AbstractCloverMojo
     public void execute()
         throws MojoExecutionException
     {
+        if (skip) {
+            getLog().debug("Skipping clover log.");
+            return;
+        }
+
         if ( areCloverDatabasesAvailable() )
         {
             super.execute();
@@ -74,7 +79,9 @@ public class CloverLogMojo extends AbstractCloverMojo
      */
     private void logDatabase(String database)
     {
-        Project antProject = AbstractCloverMojo.registerCloverAntTasks();
+        final Project antProject = new Project();
+        antProject.init();
+        AbstractCloverMojo.registerCloverAntTasks(antProject, getLog());
 
         CloverLogTask cloverLogTask = (CloverLogTask) antProject.createTask( "clover-log" );
         cloverLogTask.init();

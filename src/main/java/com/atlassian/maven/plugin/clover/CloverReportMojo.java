@@ -20,24 +20,29 @@ package com.atlassian.maven.plugin.clover;
  */
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
-import com.cenqua.clover.tasks.CloverFormatType;
-import com.cenqua.clover.tasks.CloverReportTask;
+import com.cenqua.clover.reporters.Format;
 import org.apache.maven.doxia.siterenderer.Renderer;
-import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
+import org.apache.maven.artifact.resolver.ArtifactResolutionException;
+import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
+import org.apache.maven.artifact.resolver.ArtifactResolver;
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.tools.ant.Project;
-import org.apache.tools.ant.types.FileSet;
+import org.apache.tools.ant.ProjectHelper;
+import org.apache.tools.ant.MagicNames;
 import org.codehaus.plexus.resource.ResourceManager;
-import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 import java.io.File;
-import java.util.Iterator;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
 
 /**
  * Generate a <a href="http://cenqua.com/clover">Clover</a> report from existing Clover databases. The generated report
@@ -55,6 +60,42 @@ public class CloverReportMojo extends AbstractMavenReport
 {
     // TODO: Need some way to share config elements and code between report mojos and main build mojos.
     // See http://jira.codehaus.org/browse/MNG-1886
+
+    /**
+     * @parameter expression="${maven.clover.reportDescriptor}"
+     */
+    private File reportDescriptor;
+
+    /**
+     * The component that is used to resolve additional artifacts required.
+     *
+     * @component
+     */
+    protected ArtifactResolver artifactResolver;
+
+    /**
+     * Remote repositories used for the project.
+     *
+     * @todo this is used for site descriptor resolution - it should relate to the actual project but for some reason they are not always filled in
+     * @parameter expression="${project.remoteArtifactRepositories}"
+     */
+    protected List repositories;
+
+    /**
+     * The component used for creating artifact instances.
+     *
+     * @component
+     */
+    protected ArtifactFactory artifactFactory;
+
+
+    /**
+     * The local repository.
+     *
+     * @parameter expression="${localRepository}"
+     */
+    protected ArtifactRepository localRepository;
+
 
     /**
      * The location of the <a href="http://cenqua.com/clover/doc/adv/database.html">Clover database</a>.
@@ -139,6 +180,11 @@ public class CloverReportMojo extends AbstractMavenReport
     private boolean generateXml;
 
     /**
+     * Decide whether to generate a JSON report or not.
+     * @parameter default-value="false" expression="${generateJson}"
+     */
+    private boolean generateJson;
+    /**
      * Decide whether to generate a Clover historical report or not.
      * @parameter default-value="false" expression="${generateHistorical}"
      */
@@ -155,7 +201,7 @@ public class CloverReportMojo extends AbstractMavenReport
      * generating coverage reports.
      * @parameter expression="${maven.clover.contextFilters}"
      */
-    private String contextFilters;
+    private String contextFilters = "";
 
     /**
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
@@ -222,6 +268,12 @@ public class CloverReportMojo extends AbstractMavenReport
         // Ensure the output directory exists
         this.outputDirectory.mkdirs();
 
+        if (reportDescriptor == null) {
+            reportDescriptor = resolveCloverDescriptor();
+        }
+
+        getLog().info("Using Clover report descriptor: " + reportDescriptor.getAbsolutePath());
+        
         File singleModuleCloverDatabase = new File( this.cloverDatabase );
         if ( singleModuleCloverDatabase.exists() )
         {
@@ -239,32 +291,23 @@ public class CloverReportMojo extends AbstractMavenReport
      * Example of title prefixes: "Maven Clover", "Maven Aggregated Clover"
      */
     private void createAllReportTypes( String database, String titlePrefix ) throws MavenReportException {
-        File historyDir = new File( this.outputDirectory, "history" );
 
+        final String outpath = outputDirectory.getAbsolutePath();
         if ( this.generateHtml )
         {
-            createReport( database,
-                createCurrentReportForCloverReportTask( titlePrefix, this.outputDirectory, false ),
-                createHistoricalReportForCloverReportTask( titlePrefix + " historical report", historyDir ),
-                createFormatTypeForCloverReportTask( "html" ) );
+            createReport(database, Format.TYPE_HTML, titlePrefix, outpath, "", false);
         }
         if ( this.generatePdf )
         {
-            // Note: PDF reports only support summary reports
-            createReport( database, createCurrentReportForCloverReportTask( titlePrefix,
-                new File( this.outputDirectory, "clover.pdf" ), true ),
-                createHistoricalReportForCloverReportTask( titlePrefix + "Historical report",
-                    new File( historyDir, "clover-history.pdf" ) ),
-                createFormatTypeForCloverReportTask( "pdf" ) );
+            createReport(database, Format.TYPE_PDF, titlePrefix, outpath + "/clover.pdf", outpath + "/historical.pdf", true);
         }
         if ( this.generateXml )
         {
-            // No historical reports for XML outputs
-            createReport( database,
-                createCurrentReportForCloverReportTask( titlePrefix,
-                    new File( this.outputDirectory, "clover.xml" ), false ),
-                null,
-                createFormatTypeForCloverReportTask( "xml" ) );
+            createReport(database, Format.TYPE_XML, titlePrefix, outpath + "/clover.xml", null, false);
+        }
+        if ( this.generateJson )
+        {
+            createReport(database, Format.TYPE_JSON, titlePrefix, outpath, null, false);
         }
     }
 
@@ -272,106 +315,32 @@ public class CloverReportMojo extends AbstractMavenReport
      * Note: We use Clover's <code>clover-report</code> Ant task instead of the Clover CLI APIs because the CLI
      * APIs are limited and do not support historical reports.
      */
-    private void createReport( String database, CloverReportTask.CurrentEx currentEx,
-        CloverReportTask.HistoricalEx historicalEx, CloverFormatType type )
+    private void createReport(String database, String format, String title, String output, String historyOut, boolean summary)
     {
-        Project antProject = AbstractCloverMojo.registerCloverAntTasks();
-
-        CloverReportTask cloverReportTask = (CloverReportTask) antProject.createTask( "clover-report" );
-        cloverReportTask.init();
-        cloverReportTask.setInitString( database );
-
-        // Add current report definition
-        currentEx.addFormat( type );
-        cloverReportTask.addCurrent( currentEx );
-
-        // Add historical report definition
-        if ( historicalEx != null )
-        {
-            historicalEx.addFormat( type );
-            cloverReportTask.addHistorical( historicalEx );
+        getLog().info("createReport");
+        final Project antProject = new Project();
+        antProject.init();        
+        antProject.setUserProperty(MagicNames.ANT_FILE, reportDescriptor.getAbsolutePath());
+        antProject.setCoreLoader(getClass().getClassLoader());
+        antProject.setProperty("cloverdb", database);
+        antProject.setProperty("output", output);
+        antProject.setProperty("history", historyDir);
+        antProject.setProperty("title", title);
+        antProject.setProperty("tests", project.getBuild().getTestSourceDirectory());
+        antProject.setProperty("filter", contextFilters);
+        antProject.setProperty("orderBy", orderBy);
+        antProject.setProperty("type", format);
+        antProject.setProperty("summary", String.valueOf(summary));
+        if (historyOut != null) {
+            antProject.setProperty("historyout", historyOut);
         }
-
-        cloverReportTask.execute();
+        AbstractCloverMojo.registerCloverAntTasks(antProject, getLog());
+        ProjectHelper.configureProject(antProject, reportDescriptor);
+        String target = isHistoricalDirectoryValid(output) && (historyOut != null) ? "historical" : "current";
+        antProject.executeTarget(target);
     }
 
-    private CloverReportTask.CurrentEx createCurrentReportForCloverReportTask( String title, File outFile,
-        boolean isSummaryReport ) throws MavenReportException {
-        CloverReportTask.CurrentEx currentEx = new CloverReportTask.CurrentEx();
-        currentEx.setTitle( title );
-        currentEx.setAlwaysReport( true );
-        currentEx.setOutFile( outFile );
-        currentEx.setSummary( isSummaryReport );
-        if (useSurefireTestResults) {
-            Plugin surefirePlugin = (Plugin) project.getBuild().getPluginsAsMap().get("org.apache.maven.plugins:maven-surefire-plugin");
-            if (surefirePlugin == null)
-            {
-                throw new MavenReportException("The surefire plugin is not installed, you can't set 'useSurefireTestResults' to true");                
-            }
-            File surefireReports = new File(project.getBuild().getDirectory() + File.separator + "surefire-reports");;
-            Object config = surefirePlugin.getConfiguration();
-            if (config != null)
-            {
-                String reportsDirectory = getNodeValue((Xpp3Dom) config, "reportsDirectory");
-                if (reportsDirectory != null)
-                {
-                    if (reportsDirectory.indexOf("${") != -1)
-                    {
-                        throw new MavenReportException(
-                                "You cannot use the maven-clover plugin with a surefire configuration which explicitly sets the reportsDirectory using a maven variable -- the string '"
-                                        + reportsDirectory + "' appears to include a variable.");
-                    }
-                    surefireReports = new File(reportsDirectory);
-                }
-            }
-            FileSet testResultReports = new FileSet();
-            testResultReports.setDir(surefireReports);
-            currentEx.addTestResults(testResultReports);
-        }
-
-        return currentEx;
-    }
-
-    private String getNodeValue(Xpp3Dom tree, String nodeName)
-    {
-        if (nodeName.equals(tree.getName()))
-        {
-            return tree.getValue();
-        }
-        else
-        {
-            Xpp3Dom[] children = tree.getChildren();
-            for (int i = 0; i < children.length; ++i)
-            {
-                String s = getNodeValue(children[i], nodeName);
-                if (s != null)
-                {
-                    return s;
-                }
-            }
-            return null;
-        }
-    }
-
-    private CloverReportTask.HistoricalEx createHistoricalReportForCloverReportTask( String title, File outFile)
-    {
-        CloverReportTask.HistoricalEx historicalEx = null;
-
-        // Only generate historical reports if the user has asked for it, if the history dir exists and if it contains
-        // historical data.
-        if ( this.generateHistorical && isHistoricalDirectoryValid( outFile ) )
-        {
-            historicalEx = new CloverReportTask.HistoricalEx();
-            historicalEx.setTitle( title );
-            historicalEx.setAlwaysReport( true );
-            historicalEx.setOutFile( outFile );
-            historicalEx.setHistoryDir( new File( this.historyDir ) );
-        }
-
-        return historicalEx;
-    }
-
-    private boolean isHistoricalDirectoryValid( File outFile )
+  private boolean isHistoricalDirectoryValid( String outFile )
     {
         boolean isValid = false;
 
@@ -396,18 +365,6 @@ public class CloverReportMojo extends AbstractMavenReport
 
         return isValid;
     }
-
-    private CloverFormatType createFormatTypeForCloverReportTask( String format )
-    {
-        CloverFormatType type = new CloverFormatType();
-        type.setType( format );
-        if ( this.contextFilters != null )
-        {
-        	type.setFilter( contextFilters );
-        }
-        return type;
-    }
-
     /**
      * @see org.apache.maven.reporting.MavenReport#getOutputName()
      */
@@ -514,4 +471,38 @@ public class CloverReportMojo extends AbstractMavenReport
             this.outputDirectory = reportOutputDirectory;
         }
     }
+
+     /**
+     * The logic here is taken from AbstractSiteRenderingMojo#resolveSiteDescriptor in the maven-site-plugin.
+     * See also: http://docs.codehaus.org/display/MAVENUSER/Mojo+Developer+Cookbook
+     * @return
+     * @throws IOException
+     * @throws ArtifactResolutionException
+     * @throws ArtifactNotFoundException
+     */
+    protected File resolveCloverDescriptor()
+        throws MavenReportException {
+        Artifact artifact = artifactFactory.createArtifactWithClassifier(
+                project.getGroupId(),
+                project.getArtifactId(),
+                project.getVersion(),
+                "xml", "clover-report");
+
+         try {
+             artifactResolver.resolve(artifact, repositories, localRepository);
+             return artifact.getFile();
+         } catch (ArtifactResolutionException e) {
+             getLog().debug(e.getMessage(), e);
+         } catch (ArtifactNotFoundException e) {
+             getLog().debug(e.getMessage(), e);
+         }
+         try {
+             getLog().info("Using default clover-report descriptor.");
+             return resourceManager.getResourceAsFile("/private-clover-report.xml");
+         } catch (Exception e) {
+             throw new MavenReportException("Could not resolve private-clover-report.xml. " +
+                     "Please try specifying this via the maven.clover.reportDescriptor property.", e);
+         }
+    }
+
 }

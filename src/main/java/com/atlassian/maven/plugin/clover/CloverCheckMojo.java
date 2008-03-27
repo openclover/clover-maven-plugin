@@ -71,6 +71,12 @@ public class CloverCheckMojo extends AbstractCloverMojo
     public void execute()
         throws MojoExecutionException
     {
+
+        if (skip) {
+            getLog().debug("Skipping clover check.");
+            return;
+        }
+
         if ( !isInCloverForkedLifecycle() )
         {
             if ( areCloverDatabasesAvailable() )
@@ -112,7 +118,9 @@ public class CloverCheckMojo extends AbstractCloverMojo
      */
     private void checkDatabase(String database) throws MojoExecutionException
     {
-        Project antProject = AbstractCloverMojo.registerCloverAntTasks();
+        final Project antProject = new Project();
+        antProject.init();
+        AbstractCloverMojo.registerCloverAntTasks(antProject, getLog());
 
         getLog().info( "Checking for coverage of [" + targetPercentage + "] for database [" + database + "]");
 

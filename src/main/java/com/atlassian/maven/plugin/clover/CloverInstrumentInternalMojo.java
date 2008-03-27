@@ -134,6 +134,12 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     public void execute()
         throws MojoExecutionException
     {
+
+        if (skip) {
+            getLog().debug("Skipping clover instrumentation.");
+            return;
+        }        
+
         // Ensure output directories exist
         new File( this.cloverOutputDirectory ).mkdirs();
         String cloverOutputSourceDirectory = new File( this.cloverOutputDirectory, "src" ).getPath();

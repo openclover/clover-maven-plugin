@@ -57,6 +57,11 @@ public class CloverAggregateMojo extends AbstractCloverMojo
     public void execute()
         throws MojoExecutionException
     {
+        if (skip) {
+            getLog().debug("Skipping clover aggregate.");
+            return;
+        }        
+
         // If we're in a module with children modules, then aggregate the children clover databases.
         if ( getProject().getModules() != null && getProject().getModules().size() > 0 )
         {

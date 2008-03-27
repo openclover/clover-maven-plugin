@@ -53,6 +53,11 @@ public class CloverSaveHistoryMojo extends AbstractCloverMojo
     public void execute()
         throws MojoExecutionException
     {
+        if (skip) {
+            getLog().debug("Skipping clover save-history.");
+            return;
+        }
+
         if ( areCloverDatabasesAvailable() )
         {
             super.execute();
@@ -89,7 +94,9 @@ public class CloverSaveHistoryMojo extends AbstractCloverMojo
      */
     private void saveDatabase(String database)
     {
-        Project antProject = AbstractCloverMojo.registerCloverAntTasks();
+        final Project antProject = new Project();
+        antProject.init();
+        AbstractCloverMojo.registerCloverAntTasks(antProject, getLog());
 
         getLog().info( "Saving Clover history point for database [" + database + "] in ["
             + this.historyDir + "]" );

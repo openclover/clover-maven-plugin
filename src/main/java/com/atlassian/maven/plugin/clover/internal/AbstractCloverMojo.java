@@ -31,6 +31,7 @@ import org.codehaus.plexus.resource.loader.FileResourceLoader;
 import java.io.File;
 
 import com.cenqua.clover.CloverNames;
+import com.atlassian.maven.plugin.clover.MvnLogBuildListener;
 
 /**
  * Common code for all Clover plugin build Mojos.
@@ -138,6 +139,16 @@ public abstract class AbstractCloverMojo extends AbstractMojo
     private ResourceManager resourceManager;
 
     /**
+     *
+     * A flag to indicate not to run clover for this execution.
+     *
+     * If set to true, Clover will not be run.
+     * 
+     * @parameter expression="${maven.clover.skip}" default-value="false"
+     */
+    protected boolean skip;
+
+    /**
      * {@inheritDoc}
      * @see org.apache.maven.plugin.AbstractMojo#execute()
      */
@@ -232,19 +243,14 @@ public abstract class AbstractCloverMojo extends AbstractMojo
      * Note: We're defining this method as static because it is also required in the report mojo and reporting mojos
      * and main mojos cannot share anything right now. See http://jira.codehaus.org/browse/MNG-1886.
      *
-     * @return A {{@link Project}} instance with the Clover Ant tasks registered in it
      */
-    public static Project registerCloverAntTasks()
+    public static void registerCloverAntTasks(Project antProject, Log log)
     {
-        Project antProject = new Project();
-        antProject.init();
-
+        antProject.addBuildListener(new MvnLogBuildListener(log));
         Taskdef taskdef = (Taskdef) antProject.createTask( "taskdef" );
         taskdef.init();
         taskdef.setResource( "cloverlib.xml" );
         taskdef.execute();
-
-        return antProject;
     }
 
     /**
