@@ -295,19 +295,19 @@ public class CloverReportMojo extends AbstractMavenReport
         final String outpath = outputDirectory.getAbsolutePath();
         if ( this.generateHtml )
         {
-            createReport(database, Format.TYPE_HTML, titlePrefix, outpath, "", false);
+            createReport(database, "html", titlePrefix, outpath, "", false);
         }
         if ( this.generatePdf )
         {
-            createReport(database, Format.TYPE_PDF, titlePrefix, outpath + "/clover.pdf", outpath + "/historical.pdf", true);
+            createReport(database, "pdf", titlePrefix, outpath + "/clover.pdf", outpath + "/historical.pdf", true);
         }
         if ( this.generateXml )
         {
-            createReport(database, Format.TYPE_XML, titlePrefix, outpath + "/clover.xml", null, false);
+            createReport(database, "xml", titlePrefix, outpath + "/clover.xml", null, false);
         }
         if ( this.generateJson )
         {
-            createReport(database, Format.TYPE_JSON, titlePrefix, outpath, null, false);
+            createReport(database, "json", titlePrefix, outpath, null, false);
         }
     }
 
