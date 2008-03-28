@@ -20,7 +20,6 @@ package com.atlassian.maven.plugin.clover;
  */
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
-import com.cenqua.clover.reporters.Format;
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -295,7 +294,7 @@ public class CloverReportMojo extends AbstractMavenReport
         final String outpath = outputDirectory.getAbsolutePath();
         if ( this.generateHtml )
         {
-            createReport(database, "html", titlePrefix, outpath, "", false);
+            createReport(database, "html", titlePrefix, outpath, outpath, false);
         }
         if ( this.generatePdf )
         {
@@ -336,11 +335,12 @@ public class CloverReportMojo extends AbstractMavenReport
         }
         AbstractCloverMojo.registerCloverAntTasks(antProject, getLog());
         ProjectHelper.configureProject(antProject, reportDescriptor);
+        antProject.setBaseDir(project.getBasedir());
         String target = isHistoricalDirectoryValid(output) && (historyOut != null) ? "historical" : "current";
         antProject.executeTarget(target);
     }
 
-  private boolean isHistoricalDirectoryValid( String outFile )
+   private boolean isHistoricalDirectoryValid( String outFile )
     {
         boolean isValid = false;
 
@@ -497,10 +497,17 @@ public class CloverReportMojo extends AbstractMavenReport
              getLog().debug(e.getMessage(), e);
          }
          try {
-             getLog().info("Using default clover-report descriptor.");
-             return resourceManager.getResourceAsFile("/private-clover-report.xml");
+             getLog().info("Using /default-clover-report descriptor.");
+             final File file = AbstractCloverMojo.getResourceAsFile(project,
+                                                         resourceManager,
+                                                         "/default-clover-report.xml",
+                                                         getLog(),
+                                                         this.getClass().getClassLoader());
+             file.deleteOnExit();
+             return file;
+             
          } catch (Exception e) {
-             throw new MavenReportException("Could not resolve private-clover-report.xml. " +
+             throw new MavenReportException("Could not resolve default-clover-report.xml. " +
                      "Please try specifying this via the maven.clover.reportDescriptor property.", e);
          }
     }

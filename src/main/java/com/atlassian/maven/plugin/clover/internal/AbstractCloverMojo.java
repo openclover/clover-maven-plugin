@@ -207,32 +207,47 @@ public abstract class AbstractCloverMojo extends AbstractMojo
         
         logger.debug("Using licenseLocation '" + licenseLocation +"'");
 
+        boolean deleteOnExit = false;
+        if (licenseLocation == null) {
+            logger.info("No 'maven.clover.licenseLocation' configured. Using default evaluation license.");
+            licenseLocation = "/clover.license";
+            deleteOnExit = true;
+        }
+        final File licenseFile = getResourceAsFile(project, resourceManager, licenseLocation, logger, classloader);
+        if (deleteOnExit) {
+            licenseFile.deleteOnExit();
+        }
+        logger.debug("Using license file [" + licenseFile.getPath() + "]");
+        System.setProperty(CloverNames.PROP_LICENSE_PATH, licenseFile.getPath());
+        
+    }
+
+    public static File getResourceAsFile(MavenProject project,
+                                           ResourceManager resourceManager,
+                                           String resourceLocation,
+                                           Log logger,
+                                           ClassLoader classloader) throws MojoExecutionException {
+
+        logger.debug("Getting resource: '" + resourceLocation +"'");
+
         resourceManager.addSearchPath( "url", "" );
         resourceManager.addSearchPath( FileResourceLoader.ID, project.getFile().getParentFile().getAbsolutePath() );
 
-        String licenseFile;
-        ClassLoader origLoader = Thread.currentThread().getContextClassLoader();        
+        ClassLoader origLoader = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(classloader);
-            if (licenseLocation == null) {
-                logger.info("No 'maven.clover.licenseLocation' configured. Using default evaluation license.");
-                licenseLocation = "/clover.license";
-            }
-
             try {
-                logger.debug("Attempting to load license from [" + licenseLocation + "] ...");
-                licenseFile = resourceManager.getResourceAsFile(licenseLocation).getPath();
-                logger.info("License loaded from: '"+ licenseFile + "'");
+                logger.debug("Attempting to load resource from [" + resourceLocation + "] ...");
+                File file = resourceManager.getResourceAsFile(resourceLocation);
+                return file;
             } catch (Exception e) {
-                throw new MojoExecutionException("Failed to load license file [" + licenseLocation + "]", e);
+                throw new MojoExecutionException("Failed to load resource as file [" + resourceLocation + "]", e);
             }
-
-            logger.debug("Using license file [" + licenseFile + "]");
-            System.setProperty(CloverNames.PROP_LICENSE_PATH, licenseFile);
         }
         finally {
             Thread.currentThread().setContextClassLoader( origLoader );
         }
+        
     }
 
     /**
