@@ -42,7 +42,7 @@ import com.atlassian.maven.plugin.clover.MvnLogBuildListener;
 public abstract class AbstractCloverMojo extends AbstractMojo
 {
     /**
-     * The location of the <a href="http://cenqua.com/clover/doc/adv/database.html">Clover database</a>.
+     * The location of the <a href="http://confluence.atlassian.com/x/EIBOB">Clover database</a>.
      *
      * @parameter expression="${maven.clover.cloverDatabase}" default-value="${project.build.directory}/clover/clover.db"
      */
@@ -78,7 +78,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo
 
 
     /**
-     * The <a href="http://cenqua.com/clover/doc/adv/flushpolicies.html">Clover flush policy</a> to use.
+     * The <a href="http://confluence.atlassian.com/x/O4BOB">Clover flush policy</a> to use.
      * Valid values are <code>directed</code>, <code>interval</code> and <code>threaded</code>.
      *
      * @parameter expression="${maven.clover.flushPolicy}" default-value="threaded"

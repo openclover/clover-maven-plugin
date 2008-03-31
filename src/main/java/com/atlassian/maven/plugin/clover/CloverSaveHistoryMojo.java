@@ -27,7 +27,7 @@ import com.cenqua.clover.tasks.HistoryPointTask;
 import java.io.File;
 
 /**
- * Save a <a href="http://cenqua.com/clover/doc/tutorial/part2.html">Clover history point</a>.
+ * Save a <a href="http://confluence.atlassian.com/x/rYhEB">Clover history point</a>.
  *
  * @goal save-history
  *
