@@ -28,7 +28,7 @@
 
 {Contexts Example}
 
-  This example demonstrates how to configure {{{http://cenqua.com/clover/doc/adv/contexts.html}Clover filter contexts}}
+  This example demonstrates how to configure {{{http://confluence.atlassian.com/display/CLOVER/Using+Coverage+Contexts}Clover filter contexts}}
   using the Clover plugin.
 
 * {Sources}

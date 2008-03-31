@@ -61,7 +61,7 @@
 
 * {Getting Started}
 
-  The first thing to do is to create a {{{http://cenqua.com/clover/doc/adv/database.html}Clover database}}. To do
+  The first thing to do is to create a {{{http://confluence.atlassian.com/x/EIBOB}Clover database}}. To do
   this, you must either do:
 
 +------+
@@ -94,7 +94,7 @@
 +------+
 
   This instruments all sources using Clover so that a
-  {{{http://cenqua.com/clover/doc/adv/database.html}Clover database}} is created (or if it already exists, the plugin
+  {{{http://confluence.atlassian.com/x/EIBOB}Clover database}} is created (or if it already exists, the plugin
   will simply use it and add data on top of the existing one). When you execute your tests
   the instrumented code will start generating logs into the Clover database. These logs can then be used for
   Test Coverage Percentage checks, for report generation or for logging.
@@ -174,7 +174,7 @@
   <<<70%>>> will be used.
 
   However, as previously mentioned, Clover needs an existing
-  {{{http://cenqua.com/clover/doc/adv/database.html}Clover database}}. Thus, a call
+  {{{http://confluence.atlassian.com/x/EIBOB}Clover database}}. Thus, a call
   to <<<clover:instrument>>> may be neccessary:
 
 +------+
@@ -223,7 +223,7 @@
 
 ** {Using block contexts}
 
-  Clover allows specifying {{{http://cenqua.com/clover/doc/adv/contexts.html}block contexts}}
+  Clover allows specifying {{{http://confluence.atlassian.com/x/AwBTB}block contexts}}
   (i.e. elements to be excluded from the Test Percentage Coverage). To configure a block context use
   the <<<contextFilters>>> element in the <<<reporting>>> section. For example to exclude <<<try>>> and <<<static>>>
   block contexts, you would write:
@@ -267,7 +267,7 @@
 ** {Specifying a Clover flush policy}
 
   If you want to specify the Clover
-  {{{http://cenqua.com/clover/doc/adv/flushpolicies.html}flush policy}} that the
+  {{{http://confluence.atlassian.com/x/O4BOB}flush policy}} that the
   plugin should use, then specify it in the plugin's configuration. Valid
   policies are <<<threaded>>>, <<<directed>>> and <<<interval>>>.
 
@@ -319,7 +319,7 @@ mvn clover:clover
 
   But just like the <<<clover:check>>> goal, the <<<clover:clover>>> goal
   also needs an existing
-  {{{http://cenqua.com/clover/doc/adv/database.html}Clover database}}. Thus, if
+  {{{http://confluence.atlassian.com/x/EIBOB}Clover database}}. Thus, if
   if it still does not exist, a call to <<<clover:instrument>>> must first be
   made:
 
@@ -369,7 +369,7 @@ mvn clover:instrument clover:clover
 
   Note that in the above example that <<<clover:instrument>>> was bound to the
   <<<pre-site>>> phase. This is done to ensure that a
-  {{{http://cenqua.com/clover/doc/adv/database.html}Clover database}} is
+  {{{http://confluence.atlassian.com/x/EIBOB}Clover database}} is
   generated before the report executes.
 
   <Back to {{{usage.html}top}}.>
@@ -473,7 +473,7 @@ mvn clover:instrument clover:clover
 +---------
 
   Now this will generate a
-  {{{http://cenqua.com/clover/doc/tutorial/part2.html}Clover historical report}}
+  {{{http://confluence.atlassian.com/x/rYhEB}Clover historical report}}
   only if you have saved Clover historical savepoints. In order to save a Clover
   savepoint, run the <<<clover:save-history>>> goal. It's up to you to decide
   when you want to call this goal.
@@ -584,7 +584,7 @@ myproject
 
   When you run <<<mvn site>>> in <<<myproject/>>>, the plugin will instrument
   your sources, run your tests, aggregate the different
-  {{{http://cenqua.com/clover/doc/adv/database.html}Clover database}} generated
+  {{{http://confluence.atlassian.com/x/EIBOB}Clover database}} generated
   for each build module (i.e. <<<project1>>> and <<<project2>>>) and generate an
   aggregated Clover report in the site for the <<<myproject>>> project.
 
@@ -595,14 +595,14 @@ mvn clover:aggregate clover:clover
 +------+
 
   or if there is no existing
-  {{{http://cenqua.com/clover/doc/adv/database.html}Clover database}}:
+  {{{http://confluence.atlassian.com/x/EIBOB}Clover database}}:
 
 +------+
 mvn clover:instrument clover:aggregate clover:clover
 +------+
 
   Note that you can control the location of the merged
-  {{{http://cenqua.com/clover/doc/adv/database.html}Clover database}} by using
+  {{{http://confluence.atlassian.com/x/EIBOB}Clover database}} by using
   the <<<cloverMergeDatabase>>> configuration property.
 
   <Back to {{{usage.html}top}}.>
@@ -632,7 +632,7 @@ Coverage Overview -
 * {Specifying a custom license file}
 
   The Clover plugin provides a default evaulation license. However if you continue to use Clover you'll need your
-  own license (they are free for open source/non-commercial project but you'll need to contact Cenqua to get a
+  own license (they are free for open source/non-commercial project but you'll need to {{{http://my.atlassian.com/}contact Atlassian}} to get a
   license). To use your license specify it using a <<<licenseLocation>>> configuration element. For example if you
   wanted to automatically execute the <<<check>>> goal when you type <<<mvn install>>> and if you wanted to use your
   license located in <<<${basedir}/src/test/clover/myclover.license>>> you would use:
