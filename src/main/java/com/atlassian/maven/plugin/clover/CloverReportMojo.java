@@ -69,7 +69,8 @@ public class CloverReportMojo extends AbstractMavenReport {
     private File reportDescriptor;
 
     /**
-     * If set to true, the clover-report configuration file will be resolved as a versioned artifact in your repository.
+     * If set to true, the clover-report configuration file will be resolved as a versioned artifact by looking for it
+     * in your configured maven repositories - both remote and local.
      *
      * @parameter expression="${maven.clover.resolveReportDescriptor}" default-value="false"
      */
@@ -85,7 +86,6 @@ public class CloverReportMojo extends AbstractMavenReport {
     /**
      * Remote repositories used for the project.
      *
-     * @todo this is used for site descriptor resolution - it should relate to the actual project but for some reason they are not always filled in
      * @parameter expression="${project.remoteArtifactRepositories}"
      */
     protected List repositories;
@@ -215,9 +215,9 @@ public class CloverReportMojo extends AbstractMavenReport {
      * Comma or space separated list of Clover somesrcexcluded (block, statement or method filers) to exclude when
      * generating coverage reports.
      *
-     * @parameter expression="${maven.clover.contextFilters}"
+     * @parameter expression="${maven.clover.contextFilters}" default-value=""
      */
-    private String contextFilters = "";
+    private String contextFilters;
 
     /**
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
@@ -333,7 +333,7 @@ public class CloverReportMojo extends AbstractMavenReport {
         antProject.setProperty("history", historyDir);
         antProject.setProperty("title", title);
         antProject.setProperty("tests", project.getBuild().getTestSourceDirectory());
-        antProject.setProperty("filter", contextFilters);
+        antProject.setProperty("filter", contextFilters != null ? contextFilters : "");
         antProject.setProperty("orderBy", orderBy);
         antProject.setProperty("type", format);
         antProject.setProperty("summary", String.valueOf(summary));
