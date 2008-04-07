@@ -106,13 +106,6 @@ public abstract class AbstractCloverMojo extends AbstractMojo
      */
     private boolean waitForFlush;
 
-    /**
-     * If true we won't instrument the tests to record results, and will get test results from the
-     * surefire test results instead.
-     *
-     * @parameter expression="${maven.clover.useSurefireTestResults}" default-value="false"
-     */
-    private boolean useSurefireTestResults;
 
     /**
      * Whether the Clover instrumentation should use the Clover <code>jdk14</code> or <code>jdk15</code> flags to
@@ -345,10 +338,6 @@ public abstract class AbstractCloverMojo extends AbstractMojo
 
     public void setProject(MavenProject project) {
         this.project = project;
-    }
-
-    public boolean isUseSurefireTestResults() {
-        return useSurefireTestResults;
     }
 
     public void setLicenseLocation(String licenseLocation) {

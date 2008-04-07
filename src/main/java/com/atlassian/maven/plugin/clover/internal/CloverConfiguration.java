@@ -52,5 +52,4 @@ public interface CloverConfiguration
 
     boolean isUseFullyQualifiedJavaLang();
 
-    boolean isUseSurefireTestResults();
 }

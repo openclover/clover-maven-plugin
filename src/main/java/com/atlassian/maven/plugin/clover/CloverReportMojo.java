@@ -163,14 +163,6 @@ public class CloverReportMojo extends AbstractMavenReport {
     private boolean waitForFlush;
 
     /**
-     * If true we won't instrument the tests to record results, and will get test results from the
-     * surefire test results instead.
-     *
-     * @parameter expression="${maven.clover.useSurefireTestResults}" default-value="false"
-     */
-    private boolean useSurefireTestResults;
-
-    /**
      * Decide whether to generate an HTML report or not.
      *
      * @parameter default-value="true" expression="${generateHtml}"

@@ -237,12 +237,6 @@ public abstract class AbstractInstrumenter
             }
         }
 
-        if (getConfiguration().isUseSurefireTestResults())
-        {
-            parameters.add("--recordTestResults");
-            parameters.add("false");
-        }
-
         // Log parameters
         if ( getConfiguration().getLog().isDebugEnabled() )
         {
