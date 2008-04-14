@@ -56,7 +56,7 @@ under the License.
         <maven>2.0.1</maven>
     </prerequisites>
     <properties>
-        <cloverVersion>2.2.0-SNAPSHOT</cloverVersion>
+        <cloverVersion>2.2.1</cloverVersion>
     </properties>
     <dependencies>
         <dependency>
@@ -215,15 +215,12 @@ under the License.
                     <plugin>
                         <artifactId>maven-invoker-plugin</artifactId>
                         <configuration>
-                            <debug>false</debug>
+                            <debug>true</debug>
                             <projectsDirectory>src/it</projectsDirectory>
                             <pomIncludes>
                                 <pomInclude>**/contexts/pom.xml</pomInclude>
                                 <pomInclude>**/simple/pom.xml</pomInclude>
-                                <pomInclude>**/clmvn7/pom.xml</pomInclude>
-                                <!-- this doesn't work at present due to a problem with the invoker plugin
                                 <pomInclude>**/multiproject/pom.xml</pomInclude>
-                                -->
                                 <pomInclude>**/license/pom.xml</pomInclude>
                                 <pomInclude>**/xdoclet/pom.xml</pomInclude>
                                 <pomInclude>**/instrument-tests/pom.xml</pomInclude>
@@ -244,26 +241,6 @@ under the License.
                             </execution>
                         </executions>
                     </plugin>
-                    
-                    <!--plugin>
-                      <groupId>com.atlassian.maven.plugins</groupId>
-                      <artifactId>maven-clover-plugin</artifactId>
-                      <version>3.0-SNAPSHOT</version>
-                      <configuration>
-                         <licenseLocation>${clover.licenseLocation}</licenseLocation>
-                      </configuration>
-                      <executions>
-                        <execution>
-                          <id>main</id>
-                          <phase>verify</phase>
-                          <goals>
-                            <goal>instrument</goal>
-                            <goal>check</goal>
-                          </goals>
-                        </execution>
-                      </executions>
-                    </plugin-->
-                    
                 </plugins>
             </build>
         </profile>

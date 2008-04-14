@@ -1,1 +1,1 @@
-clean install site verifier:verify
+clean clover2:instrument clover2:aggregate clover2:clover verifier:verify

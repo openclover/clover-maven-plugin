@@ -21,10 +21,10 @@ under the License.
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.atlassian.maven.plugins</groupId>
-    <artifactId>maven-clover-plugin-sample-multiproject</artifactId>
+    <artifactId>maven-clover2-plugin-sample-multiproject</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>maven-clover-plugin-sample-multiproject-ear1</artifactId>
+  <artifactId>maven-clover2-plugin-sample-multiproject-ear1</artifactId>
   <packaging>ear</packaging>
   <name>Maven Clover Plugin Multiproject Sample - EAR 1</name>
   <description>Maven Clover Plugin Multiproject Sample - EAR 1</description>
@@ -32,7 +32,7 @@ under the License.
   <dependencies>
     <dependency>
       <groupId>com.atlassian.maven.plugins</groupId>
-      <artifactId>maven-clover-plugin-sample-multiproject-war1</artifactId>
+      <artifactId>maven-clover2-plugin-sample-multiproject-war1</artifactId>
       <version>1.0-SNAPSHOT</version>
       <type>war</type>
     </dependency>
