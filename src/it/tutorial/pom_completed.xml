@@ -14,21 +14,23 @@
         </dependency>
     </dependencies>
     <properties>
-	<clover.maven.license>rRRpSBkPnORalRaWJibveDUBrPmeVEAOrkHWIDIucLSShp
-mi2Kah51etzTPoMMaH7M2S7Q2KECe8ogN6HScThUFSTS5X
-ONROWwnPrnqoMOpRrPpxsmnRRMpqoRoQrRXUVTTVXsQnmp
-mUUnomqtmnpmspovUUnomqtmnpmspovUUEfZhUUn</clover.maven.license>
-	<clover.licenseLocation>${basedir}/clover.license</clover.licenseLocation>
+        <clover.maven.license>rRRpSBkPnORalRaWJibveDUBrPmeVEAOrkHWIDIucLSShp
+            mi2Kah51etzTPoMMaH7M2S7Q2KECe8ogN6HScThUFSTS5X
+            ONROWwnPrnqoMOpRrPpxsmnRRMpqoRoQrRXUVTTVXsQnmp
+            mUUnomqtmnpmspovUUnomqtmnpmspovUUEfZhUUn
+        </clover.maven.license>
+        <clover.licenseLocation>${basedir}/clover.license</clover.licenseLocation>
     </properties>
     <build>
         <plugins>
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-clover-plugin</artifactId>
-		        <version>3.7</version>
+                <artifactId>maven-clover2-plugin</artifactId>
+                <version>3.7</version>
                 <configuration>
-		        <!--<license>${clover.maven.license}</license-->
-                 <licenseLocation>${clover.licenseLocation}</licenseLocation>
+                    <!--<license>${clover.maven.license}</license-->
+                    <licenseLocation>${clover.licenseLocation}</licenseLocation>
+
                 </configuration>
                 <executions>
                     <execution>

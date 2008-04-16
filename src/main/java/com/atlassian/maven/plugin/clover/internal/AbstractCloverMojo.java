@@ -108,8 +108,8 @@ public abstract class AbstractCloverMojo extends AbstractMojo
 
 
     /**
-     * Whether the Clover instrumentation should use the Clover <code>jdk14</code> or <code>jdk15</code> flags to
-     * parse sources.
+     * Whether the Clover instrumentation should use the Clover <code>jdk14</code>, <code>jdk15</code> or <code>jdk16</code> flags to
+     * parse sources. Valid values are 1.4, 1.5 and 1.6 .
      *
      * @parameter expression="${maven.clover.jdk}"
      */
@@ -192,8 +192,8 @@ public abstract class AbstractCloverMojo extends AbstractMojo
     {
 
         if (licenseCert != null) {
-            logger.debug("Full license supplied '" + licenseCert +
-                        "'. License location: '" + licenseLocation + "' will be ignored.");            
+            logger.debug("Full license supplied. Length: '" + licenseCert.length() +
+                        "'. License location: '" + licenseLocation + "' will be ignored.");
             System.setProperty(CloverNames.PROP_LICENSE_CERT, licenseCert);
             return;
         }

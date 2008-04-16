@@ -20,7 +20,7 @@ under the License.
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.atlassian.maven.plugins</groupId>
-    <artifactId>maven-clover-plugin-it-mclover80</artifactId>
+    <artifactId>maven-clover2-plugin-it-mclover80</artifactId>
     <packaging>pom</packaging>
     <name>mclover</name>
     <description>Maven Clover Plugin Multiproject Sample</description>
@@ -39,7 +39,7 @@ under the License.
         <plugins>
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-clover-plugin</artifactId>
+                <artifactId>maven-clover2-plugin</artifactId>
                 <configuration>
                     <generateHistorical>true</generateHistorical>
                      <licenseLocation>${clover.licenseLocation}</licenseLocation>
@@ -52,7 +52,7 @@ under the License.
             
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-clover-plugin</artifactId>
+                <artifactId>maven-clover2-plugin</artifactId>
                 <configuration>
                     <flushPolicy>threaded</flushPolicy>
                     <flushInterval>100</flushInterval>
