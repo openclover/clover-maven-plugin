@@ -165,41 +165,41 @@ public class CloverReportMojo extends AbstractMavenReport {
     /**
      * Decide whether to generate an HTML report or not.
      *
-     * @parameter default-value="true" expression="${generateHtml}"
+     * @parameter default-value="true" expression="${maven.clover.generateHtml}"
      */
     private boolean generateHtml;
 
     /**
      * Decide whether to generate a PDF report or not.
      *
-     * @parameter default-value="false" expression="${generatePdf}"
+     * @parameter default-value="false" expression="${maven.clover.generatePdf}"
      */
     private boolean generatePdf;
 
     /**
      * Decide whether to generate a XML report or not.
      *
-     * @parameter default-value="false" expression="${generateXml}"
+     * @parameter default-value="false" expression="${maven.clover.generateXml}"
      */
     private boolean generateXml;
 
     /**
      * Decide whether to generate a JSON report or not.
      *
-     * @parameter default-value="false" expression="${generateJson}"
+     * @parameter default-value="false" expression="${maven.clover.generateJson}"
      */
     private boolean generateJson;
     /**
      * Decide whether to generate a Clover historical report or not.
      *
-     * @parameter default-value="false" expression="${generateHistorical}"
+     * @parameter default-value="false" expression="${maven.clover.generateHistorical}"
      */
     private boolean generateHistorical;
 
     /**
      * How to order coverage tables.
      *
-     * @parameter default-value="PcCoveredAsc" expression="${orderBy}"
+     * @parameter default-value="PcCoveredAsc" expression="${maven.clover.orderBy}"
      */
     private String orderBy;
 
@@ -262,6 +262,10 @@ public class CloverReportMojo extends AbstractMavenReport {
      * @see org.apache.maven.reporting.AbstractMavenReport#executeReport(java.util.Locale)
      */
     public void executeReport(Locale locale) throws MavenReportException {
+        if (!canGenerateReport()) {
+            getLog().info("No report being generated for this module.");
+        }
+
         // Register the Clover license
         try {
             AbstractCloverMojo.registerLicenseFile(this.project, this.resourceManager, this.licenseLocation, getLog(),
@@ -324,7 +328,8 @@ public class CloverReportMojo extends AbstractMavenReport {
         antProject.setProperty("output", output);
         antProject.setProperty("history", historyDir);
         antProject.setProperty("title", title);
-        antProject.setProperty("tests", project.getBuild().getTestSourceDirectory());
+        final String testDir = project.getBuild().getTestSourceDirectory();
+        antProject.setProperty("tests", testDir);
         antProject.setProperty("filter", contextFilters != null ? contextFilters : "");
         antProject.setProperty("orderBy", orderBy);
         antProject.setProperty("type", format);
@@ -336,7 +341,8 @@ public class CloverReportMojo extends AbstractMavenReport {
         ProjectHelper.configureProject(antProject, reportDescriptor);
         antProject.setBaseDir(project.getBasedir());
         String target = isHistoricalDirectoryValid(output) && (historyOut != null) ? "historical" : "current";
-        antProject.executeTarget(target);
+        String suffix = new File(testDir).exists() ? "" : ".notests" ;
+        antProject.executeTarget(target + suffix);
     }
 
     private boolean isHistoricalDirectoryValid(String outFile) {
@@ -421,6 +427,7 @@ public class CloverReportMojo extends AbstractMavenReport {
      */
     public boolean canGenerateReport() {
         boolean canGenerate = false;
+
 
         AbstractCloverMojo.waitForFlush(this.waitForFlush, this.flushInterval);
 
