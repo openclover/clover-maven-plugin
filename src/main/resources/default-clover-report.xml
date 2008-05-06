@@ -24,25 +24,5 @@
             </current>
         </clover-report>
     </target>
-
-
-    <target name="historical.notests" description="Target to use if there are no tests">
-        <clover-report>
-            <current outfile="${output}"  summary="${summary}">
-                <format refid="clover.format"/>
-            </current>
-            <historical outfile="${historyout}" historydir="${history}">
-                <format refid="clover.format"/>
-            </historical>
-        </clover-report>
-    </target>
-
-    <target name="current.notests" description="Target to use if there are no tests">
-        <clover-report>
-            <current outfile="${output}" title="${title}" summary="${summary}">
-                <format refid="clover.format"/>
-            </current>
-        </clover-report>
-    </target>
-
+    
 </project>

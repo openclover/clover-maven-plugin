@@ -341,8 +341,7 @@ public class CloverReportMojo extends AbstractMavenReport {
         ProjectHelper.configureProject(antProject, reportDescriptor);
         antProject.setBaseDir(project.getBasedir());
         String target = isHistoricalDirectoryValid(output) && (historyOut != null) ? "historical" : "current";
-        String suffix = new File(testDir).exists() ? "" : ".notests" ;
-        antProject.executeTarget(target + suffix);
+        antProject.executeTarget(target);
     }
 
     private boolean isHistoricalDirectoryValid(String outFile) {
