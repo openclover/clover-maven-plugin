@@ -52,4 +52,5 @@ public interface CloverConfiguration
 
     boolean isUseFullyQualifiedJavaLang();
 
+    String getEncoding();
 }

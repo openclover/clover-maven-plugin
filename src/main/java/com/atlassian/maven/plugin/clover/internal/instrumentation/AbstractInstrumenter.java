@@ -232,6 +232,11 @@ public abstract class AbstractInstrumenter
             parameters.add("--dontFullyQualifyJavaLang");
         }
 
+        if (getConfiguration().getEncoding() != null) {
+            parameters.add("--encoding");
+            parameters.add(getConfiguration().getEncoding());
+        }
+
         for ( Iterator sourceRoots = filesToInstrument.keySet().iterator(); sourceRoots.hasNext(); )
         {
             Set filesInSourceRoot = (Set) filesToInstrument.get( (String) sourceRoots.next() );

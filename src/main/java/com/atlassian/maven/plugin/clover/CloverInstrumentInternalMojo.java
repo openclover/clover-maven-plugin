@@ -123,9 +123,16 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     /**
      * Use the fully qualified package name for java.lang.* classes.
      *
-     * @parameter expression="${useFullyQualifiedJavaLang}" default-value="true"
+     * @parameter expression="${maven.clover.useFullyQualifiedJavaLang}" default-value="true"
      */
     private boolean useFullyQualifiedJavaLang;
+
+    /**
+     * The character encoding to use when parsing source files.
+     *
+     * @parameter expression="${maven.clover.encoding}" 
+     */
+    private String encoding;
 
     /**
      * {@inheritDoc}
@@ -389,5 +396,9 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     public boolean isUseFullyQualifiedJavaLang() {
         return useFullyQualifiedJavaLang;
+    }
+
+    public String getEncoding() {
+        return encoding;
     }
 }
