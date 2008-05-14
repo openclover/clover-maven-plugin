@@ -33,11 +33,10 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
-import org.apache.tools.ant.MagicNames;
+//import org.apache.tools.ant.MagicNames;
 import org.codehaus.plexus.resource.ResourceManager;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -322,7 +321,7 @@ public class CloverReportMojo extends AbstractMavenReport {
     private void createReport(String database, String format, String title, String output, String historyOut, boolean summary) {
         final Project antProject = new Project();
         antProject.init();
-        antProject.setUserProperty(MagicNames.ANT_FILE, reportDescriptor.getAbsolutePath());
+        antProject.setUserProperty("ant.file", reportDescriptor.getAbsolutePath());
         antProject.setCoreLoader(getClass().getClassLoader());
         antProject.setProperty("cloverdb", database);
         antProject.setProperty("output", output);
