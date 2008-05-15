@@ -17,8 +17,7 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <artifactId>maven-plugins</artifactId>
         <groupId>org.apache.maven.plugins</groupId>
@@ -29,7 +28,7 @@ under the License.
     <artifactId>maven-clover2-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Maven Clover Plugin</name>
-    <version>4.0-SNAPSHOT</version>
+    <version>4.0-clmvn41</version>
     <description>Maven plugin for Clover</description>
     <url>http://confluence.atlassian.com/x/dIDBBQ</url>
     <organization>
@@ -47,10 +46,9 @@ under the License.
         </license>
     </licenses>
     <scm>
-        <connection>scm:svn:https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/trunk/</connection>
-        <developerConnection>scm:svn:https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/trunk/
-        </developerConnection>
-        <url>https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/</url>
+        <connection>scm:svn:https://svn.apache.org/repos/asf/maven/plugins/tags/maven-clover2-plugin-4.0-clmvn41</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/plugins/tags/maven-clover2-plugin-4.0-clmvn41</developerConnection>
+        <url>https://svn.apache.org/repos/asf/maven/plugins/tags/maven-clover2-plugin-4.0-clmvn41</url>
     </scm>
     <prerequisites>
         <maven>2.0.1</maven>
