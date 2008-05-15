@@ -19,15 +19,19 @@ package com.atlassian.maven.plugin.clover.internal.instrumentation;
  * under the License.
  */
 
-import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
-import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.FileUtils;
 
-import java.util.*;
-import java.io.File;
-import java.io.IOException;
-
+import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
+import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
 import com.cenqua.clover.CloverInstr;
 
 /**
@@ -65,11 +69,14 @@ public abstract class AbstractInstrumenter
         {
             instrumentSources( filesToInstrument, outputSourceDirectory );
 
-            // We need to copy excluded files as otherwise they won't be in the new Clover source directory and
-            // thus won't be compiled by the compile plugin. This will lead to compilation errors if any other
-            // Java file depends on any of these excluded files.
-            copyExcludedFiles( scanner.getExcludedFiles(), outputSourceDirectory );
         }
+
+        // We need to copy excluded files as otherwise they won't be in the new Clover source directory and
+        // thus won't be compiled by the compile plugin. This will lead to compilation errors if any other
+        // Java file depends on any of these excluded files.
+        copyExcludedFiles( scanner.getExcludedFiles(), outputSourceDirectory );
+
+        //won't do its job when include files set is empty!
     }
 
     public void redirectSourceDirectories()
@@ -112,7 +119,7 @@ public abstract class AbstractInstrumenter
             // ignore the generated sources directory, because a new clover/generated-sources directory has been created by a plugin
             // during the clover forked lifecycle, which means that we will end up with the same classes included twice
             // if we use the generated-classes directory added originally
-            else if (!isGeneratedSourcesDirectory(sourceRoot))
+            else if (!isGeneratedSourcesDirectory(sourceRoot) && !getConfiguration().includesAllSourceRoots())
             {
                 addCompileSourceRoot( sourceRoot );
             }
