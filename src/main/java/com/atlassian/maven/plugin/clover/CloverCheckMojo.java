@@ -58,7 +58,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
      * able to check what would fail but without actually failing the build. For example you may want to let the build
      * continue so that you can verify others checks that are executed after the Clover checks. 
      *
-     * @parameter expression="${failOnViolation}" default-value="true"
+     * @parameter expression="${maven.clover.failOnViolation}" default-value="true"
      */
     private boolean failOnViolation;
 
