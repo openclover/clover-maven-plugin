@@ -42,8 +42,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
     /**
      * The Test Percentage Coverage (TPC) threshold under which the plugin will report an error and fail the build.
      *
-     * @parameter expression="${maven.clover.targetPercentage}" default-value="70%" 
-     * @required
+     * @parameter expression="${maven.clover.targetPercentage}" 
      */
     private String targetPercentage;
 
@@ -62,6 +61,30 @@ public class CloverCheckMojo extends AbstractCloverMojo
      * @parameter expression="${failOnViolation}" default-value="true"
      */
     private boolean failOnViolation;
+
+
+    /**
+     * The location where historical Clover data is located.
+     * <p/>
+     * <p>
+     * Allows you to specify a location for historical build data, along with a configurable threshold expressed as a percentage ?
+     * used to cause the build to fail if coverage has dropped.
+     * This attribute is passed down to specified packages, then the same test is done for these at the package level.
+     * This will only be used if there is no targetPercentage parameter set.
+     *
+     * @parameter expression="${maven.clover.historyDir}" default-value="${project.build.directory}/clover/history"
+     */
+    private File historyDir;
+
+    /**
+     * The percentage threshold to use if clover-check is checking coverage against historical clover data.
+     *
+     * This is the amount of leeway to use when comparing the current build's coverage with that of the last build.
+     * 
+     * @parameter expression="${maven.clover.historyThreshold}" default-value="0%"
+     *
+     */
+    private String historyThreshold;
 
     /**
      * {@inheritDoc}
@@ -122,14 +145,22 @@ public class CloverCheckMojo extends AbstractCloverMojo
         antProject.init();
         AbstractCloverMojo.registerCloverAntTasks(antProject, getLog());
 
-        getLog().info( "Checking for coverage of [" + targetPercentage + "] for database [" + database + "]");
-
         CloverPassTask cloverPassTask = (CloverPassTask) antProject.createTask( "clover-check" );
         cloverPassTask.init();
         cloverPassTask.setInitString( database );
         cloverPassTask.setHaltOnFailure( true );
-        cloverPassTask.setTarget( new Percentage( this.targetPercentage ) );
         cloverPassTask.setFailureProperty( "clovercheckproperty" );
+
+        if (this.targetPercentage != null) {
+            cloverPassTask.setTarget( new Percentage( this.targetPercentage ) );
+            getLog().info( "Checking for coverage of [" + targetPercentage + "] for database [" + database + "]");            
+        } else {
+            cloverPassTask.setHistorydir(this.historyDir);
+            cloverPassTask.setThreshold(new Percentage(this.historyThreshold));
+            getLog().info( "Checking coverage against historical data [" +
+                            this.historyDir + " +/-" + this.historyThreshold +
+                           " ] for database [" + database + "]");
+        }
 
         if ( this.contextFilters != null )
         {
