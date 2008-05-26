@@ -37,5 +37,7 @@ under the License.
       <item name="Check Goal" href="/architecture/clover-check.html"/>
       <item name="Report Goal" href="/architecture/clover-report.html"/>
     </menu>
+
+    ${reports}
   </body>
 </project>

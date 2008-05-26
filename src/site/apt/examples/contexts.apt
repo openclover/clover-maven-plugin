@@ -33,6 +33,6 @@
 
 * {Sources}
 
-  Sources are available {{{http://svn.apache.org/viewvc/maven/plugins/trunk/maven-clover-plugin/src/it/contexts/}here}}.
+  Sources are available {{{http://svn.atlassian.com/fisheye/viewrep/public/contrib/clover/maven-clover-plugin/trunk/src/it/contexts/}here}}.
 
   To execute the project run either <<<mvn install>>> to verify the TPC or <<<mvn site>>> to generate the Clover report.

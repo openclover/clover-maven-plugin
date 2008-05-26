@@ -65,7 +65,7 @@
   this, you must either do:
 
 +------+
-  mvn clover:instrument
+  mvn clover2:instrument
 +------+
 
  or
@@ -74,8 +74,8 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover2-plugin</artifactId>
         <configuration>
           [...]
         </configuration>
@@ -113,8 +113,8 @@
 
 +--------
   <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-clover-plugin</artifactId>
+    <groupId>com.atlassian.maven.plugins</groupId>
+    <artifactId>maven-clover2-plugin</artifactId>
     <configuration>
       <includes>
         <include>**/api/**/*.java</include>
@@ -146,8 +146,8 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover2-plugin</artifactId>
         <configuration>
           <targetPercentage>50%</targetPercentage>
         </configuration>
@@ -187,8 +187,8 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover2-plugin</artifactId>
         <configuration>
           <targetPercentage>50%</targetPercentage>
         </configuration>
@@ -233,8 +233,8 @@
   <reporting>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover2-plugin</artifactId>
         <configuration>
           <contextFilters>try,static</contextFilters>
         </configuration>
@@ -255,8 +255,8 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover2-plugin</artifactId>
         <configuration>
           <jdk>1.4</jdk>
 [...]
@@ -278,8 +278,8 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover2-plugin</artifactId>
         <configuration>
           <flushPolicy>threaded</flushPolicy>
           <flushInterval>5000</flushInterval>
@@ -306,8 +306,8 @@ mvn clover:clover
     <plugins>
       [...]
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover2-plugin</artifactId>
         <configuration>
           [...]
         </configuration>
@@ -335,8 +335,8 @@ mvn clover:instrument clover:clover
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover2-plugin</artifactId>
         <configuration>
           [...]
         </configuration>
@@ -356,8 +356,8 @@ mvn clover:instrument clover:clover
     <plugins>
       [...]
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover2-plugin</artifactId>
         <configuration>
           [...]
         </configuration>
@@ -387,8 +387,8 @@ mvn clover:instrument clover:clover
 +--------
 [...]
   <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-clover-plugin</artifactId>
+    <groupId>com.atlassian.maven.plugins</groupId>
+    <artifactId>maven-clover2-plugin</artifactId>
     <configuration>
       <generatePdf>true</generatePdf>
       <generateXml>true</generateXml>
@@ -422,8 +422,8 @@ mvn clover:instrument clover:clover
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover2-plugin</artifactId>
         <configuration>
           <generateHtml>false</generateHtml>
           <generatePdf>true</generatePdf>
@@ -459,8 +459,8 @@ mvn clover:instrument clover:clover
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover2-plugin</artifactId>
         <configuration>
           <generateHistorical>true</generateHistorical>
           [...]
@@ -493,8 +493,8 @@ mvn clover:instrument clover:clover
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover2-plugin</artifactId>
         <configuration>
           <generateHistorical>true</generateHistorical>
           <historyDir>${myHistoryDir}</historyDir>
@@ -556,8 +556,8 @@ myproject
     <plugins>
       [...]
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover2-plugin</artifactId>
       </plugin>
     </plugins>
   </reporting>
@@ -565,8 +565,8 @@ myproject
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover2-plugin</artifactId>
         <executions>
           <execution>
             <phase>pre-site</phase>
@@ -641,8 +641,8 @@ Coverage Overview -
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clover-plugin</artifactId>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-clover2-plugin</artifactId>
         <configuration>
           <licenseLocation>${basedir}/src/test/clover/myclover.license</licenseLocation>
         </configuration>
