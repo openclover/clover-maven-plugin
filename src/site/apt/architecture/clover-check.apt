@@ -26,13 +26,13 @@
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/guides/mini/guide-apt-format.html
 
-Architecture of the clover:check goal
+Architecture of the clover2:check goal
 
-  Here's how the <<<clover:check>>> goal works:
+  Here's how the <<<clover2:check>>> goal works:
 
 [../images/clover-check-achitecture.jpg] Clover check goal architecture
 
-  Note that the generation of the Clover database is independent of the <<<clover:check>>> goal which expects
+  Note that the generation of the Clover database is independent of the <<<clover2:check>>> goal which expects
   a Clover database to exist prior to calling it. In the architecture diagram we've shown a typical use case
-  where the creation of the Clover database is done by binding the <<<clover:instrument>>> goal to the
-  <<<verify>>> phase, before the execution of the <<<clover:check>>> goal.
+  where the creation of the Clover database is done by binding the <<<clover2:instrument>>> goal to the
+  <<<verify>>> phase, before the execution of the <<<clover2:check>>> goal.

@@ -137,7 +137,7 @@
   test coverage threshold you wish to use:
 
 +------+
-  mvn clover:check -DtargetPercentage=50%
+  mvn clover2:check -DtargetPercentage=50%
 +------+
 
  or
@@ -164,7 +164,7 @@
   </build>
 +------+
 
-  In this example you've told Maven to run <<<clover:check>>> whenever the
+  In this example you've told Maven to run <<<clover2:check>>> whenever the
   <<<verify>>> phase is reached (this will be the case if you run
   <<<mvn install>>> for example).
 
@@ -175,10 +175,10 @@
 
   However, as previously mentioned, Clover needs an existing
   {{{http://confluence.atlassian.com/x/EIBOB}Clover database}}. Thus, a call
-  to <<<clover:instrument>>> may be neccessary:
+  to <<<clover2:instrument>>> may be neccessary:
 
 +------+
-  mvn clover:instrument clover:check -DtargetPercentage=50%
+  mvn clover2:instrument clover2:check -DtargetPercentage=50%
 +------+
 
  or
@@ -206,7 +206,7 @@
   </build>
 +------+
 
-  Note: The <<<clover:check>>> goal will also check the test percentage coverage
+  Note: The <<<clover2:check>>> goal will also check the test percentage coverage
   for merged Clover databases if any is found (see the
   {{{usage.html#Aggregating Clover Reports}Aggregating Clover Reports}} section for more on that).
 
@@ -216,7 +216,7 @@
   command line as follows:
 
 +------+
-  mvn clover:instrument clover:check -DtargetPercentage=50% -DfailOnViolation=false
+  mvn clover2:instrument clover2:check -DtargetPercentage=50% -DfailOnViolation=false
 +------+
 
   <Back to {{{usage.html}top}}.>
@@ -293,7 +293,7 @@
   To generate a Clover report, simply execute the following command:
 
 +------+
-mvn clover:clover
+mvn clover2:clover
 +------+
 
   Also, you may want to generate a Clover Report everytime you generate site for
@@ -317,14 +317,14 @@ mvn clover:clover
 [...]
 +---------
 
-  But just like the <<<clover:check>>> goal, the <<<clover:clover>>> goal
+  But just like the <<<clover2:check>>> goal, the <<<clover2:clover>>> goal
   also needs an existing
   {{{http://confluence.atlassian.com/x/EIBOB}Clover database}}. Thus, if
-  if it still does not exist, a call to <<<clover:instrument>>> must first be
+  if it still does not exist, a call to <<<clover2:instrument>>> must first be
   made:
 
 +------+
-mvn clover:instrument clover:clover
+mvn clover2:instrument clover2:clover
 +------+
 
   or
@@ -367,7 +367,7 @@ mvn clover:instrument clover:clover
 [...]
 +---------
 
-  Note that in the above example that <<<clover:instrument>>> was bound to the
+  Note that in the above example that <<<clover2:instrument>>> was bound to the
   <<<pre-site>>> phase. This is done to ensure that a
   {{{http://confluence.atlassian.com/x/EIBOB}Clover database}} is
   generated before the report executes.
@@ -413,7 +413,7 @@ mvn clover:instrument clover:clover
   If you do not want to generate the HTML report then you should not configure
   the Clover plugin in the <<<reporting>>> section as this section is for
   plugins which generate HTML reports. In that case, simply bind the
-  <<<clover:clover>>> goal to the <<<site>>> phase in the <<<build>>> section.
+  <<<clover2:clover>>> goal to the <<<site>>> phase in the <<<build>>> section.
   For example:
 
 +--------
@@ -475,7 +475,7 @@ mvn clover:instrument clover:clover
   Now this will generate a
   {{{http://confluence.atlassian.com/x/rYhEB}Clover historical report}}
   only if you have saved Clover historical savepoints. In order to save a Clover
-  savepoint, run the <<<clover:save-history>>> goal. It's up to you to decide
+  savepoint, run the <<<clover2:save-history>>> goal. It's up to you to decide
   when you want to call this goal.
 
   For example you could call it every time a build is executing on your CI
@@ -535,7 +535,7 @@ mvn clover:instrument clover:clover
   you've generated the children Clover databases.>
 
   You can aggregate children modules Clover databases into a single merged database
-  by running the <<<clover:aggregate>>> goal. This For example if you have the
+  by running the <<<clover2:aggregate>>> goal. This For example if you have the
   following project layout:
 
 +--------
@@ -591,14 +591,14 @@ myproject
   Alternatively, you can execute
 
 +------+
-mvn clover:aggregate clover:clover
+mvn clover2:aggregate clover2:clover
 +------+
 
   or if there is no existing
   {{{http://confluence.atlassian.com/x/EIBOB}Clover database}}:
 
 +------+
-mvn clover:instrument clover:aggregate clover:clover
+mvn clover2:instrument clover2:aggregate clover2:clover
 +------+
 
   Note that you can control the location of the merged
@@ -610,12 +610,12 @@ mvn clover:instrument clover:aggregate clover:clover
 * {Getting information on an existing Clover database}
 
   You can dump information about your project's Clover database (after it has been populated) by running
-  <<<mvn clover:log>>>.
+  <<<mvn clover2:log>>>.
 
   Here's an example of an output:
 
 +--------
-[INFO] [clover:log]
+[INFO] [clover2:log]
 [INFO] Clover Coverage Report
 Coverage Timestamp: Tue Oct 03 12:54:52 CEST 2006
 
@@ -669,5 +669,7 @@ Coverage Overview -
   Instead of specifying a file, you can also specify either a <<URL>> or a <<relative path inside a JAR>> (to learn
   how to use this feature, refer to the
   {{{http://maven.apache.org/plugins/maven-checkstyle-plugin/tips.html}Checkstlye plugin documentation}}.
+
+  As of version 4.0 of the plugin, you can also use the <license> element to embed a license directly in your pom.xml.
 
   <Back to {{{usage.html}top}}.>
