@@ -33,7 +33,7 @@ Maven Clover Plugin
 
   Clover is a tool that generates Test Coverage reports. It is free for non-commercial use.
   If your project is a commercial project you will need to get a license for the Clover jar
-  before using this plugin. Please note that a 30 days license is included in this plugin.
+  before using this plugin. Please note that an evaluation license is included in this plugin.
 
 * Features
 
