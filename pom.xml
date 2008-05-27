@@ -28,7 +28,7 @@ under the License.
     <artifactId>maven-clover2-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Maven Clover Plugin</name>
-    <version>2.3.1</version>
+    <version>2.3.1-SNAPSHOT</version>
     <description>Maven plugin for Clover</description>
     <url>http://confluence.atlassian.com/x/dIDBBQ</url>
     <organization>
@@ -270,5 +270,9 @@ under the License.
             <name>Atlassian Private Snapshot Repository</name>
             <url>dav:https://maven.atlassian.com/private-snapshot</url>
         </snapshotRepository>
+        <site>
+            <id>atlassian-documentation</id>
+            <url>dav:https://docs.atlassian.com/${project.artifactId}/${project.version}</url>
+        </site>
     </distributionManagement>
 </project>
