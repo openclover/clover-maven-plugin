@@ -137,7 +137,7 @@
   test coverage threshold you wish to use:
 
 +------+
-  mvn clover2:check -DtargetPercentage=50%
+  mvn clover2:check -Dmaven.clover.targetPercentage=50%
 +------+
 
  or
@@ -216,7 +216,7 @@
   command line as follows:
 
 +------+
-  mvn clover2:instrument clover2:check -DtargetPercentage=50% -DfailOnViolation=false
+  mvn clover2:instrument clover2:check -Dmaven.clover.targetPercentage=50% -Dmaven.clover.failOnViolation=false
 +------+
 
   <Back to {{{usage.html}top}}.>
