@@ -49,7 +49,16 @@ public class CloverAggregateMojo extends AbstractCloverMojo
      * @readonly
      */
     private List reactorProjects;
-    
+
+    /**
+     * Time span that will be used when generating aggregated database. Check
+     * http://confluence.atlassian.com/display/CLOVER/Using+Spans and
+     * http://confluence.atlassian.com/display/CLOVER/clover-merge.
+     *
+     * @parameter expression="${maven.clover.span}" default-value="0s"
+     */
+    private String span;
+
     /**
      * {@inheritDoc}
      * @see com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo#execute()
@@ -242,8 +251,12 @@ public class CloverAggregateMojo extends AbstractCloverMojo
 
         List parameters = new ArrayList();
 
+        parameters.add( "-s" );
+        parameters.add( span );
+
         parameters.add( "-i" );
         parameters.add( getCloverMergeDatabase() );
+
 
         if ( getLog().isDebugEnabled() )
         {
@@ -252,7 +265,7 @@ public class CloverAggregateMojo extends AbstractCloverMojo
 
         parameters.addAll( dbFiles );
 
-        int mergeResult = CloverMerge.mainImpl( (String[]) parameters.toArray(new String[0]) );
+        int mergeResult = CloverMerge.mainImpl( (String[]) parameters.toArray(new String[parameters.size()]) );
         if ( mergeResult != 0 )
         {
             throw new MojoExecutionException( "Clover has failed to merge the children module databases" );
