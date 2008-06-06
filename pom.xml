@@ -128,6 +128,19 @@ under the License.
         </extensions>
         <pluginManagement>
             <plugins>
+              <plugin>
+                    <groupId>com.atlassian.maven.plugins</groupId>
+                    <artifactId>maven-clover2-plugin</artifactId>
+                    <version>${version}</version>
+                    <configuration>
+                        <generateHistorical>true</generateHistorical>
+                        <generateHtml>true</generateHtml>
+                        <licenseLocation>${clover.licenseLocation}</licenseLocation>
+                        <jdk>1.4</jdk>
+                        <reportDescriptor>${basedir}/clover-report.xml</reportDescriptor>
+                    </configuration>
+                </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
@@ -172,11 +185,13 @@ under the License.
                 <plugins>
                     <plugin>
                         <groupId>com.atlassian.maven.plugins</groupId>
-                        <artifactId>maven-clover-plugin</artifactId>
-                        <version>4.0-SNAPSHOT</version>
+                        <artifactId>maven-clover2-plugin</artifactId>
+                        <version>${version}</version>
                         <configuration>
                             <generateHistorical>true</generateHistorical>
+                            <generateHtml>true</generateHtml>
                             <licenseLocation>${clover.licenseLocation}</licenseLocation>
+                            <jdk>1.4</jdk>
                         </configuration>
                     </plugin>
                 </plugins>
