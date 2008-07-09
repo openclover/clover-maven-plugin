@@ -279,6 +279,13 @@ public class CloverReportMojo extends AbstractMavenReport {
 
         if (reportDescriptor == null) {
             reportDescriptor = resolveCloverDescriptor();
+        } else if (!reportDescriptor.exists()){ // try finding this as a resource
+            try {
+                reportDescriptor = AbstractCloverMojo.getResourceAsFile(
+                        project, resourceManager, reportDescriptor.getPath(), getLog(), this.getClass().getClassLoader());
+            } catch (MojoExecutionException e) {
+                throw new MavenReportException("Could not resolve report descriptor: " + reportDescriptor.getPath(), e);
+            }
         }
 
         getLog().info("Using Clover report descriptor: " + reportDescriptor.getAbsolutePath());

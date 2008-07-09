@@ -14,14 +14,13 @@
         </dependency>
     </dependencies>
     <properties>
-	    <clover.reportConfig>${basedir}/clover-report.xml</clover.reportConfig>
+       <clover.reportConfig>${basedir}/clover-report.xml</clover.reportConfig>
     </properties>
     <build>
         <plugins>
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-clover2-plugin</artifactId>
-		        <version>4.0-SNAPSHOT</version>
                 <configuration>
                     <licenseLocation>${clover.licenseLocation}</licenseLocation>
                     <reportDescriptor>${clover.reportConfig}</reportDescriptor>
