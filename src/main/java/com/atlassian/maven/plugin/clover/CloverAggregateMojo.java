@@ -36,7 +36,6 @@ import com.cenqua.clover.CloverMerge;
  * @goal aggregate
  * @aggregator
  *
- * @version $Id: CloverAggregateMojo.java 555822 2007-07-13 00:03:28Z vsiveton $
  */
 public class CloverAggregateMojo extends AbstractCloverMojo
 {
