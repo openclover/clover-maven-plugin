@@ -6,11 +6,11 @@
 
     <target name="historical">
         <clover-report>
-            <current outfile="${output}"  summary="${summary}">
+            <current outfile="${output}"  summary="${summary}" charset="${charset}">
                 <format refid="clover.format"/>
                 <testsources dir="${tests}"/>
             </current>
-            <historical outfile="${historyout}" historydir="${history}">
+            <historical outfile="${historyout}" historydir="${history}" charset="${charset}">
                 <format refid="clover.format"/>
             </historical>
         </clover-report>
@@ -18,7 +18,7 @@
 
     <target name="current">
         <clover-report>
-            <current outfile="${output}" title="${title}" summary="${summary}">
+            <current outfile="${output}" title="${title}" summary="${summary}" charset="${charset}">
                 <format refid="clover.format"/>
                 <testsources dir="${tests}"/>
             </current>

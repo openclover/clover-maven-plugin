@@ -210,6 +210,15 @@ public class CloverReportMojo extends AbstractMavenReport {
      */
     private String contextFilters;
 
+
+
+    /**
+     * The charset to use in the html reports.
+     *
+     * @parameter expression="${maven.clover.charset}" default-value="UTF-8"
+     */
+    private String charset;
+
     /**
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
      *
@@ -338,6 +347,7 @@ public class CloverReportMojo extends AbstractMavenReport {
         antProject.setProperty("tests", testDir);
         antProject.setProperty("filter", contextFilters != null ? contextFilters : "");
         antProject.setProperty("orderBy", orderBy);
+        antProject.setProperty("charset", charset);
         antProject.setProperty("type", format);
         antProject.setProperty("summary", String.valueOf(summary));
         if (historyOut != null) {
