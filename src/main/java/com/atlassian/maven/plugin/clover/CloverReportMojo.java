@@ -301,12 +301,12 @@ public class CloverReportMojo extends AbstractMavenReport {
 
         File singleModuleCloverDatabase = new File(this.cloverDatabase);
         if (singleModuleCloverDatabase.exists()) {
-            createAllReportTypes(this.cloverDatabase, project.getName());
+            createAllReportTypes(this.cloverDatabase, project.getArtifactId());
         }
 
         File mergedCloverDatabase = new File(this.cloverMergeDatabase);
         if (mergedCloverDatabase.exists()) {
-            createAllReportTypes(this.cloverMergeDatabase, project.getName() + "(Aggregated)");
+            createAllReportTypes(this.cloverMergeDatabase, project.getArtifactId() + "(Aggregated)");
         }
     }
 
