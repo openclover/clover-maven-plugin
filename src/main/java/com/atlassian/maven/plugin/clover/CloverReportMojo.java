@@ -328,7 +328,7 @@ public class CloverReportMojo extends AbstractMavenReport {
         if (this.generateJson) {
             createReport(database, "json", titlePrefix, outpath, null, false);
         }
-    }
+    } 
 
     /**
      * Note: We use Clover's <code>clover-report</code> Ant task instead of the Clover CLI APIs because the CLI
@@ -343,8 +343,9 @@ public class CloverReportMojo extends AbstractMavenReport {
         antProject.setProperty("output", output);
         antProject.setProperty("history", historyDir);
         antProject.setProperty("title", title);
-        final String testDir = project.getBuild().getTestSourceDirectory();
-        antProject.setProperty("tests", testDir);
+        final String projectDir = project.getBasedir().getPath();
+        antProject.setProperty("projectDir", projectDir);
+        antProject.setProperty("testPattern", "**/src/test/java/**");
         antProject.setProperty("filter", contextFilters != null ? contextFilters : "");
         antProject.setProperty("orderBy", orderBy);
         antProject.setProperty("charset", charset);

@@ -4,11 +4,15 @@
 
     <clover-setup initString="${cloverdb}"/>
 
+    <fileset id="test.sources" dir="${projectDir}">
+        <include name="${testPattern}"/>
+    </fileset>
+
     <target name="historical">
         <clover-report>
             <current outfile="${output}"  summary="${summary}" charset="${charset}" title="${title}">
                 <format refid="clover.format"/>
-                <testsources dir="${tests}"/>
+                <testsources refid="test.sources"/>
             </current>
             <historical outfile="${historyout}" historydir="${history}" charset="${charset}" title="${title}">
                 <format refid="clover.format"/>
@@ -20,7 +24,7 @@
         <clover-report>
             <current outfile="${output}" title="${title}" summary="${summary}" charset="${charset}">
                 <format refid="clover.format"/>
-                <testsources dir="${tests}"/>
+                <testsources refid="test.sources"/>
             </current>
         </clover-report>
     </target>
