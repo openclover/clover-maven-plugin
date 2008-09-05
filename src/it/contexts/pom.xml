@@ -41,7 +41,7 @@ under the License.
         <artifactId>maven-clover2-plugin</artifactId>
         <configuration>
           <!-- Verify that context filters work -->
-          <contextFilters>try</contextFilters>
+          <contextFilters>try,main,log</contextFilters>
             <licenseLocation>${clover.licenseLocation}</licenseLocation>
         </configuration>
       </plugin>
@@ -57,6 +57,14 @@ under the License.
                55% to verify the filter has been applied correctly -->
           <targetPercentage>55%</targetPercentage>
            <licenseLocation>${clover.licenseLocation}</licenseLocation>
+           <methodContexts>
+             <main>(.* )?public static void main\(String\[\] argv\).*</main>
+           </methodContexts>
+           <statementContexts>
+             <log>System.out.println\(.*\);</log>
+           </statementContexts>
+           <generateXml>true</generateXml>
+
         </configuration>
         <executions>
           <execution>

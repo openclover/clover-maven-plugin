@@ -107,6 +107,26 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     private Set excludes = new HashSet();
 
     /**
+     * Specifies the custom method contexts to use for filtering specific methods from Clover reports.
+     *
+     * e.g. <pre>&lt;main&gt;public static void main\(String args\[\]\).*&lt;/main&gt;</pre>
+     * will define the context called 'main' which will match all public static void main methods.
+     *
+     * @parameter 
+     */
+    private Map methodContexts = new HashMap();
+
+    /**
+     * Specifies the custom statement contexts to use for filtering specific statements from Clover reports.
+     *
+     * e.g.<pre>&lt;log&gt;^LOG\..*&lt;/log&gt;<pre>
+     * defines a statement context called "log" which matches all LOG statements.
+     * 
+     * @parameter
+     */
+    private Map statementContexts = new HashMap();
+
+    /**
      * Whether the Clover plugin should instrument all source roots (ie even
      * generated sources) or whether it should only instrument the main source
      * root.
@@ -400,5 +420,13 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     public String getEncoding() {
         return encoding;
+    }
+
+    public Map getMethodContexts() {
+        return methodContexts;
+    }
+
+    public Map getStatementContexts() {
+        return statementContexts;
     }
 }

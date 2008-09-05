@@ -179,6 +179,7 @@ public abstract class AbstractInstrumenter
     }
 
     private void instrumentSources( Map filesToInstrument, String outputDir ) throws MojoExecutionException {
+
         int result = CloverInstr.mainImpl( createCliArgs( filesToInstrument, outputDir ) );
         if ( result != 0 )
         {
@@ -254,6 +255,10 @@ public abstract class AbstractInstrumenter
             }
         }
 
+        // custom contexts
+        addCustomContexts(parameters, getConfiguration().getMethodContexts().entrySet(), "-mc");
+        addCustomContexts(parameters, getConfiguration().getStatementContexts().entrySet(), "-sc");
+
         // Log parameters
         if ( getConfiguration().getLog().isDebugEnabled() )
         {
@@ -266,6 +271,14 @@ public abstract class AbstractInstrumenter
         }
 
         return (String[]) parameters.toArray( new String[0] );
+    }
+
+    private void addCustomContexts(List parameters, Set/*<Map.Entry<<String,<String>>>*/ contexts, String flag) {
+        for (Iterator iterator = contexts.iterator(); iterator.hasNext();) {
+            Map.Entry entry = (Map.Entry) iterator.next();
+            parameters.add(flag);
+            parameters.add(entry.getKey() + "=" + entry.getValue());
+        }
     }
 }
 

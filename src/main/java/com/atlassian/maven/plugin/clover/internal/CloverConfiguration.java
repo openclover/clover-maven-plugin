@@ -23,6 +23,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
 import java.util.Set;
+import java.util.Map;
 
 /**
  * Represents a Clover configuration. Used by internal classes to wrap Mojos and get access to
@@ -53,4 +54,8 @@ public interface CloverConfiguration
     boolean isUseFullyQualifiedJavaLang();
 
     String getEncoding();
+
+    Map getMethodContexts();
+    
+    Map getStatementContexts();
 }

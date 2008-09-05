@@ -35,9 +35,14 @@ public class Simple
     
     public void someMethod2(int i)
     {                
+        System.out.println("Testing statement context filter.");
         if (i == 2)
         {
             //  Do nothing
         }
+    }
+
+    public static void main(String[] argv) {
+        System.out.println("This statement should be filtered");
     }
 } 
