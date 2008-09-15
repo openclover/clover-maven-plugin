@@ -22,7 +22,7 @@ under the License.
     <id>clover</id>
     <phases>
       <phase>
-        <id>validate</id>
+        <id>process-sources</id>
         <executions>
           <execution>
             <!--configuration>

@@ -43,7 +43,7 @@ import java.util.*;
  * <p><b>Note 2: We bind this mojo to the "validate" phase so that it executes prior to any other mojos</b></p>
  *
  * @goal instrumentInternal
- * @phase validate
+ * @phase process-sources
  * @requiresDependencyResolution test
  *
  * @version $Id: CloverInstrumentInternalMojo.java 555822 2007-07-13 00:03:28Z vsiveton $
