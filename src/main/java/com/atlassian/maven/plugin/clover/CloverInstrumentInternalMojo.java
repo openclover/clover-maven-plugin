@@ -219,7 +219,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         return true;
     }
 
-    private void redirectOutputDirectories()
+    protected void redirectOutputDirectories()
     {
         // Explicitely set the output directory to be the Clover one so that all other plugins executing
         // thereafter output files in the Clover output directory and not in the main output directory.
@@ -240,7 +240,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      * Modify main artifact to add a "clover" classifier to it so that it's not mixed with the main artifact of
      * a normal build.
      */
-    private void redirectArtifact()
+    protected void redirectArtifact()
     {
         // Only redirect main artifact for non-pom projects
         if ( !getProject().getPackaging().equals( "pom" ) )
