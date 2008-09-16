@@ -85,25 +85,11 @@ under the License.
                 <artifactId>maven-clover2-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>setup</id>
-                        <phase>process-sources</phase>
-                        <goals>
-                            <goal>setup</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>optimize</id>
-                        <phase>process-test-classes</phase>
-                        <goals>
-                            <goal>optimize</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>checkpoint</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>checkpoint</goal>
-                        </goals>
+                       <goals>
+                           <goal>setup</goal>
+                           <goal>optimize</goal>
+                           <goal>checkpoint</goal>
+                       </goals>
                     </execution>
 
                 </executions>

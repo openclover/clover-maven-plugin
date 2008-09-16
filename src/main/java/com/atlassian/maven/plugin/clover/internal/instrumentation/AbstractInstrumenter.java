@@ -19,6 +19,14 @@ package com.atlassian.maven.plugin.clover.internal.instrumentation;
  * under the License.
  */
 
+import com.atlassian.maven.plugin.clover.MvnLogger;
+import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
+import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
+import com.cenqua.clover.CloverInstr;
+import com.cenqua.clover.Logger;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.codehaus.plexus.util.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,13 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.maven.plugin.MojoExecutionException;
-import org.codehaus.plexus.util.FileUtils;
-
-import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
-import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
-import com.cenqua.clover.CloverInstr;
 
 /**
  * Code common for instrumentation of various source roots (main sources, test sources).
@@ -180,6 +181,7 @@ public abstract class AbstractInstrumenter
 
     private void instrumentSources( Map filesToInstrument, String outputDir ) throws MojoExecutionException {
 
+        Logger.setInstance(new MvnLogger(configuration.getLog()));
         int result = CloverInstr.mainImpl( createCliArgs( filesToInstrument, outputDir ) );
         if ( result != 0 )
         {

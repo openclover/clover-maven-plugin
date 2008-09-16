@@ -13,7 +13,13 @@ public class MvnLogger extends Logger {
     }
 
     public void log(int level, String msg, Throwable t) {
-        log.info(msg, t);
+        switch (level) {
+            case Logger.LOG_DEBUG: 
+            case Logger.LOG_VERBOSE: log.debug(msg, t); break;
+            case Logger.LOG_INFO: log.info(msg, t); break;
+            case Logger.LOG_WARN: log.warn(msg, t); break;
+            default: log.info(msg, t);
+        }
     }
 
     public static class MvnLoggerFactory implements Logger.Factory {

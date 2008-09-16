@@ -1,25 +1,25 @@
 package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
-import com.cenqua.clover.types.junit.CloverOptimisedTestSet;
-import com.cenqua.clover.Logger;
 import com.cenqua.clover.CloverNames;
-import org.apache.maven.plugin.MojoExecutionException;
+import com.cenqua.clover.types.junit.CloverOptimisedTestSet;
 import org.apache.maven.model.Plugin;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Resource;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
-import java.util.List;
+import java.io.File;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Arrays;
-import java.io.File;
+import java.util.List;
 
 /**
  * @goal optimize
+ * @phase process-test-classes
  */
 public class CloverOptimizerMojo extends AbstractCloverMojo {
 

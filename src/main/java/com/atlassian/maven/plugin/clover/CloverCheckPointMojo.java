@@ -7,6 +7,7 @@ import org.apache.tools.ant.Project;
 
 /**
  * @goal checkpoint
+ * @phase test
  */
 public class CloverCheckPointMojo extends AbstractCloverMojo {
 
