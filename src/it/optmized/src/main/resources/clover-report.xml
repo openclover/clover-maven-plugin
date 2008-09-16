@@ -1,0 +1,47 @@
+<project name="Clover Report" default="current">
+
+    <clover-format id="clover.format" type="${type}" orderBy="${orderBy}" filter="${filter}"/>
+
+    <clover-setup initString="${cloverdb}"/>
+
+    <clover-columns id="clover.columns">
+        <totalChildren/>
+        <expression title="Sum Global">Complexity^2 * ((1 - %CoveredElements/100)^3) + Complexity</expression>
+        <complexity format="raw"/>
+        <coveredElements format="raw" min="3900" max="5000"/>
+        <uncoveredBranches format="raw"/>
+        <uncoveredStatements format="raw"/>
+        <uncoveredMethods format="raw"/>
+        <uncoveredElements format="raw"/>
+        <totalPercentageCovered format="longbar" min="75"/>
+    </clover-columns>
+
+    <target name="historical">
+        <clover-report>
+            <current outfile="${output}" summary="${summary}">
+                <format refid="clover.format"/>
+                <testsources dir="${tests}"/>
+                <columns refid="clover.columns"/>
+            </current>
+            <historical outfile="${historyout}" historydir="${history}">
+                <format refid="clover.format"/>
+                <columns refid="clover.columns"/>
+            </historical>
+        </clover-report>
+    </target>
+
+    <target name="current">
+        <clover-report>
+            <current outfile="${output}" title="${title}" summary="${summary}">
+                <format refid="clover.format"/>
+                <testsources dir="${tests}"/>
+                <columns refid="clover.columns"/>
+            </current>
+        </clover-report>
+    </target>
+
+    <clover-check target="80%" haltOnFailure="true">
+        <package name="com.cenqua.samples.money" target="95%"/>
+    </clover-check>
+
+</project>
