@@ -12,6 +12,14 @@ import java.lang.reflect.AccessibleObject;
 import java.io.File;
 
 /**
+ * The clover2:clean goal should be run directly from the command line,
+ * when you are developing using the clover test runner optimizer.
+ *
+ * This mojo ensures that the file required by Clover to optimize your test is not deleted between builds.
+ * Unfortunately, the implementation is not optimal. It will be a lot simpler however if
+ * the patch attached to http://jira.codehaus.org/browse/MCLEAN-38 is applied. Then, this plugin can simply set the
+ * maven.clean.excludes property.
+ * 
  * @goal clean
  * @phase initialize
  */
