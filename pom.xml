@@ -126,6 +126,12 @@ under the License.
             <artifactId>maven-surefire-plugin</artifactId>
             <version>2.4.3</version>
         </dependency>
+         <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-clean-plugin</artifactId>
+            <type>maven-plugin</type>
+            <version>2.3-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <extensions>
@@ -148,6 +154,18 @@ under the License.
                         <configuration>
                             <attach>true</attach>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.ops4j</groupId>
+                <artifactId>maven-inherit-plugin</artifactId>
+                <version>1.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>inherit</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -312,4 +330,14 @@ under the License.
             <url>dav:https://docs.atlassian.com/${project.artifactId}/${project.version}</url>
         </site>
     </distributionManagement>
+
+     <pluginRepositories>
+        <pluginRepository>
+            <id>ops4j.releases</id>
+            <url>http://repository.ops4j.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
