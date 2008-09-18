@@ -145,12 +145,12 @@ public class CloverCheckMojo extends AbstractCloverMojo
         antProject.init();
         AbstractCloverMojo.registerCloverAntTasks(antProject, getLog());
 
-        CloverPassTask cloverPassTask = (CloverPassTask) antProject.createTask( "clover-check" );
+        CloverPassTask cloverPassTask = createCloverPassTask(database, antProject);
         cloverPassTask.init();
         cloverPassTask.setInitString( database );
         cloverPassTask.setHaltOnFailure( true );
         cloverPassTask.setFailureProperty( "clovercheckproperty" );
-
+        
         if (this.targetPercentage != null) {
             cloverPassTask.setTarget( new Percentage( this.targetPercentage ) );
             getLog().info( "Checking for coverage of [" + targetPercentage + "] for database [" + database + "]");            
@@ -161,7 +161,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
                             this.historyDir + " +/-" + this.historyThreshold +
                            " ] for database [" + database + "]");
         } else {
-            getLog().warn("No checking being done. 'maven.clover.targetPercentage' is not defined " +
+            getLog().warn("Skipping clover2:check as 'maven.clover.targetPercentage' is not defined " +
                     "and 'maven.clover.historyDir' (" + this.historyDir.getPath() +
                     ") does not exist or is not a directory.");
             return;
@@ -190,6 +190,10 @@ public class CloverCheckMojo extends AbstractCloverMojo
                     + " false, preventing the build from failing." );
             }
         }
+    }
+
+    CloverPassTask createCloverPassTask(String database, Project antProject) {
+        return (CloverPassTask) antProject.createTask( "clover-check" );
     }
 
     /**

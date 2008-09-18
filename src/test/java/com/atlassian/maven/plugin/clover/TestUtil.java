@@ -19,7 +19,7 @@ public class TestUtil {
         return LOG;
     }
 
-    public static void setPrivateField(Class clazz, Object target, String fieldName, String value) throws MojoExecutionException {
+    public static void setPrivateField(Class clazz, Object target, String fieldName, Object value) throws MojoExecutionException {
         try {
             final Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
@@ -36,79 +36,87 @@ public class TestUtil {
      */
     static class RecordingLogger extends SystemStreamLog {
 
-        final List<LogEvent> buffer = new LinkedList<LogEvent>();
+        final List buffer = new LinkedList();
 
-        public enum Level { DEBUG, INFO, WARN, ERROR }
-
-        public boolean contains(String msg, Throwable e, Level level) {
+        public boolean contains(String msg, Throwable e, int level) {
             // look for a log event matching the parameter in the log buffer
             return buffer.contains(new LogEvent(msg, e, level));
         }
 
-        public boolean contains(Throwable e, Level level) {
+        public boolean contains(Throwable e, int level) {
             // look for a log event matching the parameter in the log buffer
             return buffer.contains(new LogEvent(null, e, level));
         }
 
-        public boolean contains(String msg, Level level) {
+        public boolean contains(String msg, int level) {
             // look for a log event matching the parameter in the log buffer
             return buffer.contains(new LogEvent(msg, null, level));
         }
         
 
         public void debug(CharSequence content) {
+            super.debug(content);
             buffer.add(new LogEvent(content.toString(), null, Level.DEBUG));
 
         }
 
         public void debug(CharSequence content, Throwable error) {
+            super.debug(content);
             buffer.add(new LogEvent(content.toString(), error, Level.DEBUG));
-
         }
 
         public void debug(Throwable error) {
+            super.debug(error);
             buffer.add(new LogEvent(null, error, Level.DEBUG));
 
         }
 
         public void info(CharSequence content) {
+            super.info(content);
             buffer.add(new LogEvent(content.toString(), null, Level.INFO));
         }
 
         public void info(CharSequence content, Throwable error) {
+            super.info(content, error);
             buffer.add(new LogEvent(content.toString(), error, Level.INFO));
         }
 
         public void info(Throwable error) {
+            super.info(error);
             buffer.add(new LogEvent(null, error, Level.INFO));
         }
 
         public void warn(CharSequence content) {
+            super.warn(content);
             buffer.add(new LogEvent(content.toString(), null, Level.WARN));
 
         }
 
         public void warn(CharSequence content, Throwable error) {
+            super.warn(content, error);
             buffer.add(new LogEvent(content.toString(), error, Level.WARN));
-
         }
 
         public void warn(Throwable error) {
+            super.warn(error);
             buffer.add(new LogEvent(null, error, Level.WARN));
 
         }
 
         public void error(CharSequence content) {
+            super.error(content);
             buffer.add(new LogEvent(content.toString(), null, Level.ERROR));
 
         }
 
         public void error(CharSequence content, Throwable error) {
+            super.error(content, error);
             buffer.add(new LogEvent(content.toString(), error, Level.ERROR));
 
         }
 
         public void error(Throwable error) {
+            super.error(error);
             buffer.add(new LogEvent(null, error, Level.ERROR));
 
         }
@@ -116,9 +124,9 @@ public class TestUtil {
         class LogEvent {
             Throwable e;
             String msg;
-            Level level;
+            int level;
 
-            LogEvent(String msg, Throwable e, Level level) {
+            LogEvent(String msg, Throwable e, int level) {
                 this.e = e;
                 this.msg = msg;
                 this.level = level;
@@ -141,9 +149,16 @@ public class TestUtil {
                 int result;
                 result = (e != null ? e.hashCode() : 0);
                 result = 31 * result + (msg != null ? msg.hashCode() : 0);
-                result = 31 * result + (level != null ? level.hashCode() : 0);
+                result = 31 * result + level;
                 return result;
             }
         }
+    }
+
+    public class Level {
+        public static final int DEBUG = 0;
+        public static final int INFO = 1;
+        public static final int WARN = 2;
+        public static final int ERROR = 3;
     }
 }
