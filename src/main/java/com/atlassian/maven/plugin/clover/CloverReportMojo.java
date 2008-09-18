@@ -178,7 +178,7 @@ public class CloverReportMojo extends AbstractMavenReport {
     /**
      * Decide whether to generate a XML report or not.
      *
-     * @parameter default-value="false" expression="${maven.clover.generateXml}"
+     * @parameter default-value="true" expression="${maven.clover.generateXml}"
      */
     private boolean generateXml;
 

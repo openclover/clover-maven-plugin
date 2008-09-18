@@ -154,12 +154,17 @@ public class CloverCheckMojo extends AbstractCloverMojo
         if (this.targetPercentage != null) {
             cloverPassTask.setTarget( new Percentage( this.targetPercentage ) );
             getLog().info( "Checking for coverage of [" + targetPercentage + "] for database [" + database + "]");            
-        } else {
+        } else if (this.historyDir.exists() && this.historyDir.isDirectory()) {
             cloverPassTask.setHistorydir(this.historyDir);
             cloverPassTask.setThreshold(new Percentage(this.historyThreshold));
             getLog().info( "Checking coverage against historical data [" +
                             this.historyDir + " +/-" + this.historyThreshold +
                            " ] for database [" + database + "]");
+        } else {
+            getLog().warn("No checking being done. 'maven.clover.targetPercentage' is not defined " +
+                    "and 'maven.clover.historyDir' (" + this.historyDir.getPath() +
+                    ") does not exist or is not a directory.");
+            return;
         }
 
         if ( this.contextFilters != null )
