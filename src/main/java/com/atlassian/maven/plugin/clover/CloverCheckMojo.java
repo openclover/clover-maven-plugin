@@ -44,14 +44,14 @@ public class CloverCheckMojo extends AbstractCloverMojo
      *
      * @parameter expression="${maven.clover.targetPercentage}" 
      */
-    private String targetPercentage;
+    String targetPercentage;
 
     /**
      * Comma or space separated list of Clover contexts (block, statement or method filers) to exclude when
      * generating coverage reports.
      * @parameter expression="${maven.clover.contextFilters}"
      */
-    private String contextFilters;
+    String contextFilters;
 
     /**
      * Do we fail the build on a violation? The default is true but there are some edge cases where you want to be
@@ -60,7 +60,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
      *
      * @parameter expression="${maven.clover.failOnViolation}" default-value="true"
      */
-    private boolean failOnViolation;
+    boolean failOnViolation;
 
 
     /**
@@ -74,7 +74,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
      *
      * @parameter expression="${maven.clover.historyDir}" default-value="${project.build.directory}/clover/history"
      */
-    private File historyDir;
+    File historyDir;
 
     /**
      * The percentage threshold to use if clover-check is checking coverage against historical clover data.
@@ -84,7 +84,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
      * @parameter expression="${maven.clover.historyThreshold}" default-value="0%"
      *
      */
-    private String historyThreshold;
+    String historyThreshold;
 
     /**
      * {@inheritDoc}
