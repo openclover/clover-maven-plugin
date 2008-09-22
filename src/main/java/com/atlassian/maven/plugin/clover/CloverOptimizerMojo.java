@@ -49,6 +49,17 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
     public void execute() throws MojoExecutionException {
 
+        if (skip) {
+            getLog().info("Skipping build optimization.");
+        }
+
+        // if there are no source files, then skip this mojo
+        final String sourceDirectory = getProject().getBuild().getSourceDirectory();
+        if (!new File(sourceDirectory).exists()) {
+            getLog().info(sourceDirectory + " does not exist. No optimization will be done.");
+            return;
+        }
+
         final Project antProj = new Project();
         antProj.init();
         antProj.addBuildListener(new MvnLogBuildListener(getLog()));
@@ -61,7 +72,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         StringBuffer testPattern = new StringBuffer();
         for (Iterator iterator = optimizedTests.iterator(); iterator.hasNext();) {
             Resource test = (Resource) iterator.next();
-            getLog().info("Running TEST::: " + test.getName());
+            getLog().info("Running TEST: " + test.getName());
             testPattern.append(test.getName());
             testPattern.append(",");
         }
@@ -103,9 +114,16 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         final List testSources = getProject().getTestCompileSourceRoots();
         for (Iterator iterator = testSources.iterator(); iterator.hasNext();) {
             String testRoot = (String) iterator.next();
+            final File testRootDir = new File(testRoot);
+            if (!testRootDir.exists()) {
+                // if the test dir does not exist, do not add this as a fileset.
+                continue;
+            }
+            
             FileSet testFileSet = new FileSet();
             testFileSet.setProject(antProj);
-            testFileSet.setDir(new File(testRoot));
+
+            testFileSet.setDir(testRootDir);
 
 
             testFileSet.appendIncludes((String[]) includes.toArray(new String[includes.size()]));

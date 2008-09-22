@@ -1,4 +1,4 @@
-package com.atlassian.maven.plugin.clover.samples.simple;
+package com.atlassian.maven.plugin.clover.samples.modulea;
 
 import junit.framework.TestCase;
 

@@ -5,6 +5,8 @@ import com.cenqua.clover.tasks.CloverTestCheckpointTask;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.Project;
 
+import java.io.File;
+
 /**
  * @goal checkpoint
  * @phase test
@@ -19,7 +21,15 @@ public class CloverCheckPointMojo extends AbstractCloverMojo {
 
     public void execute() throws MojoExecutionException {
 
-        
+        if (skip) {
+            getLog().info("Skipping checkpoint.");
+        }
+
+         // if there is no database, do not save a checkpoint
+        if (!new File(getCloverDatabase()).exists()) {
+            getLog().info(getCloverDatabase() + " does not exist. Skipping checkpoint creation.");
+            return;
+        }
 
         CloverTestCheckpointTask task = new CloverTestCheckpointTask();
         final Project antProj = new Project();
