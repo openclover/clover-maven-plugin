@@ -3,6 +3,7 @@ package com.atlassian.maven.plugin.clover;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.Project;
+import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.taskdefs.Delete;
 
 import java.io.File;
@@ -76,21 +77,29 @@ public class CloverCleanMojo extends AbstractCloverMojo {
 
         final Project project = new Project();
         project.setBasedir(getProject().getBasedir().getPath());
+        project.addBuildListener(new MvnLogBuildListener(getLog()));
         project.init();
         // delete just the checkpoint
-        removeFileSet(directory.getPath(), project);
-        removeFileSet(outputDirectory.getPath(), project);
-        removeFileSet(testOutputDirectory.getPath(), project);
-        removeFileSet(reportDirectory.getPath(), project);
+        removeWithFilter(directory, project);
+        removeWithFilter(outputDirectory, project);
+        removeWithFilter(testOutputDirectory, project);
+        removeWithFilter(reportDirectory, project);
     }
 
-    private void removeFileSet(String path, Project project) throws MojoExecutionException {
+    private void removeWithFilter(File path, Project project) throws MojoExecutionException {
 
+        if (!path.exists() && !path.isDirectory()) {
+            return;
+        }
         Delete delete = new Delete();
         delete.setProject(project);
+        delete.setIncludeEmptyDirs(true);
         delete.init();
-        delete.setDir(new File(path));
-        delete.setExcludes(cloverCheckpoint);
+        FileSet fileSet = new FileSet();
+        fileSet.setProject(project);
+        fileSet.setDir(path);
+        fileSet.setExcludes(cloverCheckpoint);
+        delete.addFileset(fileSet);
         delete.execute();
     }
 }

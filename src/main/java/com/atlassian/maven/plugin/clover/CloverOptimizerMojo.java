@@ -106,7 +106,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
         final CloverOptimisedTestSet testsToRun = new CloverOptimisedTestSet();
         testsToRun.setProject(antProj);
-        testsToRun.setLoggerFactory(new MvnLogger.MvnLoggerFactory(getLog()));
+        testsToRun.setLogger(new MvnLogger(getLog()));
         antProj.setProperty(CloverNames.PROP_INITSTRING, getCloverDatabase());
         antProj.setName(getProject().getName());
         
