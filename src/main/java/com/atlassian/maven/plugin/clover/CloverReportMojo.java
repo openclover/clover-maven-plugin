@@ -267,6 +267,13 @@ public class CloverReportMojo extends AbstractMavenReport {
     private ResourceManager resourceManager;
 
     /**
+     * A span specifies the age of the coverage data that should be used when creating a report.
+     *
+     * @parameter expression="${maven.clover.span}" default-value="0s"
+     */
+    private String span;
+
+    /**
      * @see org.apache.maven.reporting.AbstractMavenReport#executeReport(java.util.Locale)
      */
     public void executeReport(Locale locale) throws MavenReportException {
@@ -350,6 +357,7 @@ public class CloverReportMojo extends AbstractMavenReport {
         antProject.setProperty("orderBy", orderBy);
         antProject.setProperty("charset", charset);
         antProject.setProperty("type", format);
+        antProject.setProperty("span", span);
         antProject.setProperty("summary", String.valueOf(summary));
         if (historyOut != null) {
             antProject.setProperty("historyout", historyOut);
