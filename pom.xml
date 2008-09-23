@@ -280,9 +280,9 @@ under the License.
     
     <distributionManagement>
         <repository>
-            <id>atlassian-central-sync</id>
-            <name>Atlassian Central Sync</name>
-            <url>dav:https://maven.atlassian.com/centralsync</url>
+            <id>atlassian-m2-repository</id>
+            <name>Atlassian Public Repository</name>
+            <url>dav:https://maven.atlassian.com/public</url>
         </repository>
         <snapshotRepository>
             <id>atlassian-private-snapshot</id>
