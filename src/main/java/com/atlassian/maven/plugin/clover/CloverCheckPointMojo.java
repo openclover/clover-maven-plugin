@@ -43,6 +43,7 @@ public class CloverCheckPointMojo extends AbstractCloverMojo {
         final Project antProj = new Project();
         antProj.init();
         task.setProject(antProj);
+        task.init();        
         getLog().info("Clover database at: " + getCloverDatabase());
         task.setInitString(getCloverDatabase());
         if (span != null) {
@@ -52,7 +53,6 @@ public class CloverCheckPointMojo extends AbstractCloverMojo {
         task.setFile(checkpoint);
         getLog().info("Saving checkpoint.");
         antProj.addBuildListener(new MvnLogBuildListener(getLog()));
-        task.init();        
         task.execute();
     }
 }
