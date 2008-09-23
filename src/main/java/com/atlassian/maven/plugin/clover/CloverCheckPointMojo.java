@@ -19,6 +19,14 @@ public class CloverCheckPointMojo extends AbstractCloverMojo {
      */
     private String span;
 
+    /**
+     * The location to store the clover checkpoint file. This file needs to persist between builds to enable Clover's
+     * build optimization feature.
+     * 
+     * @parameter expression="${maven.clover.checkpoint}"
+     */
+    private File checkpoint;
+
     public void execute() throws MojoExecutionException {
 
         if (skip) {
@@ -35,14 +43,16 @@ public class CloverCheckPointMojo extends AbstractCloverMojo {
         final Project antProj = new Project();
         antProj.init();
         task.setProject(antProj);
-        task.init();
         getLog().info("Clover database at: " + getCloverDatabase());
         task.setInitString(getCloverDatabase());
         if (span != null) {
             task.setSpan(span);
         }
+
+        task.setFile(checkpoint);
         getLog().info("Saving checkpoint.");
         antProj.addBuildListener(new MvnLogBuildListener(getLog()));
+        task.init();        
         task.execute();
     }
 }
