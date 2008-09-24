@@ -280,7 +280,7 @@ public class CloverReportMojo extends AbstractMavenReport {
         if (!canGenerateReport()) {
             getLog().info("No report being generated for this module.");
         }
-
+        
         // Register the Clover license
         try {
             AbstractCloverMojo.registerLicenseFile(this.project, this.resourceManager, this.licenseLocation, getLog(),

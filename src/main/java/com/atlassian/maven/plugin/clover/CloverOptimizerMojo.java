@@ -2,7 +2,7 @@ package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.cenqua.clover.CloverNames;
-import com.cenqua.clover.types.junit.CloverOptimisedTestSet;
+import com.cenqua.clover.types.junit.CloverOptimizedTestSet;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -25,10 +25,10 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
     /**
      *
-     * @parameter expression="${maven.clover.fullRunAfter}" default-value="10"
+     * @parameter expression="${maven.clover.fullRunEvery}" default-value="10"
      *
      */
-    private int fullRunAfter;
+    private int fullRunEvery;
 
     /**
      * @parameter
@@ -65,7 +65,6 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         antProj.addBuildListener(new MvnLogBuildListener(getLog()));
 
 
-        //testsToRun.setFullRunAfter(fullRunAfter);
 
         final List optimizedTests = configureOptimisedTestSet(antProj);
 
@@ -95,18 +94,21 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
         if (surefirePlugin != null) {
             final Xpp3Dom config = (Xpp3Dom) surefirePlugin.getConfiguration();
-            // get the includes and excludes from the surefire plugin
-            surefireIncludes = extractNestedStrings("includes", config);
-            surefireExcludes = extractNestedStrings("excludes", config);
+            if (config != null) {
+                // get the includes and excludes from the surefire plugin
+                surefireIncludes = extractNestedStrings("includes", config);
+                surefireExcludes = extractNestedStrings("excludes", config);
+            }
         }
 
         final List includes = optimizeIncludes != null ? optimizeIncludes : (surefireIncludes != null) ? surefireIncludes : DEFAULT_INCLUDES;
         final List excludes = optimizeExcludes != null ? optimizeExcludes : surefireExcludes;
 
 
-        final CloverOptimisedTestSet testsToRun = new CloverOptimisedTestSet();
+        final CloverOptimizedTestSet testsToRun = new CloverOptimizedTestSet();
         testsToRun.setProject(antProj);
         testsToRun.setLogger(new MvnLogger(getLog()));
+        testsToRun.setFullRunEvery(fullRunEvery);
         antProj.setProperty(CloverNames.PROP_INITSTRING, getCloverDatabase());
         antProj.setName(getProject().getName());
         
@@ -127,16 +129,16 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
 
             testFileSet.appendIncludes((String[]) includes.toArray(new String[includes.size()]));
-            getLog().info("INCLUDING: " + includes);
+            getLog().debug("INCLUDING: " + includes);
 
             if (excludes != null && excludes.size() > 0) {
                 testFileSet.appendExcludes((String[]) excludes.toArray(new String[excludes.size()]));
-                getLog().info("EXCLUDING: " + excludes);
+                getLog().debug("EXCLUDING: " + excludes);
             }
 
             testsToRun.add(testFileSet);
         }
-        return testsToRun.getOptimisedTestResource();
+        return testsToRun.getOptimizedTestResource();
     }
 
     /**
@@ -146,6 +148,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * @param config the actual config object
      */
     private List extractNestedStrings(String childname, Xpp3Dom config) {
+        
         final Xpp3Dom subelement = config.getChild(childname);
         if (subelement != null) {
             List result = new LinkedList();
@@ -154,14 +157,18 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
                 final Xpp3Dom child = children[i];
                 result.add(child.getValue());
             }
+            getLog().info("Extracted strings: " + result);
             return result;
         }
+
         return null;
     }
 
     private Plugin lookupSurefirePlugin() {
 
-        final MavenProject mavenProject = getProject().getExecutionProject();
+        final String key = "org.apache.maven.plugins:maven-surefire-plugin";
+
+        final MavenProject mavenProject = getProject();
         if (mavenProject == null) {
             getLog().warn("Maven execution project is null. Surefire configuration will be ignored.");
             return null;
@@ -169,10 +176,9 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         }
         List plugins = mavenProject.getBuildPlugins();
 
-
         for (Iterator iterator = plugins.iterator(); iterator.hasNext();) {
             Plugin plugin = (Plugin) iterator.next();
-            if("org.apache.maven.plugins:maven-surefire-plugin".equalsIgnoreCase(plugin.getKey())) {
+            if(key.equalsIgnoreCase(plugin.getKey())) {
                 return plugin;
             }
         }
