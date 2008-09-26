@@ -31,13 +31,13 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
     private int fullRunEvery;
 
     /**
-     * @parameter
+     * @parameter 
      */
     private List optimizeIncludes;
 
 
     /**
-     * @parameter 
+     * @parameter
      */
     private List optimizeExcludes;
 
@@ -104,14 +104,13 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         final List includes = optimizeIncludes != null ? optimizeIncludes : (surefireIncludes != null) ? surefireIncludes : DEFAULT_INCLUDES;
         final List excludes = optimizeExcludes != null ? optimizeExcludes : surefireExcludes;
 
-
         final CloverOptimizedTestSet testsToRun = new CloverOptimizedTestSet();
         testsToRun.setProject(antProj);
         testsToRun.setLogger(new MvnLogger(getLog()));
         testsToRun.setFullRunEvery(fullRunEvery);
+        testsToRun.setCheckpointFile(checkpoint);
         antProj.setProperty(CloverNames.PROP_INITSTRING, getCloverDatabase());
         antProj.setName(getProject().getName());
-        
         
         final List testSources = getProject().getTestCompileSourceRoots();
         for (Iterator iterator = testSources.iterator(); iterator.hasNext();) {

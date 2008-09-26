@@ -49,6 +49,14 @@ public abstract class AbstractCloverMojo extends AbstractMojo
     private String cloverDatabase;
 
     /**
+     * The location to store the clover checkpoint file. This file needs to persist between builds to enable Clover's
+     * build optimization feature. If not specified, the checkpoint will be stored next to the cloverDatabase.
+     *
+     * @parameter expression="${maven.clover.checkpoint}"
+     */
+    protected File checkpoint;
+
+    /**
      * The location of the merged clover database to create when running a report in a multimodule build.
      *
      * @parameter expression="${maven.clover.cloverMergeDatabase}" default-value="${project.build.directory}/clover/cloverMerge.db"

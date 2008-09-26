@@ -25,9 +25,9 @@ public class CloverCleanMojo extends AbstractCloverMojo {
     /**
      * The location of the Checkpoint file. By default, this is next to the cloverDatabase.
      *
-     * @parameter expression="${maven.clover.cloverCheckpoint}" default-value="**\/*.teststate"
+     * @parameter expression="${maven.clover.checkpointPattern}" default-value="**\/*.teststate"
      */
-    private String cloverCheckpoint;
+    private String checkpointPattern;
 
     /**
      * This is where build results go.
@@ -98,7 +98,7 @@ public class CloverCleanMojo extends AbstractCloverMojo {
         FileSet fileSet = new FileSet();
         fileSet.setProject(project);
         fileSet.setDir(path);
-        fileSet.setExcludes(cloverCheckpoint);
+        fileSet.setExcludes(checkpointPattern);
         delete.addFileset(fileSet);
         delete.execute();
     }
