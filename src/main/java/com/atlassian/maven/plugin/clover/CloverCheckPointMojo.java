@@ -75,8 +75,10 @@ public class CloverCheckPointMojo extends AbstractCloverMojo {
             task.setSpan(interval);
         }
 
-        task.setFile(checkpoint);
-        getLog().info("Saving checkpoint for initstring: " + getCloverDatabase() + " to: " + checkpoint);
+        if (checkpoint != null) {
+            getLog().info("Saving checkpoint to: " + checkpoint);
+            task.setFile(checkpoint);
+        }
 
         task.execute();
     }
