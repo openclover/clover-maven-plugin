@@ -3,17 +3,16 @@ package com.atlassian.maven.plugin.clover;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.cenqua.clover.tasks.CloverTestCheckpointTask;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 
 import java.io.File;
-import java.util.List;
-import java.util.Iterator;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @goal checkpoint
  * @phase test
+ * @aggregator
  */
 public class CloverCheckPointMojo extends AbstractCloverMojo {
 
@@ -38,9 +37,9 @@ public class CloverCheckPointMojo extends AbstractCloverMojo {
      * If true, then a single checkpoint will be saved for the entire project, at the very end of the build.
      * This flag should be set to true in conjunction with -Dmaven.clover.checkpoint which points to the same location
      * for all sub-modules in a multi-module build.
-     * @parameter expression="${maven.clover.checkpoint.global}" default-value="true"
+     * @parameter expression="${maven.clover.checkpoint.global}" default-value="false"
      */
-    private boolean gloabl = false;
+    private boolean gloabl;
 
     public void execute() throws MojoExecutionException {
 
