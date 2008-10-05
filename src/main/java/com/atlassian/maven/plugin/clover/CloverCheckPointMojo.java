@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * @goal checkpoint
- * @phase test
+ * @phase post-integration-test
  * @aggregator
  */
 public class CloverCheckPointMojo extends AbstractCloverMojo {
@@ -32,19 +32,10 @@ public class CloverCheckPointMojo extends AbstractCloverMojo {
      */
     private List reactorProjects;
 
-
-    /**
-     * If true, then a single checkpoint will be saved for the entire project, at the very end of the build.
-     * This flag should be set to true in conjunction with -Dmaven.clover.checkpoint which points to the same location
-     * for all sub-modules in a multi-module build.
-     * @parameter expression="${maven.clover.checkpoint.global}" default-value="false"
-     */
-    private boolean gloabl;
-
     public void execute() throws MojoExecutionException {
 
         // only run the checkpoint once, on the very last project.
-        if (gloabl && reactorProjects.get(reactorProjects.size() - 1) != getProject()) {
+        if (globalCheckpoint && reactorProjects.get(reactorProjects.size() - 1) != getProject()) {
             return;
         }
 

@@ -56,6 +56,15 @@ public abstract class AbstractCloverMojo extends AbstractMojo
      */
     protected File checkpoint;
 
+
+    /**
+     * If true, then a single checkpoint will be saved for the entire project, at the very end of the build.
+     * This flag should be set to true in conjunction with -Dmaven.clover.checkpoint which points to the same location
+     * for all sub-modules in a multi-module build.
+     * @parameter expression="${maven.clover.globalCheckpoint}" default-value="false"
+     */
+    protected boolean globalCheckpoint;
+
     /**
      * The location of the merged clover database to create when running a report in a multimodule build.
      *

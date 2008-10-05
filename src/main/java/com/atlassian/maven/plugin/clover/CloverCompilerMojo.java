@@ -35,7 +35,13 @@ public class CloverCompilerMojo extends CloverInstrumentInternalMojo {
         if (firstProject == getProject()) {
             START_DATE = new Date();
         }
+
         super.execute();
+    }
+
+    public String getCloverDatabase() {
+        return globalCheckpoint ? getProject().getExecutionProject().getBuild().getDirectory() + "/clover/clover.db" 
+                : super.getCloverDatabase();
     }
 
     protected void redirectOutputDirectories() {
