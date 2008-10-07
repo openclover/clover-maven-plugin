@@ -40,7 +40,7 @@ under the License.
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <!--<includes>-->
-                        <!--<include>**/SlowTest.java</include>-->
+                    <!--<include>**/SlowTest.java</include>-->
                     <!--</includes>-->
                 </configuration>
             </plugin>

@@ -109,10 +109,12 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         testsToRun.setLogger(new MvnLogger(getLog()));
         testsToRun.setFullRunEvery(fullRunEvery);
         testsToRun.setCheckpointFile(checkpoint);
-        antProj.setProperty(CloverNames.PROP_INITSTRING, getCloverDatabase());
+
+        antProj.setProperty(CloverNames.PROP_INITSTRING, resolveCloverDatabase());
         antProj.setName(getProject().getName());
         
         final List testSources = getProject().getTestCompileSourceRoots();
+        
         for (Iterator iterator = testSources.iterator(); iterator.hasNext();) {
             String testRoot = (String) iterator.next();
             final File testRootDir = new File(testRoot);

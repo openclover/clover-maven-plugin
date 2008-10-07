@@ -20,6 +20,8 @@ package com.atlassian.maven.plugin.clover;
  */
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
+import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
+import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -53,7 +55,7 @@ import java.util.ResourceBundle;
  * @version $Id: CloverReportMojo.java 555822 2007-07-13 00:03:28Z vsiveton $
  * @goal clover
  */
-public class CloverReportMojo extends AbstractMavenReport {
+public class CloverReportMojo extends AbstractMavenReport implements CloverConfiguration {
     // TODO: Need some way to share config elements and code between report mojos and main build mojos.
     // See http://jira.codehaus.org/browse/MNG-1886
 
@@ -108,10 +110,18 @@ public class CloverReportMojo extends AbstractMavenReport {
     /**
      * The location of the <a href="http://confluence.atlassian.com/x/EIBOB">Clover database</a>.
      *
-     * @parameter expression="${maven.clover.cloverDatabase}" default-value="${project.build.directory}/clover/clover.db"
-     * @required
+     * @parameter expression="${maven.clover.cloverDatabase}"
      */
     private String cloverDatabase;
+
+    /**
+     * If true, then a single database will be saved for the entire project, in the target directory of the execution
+     * root.
+     * If a custom location for the cloverDatabase is specified, this flag is ignored.
+     * @parameter expression="${maven.clover.singleCloverDatabase}" default-value="false"
+     */
+    protected boolean singleCloverDatabase;
+    
 
     /**
      * The location of the merged clover database to create when running a report in a multimodule build.
@@ -306,9 +316,9 @@ public class CloverReportMojo extends AbstractMavenReport {
 
         getLog().info("Using Clover report descriptor: " + reportDescriptor.getAbsolutePath());
 
-        File singleModuleCloverDatabase = new File(this.cloverDatabase);
+        File singleModuleCloverDatabase = new File(resolveCloverDatabase());
         if (singleModuleCloverDatabase.exists()) {
-            createAllReportTypes(this.cloverDatabase, project.getArtifactId());
+            createAllReportTypes(resolveCloverDatabase(), project.getArtifactId());
         }
 
         File mergedCloverDatabase = new File(this.cloverMergeDatabase);
@@ -395,6 +405,8 @@ public class CloverReportMojo extends AbstractMavenReport {
         return "clover/index";
     }
 
+
+
     /**
      * @see org.apache.maven.reporting.MavenReport#getDescription(java.util.Locale)
      */
@@ -423,7 +435,7 @@ public class CloverReportMojo extends AbstractMavenReport {
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#getProject()
      */
-    protected MavenProject getProject() {
+    public MavenProject getProject() {
         return this.project;
     }
 
@@ -455,7 +467,7 @@ public class CloverReportMojo extends AbstractMavenReport {
 
         AbstractCloverMojo.waitForFlush(this.waitForFlush, this.flushInterval);
 
-        File singleModuleCloverDatabase = new File(this.cloverDatabase);
+        File singleModuleCloverDatabase = new File(resolveCloverDatabase());
         File mergedCloverDatabase = new File(this.cloverMergeDatabase);
 
         if (singleModuleCloverDatabase.exists() || mergedCloverDatabase.exists()) {
@@ -523,5 +535,22 @@ public class CloverReportMojo extends AbstractMavenReport {
         }
     }
 
+    public String getCloverDatabase()
+    {
+        return cloverDatabase;
+    }
+
+    public String resolveCloverDatabase()
+    {
+        return new ConfigUtil(this).resolveCloverDatabase();
+    }
+
+    public List getReactorProjects() {
+        return reactorProjects;
+    }
+
+    public boolean isSingleCloverDatabase() {
+        return this.singleCloverDatabase;
+    }
 }
  

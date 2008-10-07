@@ -123,9 +123,9 @@ public class CloverCheckMojo extends AbstractCloverMojo
      */
     private void check() throws MojoExecutionException
     {
-        if ( new File( getCloverDatabase() ).exists() )
+        if ( new File( resolveCloverDatabase() ).exists() )
         {
-            checkDatabase( getCloverDatabase() );
+            checkDatabase( resolveCloverDatabase() );
         }
         if ( new File( getCloverMergeDatabase() ).exists() )
         {

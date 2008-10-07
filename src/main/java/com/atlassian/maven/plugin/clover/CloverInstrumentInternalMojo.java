@@ -28,7 +28,7 @@ import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.plugin.MojoExecutionException;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
-import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
+import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 import com.atlassian.maven.plugin.clover.internal.instrumentation.MainInstrumenter;
 import com.atlassian.maven.plugin.clover.internal.instrumentation.TestInstrumenter;
 
@@ -48,7 +48,7 @@ import java.util.*;
  *
  * @version $Id: CloverInstrumentInternalMojo.java 555822 2007-07-13 00:03:28Z vsiveton $
  */
-public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements CloverConfiguration
+public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements CompilerConfiguration
 {
     /**
      * The directory where the Clover plugin will put all the files it generates during the build process. For
@@ -171,7 +171,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         new File( this.cloverOutputDirectory ).mkdirs();
         String cloverOutputSourceDirectory = new File( this.cloverOutputDirectory, "src" ).getPath();
         String cloverOutputTestSourceDirectory = new File( this.cloverOutputDirectory, "src-test" ).getPath();
-        new File( getCloverDatabase() ).getParentFile().mkdirs();
+        new File( resolveCloverDatabase() ).getParentFile().mkdirs();
 
         super.execute();
 
@@ -307,6 +307,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
                             + "but it's older and could fail the build. Please consider running Clover again on that "
                             + "dependency's project." );
                         resolvedArtifacts.add( artifact );
+
                     }
                     else
                     {

@@ -15,10 +15,10 @@
  */
 package com.atlassian.maven.plugin.clover.samples.modulea;
 
-public class Dummy
-{
-    public void dummyMethod()
-    {
+public class Dummy {
+    public void dummyMethod() {
         int i = 0;
+
+
     }
 }

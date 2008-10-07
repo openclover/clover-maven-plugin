@@ -1,13 +1,12 @@
 package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
-import com.cenqua.clover.tasks.CloverTestCheckpointTask;
+import com.cenqua.clover.tasks.CloverCheckpointTask;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.Project;
 
 import java.io.File;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @goal checkpoint
@@ -22,20 +21,10 @@ public class CloverCheckPointMojo extends AbstractCloverMojo {
      */
     private String span;
 
-    /**
-     * The projects in the reactor for aggregation report.
-     *
-     * <p>Note: This is passed by Maven and must not be configured by the user.</p>
-     *
-     * @parameter expression="${reactorProjects}"
-     * @readonly
-     */
-    private List reactorProjects;
-
     public void execute() throws MojoExecutionException {
 
         // only run the checkpoint once, on the very last project.
-        if (globalCheckpoint && reactorProjects.get(reactorProjects.size() - 1) != getProject()) {
+        if (isSingleCloverDatabase() && getReactorProjects().get(getReactorProjects().size() - 1) != getProject()) {
             return;
         }
 
@@ -45,18 +34,18 @@ public class CloverCheckPointMojo extends AbstractCloverMojo {
         }
 
          // if there is no database, do not save a checkpoint
-        if (!new File(getCloverDatabase()).exists()) {
-            getLog().info(getCloverDatabase() + " does not exist. Skipping checkpoint creation.");
+        if (!new File(resolveCloverDatabase()).exists()) {
+            getLog().info(resolveCloverDatabase() + " does not exist. Skipping checkpoint creation.");
             return;
         }
 
-        CloverTestCheckpointTask task = new CloverTestCheckpointTask();
+        CloverCheckpointTask task = new CloverCheckpointTask();
         final Project antProj = new Project();
         antProj.init();
         antProj.addBuildListener(new MvnLogBuildListener(getLog()));
         task.setProject(antProj);
         task.init();        
-        task.setInitString(getCloverDatabase());
+        task.setInitString(resolveCloverDatabase());
         if (span != null) {
             task.setSpan(span);
         } else if (CloverCompilerMojo.START_DATE != null) {

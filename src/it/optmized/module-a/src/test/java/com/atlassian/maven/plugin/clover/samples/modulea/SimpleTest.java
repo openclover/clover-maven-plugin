@@ -16,12 +16,11 @@
 package com.atlassian.maven.plugin.clover.samples.modulea;
 
 import junit.framework.TestCase;
+
 import java.util.Properties;
 
-public class SimpleTest extends TestCase
-{
-    public void testSomeMethod() throws Exception
-    {
+public class SimpleTest extends TestCase {
+    public void testSomeMethod() throws Exception {
         Simple simple = new Simple();
 
         simple.someMethod();

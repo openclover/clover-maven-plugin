@@ -16,17 +16,18 @@
 package com.atlassian.maven.plugin.clover.samples.modulea;
 
 public class Simple {
-	
+
     public void someMethod() {
-	
+
         // Reference a class that we exclude in the instrumentation
         new Dummy();
         new Dummy();
         new Dummy();
+        new Dummy();
+
 
         int i = 0;
-        if (i > 0)
-        {
+        if (i > 0) {
             i = i + 0;
         }
     }

@@ -22,6 +22,7 @@ package com.atlassian.maven.plugin.clover.internal.instrumentation;
 import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.TestCloverSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
+import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class TestInstrumenter extends AbstractInstrumenter
 {
     private TestCloverSourceScanner scanner;
 
-    public TestInstrumenter(CloverConfiguration configuration, String outputSourceDirectory)
+    public TestInstrumenter(CompilerConfiguration configuration, String outputSourceDirectory)
     {
         super( configuration, outputSourceDirectory );
         scanner = new TestCloverSourceScanner( configuration );

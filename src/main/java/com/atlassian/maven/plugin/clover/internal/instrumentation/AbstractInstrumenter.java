@@ -21,6 +21,7 @@ package com.atlassian.maven.plugin.clover.internal.instrumentation;
 
 import com.atlassian.maven.plugin.clover.MvnLogger;
 import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
+import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
 import com.cenqua.clover.CloverInstr;
 import com.cenqua.clover.Logger;
@@ -42,17 +43,17 @@ import java.util.Set;
  */
 public abstract class AbstractInstrumenter
 {
-    private CloverConfiguration configuration;
+    private CompilerConfiguration configuration;
 
     private String outputSourceDirectory;
 
-    public AbstractInstrumenter(CloverConfiguration configuration, String outputSourceDirectory)
+    public AbstractInstrumenter(CompilerConfiguration configuration, String outputSourceDirectory)
     {
         this.configuration = configuration;
         this.outputSourceDirectory = outputSourceDirectory;
     }
 
-    protected CloverConfiguration getConfiguration()
+    protected CompilerConfiguration getConfiguration()
     {
         return this.configuration;
     }
@@ -203,7 +204,7 @@ public abstract class AbstractInstrumenter
         parameters.add( "" + getConfiguration().getFlushInterval() );
 
         parameters.add( "-i" );
-        parameters.add( getConfiguration().getCloverDatabase() );
+        parameters.add( getConfiguration().resolveCloverDatabase() );
 
         parameters.add( "-d" );
         parameters.add( outputDir );

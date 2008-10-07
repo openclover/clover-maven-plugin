@@ -29,6 +29,7 @@ import org.codehaus.plexus.resource.ResourceManager;
 import org.codehaus.plexus.resource.loader.FileResourceLoader;
 
 import java.io.File;
+import java.util.List;
 
 import com.cenqua.clover.CloverNames;
 import com.atlassian.maven.plugin.clover.MvnLogBuildListener;
@@ -39,12 +40,12 @@ import com.atlassian.maven.plugin.clover.MvnLogBuildListener;
  * @author <a href="mailto:vmassol@apache.org">Vincent Massol</a>
  * @version $Id: AbstractCloverMojo.java 555822 2007-07-13 00:03:28Z vsiveton $
  */
-public abstract class AbstractCloverMojo extends AbstractMojo
+public abstract class AbstractCloverMojo extends AbstractMojo implements CloverConfiguration
 {
     /**
      * The location of the <a href="http://confluence.atlassian.com/x/EIBOB">Clover database</a>.
      *
-     * @parameter expression="${maven.clover.cloverDatabase}" default-value="${project.build.directory}/clover/clover.db"
+     * @parameter expression="${maven.clover.cloverDatabase}"
      */
     private String cloverDatabase;
 
@@ -58,12 +59,12 @@ public abstract class AbstractCloverMojo extends AbstractMojo
 
 
     /**
-     * If true, then a single checkpoint will be saved for the entire project, at the very end of the build.
-     * This flag should be set to true in conjunction with -Dmaven.clover.checkpoint which points to the same location
-     * for all sub-modules in a multi-module build.
-     * @parameter expression="${maven.clover.globalCheckpoint}" default-value="false"
+     * If true, then a single cloverDatabase will be used for the entire project.
+     * This flag will be ignored if a custom cloverDatabase location is specified.
+     *
+     * @parameter expression="${maven.clover.singleCloverDatabase}" default-value="false"
      */
-    protected boolean globalCheckpoint;
+    private boolean singleCloverDatabase;
 
     /**
      * The location of the merged clover database to create when running a report in a multimodule build.
@@ -159,11 +160,23 @@ public abstract class AbstractCloverMojo extends AbstractMojo
     protected boolean skip;
 
     /**
+     * The projects in the reactor for aggregation report.
+     *
+     * <p>Note: This is passed by Maven and must not be configured by the user.</p>
+     *
+     * @parameter expression="${reactorProjects}"
+     * @readonly
+     */
+    private List reactorProjects;
+
+
+    /**
      * {@inheritDoc}
      * @see org.apache.maven.plugin.AbstractMojo#execute()
      */
     public void execute() throws MojoExecutionException
     {
+
         registerLicenseFile();
     }
 
@@ -333,9 +346,13 @@ public abstract class AbstractCloverMojo extends AbstractMojo
         return this.jdk;
     }
 
-    public String getCloverDatabase()
+    public String getCloverDatabase() {
+        return cloverDatabase;
+    }
+
+    public String resolveCloverDatabase()
     {
-        return this.cloverDatabase;
+        return new ConfigUtil(this).resolveCloverDatabase();
     }
 
     protected String getCloverMergeDatabase()
@@ -364,4 +381,14 @@ public abstract class AbstractCloverMojo extends AbstractMojo
     public void setLicense(String license) {
         this.license = license;
     }
+
+    public List getReactorProjects() {
+        return reactorProjects;
+    }
+
+    public boolean isSingleCloverDatabase() {
+        return this.singleCloverDatabase;
+    }
+
+
 }

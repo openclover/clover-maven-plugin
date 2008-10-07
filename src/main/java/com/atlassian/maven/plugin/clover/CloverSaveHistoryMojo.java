@@ -77,9 +77,9 @@ public class CloverSaveHistoryMojo extends AbstractCloverMojo
      */
     private void save()
     {
-        if ( new File( getCloverDatabase() ).exists() )
+        if ( new File( resolveCloverDatabase() ).exists() )
         {
-            saveDatabase( getCloverDatabase() );
+            saveDatabase( resolveCloverDatabase() );
         }
         if ( new File( getCloverMergeDatabase() ).exists() )
         {

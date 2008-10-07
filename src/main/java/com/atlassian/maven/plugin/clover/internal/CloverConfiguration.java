@@ -24,6 +24,7 @@ import org.apache.maven.project.MavenProject;
 
 import java.util.Set;
 import java.util.Map;
+import java.util.List;
 
 /**
  * Represents a Clover configuration. Used by internal classes to wrap Mojos and get access to
@@ -33,29 +34,16 @@ import java.util.Map;
  */
 public interface CloverConfiguration
 {
-    Set getIncludes();
-
-    Set getExcludes();
-
-    boolean includesAllSourceRoots();
-
     Log getLog();
 
     MavenProject getProject();
 
-    String getJdk();
-
-    String getFlushPolicy();
-
-    int getFlushInterval();
+    List getReactorProjects();
 
     String getCloverDatabase();
 
-    boolean isUseFullyQualifiedJavaLang();
+    String resolveCloverDatabase();
 
-    String getEncoding();
+    boolean isSingleCloverDatabase();
 
-    Map getMethodContexts();
-    
-    Map getStatementContexts();
 }

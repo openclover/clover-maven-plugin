@@ -62,9 +62,9 @@ public class CloverLogMojo extends AbstractCloverMojo
      */
     private void log()
     {
-        if ( new File( getCloverDatabase() ).exists() )
+        if ( new File( resolveCloverDatabase() ).exists() )
         {
-            logDatabase( getCloverDatabase() );
+            logDatabase( resolveCloverDatabase() );
         }
         if ( new File( getCloverMergeDatabase() ).exists() )
         {

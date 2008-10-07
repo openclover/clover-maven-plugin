@@ -19,7 +19,7 @@ package com.atlassian.maven.plugin.clover.internal.scanner;
  * under the License.
  */
 
-import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
+import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class TestCloverSourceScanner extends AbstractCloverSourceScanner
 {
-    public TestCloverSourceScanner(CloverConfiguration configuration)
+    public TestCloverSourceScanner(CompilerConfiguration configuration)
     {
         super( configuration );
     }

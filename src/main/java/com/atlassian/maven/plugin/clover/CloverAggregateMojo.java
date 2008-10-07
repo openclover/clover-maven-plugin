@@ -40,16 +40,6 @@ import com.cenqua.clover.CloverMerge;
 public class CloverAggregateMojo extends AbstractCloverMojo
 {
     /**
-     * The projects in the reactor for aggregation report.
-     *
-     * <p>Note: This is passed by Maven and must not be configured by the user.</p>
-     *
-     * @parameter expression="${reactorProjects}"
-     * @readonly
-     */
-    private List reactorProjects;
-
-    /**
      * Time span that will be used when generating aggregated database. Check
      * http://confluence.atlassian.com/display/CLOVER/Using+Spans and
      * http://confluence.atlassian.com/display/CLOVER/clover-merge.
@@ -106,7 +96,7 @@ public class CloverAggregateMojo extends AbstractCloverMojo
         // Note: This is a pretty buggy algorithm and we really need a proper
         // solution (see MNG-2180)
         
-        String relativeCloverDatabasePath = getCloverDatabase().substring(
+        String relativeCloverDatabasePath = resolveCloverDatabase().substring(
                 getProject().getBasedir().getPath().length());
         
         List dbFiles = new ArrayList();
@@ -166,9 +156,9 @@ public class CloverAggregateMojo extends AbstractCloverMojo
         
         boolean infinite = (levels == -1);
         
-        if ((reactorProjects != null) && (infinite || levels > 0))
+        if ((getReactorProjects() != null) && (infinite || levels > 0))
         {            
-            for (Iterator i = reactorProjects.iterator(); i.hasNext();)
+            for (Iterator i = getReactorProjects().iterator(); i.hasNext();)
             {
                 MavenProject reactorProject = (MavenProject) i.next();
                 

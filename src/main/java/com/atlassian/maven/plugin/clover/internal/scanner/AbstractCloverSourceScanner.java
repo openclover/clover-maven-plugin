@@ -23,7 +23,7 @@ import org.codehaus.plexus.compiler.util.scan.SourceInclusionScanner;
 import org.codehaus.plexus.compiler.util.scan.SimpleSourceInclusionScanner;
 import org.codehaus.plexus.compiler.util.scan.InclusionScanException;
 import org.codehaus.plexus.compiler.util.scan.mapping.SuffixMapping;
-import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
+import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 
 import java.util.*;
 import java.io.File;
@@ -35,14 +35,14 @@ import java.io.File;
  */
 public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
 {
-    private CloverConfiguration configuration;
+    private CompilerConfiguration configuration;
 
-    public AbstractCloverSourceScanner(CloverConfiguration configuration)
+    public AbstractCloverSourceScanner(CompilerConfiguration configuration)
     {
         this.configuration = configuration;
     }
 
-    protected CloverConfiguration getConfiguration()
+    protected CompilerConfiguration getConfiguration()
     {
         return this.configuration;
     }
