@@ -2,6 +2,8 @@ package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.cenqua.clover.tasks.CloverCheckpointTask;
+import com.cenqua.clover.util.CheckpointDumper;
+import com.cenqua.clover.CloverTestCheckpoint;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.Project;
 
@@ -20,6 +22,13 @@ public class CloverCheckPointMojo extends AbstractCloverMojo {
      * @parameter expression="${maven.clover.span}" 
      */
     private String span;
+
+    /**
+     * If set to true, the state of the checkpoint file will be dumped to the console.
+     *
+     * @parameter expression="${maven.clover.checkpoint.debug}" default-value="false"
+     */
+    private boolean debug;
 
     public void execute() throws MojoExecutionException {
 
@@ -61,5 +70,11 @@ public class CloverCheckPointMojo extends AbstractCloverMojo {
         }
 
         task.execute();
+
+        if (getLog().isDebugEnabled() || debug) {
+            final String cpLocation = checkpoint != null ? checkpoint.getPath() : task.getInitString() + ".teststate";
+            CheckpointDumper.printPretty(CloverTestCheckpoint.loadFrom(cpLocation), new MvnLogger(getLog()));
+        }
+
     }
 }

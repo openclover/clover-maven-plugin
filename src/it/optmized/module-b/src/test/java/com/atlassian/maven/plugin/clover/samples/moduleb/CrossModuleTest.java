@@ -10,6 +10,7 @@ public class CrossModuleTest extends TestCase {
 
     public void testModuleA() {
         Simple simple = new Simple();
+        simple.someMethod();
         assertNotNull(simple);
     }
 }
