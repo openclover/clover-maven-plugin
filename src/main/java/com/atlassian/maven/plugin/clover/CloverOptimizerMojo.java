@@ -108,7 +108,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         testsToRun.setProject(antProj);
         testsToRun.setLogger(new MvnLogger(getLog()));
         testsToRun.setFullRunEvery(fullRunEvery);
-        testsToRun.setCheckpointFile(checkpoint);
+        testsToRun.setSnapshotFile(snapshot);
 
         antProj.setProperty(CloverNames.PROP_INITSTRING, resolveCloverDatabase());
         antProj.setName(getProject().getName());

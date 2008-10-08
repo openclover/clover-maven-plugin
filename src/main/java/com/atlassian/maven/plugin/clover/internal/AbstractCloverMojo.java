@@ -50,12 +50,12 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     private String cloverDatabase;
 
     /**
-     * The location to store the clover checkpoint file. This file needs to persist between builds to enable Clover's
-     * build optimization feature. If not specified, the checkpoint will be stored next to the cloverDatabase.
+     * The location to store the clover snapshot file. This file needs to persist between builds to enable Clover's
+     * build optimization feature. If not specified, the snapshot will be stored next to the cloverDatabase.
      *
-     * @parameter expression="${maven.clover.checkpoint}"
+     * @parameter expression="${maven.clover.snapshot}"
      */
-    protected File checkpoint;
+    protected File snapshot;
 
 
     /**

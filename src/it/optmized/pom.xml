@@ -57,7 +57,7 @@ under the License.
                             <goal>clean</goal>
                             <goal>setup</goal>
                             <goal>optimize</goal>
-                            <goal>checkpoint</goal>
+                            <goal>snapshot</goal>
                         </goals>
                     </execution>
                 </executions>

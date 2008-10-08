@@ -1,6 +1,7 @@
 package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
+import com.cenqua.clover.CloverNames;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
@@ -23,11 +24,11 @@ import java.io.File;
 public class CloverCleanMojo extends AbstractCloverMojo {
 
     /**
-     * The location of the Checkpoint file. By default, this is next to the cloverDatabase.
+     * The location of the snapshot file. By default, this is next to the cloverDatabase.
      *
-     * @parameter expression="${maven.clover.checkpointPattern}" default-value="**\/*.teststate"
+     * @parameter expression="${maven.clover.snapshotPattern}"
      */
-    private String checkpointPattern;
+    private String snapshotPattern = "**/*" + CloverNames.SNAPSHOT_SUFFIX;
 
     /**
      * This is where build results go.
@@ -79,7 +80,7 @@ public class CloverCleanMojo extends AbstractCloverMojo {
         project.setBasedir(getProject().getBasedir().getPath());
         project.addBuildListener(new MvnLogBuildListener(getLog()));
         project.init();
-        // delete just the checkpoint
+        // delete just the snapshot
         removeWithFilter(directory, project);
         removeWithFilter(outputDirectory, project);
         removeWithFilter(testOutputDirectory, project);
@@ -98,7 +99,7 @@ public class CloverCleanMojo extends AbstractCloverMojo {
         FileSet fileSet = new FileSet();
         fileSet.setProject(project);
         fileSet.setDir(path);
-        fileSet.setExcludes(checkpointPattern);
+        fileSet.setExcludes(snapshotPattern);
         delete.addFileset(fileSet);
         delete.execute();
     }
