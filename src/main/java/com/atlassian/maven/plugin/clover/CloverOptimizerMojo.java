@@ -2,7 +2,7 @@ package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.cenqua.clover.CloverNames;
-import com.cenqua.clover.types.junit.CloverOptimizedTestSet;
+import com.cenqua.clover.types.CloverOptimizedTestSet;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;

@@ -35,6 +35,7 @@ public class CloverSnapshotMojo extends AbstractCloverMojo {
 
         // only run the snapshot once, on the very last project.
         if (isSingleCloverDatabase() && getReactorProjects().get(getReactorProjects().size() - 1) != getProject()) {
+            getLog().info("Skipping snapshot until the final project in the reactor.");
             return;
         }
 
