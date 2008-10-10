@@ -320,7 +320,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     {
         boolean shouldRun = false;
 
-        File singleModuleCloverDatabase = new File( this.cloverDatabase );
+        File singleModuleCloverDatabase = new File( resolveCloverDatabase() );
         File mergedCloverDatabase = new File ( this.cloverMergeDatabase );
 
         if (singleModuleCloverDatabase.exists() || mergedCloverDatabase.exists() )

@@ -30,6 +30,7 @@ import java.io.File;
  * Provides information on the current Clover database.
  *
  * @goal log
+ * @phase post-integration-test
  *
  * @version $Id: CloverLogMojo.java 555822 2007-07-13 00:03:28Z vsiveton $
  */
