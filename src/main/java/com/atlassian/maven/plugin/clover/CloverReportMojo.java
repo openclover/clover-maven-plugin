@@ -22,6 +22,7 @@ package com.atlassian.maven.plugin.clover;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
 import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
+import com.cenqua.clover.cfg.Interval;
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -279,9 +280,9 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     /**
      * A span specifies the age of the coverage data that should be used when creating a report.
      *
-     * @parameter expression="${maven.clover.span}" default-value="0s"
+     * @parameter expression="${maven.clover.span}"
      */
-    private String span;
+    private String span = Interval.DEFAULT_SPAN.toString();
 
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#executeReport(java.util.Locale)

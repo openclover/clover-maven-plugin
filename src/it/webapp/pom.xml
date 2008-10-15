@@ -85,14 +85,7 @@
                             <name>webapp.url</name>
                             <value>${webapp.url}</value>
                         </property>
-                        <property>
-                            <name>test.jar</name>
-                            <value>${test.jar}</value>
-                        </property>
-                        <property>
-                            <name>codebase.server</name>
-                            <value>false</value>
-                        </property>
+
 
                     </systemProperties>
                 </configuration>
@@ -157,7 +150,6 @@
                         <systemProperties>
                             <clover.server>true</clover.server>
                             <codebase.server>true</codebase.server>
-                            <test.jar>${test.jar}</test.jar>
                         </systemProperties>
                     </container>
                     <configuration>
@@ -197,7 +189,7 @@
         <cargo.wait>false</cargo.wait>
         <webapp.context>/context</webapp.context>
         <webapp.url>http://localhost</webapp.url>
-        <test.jar>${basedir}/target/webapp-test.jar</test.jar>
+        <ansi.color>true</ansi.color>
         <jvm.args></jvm.args>
     </properties>
 </project>

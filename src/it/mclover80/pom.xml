@@ -57,7 +57,6 @@ under the License.
                     <flushPolicy>threaded</flushPolicy>
                     <flushInterval>100</flushInterval>
                     <targetPercentage>25%</targetPercentage>
-                    <!-- <licenseLocation>/Users/tomd/dev/atlassian/mcp-new/clover.license.txt</licenseLocation> -->
                      <licenseLocation>${clover.licenseLocation}</licenseLocation>
                 </configuration>
                 <executions>

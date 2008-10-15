@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.*;
 
 import com.cenqua.clover.CloverMerge;
+import com.cenqua.clover.cfg.Interval;
 
 /**
  * Aggregate children module Clover databases if there are any. This mojo should not exist. It's only there because
@@ -44,9 +45,9 @@ public class CloverAggregateMojo extends AbstractCloverMojo
      * http://confluence.atlassian.com/display/CLOVER/Using+Spans and
      * http://confluence.atlassian.com/display/CLOVER/clover-merge.
      *
-     * @parameter expression="${maven.clover.span}" default-value="0s"
+     * @parameter expression="${maven.clover.span}"
      */
-    private String span;
+    private String span = Interval.DEFAULT_SPAN.toString();
 
     /**
      * {@inheritDoc}

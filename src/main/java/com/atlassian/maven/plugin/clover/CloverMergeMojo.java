@@ -65,7 +65,7 @@ public class CloverMergeMojo extends AbstractCloverMojo
      *
      * @parameter expression="${maven.clover.merge.span}"
      */
-    private String span;
+    private String span = Interval.DEFAULT_SPAN.toString();
 
  
 
