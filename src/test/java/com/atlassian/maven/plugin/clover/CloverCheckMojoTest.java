@@ -38,7 +38,7 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
 
     public void testWhenDatabaseMissing() throws MojoExecutionException {
         // ensure this mojo does not failed, if targetPercentage and historyDir are missing
-        CloverCheckMojo mojo = new CloverCheckMojo();
+        CloverCheckMojo mojo = new CloverCheckMojo();    
         mojo.setProject(project);
         final TestUtil.RecordingLogger log = new TestUtil.RecordingLogger();
         mojo.setLog(log);

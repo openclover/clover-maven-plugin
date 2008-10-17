@@ -2,7 +2,9 @@ package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.cenqua.clover.CloverNames;
+import com.cenqua.clover.util.Color;
 import com.cenqua.clover.types.CloverOptimizedTestSet;
+import com.cenqua.clover.types.CloverAlwaysRunTestSet;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -24,27 +26,43 @@ import java.util.List;
 public class CloverOptimizerMojo extends AbstractCloverMojo {
 
     /**
+     * The number of builds to run, before the snapshot file gets deleted.
+     * <p/>
+     * The snapshot stores the mapping between your test cases and source code. Over time, this becomes stale,
+     * so it is recommended to regenerate this file, by running all tests, on a regular basis.
      *
      * @parameter expression="${maven.clover.fullRunEvery}" default-value="10"
-     *
      */
     private int fullRunEvery;
 
     /**
-     * @parameter 
+     * A list of Tests to include for build optimization.
+     * If not supplied, the includes specified in the maven-surefire-plugin's configuration will be used.
+     *
+     * @parameter
      */
     private List optimizeIncludes;
 
 
     /**
+     * A list of Tests to exclude from build optimization.
+     * If not supplied, the excludes specified in the maven-surefire-plugin's configuration will be used.
+     *
      * @parameter
      */
     private List optimizeExcludes;
 
     /**
+     * A list of Tests which should always be run. ie they will never be optimized away.
+     * 
+     * @parameter
+     */
+    private List alwaysRunTests;
+
+    /**
      * The default test patterns to include.
      */
-    private static final List DEFAULT_INCLUDES = Arrays.asList(new String[] { "**/Test*.java", "**/*Test.java","**/*TestCase.java" });
+    private static final List DEFAULT_INCLUDES = Arrays.asList(new String[]{"**/Test*.java", "**/*Test.java", "**/*TestCase.java"});
 
 
     public void execute() throws MojoExecutionException {
@@ -63,7 +81,6 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         final Project antProj = new Project();
         antProj.init();
         antProj.addBuildListener(new MvnLogBuildListener(getLog()));
-
 
 
         final List optimizedTests = configureOptimisedTestSet(antProj);
@@ -88,8 +105,8 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
         List surefireIncludes = null;
         List surefireExcludes = null;
-        
-          // lookup the surefire-plugin
+
+        // lookup the surefire-plugin
         final Plugin surefirePlugin = lookupSurefirePlugin();
 
         if (surefirePlugin != null) {
@@ -112,9 +129,9 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
         antProj.setProperty(CloverNames.PROP_INITSTRING, resolveCloverDatabase());
         antProj.setName(getProject().getName());
-        
+
         final List testSources = getProject().getTestCompileSourceRoots();
-        
+
         for (Iterator iterator = testSources.iterator(); iterator.hasNext();) {
             String testRoot = (String) iterator.next();
             final File testRootDir = new File(testRoot);
@@ -122,7 +139,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
                 // if the test dir does not exist, do not add this as a fileset.
                 continue;
             }
-            
+
             FileSet testFileSet = new FileSet();
             testFileSet.setProject(antProj);
 
@@ -138,18 +155,35 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
             }
 
             testsToRun.add(testFileSet);
+
+            if (alwaysRunTests != null) {
+                // create  fileset
+                final FileSet alwaysRunFileSet = new FileSet();
+                alwaysRunFileSet.setProject(antProj);
+                alwaysRunFileSet.setDir(testRootDir);
+                alwaysRunFileSet.appendIncludes((String[]) alwaysRunTests.toArray(new String[alwaysRunTests.size()]));
+
+                // add it to an AlwaysRunTestSet
+                final CloverAlwaysRunTestSet alwaysRunTestSet = new CloverAlwaysRunTestSet();
+                alwaysRunTestSet.setProject(antProj);
+                alwaysRunTestSet.add(alwaysRunFileSet);
+
+                // then add that to the OptimizedTestSet
+                testsToRun.add(alwaysRunTestSet);
+            }
+
         }
         return testsToRun.getOptimizedTestResource();
     }
 
     /**
      * Extracts nested values from the given config object into a List.
-     * 
+     *
      * @param childname the name of the first subelement that contains the list
-     * @param config the actual config object
+     * @param config    the actual config object
      */
     private List extractNestedStrings(String childname, Xpp3Dom config) {
-        
+
         final Xpp3Dom subelement = config.getChild(childname);
         if (subelement != null) {
             List result = new LinkedList();
@@ -179,7 +213,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
         for (Iterator iterator = plugins.iterator(); iterator.hasNext();) {
             Plugin plugin = (Plugin) iterator.next();
-            if(key.equalsIgnoreCase(plugin.getKey())) {
+            if (key.equalsIgnoreCase(plugin.getKey())) {
                 return plugin;
             }
         }
