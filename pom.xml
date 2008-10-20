@@ -236,6 +236,7 @@ under the License.
                             <debug>true</debug>
                             <projectsDirectory>src/it</projectsDirectory>
                             <pomIncludes>
+                                <pomInclude>**/optmized/pom.xml</pomInclude>
                                 <pomInclude>**/contexts/pom.xml</pomInclude>
                                 <pomInclude>**/simple/pom.xml</pomInclude>
                                 <pomInclude>**/multiproject/pom.xml</pomInclude>
