@@ -74,7 +74,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         // if there are no source files, then skip this mojo
         final String sourceDirectory = getProject().getBuild().getSourceDirectory();
         if (!new File(sourceDirectory).exists()) {
-            getLog().info(sourceDirectory + " does not exist. No optimization will be done.");
+            getLog().info(sourceDirectory + " does not exist. No optimization will be done for: " + getProject().getArtifactId());
             return;
         }
 
@@ -88,11 +88,11 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         StringBuffer testPattern = new StringBuffer();
         for (Iterator iterator = optimizedTests.iterator(); iterator.hasNext();) {
             Resource test = (Resource) iterator.next();
-            getLog().info("Running TEST: " + test.getName());
+            getLog().debug("Running TEST: " + test.getName());
             testPattern.append(test.getName());
             testPattern.append(",");
         }
-        getLog().info("Setting test property to: " + testPattern);
+        getLog().debug("Setting test property to: '" + testPattern + "'");
 
         if (optimizedTests.size() == 0) { // ensure surefire wont fail if we run no tests
             getProject().getProperties().put("failIfNoTests", "false");
