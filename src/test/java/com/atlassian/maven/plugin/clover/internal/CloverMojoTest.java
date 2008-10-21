@@ -70,8 +70,9 @@ public class CloverMojoTest extends MockObjectTestCase
         try {
             mojo.setLicenseLocation( "build-tools/clover.license" );
             mockResourceManager.expects(atLeastOnce()).method("addSearchPath");
+
             mockResourceManager.expects( once() ).method( "getResourceAsFile" )
-                .with( eq( "build-tools/clover.license" ) )
+                .with( eq( "build-tools/clover.license" ), startsWith(System.getProperty("java.io.tmpdir")) )
                 .will( returnValue( new File( "targetFile" ) ) );
 
 
