@@ -364,7 +364,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
             cloverArtifact.getVersion(), Artifact.SCOPE_COMPILE, cloverArtifact.getType() );
 
         // TODO: use addArtifacts when it's implemented, see http://jira.codehaus.org/browse/MNG-2197
-        Set set = new HashSet( getProject().getDependencyArtifacts() );
+        Set set = new LinkedHashSet( getProject().getDependencyArtifacts() );
         set.add( cloverArtifact );
         getProject().setDependencyArtifacts( set );
     }
