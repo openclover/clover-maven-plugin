@@ -269,7 +269,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     protected Set swizzleCloverDependencies( Set artifacts )
     {
-        Set resolvedArtifacts = new HashSet();
+        Set resolvedArtifacts = new LinkedHashSet();
         for ( Iterator i = artifacts.iterator(); i.hasNext(); )
         {
             Artifact artifact = (Artifact) i.next();
