@@ -20,7 +20,6 @@ package com.atlassian.maven.plugin.clover.internal.instrumentation;
  */
 
 import com.atlassian.maven.plugin.clover.MvnLogger;
-import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
 import com.cenqua.clover.CloverInstr;
@@ -81,9 +80,9 @@ public abstract class AbstractInstrumenter
         //won't do its job when include files set is empty!
     }
 
-    public void redirectSourceDirectories()
+    public String redirectSourceDirectories()
     {
-        redirectSourceDirectories( outputSourceDirectory );
+        return redirectSourceDirectories( outputSourceDirectory );
     }
 
     protected abstract CloverSourceScanner getSourceScanner();
@@ -92,10 +91,10 @@ public abstract class AbstractInstrumenter
     protected abstract List getCompileSourceRoots(); 
     protected abstract void addCompileSourceRoot(String sourceRoot);
     
-    private void redirectSourceDirectories(String targetDirectory)
+    private String redirectSourceDirectories(String targetDirectory)
     {
         String oldSourceDirectory = getSourceDirectory();
-
+        
         if ( new File( oldSourceDirectory ).exists() )
         {
             setSourceDirectory( targetDirectory );
@@ -129,6 +128,7 @@ public abstract class AbstractInstrumenter
 
         getConfiguration().getLog().debug( "Clover main source directories after change:" );
         logSourceDirectories();
+        return oldSourceDirectory;
     }
 
     private boolean isGeneratedSourcesDirectory(String sourceRoot) {

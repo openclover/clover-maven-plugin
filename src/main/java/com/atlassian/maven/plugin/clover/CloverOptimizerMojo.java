@@ -60,6 +60,22 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
     private List alwaysRunTests;
 
     /**
+     * This controls how Clover optimizes your tests.
+     *
+     * By default - clover excludes any test case it deems as irrelevant to any changes made to your source code.
+     * ie: only tests that cover modified code will be run.
+     *
+     * "failfast" - runs _all_ tests, but in an order optimized to ensure your build FAILs fast.
+     * ie: tests relevant to code changes first, then ascending by test run time.
+     *
+     * "random" - this is only useful for determing that your tests don't have any dependencies and are written in such
+     * a way that allows them to be run in any order.
+     * 
+     * @parameter expression="${maven.clover.ordering}" default-value="default"
+     */
+    private String ordering;
+
+    /**
      * The default test patterns to include.
      */
     private static final List DEFAULT_INCLUDES = Arrays.asList(new String[]{"**/Test*.java", "**/*Test.java", "**/*TestCase.java"});
@@ -126,6 +142,9 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         testsToRun.setLogger(new MvnLogger(getLog()));
         testsToRun.setFullRunEvery(fullRunEvery);
         testsToRun.setSnapshotFile(snapshot);
+        CloverOptimizedTestSet.TestOrdering order = new CloverOptimizedTestSet.TestOrdering();
+        order.setValue(ordering);
+        testsToRun.setOrdering(order);
 
         antProj.setProperty(CloverNames.PROP_INITSTRING, resolveCloverDatabase());
         antProj.setName(getProject().getName());
@@ -147,11 +166,11 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
 
             testFileSet.appendIncludes((String[]) includes.toArray(new String[includes.size()]));
-            getLog().debug("INCLUDING: " + includes);
+            getLog().debug("Appending includes: " + includes);
 
             if (excludes != null && excludes.size() > 0) {
                 testFileSet.appendExcludes((String[]) excludes.toArray(new String[excludes.size()]));
-                getLog().debug("EXCLUDING: " + excludes);
+                getLog().debug("Appending excludes: " + excludes);
             }
 
             testsToRun.add(testFileSet);

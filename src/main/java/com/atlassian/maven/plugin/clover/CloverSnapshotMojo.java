@@ -59,8 +59,8 @@ public class CloverSnapshotMojo extends AbstractCloverMojo {
         task.setInitString(resolveCloverDatabase());
         if (span != null) {
             task.setSpan(span);
-        } else if (CloverCompilerMojo.START_DATE != null) {
-            final long timeSinceStart = new Date().getTime() - CloverCompilerMojo.START_DATE.getTime();
+        } else if (CloverSetupMojo.START_DATE != null) {
+            final long timeSinceStart = new Date().getTime() - CloverSetupMojo.START_DATE.getTime();
             final String interval = ((timeSinceStart + 1000)/ 1000) + "s";
             getLog().info("No span specified, using span of: " + interval);
             task.setSpan(interval);

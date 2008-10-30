@@ -14,7 +14,7 @@ import java.util.Date;
  * @goal setup
  * @phase process-sources
  */
-public class CloverCompilerMojo extends CloverInstrumentInternalMojo {
+public class CloverSetupMojo extends CloverInstrumentInternalMojo {
 
     static Date START_DATE; 
 
@@ -25,8 +25,16 @@ public class CloverCompilerMojo extends CloverInstrumentInternalMojo {
         if (firstProject == getProject()) {
             START_DATE = new Date();
         }
-
         super.execute();
+    }
+
+
+    protected String getSrcName() {
+        return super.getSrcName() + "-optimized";
+    }
+
+    protected String getSrcTestName() {
+        return super.getSrcTestName() + "-optimized";
     }
 
     protected void redirectOutputDirectories() {

@@ -58,7 +58,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      * @required
      */
     private String cloverOutputDirectory;
-
+    
     /**
      * List of all artifacts for this Clover plugin provided by Maven. This is used internally to get a handle on
      * the Clover JAR artifact.
@@ -154,6 +154,18 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      */
     private String encoding;
 
+    // HACK: this allows us to reset the source directories to the originals
+    private static Map originalSrcMap = new HashMap();
+    private static Map originalSrcTestMap = new HashMap();
+
+    public static String getOriginalSrcDir(String module) {
+        return (String) originalSrcMap.get(module);
+    }
+
+    public static String getOriginalSrcTestDir(String module) {
+        return (String) originalSrcTestMap.get(module);
+    }
+
     /**
      * {@inheritDoc}
      * @see com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo#execute()
@@ -165,12 +177,14 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         if (skip) {
             getLog().debug("Skipping clover instrumentation.");
             return;
-        }        
+        }
+
+        resetSrcDirsOriginal(getProject().getArtifactId(), this);
 
         // Ensure output directories exist
         new File( this.cloverOutputDirectory ).mkdirs();
-        String cloverOutputSourceDirectory = new File( this.cloverOutputDirectory, "src" ).getPath();
-        String cloverOutputTestSourceDirectory = new File( this.cloverOutputDirectory, "src-test" ).getPath();
+        String cloverOutputSourceDirectory = new File( this.cloverOutputDirectory, getSrcName()).getPath();
+        String cloverOutputTestSourceDirectory = new File( this.cloverOutputDirectory, getSrcTestName()).getPath();
         new File( resolveCloverDatabase() ).getParentFile().mkdirs();
 
         super.execute();
@@ -197,15 +211,41 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
         // Modify Maven model so that it points to the new source directories and to the clovered
         // artifacts instead of the original values.
-        mainInstrumenter.redirectSourceDirectories();
+        String originalSrcDir = mainInstrumenter.redirectSourceDirectories();
+        originalSrcMap.put(getProject().getArtifactId(), originalSrcDir);
         if ( this.includesTestSourceRoots )
         {
-            testInstrumenter.redirectSourceDirectories();
+            String originalSrcTestDir = testInstrumenter.redirectSourceDirectories();
+            originalSrcTestMap.put(getProject().getArtifactId(), originalSrcTestDir);
         }
         redirectOutputDirectories();
         redirectArtifact();
 
         logArtifacts( "after changes" );
+    }
+
+    public static void resetSrcDirsOriginal(String artefactId, CompilerConfiguration config) {
+        if (originalSrcMap.containsKey(artefactId)) {
+            final String sourceDirectory = (String) originalSrcMap.get(artefactId);
+            MainInstrumenter mainInstrumenter =
+                    new MainInstrumenter(config, sourceDirectory);
+            mainInstrumenter.redirectSourceDirectories();
+
+        }
+        if (originalSrcTestMap.containsKey(artefactId)) {
+            final String testDirectory = (String)originalSrcTestMap.get(artefactId);
+            TestInstrumenter instrumenter =
+                    new TestInstrumenter(config, testDirectory);
+            instrumenter.redirectSourceDirectories();
+        }
+    }
+
+    protected String getSrcTestName() {
+        return "src-test";
+    }
+
+    protected String getSrcName() {
+        return "src";
     }
 
     private boolean isJavaProject()
