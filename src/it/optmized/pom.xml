@@ -49,6 +49,7 @@ under the License.
                 <artifactId>maven-clover2-plugin</artifactId>
                 <configuration>
                     <singleCloverDatabase>true</singleCloverDatabase>
+                    <!--<snapshot>${user.home}/.cloversnapshot/test.snapshot</snapshot>-->
                     <alwaysRunTests>
                         <alwaysRunTest>**/AlwaysRunTest.java</alwaysRunTest>
                     </alwaysRunTests>

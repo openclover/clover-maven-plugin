@@ -63,17 +63,34 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * This controls how Clover optimizes your tests.
      *
      * By default - clover excludes any test case it deems as irrelevant to any changes made to your source code.
-     * ie: only tests that cover modified code will be run.
      *
-     * "failfast" - runs _all_ tests, but in an order optimized to ensure your build FAILs fast.
-     * ie: tests relevant to code changes first, then ascending by test run time.
+     * "failfast" - (default) ensures your build FAILs fast ie: tests relevant to code changes are run first
      *
-     * "random" - this is only useful for determing that your tests don't have any dependencies and are written in such
-     * a way that allows them to be run in any order.
-     * 
-     * @parameter expression="${maven.clover.ordering}" default-value="default"
+     * "random" - tests will be shuffled before run. Can be used to determine inter-test-dependencies.
+     *
+     * @parameter expression="${maven.clover.ordering}"
      */
     private String ordering;
+
+    /**
+     * Toggles whether or not build optimization is to be done or not.
+     *
+     * @parameter expression="${maven.clover.optimze.enabled}" default-value="true"
+     */
+    private boolean enabled;
+
+
+    /**
+     * Controls whether or not to exclude tests that do not cover any modified files.
+     *
+     * If false, (and ordering is not random or original), Clover will not exclude any of the tests. Instead, they
+     * will be run in an optimal order to ensure the build fails as fast as possible. ie - tests that cover modify code
+     * first, then ascending by test time.
+     * 
+     * @parameter expression="${maven.clover.optimze.minimize}" default-value="true"
+     *
+     */
+    private boolean minimize;
 
     /**
      * The default test patterns to include.
@@ -142,9 +159,13 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         testsToRun.setLogger(new MvnLogger(getLog()));
         testsToRun.setFullRunEvery(fullRunEvery);
         testsToRun.setSnapshotFile(snapshot);
-        CloverOptimizedTestSet.TestOrdering order = new CloverOptimizedTestSet.TestOrdering();
-        order.setValue(ordering);
-        testsToRun.setOrdering(order);
+        if (ordering != null) {
+            CloverOptimizedTestSet.TestOrdering order = new CloverOptimizedTestSet.TestOrdering();
+            order.setValue(ordering);
+            testsToRun.setOrdering(order);
+        }
+        testsToRun.setMinimize(minimize);
+        testsToRun.setEnabled(enabled);
 
         antProj.setProperty(CloverNames.PROP_INITSTRING, resolveCloverDatabase());
         antProj.setName(getProject().getName());

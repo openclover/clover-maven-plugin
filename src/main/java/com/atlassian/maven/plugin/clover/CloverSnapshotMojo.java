@@ -6,6 +6,7 @@ import com.cenqua.clover.util.SnapshotDumper;
 import com.cenqua.clover.CloverTestSnapshot;
 import com.cenqua.clover.CloverNames;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 
 import java.io.File;
@@ -13,8 +14,8 @@ import java.util.Date;
 
 /**
  * @goal snapshot
- * @phase post-integration-test
- * @aggregator
+ * @phase test
+ *
  */
 public class CloverSnapshotMojo extends AbstractCloverMojo {
 
@@ -34,7 +35,9 @@ public class CloverSnapshotMojo extends AbstractCloverMojo {
     public void execute() throws MojoExecutionException {
 
         // only run the snapshot once, on the very last project.
-        if (isSingleCloverDatabase() && getReactorProjects().get(getReactorProjects().size() - 1) != getProject()) {
+        final MavenProject lastProject = (MavenProject) getReactorProjects().get(getReactorProjects().size() - 1);
+        final MavenProject thisProject = getProject();
+        if (isSingleCloverDatabase() && !thisProject.equals(lastProject)) {
             getLog().info("Skipping snapshot until the final project in the reactor.");
             return;
         }
