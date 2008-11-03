@@ -34,7 +34,6 @@ import java.io.File;
  * Unit tests for {@link com.atlassian.maven.plugin.clover.CloverInstrumentInternalMojo}.
  *
  * @author <a href="mailto:vmassol@apache.org">Vincent Massol</a>
- * @version $Id: CloverInstrumentInternalMojoTest.java 555822 2007-07-13 00:03:28Z vsiveton $
  */
 public class CloverInstrumentInternalMojoTest extends MockObjectTestCase
 {

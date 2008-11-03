@@ -32,7 +32,6 @@ import java.io.File;
  * @goal log
  * @phase post-integration-test
  *
- * @version $Id: CloverLogMojo.java 555822 2007-07-13 00:03:28Z vsiveton $
  */
 public class CloverLogMojo extends AbstractCloverMojo
 {

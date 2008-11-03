@@ -20,6 +20,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * Sets the 'test' property on the project which is used by the maven-surefire-plugin to determine which tests are run.
+ * If a snapshot file from a previous build, is found, that will be used to determine what tests should be run.
+ *
  * @goal optimize
  * @phase process-test-classes
  */
@@ -60,6 +63,8 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
     private List alwaysRunTests;
 
     /**
+     * <b>NOTE:</b> This currently has no effect, because the maven-surefire-plugin re-orders the tests alphabetically.
+     *
      * This controls how Clover optimizes your tests.
      *
      * By default - clover excludes any test case it deems as irrelevant to any changes made to your source code.
@@ -75,7 +80,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
     /**
      * Toggles whether or not build optimization is to be done or not.
      *
-     * @parameter expression="${maven.clover.optimze.enabled}" default-value="true"
+     * @parameter expression="${maven.clover.optimize.enabled}" default-value="true"
      */
     private boolean enabled;
 
@@ -87,7 +92,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * will be run in an optimal order to ensure the build fails as fast as possible. ie - tests that cover modify code
      * first, then ascending by test time.
      * 
-     * @parameter expression="${maven.clover.optimze.minimize}" default-value="true"
+     * @parameter expression="${maven.clover.optimize.minimize}" default-value="true"
      *
      */
     private boolean minimize;

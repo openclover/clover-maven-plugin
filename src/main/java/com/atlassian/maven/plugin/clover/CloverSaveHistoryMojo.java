@@ -31,7 +31,6 @@ import java.io.File;
  *
  * @goal save-history
  *
- * @version $Id: CloverSaveHistoryMojo.java 555822 2007-07-13 00:03:28Z vsiveton $
  */
 public class CloverSaveHistoryMojo extends AbstractCloverMojo
 {

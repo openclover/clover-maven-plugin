@@ -26,7 +26,6 @@ import java.util.List;
 /**
  * Computes the list of test source files to instrument.
  *
- * @version $Id: $
  */
 public class TestCloverSourceScanner extends AbstractCloverSourceScanner
 {

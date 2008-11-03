@@ -26,7 +26,6 @@ import java.util.List;
 /**
  * Computes the list of main source files to instrument.
  *
- * @version $Id: $
  */
 public class MainCloverSourceScanner extends AbstractCloverSourceScanner
 {

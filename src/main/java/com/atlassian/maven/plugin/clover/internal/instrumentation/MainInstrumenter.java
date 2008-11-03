@@ -28,7 +28,6 @@ import java.util.List;
 /**
  * Instruments main sources.
  * 
- * @version $Id: $
  */
 public class MainInstrumenter extends AbstractInstrumenter
 {

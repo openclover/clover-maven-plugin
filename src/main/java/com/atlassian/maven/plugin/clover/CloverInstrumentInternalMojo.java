@@ -46,7 +46,6 @@ import java.util.*;
  * @phase validate
  * @requiresDependencyResolution test
  *
- * @version $Id: CloverInstrumentInternalMojo.java 555822 2007-07-13 00:03:28Z vsiveton $
  */
 public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements CompilerConfiguration
 {

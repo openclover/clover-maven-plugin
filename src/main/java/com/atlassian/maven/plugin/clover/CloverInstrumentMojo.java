@@ -35,7 +35,6 @@ import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
  * @goal instrument
  * @execute phase="install" lifecycle="clover"
  *
- * @version $Id: CloverInstrumentMojo.java 555822 2007-07-13 00:03:28Z vsiveton $
  */
 public class CloverInstrumentMojo extends AbstractCloverMojo
 {

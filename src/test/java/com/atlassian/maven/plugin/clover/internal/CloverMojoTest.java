@@ -34,7 +34,6 @@ import com.cenqua.clover.CloverNames;
  * Unit tests for {@link com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo}.
  * 
  * @author <a href="mailto:vmassol@apache.org">Vincent Massol</a>
- * @version $Id: CloverMojoTest.java 555822 2007-07-13 00:03:28Z vsiveton $
  */
 public class CloverMojoTest extends MockObjectTestCase
 {

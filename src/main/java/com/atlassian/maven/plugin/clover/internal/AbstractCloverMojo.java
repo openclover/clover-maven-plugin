@@ -38,7 +38,7 @@ import com.atlassian.maven.plugin.clover.MvnLogBuildListener;
  * Common code for all Clover plugin build Mojos.
  *
  * @author <a href="mailto:vmassol@apache.org">Vincent Massol</a>
- * @version $Id: AbstractCloverMojo.java 555822 2007-07-13 00:03:28Z vsiveton $
+ * @author <a href="mailto:npellow@atlassian.com">Nick Pellow</a>
  */
 public abstract class AbstractCloverMojo extends AbstractMojo implements CloverConfiguration
 {

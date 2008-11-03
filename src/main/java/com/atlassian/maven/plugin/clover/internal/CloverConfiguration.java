@@ -30,7 +30,6 @@ import java.util.List;
  * Represents a Clover configuration. Used by internal classes to wrap Mojos and get access to
  * Clover configuration values.
  *  
- * @version $Id: $
  */
 public interface CloverConfiguration
 {

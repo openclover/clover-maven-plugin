@@ -38,7 +38,6 @@ import java.util.Set;
 /**
  * Code common for instrumentation of various source roots (main sources, test sources).
  *
- * @version $Id: $
  */
 public abstract class AbstractInstrumenter
 {

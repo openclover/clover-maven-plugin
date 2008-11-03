@@ -24,7 +24,6 @@ import java.util.Map;
 /**
  * Scans source roots and return list of files to instrument.
  *
- * @version $Id: $
  */
 public interface CloverSourceScanner
 {

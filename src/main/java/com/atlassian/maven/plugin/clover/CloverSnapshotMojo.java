@@ -13,6 +13,17 @@ import java.io.File;
 import java.util.Date;
 
 /**
+ * Saves a Clover snapshot to the filesystem.
+ *
+ * A clover snapshot must be saved after all tests have been run. It is used by subsequent invocations of clover2:optimize
+ * to determine which tests get run. Therefore, this file must persist between clean builds.
+ *
+ * This is possible by using one of the following techniques:
+ * 1) set the 'snapshot' (-Dmaven.clover.snapshot) configuration to a location outside the target directory
+ * 2) leave the snapshot file in the default location 'target/clover/clover.db.snapshot' and do a clean build with the
+ * clover2:clean goal. clover2:clean will delete everything the clean plugin does, however will ensure that the snapshot
+ * file does not get deleted.
+ *
  * @goal snapshot
  * @phase test
  *

@@ -35,7 +35,6 @@ import java.io.File;
  * @goal check
  * @phase verify
  *
- * @version $Id: CloverCheckMojo.java 555822 2007-07-13 00:03:28Z vsiveton $
  */
 public class CloverCheckMojo extends AbstractCloverMojo
 {

@@ -31,7 +31,6 @@ import java.io.File;
 /**
  * Code common to compute the list of source files to instrument (main sources, test sources).
  *
- * @version $Id: $
  */
 public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
 {

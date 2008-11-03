@@ -53,7 +53,6 @@ import java.util.ResourceBundle;
  * <p>Note: This report mojo should be an @aggregator and the <code>clover:aggregate</code> mojo shouldn't exist. This
  * is a limitation of the site plugin which doesn't support @aggregator reports...</p>
  *
- * @version $Id: CloverReportMojo.java 555822 2007-07-13 00:03:28Z vsiveton $
  * @goal clover
  */
 public class CloverReportMojo extends AbstractMavenReport implements CloverConfiguration {

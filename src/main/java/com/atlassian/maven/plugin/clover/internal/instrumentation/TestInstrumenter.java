@@ -29,7 +29,6 @@ import java.util.List;
 /**
  * Instruments test sources.
  *
- * @version $Id: $
  */
 public class TestInstrumenter extends AbstractInstrumenter
 {
