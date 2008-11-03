@@ -174,7 +174,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     {
 
         if (skip) {
-            getLog().debug("Skipping clover instrumentation.");
+            getLog().info("Skipping clover instrumentation.");
             return;
         }
 

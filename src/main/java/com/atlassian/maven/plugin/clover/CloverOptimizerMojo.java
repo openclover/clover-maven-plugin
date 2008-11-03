@@ -107,6 +107,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
         if (skip) {
             getLog().info("Skipping build optimization.");
+            return;
         }
 
         // if there are no source files, then skip this mojo
