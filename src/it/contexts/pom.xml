@@ -65,6 +65,7 @@ under the License.
              <log>System.out.println\(.*\);</log>
            </statementContexts>
            <generateXml>true</generateXml>
+            <reportDescriptor>clover-report.xml</reportDescriptor>
 
         </configuration>
         <executions>
