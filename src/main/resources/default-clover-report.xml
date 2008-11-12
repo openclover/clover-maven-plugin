@@ -1,6 +1,6 @@
 <project name="Clover Report" default="current">
 
-    <clover-format id="clover.format" type="${type}" orderBy="${orderBy}" filter="${filter}"/> 
+    <clover-format id="clover.format" type="${type}" orderBy="${orderBy}" filter="${filter}"/>
 
     <clover-setup initString="${cloverdb}"/>
 
@@ -8,14 +8,26 @@
         <include name="${testPattern}"/>
     </fileset>
 
+
+    <clover-columns id="clover.columns">
+        <totalChildren/>
+        <filteredElements/>
+        <avgMethodComplexity/>
+        <uncoveredElements format="raw"/>
+        <totalPercentageCovered format="longbar"/>
+    </clover-columns>
+
     <target name="historical">
         <clover-report>
-            <current outfile="${output}"  summary="${summary}" charset="${charset}" title="${title}" span="${span}">
+            <current outfile="${output}" summary="${summary}" charset="${charset}" title="${title}" span="${span}">
                 <format refid="clover.format"/>
                 <testsources refid="test.sources"/>
+                <columns refid="clover.columns"/>
             </current>
-            <historical outfile="${historyout}" historydir="${history}" charset="${charset}" title="${title}" span="${span}">
+            <historical outfile="${historyout}" historydir="${history}" charset="${charset}" title="${title}"
+                        span="${span}">
                 <format refid="clover.format"/>
+                <columns refid="clover.columns"/>
             </historical>
         </clover-report>
     </target>
@@ -25,8 +37,9 @@
             <current outfile="${output}" title="${title}" summary="${summary}" charset="${charset}" span="${span}">
                 <format refid="clover.format"/>
                 <testsources refid="test.sources"/>
+                <columns refid="clover.columns"/>
             </current>
         </clover-report>
     </target>
-    
+
 </project>
