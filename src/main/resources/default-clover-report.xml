@@ -27,7 +27,6 @@
             <historical outfile="${historyout}" historydir="${history}" charset="${charset}" title="${title}"
                         span="${span}">
                 <format refid="clover.format"/>
-                <columns refid="clover.columns"/>
             </historical>
         </clover-report>
     </target>
