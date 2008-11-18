@@ -81,6 +81,10 @@ public class CloverSnapshotMojo extends AbstractCloverMojo {
         }
 
         if (snapshot != null) {
+            if (!snapshot.getParentFile().mkdirs()) {
+                throw new MojoExecutionException("Could not create parent directory for snapshot file: " +
+                        snapshot.getAbsolutePath());
+            }
             getLog().info("Saving snapshot to: " + snapshot);
             task.setFile(snapshot);
         }

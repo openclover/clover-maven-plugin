@@ -56,6 +56,8 @@ Maven Clover Plugin
 
    * Dumping information about your {{{http://confluence.atlassian.com/x/EIBOB}Clover database}}.
 
+   * NEW: Optimizing your tests by only running tests for code that has been modified
+
   Note that the Clover plugin will <<not>> overwrite your main compiled classes nor your main
   test compiled tests classes. It creates a parallel directory in <<<target/clover>>> in order not
   to tamper with your main files.
