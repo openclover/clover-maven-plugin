@@ -22,13 +22,18 @@ package com.atlassian.maven.plugin.clover.internal;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.model.Model;
-import org.jmock.MockObjectTestCase;
-import org.jmock.Mock;
+import org.jmock.Mockery;
+import org.jmock.Expectations;
+import org.jmock.integration.junit3.MockObjectTestCase;
 import org.codehaus.plexus.resource.ResourceManager;
+import org.codehaus.plexus.resource.loader.FileResourceLoader;
+import org.codehaus.plexus.resource.loader.FileResourceCreationException;
+import org.codehaus.plexus.resource.loader.ResourceNotFoundException;
 
 import java.io.File;
 
 import com.cenqua.clover.CloverNames;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Unit tests for {@link com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo}.
@@ -57,32 +62,37 @@ public class CloverMojoTest extends MockObjectTestCase
         }
     }
 
-    public void testRegisterLicenseFile() throws MojoExecutionException
-    {
+    public void testRegisterLicenseFile() throws MojoExecutionException, FileResourceCreationException, ResourceNotFoundException {
         TestableAbstractCloverMojo mojo = new TestableAbstractCloverMojo();
-        Mock mockResourceManager = mock( ResourceManager.class );
-        mojo.setResourceManager( (ResourceManager) mockResourceManager.proxy() );
+        Mockery context = new Mockery();        
+
+        final ResourceManager mockResourceManager = context.mock( ResourceManager.class, "resource manager" );
+
+            context.checking(new Expectations(){{
+                oneOf(mockResourceManager).addSearchPath(FileResourceLoader.ID, dummyProject.getFile().getParentFile().getAbsolutePath());
+                oneOf(mockResourceManager).addSearchPath("url", "");
+                oneOf(mockResourceManager).getResourceAsFile(with("build-tools/clover.license"),
+                                                             with(startsWith(System.getProperty("java.io.tmpdir"))));
+                will(returnValue(new File("targetFile")));
+
+            }});
+        mojo.setResourceManager( mockResourceManager );
 
         // Ensure that the system property is not already set
         System.setProperty( CloverNames.PROP_LICENSE_PATH, "" );
 
         try {
             mojo.setLicenseLocation( "build-tools/clover.license" );
-            mockResourceManager.expects(atLeastOnce()).method("addSearchPath");
-
-            mockResourceManager.expects( once() ).method( "getResourceAsFile" )
-                .with( eq( "build-tools/clover.license" ), startsWith(System.getProperty("java.io.tmpdir")) )
-                .will( returnValue( new File( "targetFile" ) ) );
-
 
             mojo.setProject(dummyProject);
             mojo.registerLicenseFile();
+            context.assertIsSatisfied();
+
             assertEquals( "targetFile", System.getProperty( CloverNames.PROP_LICENSE_PATH ) );
         } finally {
             System.getProperties().remove( CloverNames.PROP_LICENSE_PATH );            
         }
     }
-
 
     public void testRegisterLicense() throws MojoExecutionException
     {

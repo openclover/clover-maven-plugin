@@ -19,15 +19,19 @@ package com.atlassian.maven.plugin.clover;
  * under the License.
  */
 
-import org.jmock.MockObjectTestCase;
-import org.jmock.Mock;
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
+import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
+import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.plugin.logging.Log;
+import org.jmock.integration.junit3.MockObjectTestCase;
+import org.jmock.Expectations;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.List;
 import java.io.File;
 
 /**
@@ -67,25 +71,31 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase
 
     public void testFindCloverArtifactWithCorrectArtifactIdButWrongGroupId()
     {
-        Mock mockArtifact = mock(Artifact.class);
-        mockArtifact.stubs().method( "getArtifactId" ).will( returnValue( "clover" ) );
-        mockArtifact.stubs().method( "getGroupId" ).will( returnValue( "notcenquaid" ) );
+        final Artifact mockArtifact = mock(Artifact.class);
+        checking(new Expectations() {{
+            oneOf(mockArtifact).getGroupId(); will(returnValue("notcenquaid"));
+        }});
 
-        Artifact clover = this.mojo.findCloverArtifact( Collections.singletonList( mockArtifact.proxy() ) );
+        Artifact clover = this.mojo.findCloverArtifact( Collections.singletonList( mockArtifact ) );
 
         assertNull( "Clover artifact should not have been found!", clover );
     }
 
     public void testFindCloverArtifactWhenCorrectIds()
     {
-        Mock mockArtifact = mock(Artifact.class);
-        mockArtifact.stubs().method( "getArtifactId" ).will( returnValue( "clover" ) );
-        mockArtifact.stubs().method( "getGroupId" ).will( returnValue( "com.cenqua.clover" ) );
 
-        Artifact clover = this.mojo.findCloverArtifact( Collections.singletonList( mockArtifact.proxy() ) );
+        final Artifact mockArtifact = mock(Artifact.class);
+        checking(new Expectations() {{
+            oneOf(mockArtifact).getArtifactId(); will(returnValue("clover"));
+            oneOf(mockArtifact).getGroupId(); will(returnValue("com.cenqua.clover"));
+        }});
+
+
+        Artifact clover = this.mojo.findCloverArtifact( Collections.singletonList( mockArtifact ) );
 
         assertNotNull( "Clover artifact should have been found!", clover );
     }
+    
 
     public void testSwizzleCloverDependenciesWhenDependencyHasClassifier()
     {
@@ -97,8 +107,7 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase
         assertTrue( "Resulting artifact should have been the original one", resultSet.contains( artifact ) );
     }
 
-    public void testSwizzleCloverDependenciesWhenCloveredVersionOfDependencyIsNewerThanOriginal()
-    {
+    public void testSwizzleCloverDependenciesWhenCloveredVersionOfDependencyIsNewerThanOriginal() throws ArtifactNotFoundException, ArtifactResolutionException {
         // Ensure that the original artifact is older than the clovered artifact so that the clovered artifact
         // is picked. Note that that we use -5000/-10000 to ensure not to set the time in the future as maybe
         // this could cause some problems on some OS.
@@ -108,17 +117,19 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase
 
         Artifact artifact = setUpMockArtifact( "some.groupId", "someArtifactId", "1.0", "jar", "compile", null,
             artifactFile );
-        Artifact cloveredArtifact = setUpMockArtifact( null, null, null, null, null, null, cloveredArtifactFile );
+        final Artifact cloveredArtifact = setUpMockArtifact( null, null, null, null, null, null, cloveredArtifactFile );
 
         setUpCommonMocksForSwizzleCloverDependenciesTests(cloveredArtifact);
+        checking(new Expectations(){{
+            oneOf(cloveredArtifact).setScope("compile");
+        }});
 
         Set resultSet = this.mojo.swizzleCloverDependencies( Collections.singleton( artifact ) );
         assertEquals( 1, resultSet.size() );
         assertTrue( "Resulting artifact should have been the clovered one", resultSet.contains( cloveredArtifact ) );
     }
 
-    public void testSwizzleCloverDependenciesWhenOriginalVersionOfDependencyIsNewerThanCloveredOne()
-    {
+    public void testSwizzleCloverDependenciesWhenOriginalVersionOfDependencyIsNewerThanCloveredOne() throws ArtifactNotFoundException, ArtifactResolutionException {
         // Ensure that the clovered artifact is older than the original artifact so that the original artifact
         // is picked. Note that that we use -5000/-10000 to ensure not to set the time in the future as maybe
         // this could cause some problems on some OS.
@@ -128,7 +139,10 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase
 
         Artifact artifact = setUpMockArtifact( "some.groupId", "someArtifactId", "1.0", "jar", "compile", null,
             artifactFile );
-        Artifact cloveredArtifact = setUpMockArtifact( null, null, null, null, null, null, cloveredArtifactFile );
+        final Artifact cloveredArtifact = setUpMockArtifact( null, null, null, null, null, null, cloveredArtifactFile );
+        checking(new Expectations() {{
+            oneOf(cloveredArtifact).setScope("compile");
+        }});
 
         setUpCommonMocksForSwizzleCloverDependenciesTests(cloveredArtifact);
 
@@ -137,37 +151,47 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase
         assertTrue( "Resulting artifact should have been the original one", resultSet.contains( artifact ) );
     }
 
-    private void setUpCommonMocksForSwizzleCloverDependenciesTests(Artifact cloveredArtifact)
-    {
-        Mock mockArtifactFactory = mock( ArtifactFactory.class );
-        mockArtifactFactory.stubs().method( "createArtifactWithClassifier" ).will(returnValue( cloveredArtifact ) );
 
-        Mock mockArtifactResolver = mock( ArtifactResolver.class );
-        mockArtifactResolver.stubs().method( "resolve" );
+    private void setUpCommonMocksForSwizzleCloverDependenciesTests(final Artifact artifact) throws ArtifactNotFoundException, ArtifactResolutionException {
+        final ArtifactFactory mockArtifactFactory = mock( ArtifactFactory.class );
+        checking(new Expectations() {{
+            oneOf(mockArtifactFactory).createArtifactWithClassifier(
+                    "some.groupId", "someArtifactId", "1.0", "jar", "clover");
+            will(returnValue(artifact));
+        }});
 
-        Mock mockLog = mock( Log.class );
-        mockLog.stubs().method( "warn" );
 
-        this.mojo.setArtifactFactory( ( ArtifactFactory ) mockArtifactFactory.proxy() );
-        this.mojo.setArtifactResolver( ( ArtifactResolver ) mockArtifactResolver.proxy() );
-        this.mojo.setLog( (Log) mockLog.proxy() );
+        final ArtifactResolver mockArtifactResolver = mock( ArtifactResolver.class );
+        checking(new Expectations() {{
+            oneOf(mockArtifactResolver).resolve(with(any(Artifact.class)), with(any(List.class)), with(any(ArtifactRepository.class)));
+        }});
+
+        final Log mockLog = mock( Log.class );
+        checking(new Expectations() {{
+            atLeast(0).of(mockLog).warn(with(any(String.class)));
+        }});
+
+        this.mojo.setArtifactFactory(mockArtifactFactory);
+        this.mojo.setArtifactResolver(mockArtifactResolver);
+        this.mojo.setLog(mockLog);
     }
 
-    private Artifact setUpMockArtifact(String groupId, String artifactId, String version, String type, String scope,
-        String classifier, File file)
+    private Artifact setUpMockArtifact(final String groupId, final String artifactId,
+                                       final String version, final String type,
+                                       final String scope, final String classifier,
+                                       final File file)
     {
-        Mock mockArtifact = mock( Artifact.class );
-        mockArtifact.stubs().method( "getClassifier" ).will( returnValue( classifier ) );
-        mockArtifact.stubs().method( "getGroupId" ).will( returnValue( groupId ) );
-        mockArtifact.stubs().method( "getArtifactId" ).will( returnValue( artifactId ) );
-        mockArtifact.stubs().method( "getVersion" ).will( returnValue( version ) );
-        mockArtifact.stubs().method( "getType" ).will( returnValue( type ) );
-        mockArtifact.stubs().method( "getScope" ).will( returnValue( scope ) );
-        mockArtifact.stubs().method( "getFile" ).will( returnValue ( file ) );
-        mockArtifact.stubs().method( "getId" ).will( returnValue (
-            groupId + ":" + artifactId + ":" + version + ":" + classifier ) );
-        mockArtifact.stubs().method( "setScope" );
-
-        return (Artifact) mockArtifact.proxy(); 
+        final Artifact mockArtifact = mock(Artifact.class, artifactId);
+        checking(new Expectations(){{
+            atLeast(0).of(mockArtifact).getClassifier(); will(returnValue(classifier));
+            atLeast(0).of(mockArtifact).getGroupId(); will(returnValue(groupId));
+            atLeast(0).of(mockArtifact).getArtifactId(); will(returnValue(artifactId));
+            atLeast(0).of(mockArtifact).getVersion(); will(returnValue(version));
+            atLeast(0).of(mockArtifact).getType(); will(returnValue(type));
+            atLeast(0).of(mockArtifact).getScope(); will(returnValue(scope));
+            atLeast(0).of(mockArtifact).getFile(); will(returnValue(file));
+            atLeast(0).of(mockArtifact).getId(); will(returnValue(groupId + ":" + artifactId + ":" + version + ":" + classifier));
+        }});
+        return mockArtifact;
     }
 }

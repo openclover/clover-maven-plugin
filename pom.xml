@@ -17,7 +17,8 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.atlassian.maven.plugins</groupId>
     <artifactId>maven-clover2-plugin</artifactId>
@@ -42,7 +43,8 @@ under the License.
     </licenses>
     <scm>
         <connection>scm:svn:https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/trunk</connection>
-        <developerConnection>scm:svn:https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/trunk</developerConnection>
+        <developerConnection>scm:svn:https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/trunk
+        </developerConnection>
         <url>https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/trunk</url>
     </scm>
     <prerequisites>
@@ -70,12 +72,12 @@ under the License.
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-project</artifactId>
-            <version>2.0.8</version>
+            <version>2.0.9</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>2.0.8</version>
+            <version>2.0.9</version>
         </dependency>
         <dependency>
             <groupId>org.apache.ant</groupId>
@@ -96,7 +98,7 @@ under the License.
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
-            <version>2.0.8</version>
+            <version>2.0.9</version>
         </dependency>
         <dependency>
             <groupId>com.cenqua.clover</groupId>
@@ -110,10 +112,14 @@ under the License.
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>jmock</groupId>
-            <artifactId>jmock</artifactId>
-            <version>1.1.0</version>
-            <scope>test</scope>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-junit3</artifactId>
+            <version>2.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-legacy</artifactId>
+            <version>2.5.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.shared</groupId>
@@ -132,7 +138,7 @@ under the License.
         </extensions>
         <pluginManagement>
             <plugins>
-              <plugin>
+                <plugin>
                     <groupId>com.atlassian.maven.plugins</groupId>
                     <artifactId>maven-clover2-plugin</artifactId>
                     <version>${version}</version>
@@ -144,7 +150,14 @@ under the License.
                         <reportDescriptor>${basedir}/clover-report.xml</reportDescriptor>
                     </configuration>
                 </plugin>
-
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.5</source>
+                        <target>1.5</target>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
@@ -273,7 +286,7 @@ under the License.
             </plugin>
         </plugins>
     </reporting>
-    
+
     <distributionManagement>
         <repository>
             <id>atlassian-m2-repository</id>

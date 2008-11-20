@@ -31,6 +31,19 @@ public class TestUtil {
         }
     }
 
+
+    public static void setPrivateParentField(Class clazz, Object target, String fieldName, Object value) throws MojoExecutionException {
+        try {
+            final Field field = clazz.getSuperclass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(target, value);
+        } catch (NoSuchFieldException e) {
+            getLog().error("Could not set: " + fieldName, e);
+        } catch (IllegalAccessException e) {
+            getLog().error("Could not set: " + fieldName, e);
+        }
+    }
+
     /**
      * A class to use when unit testing to assert that log statements are correct.
      */
@@ -77,7 +90,11 @@ public class TestUtil {
         }
 
         public void info(CharSequence content, Throwable error) {
-            super.info(content, error);
+            if (error != null) {
+                super.info(content, error);
+            } else {
+                super.info(content);
+            }
             buffer.add(new LogEvent(content.toString(), error, Level.INFO));
         }
 
@@ -93,7 +110,11 @@ public class TestUtil {
         }
 
         public void warn(CharSequence content, Throwable error) {
-            super.warn(content, error);
+            if (error != null) {
+                super.warn(content, error);
+            } else {
+                super.warn(content);
+            }
             buffer.add(new LogEvent(content.toString(), error, Level.WARN));
         }
 
@@ -110,7 +131,11 @@ public class TestUtil {
         }
 
         public void error(CharSequence content, Throwable error) {
-            super.error(content, error);
+            if (error != null) {
+                super.error(content, error);
+            } else {
+                super.error(content);
+            }
             buffer.add(new LogEvent(content.toString(), error, Level.ERROR));
 
         }

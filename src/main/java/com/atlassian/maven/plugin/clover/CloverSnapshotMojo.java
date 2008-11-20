@@ -64,12 +64,7 @@ public class CloverSnapshotMojo extends AbstractCloverMojo {
             return;
         }
 
-        final CloverSnapshotTask task = new CloverSnapshotTask();
-        final Project antProj = new Project();
-        antProj.init();
-        antProj.addBuildListener(new MvnLogBuildListener(getLog()));
-        task.setProject(antProj);
-        task.init();        
+        final CloverSnapshotTask task = createSnapshotTask();
         task.setInitString(resolveCloverDatabase());
         if (span != null) {
             task.setSpan(span);
@@ -80,21 +75,32 @@ public class CloverSnapshotMojo extends AbstractCloverMojo {
             task.setSpan(interval);
         }
 
-        if (snapshot != null) {
-            if (!snapshot.getParentFile().mkdirs()) {
-                throw new MojoExecutionException("Could not create parent directory for snapshot file: " +
-                        snapshot.getAbsolutePath());
-            }
+        if (snapshot != null && snapshot.getParentFile() != null) {
+            snapshot.getParentFile().mkdirs();
             getLog().info("Saving snapshot to: " + snapshot);
             task.setFile(snapshot);
         }
 
-        task.execute();
+        execTask(task);
 
         if (getLog().isDebugEnabled() || debug) {
             final String cpLocation = snapshot != null ? snapshot.getPath() : task.getInitString() + CloverNames.SNAPSHOT_SUFFIX;
             SnapshotDumper.printPretty(CloverTestSnapshot.loadFrom(cpLocation), new MvnLogger(getLog()));
         }
 
+    }
+
+    protected void execTask(CloverSnapshotTask task) {
+        task.execute();
+    }
+
+    CloverSnapshotTask createSnapshotTask() {
+        CloverSnapshotTask task = new CloverSnapshotTask();
+        final Project antProj = new Project();
+        antProj.init();
+        antProj.addBuildListener(new MvnLogBuildListener(getLog()));
+        task.setProject(antProj);
+        task.init();
+        return task;
     }
 }

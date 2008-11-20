@@ -1,6 +1,6 @@
 package com.atlassian.maven.plugin.clover;
 
-import org.jmock.MockObjectTestCase;
+import org.jmock.integration.junit3.MockObjectTestCase;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
