@@ -1,10 +1,15 @@
 package com.atlassian.maven.plugin.clover;
 
 import org.jmock.integration.junit3.MockObjectTestCase;
+import org.jmock.Expectations;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 import org.codehaus.plexus.util.FileUtils;
+import org.codehaus.plexus.resource.ResourceManager;
+import org.codehaus.plexus.resource.loader.FileResourceLoader;
+import org.codehaus.plexus.resource.loader.FileResourceCreationException;
+import org.codehaus.plexus.resource.loader.ResourceNotFoundException;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.cenqua.clover.tasks.CloverPassTask;
@@ -33,22 +38,21 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
         cloverMergedDb = createFile("clovermerged.db");
         project.getBuild().setOutputDirectory("target/classes");
         project.getBuild().setDirectory("target");
+        project.setFile(new File("pom.xml").getAbsoluteFile());
         license = FileUtils.fileRead(new File(getClass().getResource("/clover.license").toURI()));
     }
 
-    public void testWhenDatabaseMissing() throws MojoExecutionException {
+    public void testWhenDatabaseMissing() throws Exception, FileResourceCreationException, ResourceNotFoundException {
         // ensure this mojo does not failed, if targetPercentage and historyDir are missing
-        CloverCheckMojo mojo = new CloverCheckMojo();    
-        mojo.setProject(project);
-        final TestUtil.RecordingLogger log = new TestUtil.RecordingLogger();
-        mojo.setLog(log);
-        TestUtil.setPrivateField(AbstractCloverMojo.class, mojo, "cloverDatabase", "target/clover/clover.db");
-        TestUtil.setPrivateField(AbstractCloverMojo.class, mojo, "cloverMergeDatabase", "target/clover/clovermerged.db");
+        final CloverPassTask task = new CloverPassTask();
+        task.setProject(antProject);
+        final CloverCheckMojo mojo = createCheckMojo(task, false);
+       
         mojo.execute();
         assertTrue(log.contains("No Clover database found, skipping test coverage verification", TestUtil.Level.INFO));
     }
     
-    public void testWhenHistoryDirIsMissing() throws MojoExecutionException, IOException {
+    public void testWhenHistoryDirIsMissing() throws Exception, IOException {
         // ensure this mojo does not failed, if targetPercentage and historyDir parameters are missing
         final boolean[] ran = {false};
         final CloverPassTask task = new MockCloverPassTask(ran[0], new Runnable() {
@@ -56,7 +60,7 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
                 ran[0] = true;
             }
         }, antProject);
-        CloverCheckMojo mojo = createCheckMojo(task);
+        CloverCheckMojo mojo = createCheckMojo(task, true);
         final File historyDir = new File("some/nonexistent/path/");
         TestUtil.setPrivateField(CloverCheckMojo.class, mojo, "historyDir", historyDir);
 
@@ -69,7 +73,7 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
                     ") does not exist or is not a directory.", TestUtil.Level.WARN));
     }
 
-    public void testWithTargetPercentage() throws MojoExecutionException, IOException {
+    public void testWithTargetPercentage() throws Exception, IOException {
         // ensure this mojo does not failed, if targetPercentage and historyDir parameters are missing
 
         final boolean[] ran = {false};
@@ -86,7 +90,7 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
                 pcSet[0] = percentValue;
             }
         };
-        CloverCheckMojo mojo = createCheckMojo(task);
+        CloverCheckMojo mojo = createCheckMojo(task, true);
 
         final Percentage targetPc = new Percentage("95%");
         TestUtil.setPrivateField(CloverCheckMojo.class, mojo, "targetPercentage", targetPc.toString());
@@ -100,15 +104,30 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
     }
 
 
-    private CloverCheckMojo createCheckMojo(final CloverPassTask task) throws MojoExecutionException, IOException {
+    private CloverCheckMojo createCheckMojo(final CloverPassTask task, final boolean areDbsAvailable) throws Exception {
         CloverCheckMojo mojo = new CloverCheckMojo() {
             CloverPassTask createCloverPassTask(String database, final Project antProject) {
                 return task;
             }
+
+            public boolean areCloverDatabasesAvailable() {
+                return areDbsAvailable;
+            }
         };
         mojo.setProject(project);
         mojo.setLicense(license);
-        mojo.setLog(log);        
+        mojo.setLog(log);
+
+
+        final ResourceManager resourceManager = mock(ResourceManager.class);
+        checking(new Expectations(){{
+            ignoring(resourceManager).addSearchPath("url", "");
+            ignoring(resourceManager).addSearchPath(FileResourceLoader.ID, project.getFile().getParentFile().getAbsolutePath());
+            ignoring(resourceManager).getResourceAsFile(with(any(String.class)), with(any(String.class)));
+            will(returnValue(new File("/clover.license")));
+        }});
+        mojo.setResourceManager(resourceManager);
+                
 
         TestUtil.setPrivateField(AbstractCloverMojo.class, mojo, "cloverDatabase", cloverDb.getPath());
         TestUtil.setPrivateField(AbstractCloverMojo.class, mojo, "cloverMergeDatabase", cloverMergedDb.getPath());
