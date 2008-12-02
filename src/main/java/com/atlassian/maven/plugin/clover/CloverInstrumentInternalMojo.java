@@ -289,8 +289,11 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
                 oldArtifact.getArtifactId(), oldArtifact.getVersion(), oldArtifact.getType(), "clover" );
             getProject().setArtifact( newArtifact );
 
-            getProject().getBuild().setFinalName( getProject().getArtifactId() + "-" + getProject().getVersion()
-                + "-clover" );
+            final String finalName =
+                    getProject().getBuild().getFinalName() == null ?
+                    (getProject().getArtifactId() + "-" + getProject().getVersion()) 
+                    : getProject().getBuild().getFinalName();
+            getProject().getBuild().setFinalName(finalName + "-clover");
         }
     }
 
