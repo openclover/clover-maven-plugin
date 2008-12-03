@@ -64,7 +64,7 @@ public class CloverSnapshotMojoTest extends MockObjectTestCase {
         db.getParentFile().mkdirs();
         db.createNewFile();
         mojo.execute();
-        assertTrue(log.contains("Saving snapshot to: test-clover/clover.snapshot", TestUtil.Level.INFO));
+        assertTrue(log.contains("Saving snapshot to: test-clover" + File.separator + "clover.snapshot", TestUtil.Level.INFO));
         assertTrue(snapshot.getParentFile().exists());
     }
 }
