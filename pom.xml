@@ -148,13 +148,34 @@ under the License.
                         <reportDescriptor>${basedir}/clover-report.xml</reportDescriptor>
                     </configuration>
                 </plugin>
-                <plugin>
+
+                <plugin> <!-- Compile tests with target jdk 1.5, but source code with 1.3, via:
+                http://www.nabble.com/RE%3A-compiler-plugin%3A-separate-test-compiler-configuration-p20417613.html -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
-                        <source>1.5</source>
-                        <target>1.5</target>
+                        <source>1.3</source>
+                        <target>1.3</target>
+                        <testExcludes>
+                            <exclude>**</exclude>
+                        </testExcludes>
                     </configuration>
+                    <executions>
+                        <execution>
+                            <id>compile-jdk15</id>
+                            <configuration>
+                                <source>1.5</source>
+                                <target>1.5</target>
+                                <excludes>
+                                    <exclude>**</exclude>
+                                </excludes>
+                            </configuration>
+                            <goals>
+                                <!--<goal>compile</goal>-->
+                                <goal>testCompile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
