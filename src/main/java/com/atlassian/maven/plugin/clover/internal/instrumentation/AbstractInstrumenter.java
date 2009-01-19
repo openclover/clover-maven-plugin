@@ -62,8 +62,9 @@ public abstract class AbstractInstrumenter
         Map filesToInstrument = scanner.getSourceFilesToInstrument();
         if ( filesToInstrument.isEmpty() )
         {
-            getConfiguration().getLog().info( "No Clover instrumentation done on source files as no "
-                + "matching sources files found" );
+            getConfiguration().getLog().info( "No Clover instrumentation done on source files in: "
+                    + getCompileSourceRoots() + " as no matching sources files found" );
+
         }
         else
         {
