@@ -20,8 +20,8 @@ package com.atlassian.maven.plugin.clover.internal.scanner;
  */
 
 import org.codehaus.plexus.compiler.util.scan.SourceInclusionScanner;
-import org.codehaus.plexus.compiler.util.scan.SimpleSourceInclusionScanner;
 import org.codehaus.plexus.compiler.util.scan.InclusionScanException;
+import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
 import org.codehaus.plexus.compiler.util.scan.mapping.SuffixMapping;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 
@@ -34,11 +34,14 @@ import java.io.File;
  */
 public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
 {
-    private CompilerConfiguration configuration;
+    private final CompilerConfiguration configuration;
+    private final File targetDir;
 
-    public AbstractCloverSourceScanner(CompilerConfiguration configuration)
+    public AbstractCloverSourceScanner(CompilerConfiguration configuration, String outputSourceDirectory)
     {
         this.configuration = configuration;
+        this.targetDir = new File(outputSourceDirectory);
+
     }
 
     protected CompilerConfiguration getConfiguration()
@@ -81,7 +84,7 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
         if ( includes.isEmpty() && excludes.isEmpty() )
         {
             includes = Collections.singleton( "**/*.java" );
-            scanner = new SimpleSourceInclusionScanner( includes, Collections.EMPTY_SET );
+            scanner = new StaleSourceScanner(0, includes, Collections.EMPTY_SET );
         }
         else
         {
@@ -89,11 +92,10 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
             {
                 includes.add( "**/*.java" );
             }
-            scanner = new SimpleSourceInclusionScanner( includes, excludes );
+            scanner = new StaleSourceScanner(0, includes, excludes );
         }
 
-        // Note: we shouldn't have to do this but this is a limitation of the Plexus SimpleSourceInclusionScanner
-        scanner.addSourceMapping( new SuffixMapping( "dummy", "dummy" ) );
+        scanner.addSourceMapping( new SuffixMapping( "java", "java" ) );
 
         return scanner;
     }
@@ -105,15 +107,14 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
 
         if ( excludes.isEmpty() )
         {
-            scanner = new SimpleSourceInclusionScanner( Collections.EMPTY_SET, Collections.EMPTY_SET );
+            scanner = new StaleSourceScanner(0, Collections.EMPTY_SET, Collections.EMPTY_SET );
         }
         else
         {
-            scanner = new SimpleSourceInclusionScanner( excludes, Collections.EMPTY_SET );
+            scanner = new StaleSourceScanner(0, excludes, Collections.EMPTY_SET );
         }
 
-        // Note: we shouldn't have to do this but this is a limitation of the Plexus SimpleSourceInclusionScanner
-        scanner.addSourceMapping( new SuffixMapping( "dummy", "dummy" ) );
+        scanner.addSourceMapping( new SuffixMapping( "java", "java" ) );
 
         return scanner;
     }
@@ -126,12 +127,12 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
         Iterator sourceRoots = getResolvedSourceRoots().iterator();
         while ( sourceRoots.hasNext() )
         {
-            File sourceRoot = new File( (String) sourceRoots.next() );
+            final File sourceRoot = new File( (String) sourceRoots.next() );
             if ( sourceRoot.exists() )
             {
                 try
                 {
-                    Set sourcesToAdd = scanner.getIncludedSources( sourceRoot, null );
+                    final Set sourcesToAdd = scanner.getIncludedSources( sourceRoot, targetDir);
                     if ( !sourcesToAdd.isEmpty() )
                     {
                         files.put( sourceRoot.getPath(), sourcesToAdd );

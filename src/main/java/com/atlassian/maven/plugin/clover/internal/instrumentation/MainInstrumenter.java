@@ -36,7 +36,7 @@ public class MainInstrumenter extends AbstractInstrumenter
     public MainInstrumenter(CompilerConfiguration configuration, String outputSourceDirectory)
     {
         super( configuration, outputSourceDirectory );
-        scanner = new MainCloverSourceScanner( configuration );
+        scanner = new MainCloverSourceScanner( configuration, outputSourceDirectory );
     }
 
     protected CloverSourceScanner getSourceScanner()

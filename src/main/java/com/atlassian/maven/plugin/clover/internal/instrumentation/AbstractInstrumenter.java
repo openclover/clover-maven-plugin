@@ -43,7 +43,7 @@ public abstract class AbstractInstrumenter
 {
     private CompilerConfiguration configuration;
 
-    private String outputSourceDirectory;
+    String outputSourceDirectory;
 
     public AbstractInstrumenter(CompilerConfiguration configuration, String outputSourceDirectory)
     {

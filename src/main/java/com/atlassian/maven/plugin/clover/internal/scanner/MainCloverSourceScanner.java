@@ -29,9 +29,9 @@ import java.util.List;
  */
 public class MainCloverSourceScanner extends AbstractCloverSourceScanner
 {
-    public MainCloverSourceScanner(CompilerConfiguration configuration)
+    public MainCloverSourceScanner(CompilerConfiguration configuration, String outputSourceDirectory)
     {
-        super( configuration );
+        super( configuration, outputSourceDirectory );
     }
 
     protected List getSourceRoots()
