@@ -19,16 +19,17 @@ package com.atlassian.maven.plugin.clover;
  * under the License.
  */
 
-import org.apache.maven.project.MavenProject;
-import org.apache.maven.plugin.MojoExecutionException;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
+import com.cenqua.clover.CloverMerge;
+import com.cenqua.clover.cfg.Interval;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
-
-import com.cenqua.clover.CloverMerge;
-import com.cenqua.clover.cfg.Interval;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Aggregate children module Clover databases if there are any. This mojo should not exist. It's only there because
@@ -132,7 +133,7 @@ public class CloverAggregateMojo extends AbstractCloverMojo
     {
         return getModuleProjects( project, -1 );
     }
-    
+
     /**
      * Returns all the projects that are modules, or modules of modules, of the 
      * specified project found witin the reactor. 
@@ -166,11 +167,12 @@ public class CloverAggregateMojo extends AbstractCloverMojo
                 if (isModuleOfProject(project, reactorProject))
                 {
                     projects.add(reactorProject);
-                    
-                    // recurse to find the modules of this project
-                    
-                    projects.addAll(getModuleProjects(reactorProject,
+                    if (project == reactorProject) {
+                        projects.add(project); //CLMVN-78 don't recurse if project is the same as reactorProject.                     
+                    } else {
+                        projects.addAll(getModuleProjects(reactorProject,
                             infinite ? levels : levels - 1));
+                    }
                 }
             }
         }
@@ -197,7 +199,7 @@ public class CloverAggregateMojo extends AbstractCloverMojo
         
         List modules = parentProject.getModules();
         
-        if ( modules != null )
+        if ( modules != null)
         {
             File parentBaseDir = parentProject.getBasedir();
 

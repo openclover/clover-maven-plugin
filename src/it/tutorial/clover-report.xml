@@ -41,7 +41,7 @@
     </target>
 
     <clover-check target="80%" haltOnFailure="true">
-        <package name="com.cenqua.samples.money" target="95%"/>
+        <package name="com.cenqua.samples.money" target="93%"/>
     </clover-check>
 
 </project>
