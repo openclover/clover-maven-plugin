@@ -77,7 +77,7 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
      */
     private SourceInclusionScanner getScanner()
     {
-        SourceInclusionScanner scanner;
+        final SourceInclusionScanner scanner;
         Set includes = getConfiguration().getIncludes();
         Set excludes = getConfiguration().getExcludes();
 
@@ -102,17 +102,10 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
 
     private SourceInclusionScanner getExcludesScanner()
     {
-        SourceInclusionScanner scanner;
+
         Set excludes = getConfiguration().getExcludes();
 
-        if ( excludes.isEmpty() )
-        {
-            scanner = new StaleSourceScanner(0, Collections.EMPTY_SET, Collections.EMPTY_SET );
-        }
-        else
-        {
-            scanner = new StaleSourceScanner(0, excludes, Collections.EMPTY_SET );
-        }
+        SourceInclusionScanner scanner = new StaleSourceScanner(0, excludes, Collections.EMPTY_SET );
 
         scanner.addSourceMapping( new SuffixMapping( "java", "java" ) );
 
@@ -150,17 +143,11 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
 
     private List getResolvedSourceRoots()
     {
-        List sourceRoots;
-        if ( getConfiguration().includesAllSourceRoots() )
-        {
-            sourceRoots = getSourceRoots();
-        }
-        else
-        {
-            sourceRoots = Collections.singletonList( getSourceDirectory() );
-        }
 
-        return sourceRoots;
+        return getConfiguration().includesAllSourceRoots() ?
+                getSourceRoots() : 
+                Collections.singletonList( getSourceDirectory() );
+
     }
 
 }
