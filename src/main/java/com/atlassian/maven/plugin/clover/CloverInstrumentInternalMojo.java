@@ -153,6 +153,23 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      */
     private String encoding;
 
+
+    /**
+     * Sets the granularity in milliseconds of the last modification date for testing whether a source needs reinstrumentation.
+     *
+     * @parameter expression="${maven.clover.staleMillis}" default-value=0
+     */
+    private int staleMillis;
+
+
+    /**
+     * The location of the clover server. This is typically the test JVM.
+     * This setting is only used if remote flushing is enabled, via remoteFlushing.
+     *
+     * @parameter expression="${maven.clover.serverLocation}"
+     */
+    private String serverLocation;
+
     // HACK: this allows us to reset the source directories to the originals
     private static Map originalSrcMap = new HashMap();
     private static Map originalSrcTestMap = new HashMap();
@@ -163,6 +180,10 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     public static String getOriginalSrcTestDir(String module) {
         return (String) originalSrcTestMap.get(module);
+    }
+
+    public String getServerLocation() {
+        return serverLocation;
     }
 
     /**
@@ -191,9 +212,9 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         logArtifacts( "before changes" );
 
         // Instrument both the main sources and the test sources if the user has configured it
-        MainInstrumenter mainInstrumenter =
+        final MainInstrumenter mainInstrumenter =
             new MainInstrumenter( this, cloverOutputSourceDirectory );
-        TestInstrumenter testInstrumenter =
+        final TestInstrumenter testInstrumenter =
             new TestInstrumenter( this, cloverOutputTestSourceDirectory );
 
         if ( isJavaProject() )
@@ -471,5 +492,9 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     public Map getStatementContexts() {
         return statementContexts;
+    }
+
+    public int getStaleMillis() {
+        return staleMillis;
     }
 }

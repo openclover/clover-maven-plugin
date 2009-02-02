@@ -27,5 +27,9 @@ public interface CompilerConfiguration extends CloverConfiguration {
 
     Map getStatementContexts();
 
+    String getServerLocation();
+
+    int getStaleMillis();
+
 
 }

@@ -84,7 +84,7 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
         if ( includes.isEmpty() && excludes.isEmpty() )
         {
             includes = Collections.singleton( "**/*.java" );
-            scanner = new StaleSourceScanner(0, includes, Collections.EMPTY_SET );
+            scanner = new StaleSourceScanner(getConfiguration().getStaleMillis(), includes, Collections.EMPTY_SET );
         }
         else
         {
@@ -92,7 +92,7 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
             {
                 includes.add( "**/*.java" );
             }
-            scanner = new StaleSourceScanner(0, includes, excludes );
+            scanner = new StaleSourceScanner(getConfiguration().getStaleMillis(), includes, excludes );
         }
 
         scanner.addSourceMapping( new SuffixMapping( "java", "java" ) );
@@ -103,9 +103,9 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
     private SourceInclusionScanner getExcludesScanner()
     {
 
-        Set excludes = getConfiguration().getExcludes();
-
-        SourceInclusionScanner scanner = new StaleSourceScanner(0, excludes, Collections.EMPTY_SET );
+        final SourceInclusionScanner scanner = new StaleSourceScanner(getConfiguration().getStaleMillis(), 
+                                                                      getConfiguration().getExcludes(),
+                                                                      Collections.EMPTY_SET );
 
         scanner.addSourceMapping( new SuffixMapping( "java", "java" ) );
 
