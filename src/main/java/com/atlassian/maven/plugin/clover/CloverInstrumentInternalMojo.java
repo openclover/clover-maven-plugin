@@ -226,9 +226,10 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
             }
         }
 
-        swizzleCloverDependencies();
-        addCloverDependencyToCompileClasspath();
 
+        addCloverDependencyToCompileClasspath();
+        swizzleCloverDependencies();
+        
         // Modify Maven model so that it points to the new source directories and to the clovered
         // artifacts instead of the original values.
         String originalSrcDir = mainInstrumenter.redirectSourceDirectories();

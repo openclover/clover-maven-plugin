@@ -58,7 +58,7 @@ public abstract class AbstractInstrumenter
 
     public void instrument() throws MojoExecutionException
     {
-        CloverSourceScanner scanner = getSourceScanner();
+        final CloverSourceScanner scanner = getSourceScanner();
         Map filesToInstrument = scanner.getSourceFilesToInstrument();
         if ( filesToInstrument.isEmpty() )
         {
@@ -76,6 +76,9 @@ public abstract class AbstractInstrumenter
         // thus won't be compiled by the compile plugin. This will lead to compilation errors if any other
         // Java file depends on any of these excluded files.
         copyExcludedFiles( scanner.getExcludedFiles(), outputSourceDirectory );
+
+        // also copy an resources that are in the java source directories
+        copyExcludedFiles( scanner.getResourceFiles(), outputSourceDirectory );
 
         //won't do its job when include files set is empty!
     }
@@ -212,6 +215,11 @@ public abstract class AbstractInstrumenter
         if ( getConfiguration().getLog().isDebugEnabled() )
         {
             parameters.add( "-v" );
+        }
+
+        if (getConfiguration().getServerLocation() != null) {
+            parameters.add("--serverLocation");
+            parameters.add(getConfiguration().getServerLocation());
         }
 
         if ( getConfiguration().getJdk() != null )

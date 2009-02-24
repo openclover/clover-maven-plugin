@@ -2,9 +2,10 @@ package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.cenqua.clover.tasks.CloverSnapshotTask;
-import com.cenqua.clover.util.SnapshotDumper;
-import com.cenqua.clover.CloverTestSnapshot;
+import com.cenqua.clover.test.optimization.SnapshotPrinter;
+import com.cenqua.clover.test.optimization.Snapshot;
 import com.cenqua.clover.CloverNames;
+import com.cenqua.clover.Logger;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
@@ -85,7 +86,7 @@ public class CloverSnapshotMojo extends AbstractCloverMojo {
 
         if (getLog().isDebugEnabled() || debug) {
             final String cpLocation = snapshot != null ? snapshot.getPath() : task.getInitString() + CloverNames.SNAPSHOT_SUFFIX;
-            SnapshotDumper.printPretty(CloverTestSnapshot.loadFrom(cpLocation), new MvnLogger(getLog()));
+            SnapshotPrinter.prettyPrint(Snapshot.loadFrom(cpLocation), new MvnLogger(getLog()), Logger.LOG_VERBOSE);
         }
 
     }

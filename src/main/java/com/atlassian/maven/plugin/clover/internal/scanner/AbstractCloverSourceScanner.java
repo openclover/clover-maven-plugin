@@ -67,6 +67,11 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
         return computeFiles(getExcludesScanner());
     }
 
+    public Map getResourceFiles() {
+        
+        return computeFiles(getResourceScanner());
+    }
+
     protected abstract List getSourceRoots();
     protected abstract String getSourceDirectory();
 
@@ -108,6 +113,18 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
                                                                       Collections.EMPTY_SET );
 
         scanner.addSourceMapping( new SuffixMapping( "java", "java" ) );
+
+        return scanner;
+    }
+
+    private SourceInclusionScanner getResourceScanner() {
+
+        Set excludes = Collections.singleton("**/*.java");
+        Set includes = Collections.singleton("**");
+        final SourceInclusionScanner scanner = new StaleSourceScanner(getConfiguration().getStaleMillis(),
+                                                                      includes, excludes);
+        
+        scanner.addSourceMapping( new SuffixMapping("", "") );
 
         return scanner;
     }
