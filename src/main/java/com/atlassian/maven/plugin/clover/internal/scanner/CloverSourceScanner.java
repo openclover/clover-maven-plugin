@@ -40,11 +40,5 @@ public interface CloverSourceScanner
      *         source roots.
      */
     Map getExcludedFiles();
-
-    /**
-     *
-     * @return the map of source roots to a set of resource files that are in the source directories.
-     */
-    Map getResourceFiles();
     
 }

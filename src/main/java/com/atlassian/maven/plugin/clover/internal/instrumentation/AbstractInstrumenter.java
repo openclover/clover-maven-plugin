@@ -77,9 +77,6 @@ public abstract class AbstractInstrumenter
         // Java file depends on any of these excluded files.
         copyExcludedFiles( scanner.getExcludedFiles(), outputSourceDirectory );
 
-        // also copy an resources that are in the java source directories
-        copyExcludedFiles( scanner.getResourceFiles(), outputSourceDirectory );
-
         //won't do its job when include files set is empty!
     }
 

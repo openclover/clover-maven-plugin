@@ -69,11 +69,6 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
         return computeExcludedFiles(getScanner());
     }
 
-    public Map getResourceFiles() {
-
-        return new HashMap();
-    }
-
     protected abstract List getSourceRoots();
 
     protected abstract String getSourceDirectory();
