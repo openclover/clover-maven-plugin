@@ -95,9 +95,11 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     /**
      * The list of file to include in the instrumentation.
+     * Defaults are **.java which are overwritten if &lt;includes&gt; is set by the user
+     *
      * @parameter
      */
-    private Set includes = new HashSet();
+    private Set includes = new HashSet(Arrays.asList(new String[]{"**/*.java"}));
 
     /**
      * The list of file to exclude from the instrumentation.

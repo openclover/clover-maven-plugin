@@ -14,7 +14,7 @@
         </dependency>
     </dependencies>
     <properties>
-       <clover.reportConfig>${basedir}/clover-report.xml</clover.reportConfig>
+        <clover.reportConfig>${basedir}/clover-report.xml</clover.reportConfig>
     </properties>
     <build>
         <plugins>

@@ -1,10 +1,10 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.atlassian.maven.plugins</groupId>
-  <artifactId>maven-clover2-plugin-it-somesrcexcluded</artifactId>
+  <artifactId>maven-clover2-plugin-it-somesrcincluded</artifactId>
   <packaging>jar</packaging>
-  <name>Maven Clover Plugin Some Src Excluded Sample</name>
-  <description>Maven Clover Plugin Some Src Excluded Sample -- test for MCLOVER-79</description>
+  <name>Maven Clover Plugin Some Src Included Sample</name>
+  <description>Maven Clover Plugin Some Src Included Sample -- test for MCLOVER-79</description>
   <version>1.0-SNAPSHOT</version>
   <dependencies>
     <dependency>

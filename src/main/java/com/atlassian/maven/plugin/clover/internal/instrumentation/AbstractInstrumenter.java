@@ -163,20 +163,20 @@ public abstract class AbstractInstrumenter
         for ( Iterator sourceRoots = excludedFiles.keySet().iterator(); sourceRoots.hasNext(); )
         {
             String sourceRoot = (String) sourceRoots.next();
-            Set filesInSourceRoot = (Set) excludedFiles.get( sourceRoot );
+            String[] filesInSourceRoot = (String[]) excludedFiles.get( sourceRoot );
 
-            for ( Iterator files = filesInSourceRoot.iterator(); files.hasNext(); )
-            {
-                File file = (File) files.next();
+            for (int i = 0; i < filesInSourceRoot.length; i++) {
+
+                File srcFile = new File(sourceRoot, filesInSourceRoot[i]);
 
                 try
                 {
-                    FileUtils.copyFile( file, new File( targetDirectory,
-                        file.getPath().substring(sourceRoot.length() ) ) );
+                    FileUtils.copyFile(srcFile, new File( targetDirectory,
+                        srcFile.getPath().substring(sourceRoot.length() ) ) );
                 }
                 catch (IOException e)
                 {
-                    throw new MojoExecutionException( "Failed to copy excluded file [" + file + "] to ["
+                    throw new MojoExecutionException( "Failed to copy excluded file [" + srcFile + "] to ["
                         + targetDirectory + "]", e );
                 }
             }
@@ -258,10 +258,12 @@ public abstract class AbstractInstrumenter
 
         for ( Iterator sourceRoots = filesToInstrument.keySet().iterator(); sourceRoots.hasNext(); )
         {
-            Set filesInSourceRoot = (Set) filesToInstrument.get( (String) sourceRoots.next() );
-            for ( Iterator files = filesInSourceRoot.iterator(); files.hasNext(); )
-            {
-                File file = (File) files.next();
+            final String srcDir = (String) sourceRoots.next();
+            String[] filesInSourceRoot = (String[]) filesToInstrument.get(srcDir);
+            for (int i = 0; i < filesInSourceRoot.length; i++) {
+                String s = filesInSourceRoot[i];
+
+                File file = new File(srcDir, s);
                 parameters.add( file.getPath() );
             }
         }

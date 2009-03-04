@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.atlassian.maven.plugin.clover.samples.somesrcexcluded;
+package com.atlassian.maven.plugin.clover.samples.somesrcincluded;
 
-import com.atlassian.maven.plugin.clover.samples.somesrcexcluded.exclude.Simple2;
+import com.atlassian.maven.plugin.clover.samples.somesrcincluded.include.Simple2;
 import junit.framework.TestCase;
 
 public class SimpleTest extends TestCase

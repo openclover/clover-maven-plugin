@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.atlassian.maven.plugin.clover.samples.somesrcexcluded;
+package com.atlassian.maven.plugin.clover.samples.somesrcincluded;
 
 public class Simple
 {

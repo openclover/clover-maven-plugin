@@ -19,152 +19,160 @@ package com.atlassian.maven.plugin.clover.internal.scanner;
  * under the License.
  */
 
-import org.codehaus.plexus.compiler.util.scan.SourceInclusionScanner;
-import org.codehaus.plexus.compiler.util.scan.InclusionScanException;
-import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
-import org.codehaus.plexus.compiler.util.scan.mapping.SuffixMapping;
+import org.apache.tools.ant.DirectoryScanner;
+import org.apache.tools.ant.types.selectors.FileSelector;
+import org.apache.tools.ant.types.selectors.DependSelector;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 
-import java.util.*;
 import java.io.File;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * Code common to compute the list of source files to instrument (main sources, test sources).
- *
  */
-public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
-{
+public abstract class AbstractCloverSourceScanner implements CloverSourceScanner {
     private final CompilerConfiguration configuration;
     private final File targetDir;
 
-    public AbstractCloverSourceScanner(CompilerConfiguration configuration, String outputSourceDirectory)
-    {
+    public AbstractCloverSourceScanner(CompilerConfiguration configuration, String outputSourceDirectory) {
         this.configuration = configuration;
         this.targetDir = new File(outputSourceDirectory);
 
     }
 
-    protected CompilerConfiguration getConfiguration()
-    {
+    protected CompilerConfiguration getConfiguration() {
         return this.configuration;
     }
 
     /**
      * {@inheritDoc}
+     *
      * @see CloverSourceScanner#getSourceFilesToInstrument()
      */
-    public Map getSourceFilesToInstrument()
-    {
-        return computeFiles(getScanner());
+    public Map getSourceFilesToInstrument() {
+        return computeIncludedFiles(getScanner());
     }
 
     /**
      * {@inheritDoc}
-     * @see CloverSourceScanner#getExcludedFiles() 
+     *
+     * @see CloverSourceScanner#getExcludedFiles()
      */
-    public Map getExcludedFiles()
-    {
-        return computeFiles(getExcludesScanner());
+    public Map getExcludedFiles() {
+
+        return computeExcludedFiles(getScanner());
     }
 
     public Map getResourceFiles() {
-        
-        return computeFiles(getResourceScanner());
+
+        return new HashMap();
     }
 
     protected abstract List getSourceRoots();
+
     protected abstract String getSourceDirectory();
 
     /**
      * @return a Plexus scanner object that scans a source root and filters files according to inclusion and
-     * exclusion patterns. In our case at hand we include only Java sources as these are the only files we want
-     * to instrument.
+     *         exclusion patterns. In our case at hand we include only Java sources as these are the only files we want
+     *         to instrument.
      */
-    private SourceInclusionScanner getScanner()
-    {
-        final SourceInclusionScanner scanner;
+    private DirectoryScanner getScanner() {
+
         Set includes = getConfiguration().getIncludes();
         Set excludes = getConfiguration().getExcludes();
 
-        if ( includes.isEmpty() && excludes.isEmpty() )
-        {
-            includes = Collections.singleton( "**/*.java" );
-            scanner = new StaleSourceScanner(getConfiguration().getStaleMillis(), includes, Collections.EMPTY_SET );
-        }
-        else
-        {
-            if ( includes.isEmpty() )
-            {
-                includes.add( "**/*.java" );
-            }
-            scanner = new StaleSourceScanner(getConfiguration().getStaleMillis(), includes, excludes );
-        }
+        configuration.getLog().debug("excludes patterns = " + excludes);
+        configuration.getLog().debug("includes patterns = " + includes);
+        DirectoryScanner dirScan = new DirectoryScanner();
 
-        scanner.addSourceMapping( new SuffixMapping( "java", "java" ) );
+        dirScan.addExcludes((String[]) excludes.toArray(new String[excludes.size()]));
+        dirScan.setIncludes((String[]) includes.toArray(new String[includes.size()]));
 
-        return scanner;
+        dirScan.addDefaultExcludes();
+
+        DependSelector selector = new DependSelector();
+        selector.setTargetdir(targetDir);
+        dirScan.setSelectors(new FileSelector[]{selector});
+
+        return dirScan;
     }
 
-    private SourceInclusionScanner getExcludesScanner()
-    {
+    private Map computeExcludedFiles(final DirectoryScanner scanner) {
+        final Map files = new HashMap();
 
-        final SourceInclusionScanner scanner = new StaleSourceScanner(getConfiguration().getStaleMillis(), 
-                                                                      getConfiguration().getExcludes(),
-                                                                      Collections.EMPTY_SET );
+        visitSourceRoots(new SourceRootVisitor() {
+            public void visitDir(File dir) {
+                scanner.setBasedir(dir);
 
-        scanner.addSourceMapping( new SuffixMapping( "java", "java" ) );
+                final String[] configuredIncludes = (String[]) getConfiguration().getIncludes().toArray(new String[]{});
+                final String[] includes = concatArrays(configuredIncludes, DirectoryScanner.getDefaultExcludes());
+                scanner.setIncludes(includes);// ensure that .svn dirs etc are not considered excluded
+                scanner.scan();
 
-        return scanner;
-    }
+                final String[] sourcesToAdd = concatArrays(scanner.getExcludedFiles(), scanner.getNotIncludedFiles());
 
-    private SourceInclusionScanner getResourceScanner() {
+                configuration.getLog().debug("excluding files from instrumentation = " + Arrays.asList(sourcesToAdd));
 
-        Set excludes = Collections.singleton("**/*.java");
-        Set includes = Collections.singleton("**");
-        final SourceInclusionScanner scanner = new StaleSourceScanner(getConfiguration().getStaleMillis(),
-                                                                      includes, excludes);
-        
-        scanner.addSourceMapping( new SuffixMapping("", "") );
-
-        return scanner;
-    }
-
-    private Map computeFiles(SourceInclusionScanner scanner)
-    {
-        Map files = new HashMap();
-
-        // Decide whether to instrument all source roots or only the main source root.
-        Iterator sourceRoots = getResolvedSourceRoots().iterator();
-        while ( sourceRoots.hasNext() )
-        {
-            final File sourceRoot = new File( (String) sourceRoots.next() );
-            if ( sourceRoot.exists() )
-            {
-                try
-                {
-                    final Set sourcesToAdd = scanner.getIncludedSources( sourceRoot, targetDir);
-                    if ( !sourcesToAdd.isEmpty() )
-                    {
-                        files.put( sourceRoot.getPath(), sourcesToAdd );
-                    }
-                }
-                catch ( InclusionScanException e )
-                {
-                    getConfiguration().getLog().warn( "Failed to add sources from [" + sourceRoot + "]", e );
+                if (sourcesToAdd.length > 0) {
+                    files.put(dir.getPath(), sourcesToAdd);
                 }
             }
-        }
+        });
+        return files;
+    }
+
+    private Map computeIncludedFiles(final DirectoryScanner scanner) {
+        final Map files = new HashMap();
+        visitSourceRoots(new SourceRootVisitor() {
+            public void visitDir(File dir) {
+                scanner.setBasedir(dir);
+                scanner.scan();
+                final String[] sourcesToAdd = scanner.getIncludedFiles();
+                configuration.getLog().debug("including files for instrumentation = " + Arrays.asList(sourcesToAdd));
+                if (sourcesToAdd.length > 0) {
+                    files.put(dir.getPath(), sourcesToAdd);
+                }
+            }
+        });
 
         return files;
     }
 
-    private List getResolvedSourceRoots()
-    {
+    private String[] concatArrays(String[] a1, String[] a2) {
+        final String[] result = new String[a1.length + a2.length];
+        System.arraycopy(a1, 0, result, 0, a1.length);
+        System.arraycopy(a2, 0, result, a1.length, a2.length);
+        return result;
+    }
+
+    private List getResolvedSourceRoots() {
 
         return getConfiguration().includesAllSourceRoots() ?
-                getSourceRoots() : 
-                Collections.singletonList( getSourceDirectory() );
+                getSourceRoots() :
+                Collections.singletonList(getSourceDirectory());
+    }
 
+    interface SourceRootVisitor {
+        void visitDir(File dir);
+    }
+
+
+    private void visitSourceRoots(SourceRootVisitor visitor) {
+        // Decide whether to instrument all source roots or only the main source root.
+        final Iterator sourceRoots = getResolvedSourceRoots().iterator();
+        while (sourceRoots.hasNext()) {
+            final File sourceRoot = new File((String) sourceRoots.next());
+            if (sourceRoot.exists()) {
+                visitor.visitDir(sourceRoot);
+            }
+        }
     }
 
 }
