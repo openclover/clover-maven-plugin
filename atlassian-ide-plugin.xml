@@ -1,0 +1,28 @@
+<atlassian-ide-plugin>
+  <project-configuration>
+    <servers>
+      <crucible>
+        <server-id>115ca4c0-5754-4ff1-bed9-f770f6038d76</server-id>
+        <name>Crucible</name>
+        <url>http://svn.atlassian.com/fisheye</url>
+        <isFisheyeInstance>true</isFisheyeInstance>
+      </crucible>
+      <jira>
+        <server-id>38bd3d1a-3bc9-4fd1-8729-dfc313476a9f</server-id>
+        <name>CLMVN</name>
+        <url>http://developer.atlassian.com/jira</url>
+      </jira>
+      <fisheye>
+        <server-id>36199530-46da-461f-aa89-7452037d4356</server-id>
+        <name>svn.atlassian.com</name>
+        <url>http://svn.atlassian.com/fisheye</url>
+      </fisheye>
+    </servers>
+    <default-crucible-server>115ca4c0-5754-4ff1-bed9-f770f6038d76</default-crucible-server>
+    <default-crucible-project>CR-CLMVN</default-crucible-project>
+    <default-crucible-repo>public</default-crucible-repo>
+    <default-fisheye-server>36199530-46da-461f-aa89-7452037d4356</default-fisheye-server>
+    <default-fisheye-repo>public</default-fisheye-repo>
+    <fisheye-project-path>contrib/clover/maven-clover-plugin/trunk</fisheye-project-path>
+  </project-configuration>
+</atlassian-ide-plugin>
