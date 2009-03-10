@@ -201,7 +201,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
             return;
         }
 
-        resetSrcDirsOriginal(getProject().getArtifactId(), this);
+        resetSrcDirsOriginal(getProject().getArtifact(), this);
 
         // Ensure output directories exist
         new File( this.cloverOutputDirectory ).mkdirs();
@@ -247,7 +247,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         logArtifacts( "after changes" );
     }
 
-    public static void resetSrcDirsOriginal(String artefactId, CompilerConfiguration config) {
+    public static void resetSrcDirsOriginal(Artifact artefactId, CompilerConfiguration config) {
         if (originalSrcMap.containsKey(artefactId)) {
             final String sourceDirectory = (String) originalSrcMap.get(artefactId);
             MainInstrumenter mainInstrumenter =
