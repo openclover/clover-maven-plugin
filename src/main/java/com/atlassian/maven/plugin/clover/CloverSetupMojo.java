@@ -33,11 +33,11 @@ public class CloverSetupMojo extends CloverInstrumentInternalMojo {
 
 
     protected String getSrcName() {
-        return super.getSrcName() + "-optimized";
+        return super.getSrcName() + "-instrumented";
     }
 
     protected String getSrcTestName() {
-        return super.getSrcTestName() + "-optimized";
+        return super.getSrcTestName() + "-instrumented";
     }
 
     protected void redirectOutputDirectories() {
