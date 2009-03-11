@@ -247,16 +247,16 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         logArtifacts( "after changes" );
     }
 
-    public static void resetSrcDirsOriginal(Artifact artefactId, CompilerConfiguration config) {
-        if (originalSrcMap.containsKey(artefactId)) {
-            final String sourceDirectory = (String) originalSrcMap.get(artefactId);
+    public static void resetSrcDirsOriginal(Artifact artifact, CompilerConfiguration config) {
+        if (originalSrcMap.containsKey(artifact)) {
+            final String sourceDirectory = (String) originalSrcMap.get(artifact);
             MainInstrumenter mainInstrumenter =
                     new MainInstrumenter(config, sourceDirectory);
             mainInstrumenter.redirectSourceDirectories();
 
         }
-        if (originalSrcTestMap.containsKey(artefactId)) {
-            final String testDirectory = (String)originalSrcTestMap.get(artefactId);
+        if (originalSrcTestMap.containsKey(artifact)) {
+            final String testDirectory = (String)originalSrcTestMap.get(artifact);
             TestInstrumenter instrumenter =
                     new TestInstrumenter(config, testDirectory);
             instrumenter.redirectSourceDirectories();
@@ -291,12 +291,12 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         // TODO: Ugly hack below. Changing the directory should be enough for changing the values of all other
         // properties depending on it!
         getProject().getBuild().setOutputDirectory( new File( this.cloverOutputDirectory, "classes" ).getPath() );
+        getProject().getBuild().setTestOutputDirectory(new File( this.cloverOutputDirectory, "test-classes" ).getPath() );
 
-        // TODO: This is a hack. Remove this when http://jira.codehaus.org/browse/MINSTALL-18 is fixed.
+        // TODO: This is a hack. Remove these when http://jira.codehaus.org/browse/MINSTALL-18 is fixed.
         new File( getProject().getBuild().getOutputDirectory() ).mkdirs();
+        new File( getProject().getBuild().getTestOutputDirectory() ).mkdirs();
 
-        getProject().getBuild().setTestOutputDirectory(
-            new File( this.cloverOutputDirectory, "test-classes" ).getPath() );
     }
 
     /**
@@ -327,10 +327,19 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      */
     private void swizzleCloverDependencies()
     {
-        getProject().setDependencyArtifacts(
-            swizzleCloverDependencies( getProject().getDependencyArtifacts() ) );
-        getProject().setArtifacts(
-            swizzleCloverDependencies( getProject().getArtifacts() ) );
+        final Set swizzledDependencyArtifacts = swizzleCloverDependencies(getProject().getDependencyArtifacts());
+
+
+        // only swizzle the difference between artifacts and dependency artifacts to ensure no dupes
+        final Set artifacts = getProject().getArtifacts();
+        final Set dependencyArtifacts = getProject().getDependencyArtifacts();
+        artifacts.removeAll(dependencyArtifacts);
+
+        final Set swizzledArtifacts = swizzleCloverDependencies(artifacts);
+        swizzledArtifacts.addAll(swizzledDependencyArtifacts);
+
+        getProject().setDependencyArtifacts(swizzledDependencyArtifacts);
+        getProject().setArtifacts(swizzledArtifacts);
     }
 
     protected Set swizzleCloverDependencies( Set artifacts )
@@ -369,8 +378,10 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
                     // We provide a 'fudge-factor' of 2 seconds, as the clover artifact is created first.
                     if ( cloveredArtifact.getFile().lastModified() + 2000l < artifact.getFile().lastModified() )
                     {
-                        getLog().warn( "Using [" + artifact.getId() + "] even though a Clovered version exists "
-                            + "but it's older and could fail the build. Please consider running Clover again on that "
+                        getLog().warn( "Using [" + artifact.getId() + "], built on " + new Date(artifact.getFile().lastModified()) +
+                                " even though a Clovered version exists "
+                            + "but it's older (lastModified: " + new Date(cloveredArtifact.getFile().lastModified())
+                                + " ) and could fail the build. Please consider running Clover again on that "
                             + "dependency's project." );
                         resolvedArtifacts.add( artifact );
 
