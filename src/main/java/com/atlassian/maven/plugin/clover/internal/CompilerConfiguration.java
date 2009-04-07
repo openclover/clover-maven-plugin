@@ -31,5 +31,6 @@ public interface CompilerConfiguration extends CloverConfiguration {
 
     int getStaleMillis();
 
+    String getInstrumentation();
 
 }

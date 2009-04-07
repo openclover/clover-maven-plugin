@@ -86,7 +86,7 @@ under the License.
             <exclude>**/*Dummy*.java</exclude>
           </excludes>
 
-             <licenseLocation>${clover.licenseLocation}</licenseLocation>
+          <licenseLocation>${clover.licenseLocation}</licenseLocation>
         </configuration>
         <executions>
           <execution>

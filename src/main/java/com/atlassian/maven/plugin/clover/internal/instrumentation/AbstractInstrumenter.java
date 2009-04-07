@@ -253,6 +253,11 @@ public abstract class AbstractInstrumenter
             parameters.add(getConfiguration().getEncoding());
         }
 
+        if (getConfiguration().getInstrumentation() != null) {
+            parameters.add("--instrlevel");
+            parameters.add(getConfiguration().getInstrumentation());
+        }
+
         for ( Iterator sourceRoots = filesToInstrument.keySet().iterator(); sourceRoots.hasNext(); )
         {
             final String srcDir = (String) sourceRoots.next();

@@ -186,7 +186,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
             else
             {
                 getLog().warn( "Clover test percentage coverage is below threshold but failOnViolation is set to "
-                    + " false, preventing the build from failing." );
+                    + " false, preventing the build from failing.");
             }
         }
     }

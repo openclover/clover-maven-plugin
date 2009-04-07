@@ -2,7 +2,6 @@ package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.cenqua.clover.CloverNames;
-import com.cenqua.clover.util.Color;
 import com.cenqua.clover.types.CloverOptimizedTestSet;
 import com.cenqua.clover.types.CloverAlwaysRunTestSet;
 import org.apache.maven.model.Plugin;

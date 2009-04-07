@@ -172,6 +172,16 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      */
     private String serverLocation;
 
+    /**
+     * The level to instrument to. Valid values are 'method' or 'statement'. Default is 'statement'.
+     *
+     * Setting this to 'method' greatly reduces the overhead of enabling Clover, however limited or no reporting is
+     * available. The current use of setting this to method is for Test Optimization only.
+     *
+     * @parameter expression="${maven.clover.instrumentation}"
+     */
+    private String instrumentation;
+
     // HACK: this allows us to reset the source directories to the originals
     private static Map originalSrcMap = new HashMap();
     private static Map originalSrcTestMap = new HashMap();
@@ -510,5 +520,9 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     public int getStaleMillis() {
         return staleMillis;
+    }
+
+    public String getInstrumentation() {
+        return instrumentation;
     }
 }
