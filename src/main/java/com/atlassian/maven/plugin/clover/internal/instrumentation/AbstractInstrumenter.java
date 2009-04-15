@@ -44,6 +44,7 @@ public abstract class AbstractInstrumenter
     private CompilerConfiguration configuration;
 
     String outputSourceDirectory;
+    private static final String PROP_PROJECT_BUILD_SOURCEENCODING = "project.build.sourceEncoding";
 
     public AbstractInstrumenter(CompilerConfiguration configuration, String outputSourceDirectory)
     {
@@ -251,6 +252,9 @@ public abstract class AbstractInstrumenter
         if (getConfiguration().getEncoding() != null) {
             parameters.add("--encoding");
             parameters.add(getConfiguration().getEncoding());
+        } else if (getConfiguration().getProject().getProperties().get(PROP_PROJECT_BUILD_SOURCEENCODING) != null) {
+            parameters.add("--encoding");
+            parameters.add(getConfiguration().getProject().getProperties().get(PROP_PROJECT_BUILD_SOURCEENCODING));
         }
 
         if (getConfiguration().getInstrumentation() != null) {
