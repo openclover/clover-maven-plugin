@@ -43,6 +43,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Map;
+import java.util.Iterator;
 
 
 /**
@@ -354,8 +356,13 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     private void createReport(String database, String format, String title, String output, String historyOut, boolean summary) {
         final Project antProject = new Project();
         antProject.init();
+
+
         antProject.setUserProperty("ant.file", reportDescriptor.getAbsolutePath());
         antProject.setCoreLoader(getClass().getClassLoader());
+
+        addMavenProperties(antProject);
+
         antProject.setProperty("cloverdb", database);
         antProject.setProperty("output", output);
         antProject.setProperty("history", historyDir);
@@ -377,6 +384,24 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
         antProject.setBaseDir(project.getBasedir());
         String target = isHistoricalDirectoryValid(output) && (historyOut != null) ? "historical" : "current";
         antProject.executeTarget(target);
+    }
+
+    private void addMavenProperties(Project antProject) {
+        final Map properties = getProject().getProperties();
+
+        for (Iterator iterator = properties.entrySet().iterator(); iterator.hasNext();) {
+            Map.Entry entry = (Map.Entry) iterator.next();
+            getLog().debug("Setting Property: " + entry.getKey().toString() + " = " + entry.getValue().toString());
+            antProject.setProperty(entry.getKey().toString(), entry.getValue().toString());
+        }
+        // also add some common maven properties
+        antProject.setProperty("project.url", project.getUrl());
+        antProject.setProperty("project.version", project.getVersion());
+        antProject.setProperty("project.name", project.getName());
+        antProject.setProperty("project.description", project.getDescription());
+        antProject.setProperty("project.id", project.getId());
+        antProject.setProperty("project.groupId", project.getGroupId());
+        antProject.setProperty("project.inceptionYear", project.getInceptionYear());
     }
 
     private boolean isHistoricalDirectoryValid(String outFile) {

@@ -46,8 +46,8 @@ public class CloverCheckMojo extends AbstractCloverMojo
     String targetPercentage;
 
     /**
-     * Comma or space separated list of Clover contexts (block, statement or method filers) to exclude when
-     * generating coverage reports.
+     * Comma or space separated list of Clover contexts (block, statement or method filers) to exclude before
+     * performing the check.
      * @parameter expression="${maven.clover.contextFilters}"
      */
     String contextFilters;
