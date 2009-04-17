@@ -19,32 +19,34 @@ package com.atlassian.maven.plugin.clover;
  * under the License.
  */
 
-import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
-import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
-import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
-import com.cenqua.clover.cfg.Interval;
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.factory.ArtifactFactory;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
+import org.apache.maven.artifact.resolver.ArtifactResolutionException;
+import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
-import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
-import org.apache.maven.artifact.resolver.ArtifactResolver;
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
-//import org.apache.tools.ant.MagicNames;
+import org.apache.tools.ant.PropertyHelper;
 import org.codehaus.plexus.resource.ResourceManager;
 
-import java.io.File;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.Map;
-import java.util.Iterator;
+import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
+import com.atlassian.maven.plugin.clover.internal.AntPropertyHelper;
+import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
+import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
+import com.cenqua.clover.cfg.Interval;
 
 
 /**
@@ -222,7 +224,19 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
      */
     private String contextFilters;
 
-
+    /**
+     * Title of the report
+     * 
+     * @parameter expression="${maven.clover.title}" default-value="${project.name} ${project.version}"
+     */
+    private String title;
+    
+    /**
+     * Title anchor of the report
+     * 
+     * @parameter expression="${maven.clover.titleAnchor}" default-value="${project.url}"
+     */
+    private String titleAnchor;
 
     /**
      * The charset to use in the html reports.
@@ -318,14 +332,18 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
 
         getLog().info("Using Clover report descriptor: " + reportDescriptor.getAbsolutePath());
 
+        if(title != null && title.startsWith("Unnamed")) { // no project.name on the project
+            title = project.getArtifactId() + " " + project.getVersion();
+        }
+
         File singleModuleCloverDatabase = new File(resolveCloverDatabase());
         if (singleModuleCloverDatabase.exists()) {
-            createAllReportTypes(resolveCloverDatabase(), project.getArtifactId());
+            createAllReportTypes(resolveCloverDatabase(), title);
         }
 
         File mergedCloverDatabase = new File(this.cloverMergeDatabase);
         if (mergedCloverDatabase.exists()) {
-            createAllReportTypes(this.cloverMergeDatabase, project.getArtifactId() + "(Aggregated)");
+            createAllReportTypes(this.cloverMergeDatabase, title + " (Aggregated)");
         }
     }
 
@@ -357,16 +375,20 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
         final Project antProject = new Project();
         antProject.init();
 
+        PropertyHelper propertyHelper = PropertyHelper.getPropertyHelper( antProject );
+
+        propertyHelper.setNext( new AntPropertyHelper( project, getLog() ) );
 
         antProject.setUserProperty("ant.file", reportDescriptor.getAbsolutePath());
         antProject.setCoreLoader(getClass().getClassLoader());
 
         addMavenProperties(antProject);
-
+        
         antProject.setProperty("cloverdb", database);
         antProject.setProperty("output", output);
         antProject.setProperty("history", historyDir);
-        antProject.setProperty("title", title);
+        antProject.setProperty("title", title == null ? "" : title); // empty string will have it be ignore by clover
+        antProject.setProperty("titleAnchor", titleAnchor == null ? "" : titleAnchor);
         final String projectDir = project.getBasedir().getPath();
         antProject.setProperty("projectDir", projectDir);
         antProject.setProperty("testPattern", "**/src/test/java/**");
@@ -394,14 +416,6 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
             getLog().debug("Setting Property: " + entry.getKey().toString() + " = " + entry.getValue().toString());
             antProject.setProperty(entry.getKey().toString(), entry.getValue().toString());
         }
-        // also add some common maven properties
-        antProject.setProperty("project.url", project.getUrl());
-        antProject.setProperty("project.version", project.getVersion());
-        antProject.setProperty("project.name", project.getName());
-        antProject.setProperty("project.description", project.getDescription());
-        antProject.setProperty("project.id", project.getId());
-        antProject.setProperty("project.groupId", project.getGroupId());
-        antProject.setProperty("project.inceptionYear", project.getInceptionYear());
     }
 
     private boolean isHistoricalDirectoryValid(String outFile) {
@@ -422,7 +436,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
 
         return isValid;
     }
-
+    
     /**
      * @see org.apache.maven.reporting.MavenReport#getOutputName()
      */

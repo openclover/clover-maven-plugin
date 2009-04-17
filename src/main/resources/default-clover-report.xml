@@ -19,12 +19,12 @@
 
     <target name="historical">
         <clover-report>
-            <current outfile="${output}" summary="${summary}" charset="${charset}" title="${title}" span="${span}">
+            <current outfile="${output}" summary="${summary}" charset="${charset}" title="${title}" titleAnchor="${titleAnchor}" span="${span}">
                 <format refid="clover.format"/>
                 <testsources refid="test.sources"/>
                 <columns refid="clover.columns"/>
             </current>
-            <historical outfile="${historyout}" historydir="${history}" charset="${charset}" title="${title}"
+            <historical outfile="${historyout}" historydir="${history}" charset="${charset}" title="${title}" titleAnchor="${titleAnchor}"
                         span="${span}">
                 <format refid="clover.format"/>
             </historical>
@@ -33,7 +33,7 @@
 
     <target name="current">
         <clover-report>
-            <current outfile="${output}" title="${title}" summary="${summary}" charset="${charset}" span="${span}">
+            <current outfile="${output}" title="${title}" titleAnchor="${titleAnchor}" summary="${summary}" charset="${charset}" span="${span}">
                 <format refid="clover.format"/>
                 <testsources refid="test.sources"/>
                 <columns refid="clover.columns"/>
