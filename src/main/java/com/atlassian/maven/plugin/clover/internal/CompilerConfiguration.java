@@ -1,5 +1,7 @@
 package com.atlassian.maven.plugin.clover.internal;
 
+import com.atlassian.maven.plugin.clover.DistributedCoverage;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -27,7 +29,7 @@ public interface CompilerConfiguration extends CloverConfiguration {
 
     Map getStatementContexts();
 
-    String getServerLocation();
+    DistributedCoverage getDistributedCoverage();
 
     int getStaleMillis();
 

@@ -163,14 +163,24 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      */
     private int staleMillis;
 
-
     /**
-     * The location of the clover server. This is typically the test JVM.
-     * This setting is only used if remote flushing is enabled, via remoteFlushing.
+     * The configuration for distributed coverage collection by Clover.
      *
-     * @parameter expression="${maven.clover.serverLocation}"
+     * If present, default values will be used and coverage will be collected across JVMs.
+     *
+     * Optional nested elements (and their defaults) of distributedCoverage are:
+     *  <ul>
+     *   <li><tt>host</tt> - the host name of the JVM running the tests. default: <b>localhost</b></li>
+     *   <li><tt>port</tt> - the port that Clover can bind to in the host JVM. default: <b>1198</b></li>
+     *   <li><tt>numClients</tt> - the number of clients expected to attach to the Test JVM. The test JVM will wait until numClients
+     *                    have connected before continuing. default: <b>0</b></li>
+     *   <li><tt>timeout</tt> - the amount of time to wait for a response from a remote JVM before shunning it. default: <b>5000</b></li>
+     *   <li><tt>retryPeriod</tt> - the amount of time a client should wait between reconnect attempts. default: <b>1000</b></li>
+     *  </ul>
+     *
+     * @parameter 
      */
-    private String serverLocation;
+    private DistributedCoverage distributedCoverage;
 
     /**
      * The level to instrument to. Valid values are 'method' or 'statement'. Default is 'statement'.
@@ -194,10 +204,6 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         return (String) originalSrcTestMap.get(module);
     }
 
-    public String getServerLocation() {
-        return serverLocation;
-    }
-
     /**
      * {@inheritDoc}
      * @see com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo#execute()
@@ -205,7 +211,6 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     public void execute()
         throws MojoExecutionException
     {
-
         if (skip) {
             getLog().info("Skipping clover instrumentation.");
             return;
@@ -524,5 +529,9 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     public String getInstrumentation() {
         return instrumentation;
+    }
+
+    public DistributedCoverage getDistributedCoverage() {
+        return distributedCoverage;
     }
 }

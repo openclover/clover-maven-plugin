@@ -215,9 +215,9 @@ public abstract class AbstractInstrumenter
             parameters.add( "-v" );
         }
 
-        if (getConfiguration().getServerLocation() != null) {
-            parameters.add("--serverLocation");
-            parameters.add(getConfiguration().getServerLocation());
+        if (getConfiguration().getDistributedCoverage() != null && getConfiguration().getDistributedCoverage().isEnabled()) {
+            parameters.add("--distributedCoverage");
+            parameters.add(getConfiguration().getDistributedCoverage().toString());
         }
 
         if ( getConfiguration().getJdk() != null )

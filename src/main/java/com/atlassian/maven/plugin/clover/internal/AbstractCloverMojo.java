@@ -388,5 +388,4 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
         return this.singleCloverDatabase;
     }
 
-
 }
