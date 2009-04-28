@@ -85,6 +85,11 @@ public class CloverMergeMojo extends AbstractCloverMojo
     private void mergeCloverDatabases() throws MojoExecutionException
     {
 
+        AbstractCloverMojo.registerLicenseFile(getProject(), getResourceManager(),
+                                               this.licenseLocation, getLog(),
+                                               this.getClass().getClassLoader(),
+                                               this.license);
+
         try {
             final Project antProject = new Project();
             antProject.init();
