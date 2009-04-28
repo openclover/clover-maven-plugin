@@ -44,12 +44,21 @@ public class CloverSnapshotMojo extends AbstractCloverMojo {
      */
     private boolean debug;
 
+
+    /**
+     * If set to true, the snapshot will always be created. Otherwise, if a singleCloverDatabase is used
+     * the snapshot will only be created during the execution of the last module in the reactor.
+     *
+     * @parameter expression="${maven.clover.forceSnapshot}" default-value="false"
+     */
+    private boolean forceSnapshot;
+
     public void execute() throws MojoExecutionException {
 
         // only run the snapshot once, on the very last project.
         final MavenProject lastProject = (MavenProject) getReactorProjects().get(getReactorProjects().size() - 1);
         final MavenProject thisProject = getProject();
-        if (isSingleCloverDatabase() && !thisProject.equals(lastProject)) {
+        if (isSingleCloverDatabase() && !thisProject.equals(lastProject) && !forceSnapshot) {
             getLog().info("Skipping snapshot until the final project in the reactor.");
             return;
         }
