@@ -306,7 +306,15 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
         if (!canGenerateReport()) {
             getLog().info("No report being generated for this module.");
         }
-        
+
+        // only run the snapshot once, on the very last project.
+        final MavenProject lastProject = (MavenProject) getReactorProjects().get(getReactorProjects().size() - 1);
+        final MavenProject thisProject = getProject();
+        if (isSingleCloverDatabase() && !thisProject.equals(lastProject)) {
+            getLog().info("Skipping snapshot until the final project in the reactor.");
+            return;
+        }
+
         // Register the Clover license
         try {
             AbstractCloverMojo.registerLicenseFile(this.project, this.resourceManager, this.licenseLocation, getLog(),
