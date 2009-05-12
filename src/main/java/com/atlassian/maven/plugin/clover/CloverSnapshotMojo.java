@@ -1,6 +1,7 @@
 package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
+import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
 import com.cenqua.clover.tasks.CloverSnapshotTask;
 import com.cenqua.clover.CloverNames;
 import com.cenqua.clover.Logger;
@@ -85,11 +86,11 @@ public class CloverSnapshotMojo extends AbstractCloverMojo {
             task.setSpan(interval);
         }
 
-        if (snapshot != null && snapshot.getParentFile() != null) {
-            snapshot.getParentFile().mkdirs();
-            getLog().info("Saving snapshot to: " + snapshot);
-            task.setFile(snapshot);
-        }
+        snapshot = new ConfigUtil(this).resolveSnapshotFile(snapshot);
+
+        snapshot.getParentFile().mkdirs();
+        getLog().info("Saving snapshot to: " + snapshot);
+        task.setFile(snapshot);
 
         execTask(task);
 

@@ -1,6 +1,7 @@
 package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
+import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
 import com.cenqua.clover.CloverNames;
 import com.cenqua.clover.types.CloverOptimizedTestSet;
 import com.cenqua.clover.types.CloverAlwaysRunTestSet;
@@ -164,7 +165,8 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         testsToRun.setProject(antProj);
         testsToRun.setLogger(new MvnLogger(getLog()));
         testsToRun.setFullRunEvery(fullRunEvery);
-        testsToRun.setSnapshotFile(snapshot);
+
+        testsToRun.setSnapshotFile(new ConfigUtil(this).resolveSnapshotFile(snapshot));
         if (ordering != null) {
             CloverOptimizedTestSet.TestOrdering order = new CloverOptimizedTestSet.TestOrdering();
             order.setValue(ordering);

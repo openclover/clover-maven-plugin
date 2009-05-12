@@ -53,7 +53,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * The location to store the clover snapshot file. This file needs to persist between builds to enable Clover's
      * build optimization feature. If not specified, the snapshot will be stored next to the cloverDatabase.
      *
-     * @parameter expression="${maven.clover.snapshot}"
+     * @parameter expression="${maven.clover.snapshot}" 
      */
     protected File snapshot;
 
