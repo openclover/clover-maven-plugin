@@ -391,7 +391,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
                     //   version between the original A version and the clovered version.
                     //
                     // We provide a 'fudge-factor' of 2 seconds, as the clover artifact is created first.
-                    if ( cloveredArtifact.getFile().lastModified() + 2000l < artifact.getFile().lastModified() )
+                    if ( cloveredArtifact.getFile().lastModified() + 2000L < artifact.getFile().lastModified() )
                     {
                         getLog().warn( "Using [" + artifact.getId() + "], built on " + new Date(artifact.getFile().lastModified()) +
                                 " even though a Clovered version exists "
@@ -408,15 +408,18 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
                 }
                 catch ( ArtifactResolutionException e )
                 {
+                    getLog().warn( "Skipped dependency [" + artifact.getId() + "] due to resolution error: " + e.getMessage() );
                     resolvedArtifacts.add( artifact );
                 }
                 catch ( ArtifactNotFoundException e )
                 {
+                    getLog().debug( "Skipped dependency [" + artifact.getId() + "] as the clovered artifact could not be found" );
                     resolvedArtifacts.add( artifact );
                 }
             }
             else
             {
+                getLog().debug( "Skipped dependency [" + artifact.getId() + "] as it has a classifier" );
                 resolvedArtifacts.add( artifact );
             }
         }
