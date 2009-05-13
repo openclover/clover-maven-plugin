@@ -192,6 +192,18 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      */
     private String instrumentation;
 
+    /**
+     * The difference (in milliseconds) that a -clover classified artifact can have to a non-clover classified artifact.
+     *
+     * If the -clover classified artifact is more than cloveredArtifactExpiryInMillis older than the non-clover classified
+     * artifact, then the non-classified artifact will be used.
+     *
+     * This setting defaults to 2000.
+     *
+     * @parameter expression="${maven.clover.cloveredArtifactExpiryInMillis}" default-value=2000
+     */
+    private long cloveredArtifactExpiryInMillis;
+
     // HACK: this allows us to reset the source directories to the originals
     private static Map originalSrcMap = new HashMap();
     private static Map originalSrcTestMap = new HashMap();
@@ -391,7 +403,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
                     //   version between the original A version and the clovered version.
                     //
                     // We provide a 'fudge-factor' of 2 seconds, as the clover artifact is created first.
-                    if ( cloveredArtifact.getFile().lastModified() + 2000L < artifact.getFile().lastModified() )
+                    if ( cloveredArtifact.getFile().lastModified() + cloveredArtifactExpiryInMillis < artifact.getFile().lastModified() )
                     {
                         getLog().warn( "Using [" + artifact.getId() + "], built on " + new Date(artifact.getFile().lastModified()) +
                                 " even though a Clovered version exists "
