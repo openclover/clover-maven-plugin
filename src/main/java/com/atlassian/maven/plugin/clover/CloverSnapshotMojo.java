@@ -38,13 +38,6 @@ public class CloverSnapshotMojo extends AbstractCloverMojo {
      */
     private String span;
 
-    /**
-     * If set to true, the state of the snapshot file will be dumped to the console.
-     *
-     * @parameter expression="${maven.clover.snapshot.debug}" default-value="false"
-     */
-    private boolean debug;
-
 
     /**
      * If set to true, the snapshot will always be created. Otherwise, if a singleCloverDatabase is used

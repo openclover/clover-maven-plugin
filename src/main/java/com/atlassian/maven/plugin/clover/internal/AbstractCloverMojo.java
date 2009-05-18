@@ -160,6 +160,16 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     protected boolean skip;
 
     /**
+     * If you wish to enable debug level logging in just the Clover plugin, set this to true.
+     *
+     * This is useful for integrating Clover into the build
+     *
+     * @parameter expression="${maven.clover.debug}" default-value="false"
+     *
+     */
+    protected boolean debug;
+
+    /**
      * The projects in the reactor for aggregation report.
      *
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
@@ -176,7 +186,6 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      */
     public void execute() throws MojoExecutionException
     {
-
         registerLicenseFile();
     }
 
