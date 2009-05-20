@@ -149,6 +149,13 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     private boolean useFullyQualifiedJavaLang;
 
     /**
+     * Whether or not to include the -clover classifier on artifacts.
+     *
+     * @parameter expression="${maven.clover.useCloverClassifier}" default-value="true"
+     */
+    private boolean useCloverClassifier = true;
+
+    /**
      * The character encoding to use when parsing source files.
      *
      * @parameter expression="${maven.clover.encoding}" 
@@ -344,7 +351,8 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
                     getProject().getBuild().getFinalName() == null ?
                     (getProject().getArtifactId() + "-" + getProject().getVersion()) 
                     : getProject().getBuild().getFinalName();
-            getProject().getBuild().setFinalName(finalName + "-clover");
+            
+            getProject().getBuild().setFinalName(finalName + (useCloverClassifier ? "-clover" : ""));
         }
     }
 
