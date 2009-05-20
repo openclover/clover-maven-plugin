@@ -21,7 +21,21 @@ import java.io.File;
  */
 public class CloverCleanMojo extends AbstractCloverMojo {
 
+    /**
+     *
+     * A flag to indicate not to run clover2:clean for this execution.
+     *
+     * If set to true, clean will be skipped will not be run.
+     *
+     * @parameter expression="${maven.clover.clean.skip}" default-value="false"
+     */
+    protected boolean skip;
+
+
     public void execute() throws MojoExecutionException {
+        if (skip) {
+            return;
+        }
 
         final Project project = new Project();
         project.setBasedir(getProject().getBasedir().getPath());
