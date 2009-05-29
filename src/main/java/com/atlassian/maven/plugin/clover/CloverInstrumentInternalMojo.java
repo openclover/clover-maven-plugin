@@ -237,8 +237,6 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
         resetSrcDirsOriginal(getProject().getArtifact(), this);
 
-        // Ensure output directories exist
-        new File( this.cloverOutputDirectory ).mkdirs();
         String cloverOutputSourceDirectory = new File( this.cloverOutputDirectory, getSrcName()).getPath();
         String cloverOutputTestSourceDirectory = new File( this.cloverOutputDirectory, getSrcTestName()).getPath();
         new File( resolveCloverDatabase() ).getParentFile().mkdirs();
@@ -248,10 +246,8 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         logArtifacts( "before changes" );
 
         // Instrument both the main sources and the test sources if the user has configured it
-        final MainInstrumenter mainInstrumenter =
-            new MainInstrumenter( this, cloverOutputSourceDirectory );
-        final TestInstrumenter testInstrumenter =
-            new TestInstrumenter( this, cloverOutputTestSourceDirectory );
+        final MainInstrumenter mainInstrumenter = new MainInstrumenter( this, cloverOutputSourceDirectory );
+        final TestInstrumenter testInstrumenter = new TestInstrumenter( this, cloverOutputTestSourceDirectory );
 
         if ( isJavaProject() )
         {
@@ -326,11 +322,6 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         // properties depending on it!
         getProject().getBuild().setOutputDirectory( new File( this.cloverOutputDirectory, "classes" ).getPath() );
         getProject().getBuild().setTestOutputDirectory(new File( this.cloverOutputDirectory, "test-classes" ).getPath() );
-
-        // TODO: This is a hack. Remove these when http://jira.codehaus.org/browse/MINSTALL-18 is fixed.
-        new File( getProject().getBuild().getOutputDirectory() ).mkdirs();
-        new File( getProject().getBuild().getTestOutputDirectory() ).mkdirs();
-
     }
 
     /**

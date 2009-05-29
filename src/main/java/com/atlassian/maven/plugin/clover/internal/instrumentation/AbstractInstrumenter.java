@@ -184,6 +184,8 @@ public abstract class AbstractInstrumenter
     private void instrumentSources( Map filesToInstrument, String outputDir ) throws MojoExecutionException {
 
         Logger.setInstance(new MvnLogger(configuration.getLog()));
+        // only make dirs when there is src to instrument. see CLMVN-118
+        new File(outputDir).mkdirs();
         int result = CloverInstr.mainImpl( createCliArgs( filesToInstrument, outputDir ) );
         if ( result != 0 )
         {
