@@ -278,15 +278,15 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     }
 
     public static void resetSrcDirsOriginal(Artifact artifact, CompilerConfiguration config) {
-        if (originalSrcMap.containsKey(artifact)) {
-            final String sourceDirectory = (String) originalSrcMap.get(artifact);
+        if (originalSrcMap.containsKey(artifact.getArtifactId())) {
+            final String sourceDirectory = (String) originalSrcMap.get(artifact.getArtifactId());
             MainInstrumenter mainInstrumenter =
                     new MainInstrumenter(config, sourceDirectory);
             mainInstrumenter.redirectSourceDirectories();
 
         }
-        if (originalSrcTestMap.containsKey(artifact)) {
-            final String testDirectory = (String)originalSrcTestMap.get(artifact);
+        if (originalSrcTestMap.containsKey(artifact.getArtifactId())) {
+            final String testDirectory = (String)originalSrcTestMap.get(artifact.getArtifactId());
             TestInstrumenter instrumenter =
                     new TestInstrumenter(config, testDirectory);
             instrumenter.redirectSourceDirectories();
