@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Test NG Test Suite" verbose="999">
+    
+    <test name="App test">
+        <classes>
+            <class name="com.atlassian.maven.AppTest"/>
+        </classes>
+    </test>
+</suite>
