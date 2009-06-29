@@ -143,24 +143,29 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
     private List configureOptimisedTestSet(Project antProj) {
 
-        List surefireIncludes = null;
-        List surefireExcludes = null;
+        List includes = optimizeIncludes;
+        List excludes = optimizeExcludes;
+        
+        if (includes == null && excludes == null) {
+            getLog().debug("No clover excludes or includes specified. Falling back to Surefire configuration.");
 
-        // lookup the surefire-plugin
-        final Plugin surefirePlugin = lookupSurefirePlugin();
-
-        if (surefirePlugin != null) {
-            final Xpp3Dom config = (Xpp3Dom) surefirePlugin.getConfiguration();
-            if (config != null) {
-                // get the includes and excludes from the surefire plugin
-                surefireIncludes = extractNestedStrings("includes", config);
-                surefireExcludes = extractNestedStrings("excludes", config);
+            final Plugin surefirePlugin = lookupSurefirePlugin();
+            if (surefirePlugin != null) {
+                final Xpp3Dom config = (Xpp3Dom) surefirePlugin.getConfiguration();
+                if (config != null) {
+                    // get the includes and excludes from the surefire plugin
+                    includes = extractNestedStrings("includes", config);
+                    excludes = extractNestedStrings("excludes", config);
+                }
+            }
+            // If there are still no includes use the default ones
+            if (includes == null) {
+                includes = DEFAULT_INCLUDES;
             }
         }
 
-        final List includes = optimizeIncludes != null ? optimizeIncludes : (surefireIncludes != null) ? surefireIncludes : DEFAULT_INCLUDES;
-        final List excludes = optimizeExcludes != null ? optimizeExcludes : surefireExcludes;
-
+        getLog().debug("Effective filtering: includes=" + includes + ", excludes=" + excludes);
+        
         final CloverOptimizedTestSet testsToRun = new CloverOptimizedTestSet();
         testsToRun.setProject(antProj);
         testsToRun.setLogger(new MvnLogger(getLog()));
@@ -189,28 +194,13 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
                 continue;
             }
 
-            FileSet testFileSet = new FileSet();
-            testFileSet.setProject(antProj);
+            getLog().info("Adding fileset: directory=" + testRootDir + ", includes=" + includes + ", excludes=" + excludes);
 
-            testFileSet.setDir(testRootDir);
-
-
-            testFileSet.appendIncludes((String[]) includes.toArray(new String[includes.size()]));
-            getLog().debug("Appending includes: " + includes);
-
-            if (excludes != null && excludes.size() > 0) {
-                testFileSet.appendExcludes((String[]) excludes.toArray(new String[excludes.size()]));
-                getLog().debug("Appending excludes: " + excludes);
-            }
-
-            testsToRun.add(testFileSet);
+            testsToRun.add(createFileSet(antProj, testRootDir, includes, excludes));
 
             if (alwaysRunTests != null) {
                 // create  fileset
-                final FileSet alwaysRunFileSet = new FileSet();
-                alwaysRunFileSet.setProject(antProj);
-                alwaysRunFileSet.setDir(testRootDir);
-                alwaysRunFileSet.appendIncludes((String[]) alwaysRunTests.toArray(new String[alwaysRunTests.size()]));
+                final FileSet alwaysRunFileSet = createFileSet(antProj, testRootDir, alwaysRunTests, null);
 
                 // add it to an AlwaysRunTestSet
                 final CloverAlwaysRunTestSet alwaysRunTestSet = new CloverAlwaysRunTestSet();
@@ -223,6 +213,18 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
         }
         return testsToRun.getOptimizedTestResource();
+    }
+
+    private FileSet createFileSet(Project antProject, final File directory, List includes, List excludes) {
+        
+        FileSet testFileSet = new FileSet();
+        testFileSet.setProject(antProject);
+        testFileSet.setDir(directory);
+        testFileSet.appendIncludes((String[]) includes.toArray(new String[includes.size()]));
+        if (excludes != null && !excludes.isEmpty()) {
+            testFileSet.appendExcludes((String[]) excludes.toArray(new String[excludes.size()]));
+        }
+        return testFileSet;
     }
 
     /**
@@ -241,7 +243,6 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
                 final Xpp3Dom child = children[i];
                 result.add(child.getValue());
             }
-            getLog().info("Extracted strings: " + result);
             return result;
         }
 
