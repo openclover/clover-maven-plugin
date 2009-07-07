@@ -25,8 +25,11 @@ import org.apache.maven.plugin.MojoExecutionException;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
+import org.apache.tools.ant.types.FileSet;
 
 import java.io.File;
+import java.util.List;
+import java.util.Iterator;
 
 /**
  * Verify Test Percentage Coverage (TPC) from an existing Clover database and fail the build if it is below the defined
@@ -152,7 +155,8 @@ public class CloverCheckMojo extends AbstractCloverMojo
         
         if (this.targetPercentage != null) {
             cloverPassTask.setTarget( new Percentage( this.targetPercentage ) );
-            getLog().info( "Checking for coverage of [" + targetPercentage + "] for database [" + database + "]");            
+
+            getLog().info( "Checking for coverage of [" + targetPercentage + "] for database [" + database + "]");
         } else if (this.historyDir.exists() && this.historyDir.isDirectory()) {
             cloverPassTask.setHistorydir(this.historyDir);
             cloverPassTask.setThreshold(new Percentage(this.historyThreshold));
@@ -171,6 +175,8 @@ public class CloverCheckMojo extends AbstractCloverMojo
             cloverPassTask.setFilter( this.contextFilters );
         }
 
+        setTestSourceRoots(cloverPassTask);
+
         try
         {
             cloverPassTask.execute();
@@ -188,6 +194,16 @@ public class CloverCheckMojo extends AbstractCloverMojo
                 getLog().warn( "Clover test percentage coverage is below threshold but failOnViolation is set to "
                     + " false, preventing the build from failing.");
             }
+        }
+    }
+
+    private void setTestSourceRoots(CloverPassTask cloverPassTask) {
+        final List testSourceRoots = getProject().getTestCompileSourceRoots();
+        for (Iterator iterator = testSourceRoots.iterator(); iterator.hasNext();) {
+            String testDir = (String) iterator.next();
+            final FileSet testFiles = new FileSet();
+            testFiles.setDir(new File(testDir));
+            cloverPassTask.addTestSources(testFiles);
         }
     }
 
