@@ -52,7 +52,6 @@ under the License.
       <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
         <artifactId>maven-clover2-plugin</artifactId>
-        <version>2.4.1</version>
         <configuration>
           <!-- Without the block filter the TPC is 50% and with it it's 57,1%. Thus we check for a TPC above of
                55% to verify the filter has been applied correctly -->
