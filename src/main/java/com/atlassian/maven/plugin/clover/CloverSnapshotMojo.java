@@ -70,6 +70,8 @@ public class CloverSnapshotMojo extends AbstractCloverMojo {
 
         final CloverSnapshotTask task = createSnapshotTask();
         task.setInitString(resolveCloverDatabase());
+        task.setDebug(debug);
+
         if (span != null) {
             task.setSpan(span);
         } else if (CloverSetupMojo.START_DATE != null) {

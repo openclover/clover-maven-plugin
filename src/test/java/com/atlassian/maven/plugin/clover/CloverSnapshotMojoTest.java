@@ -56,6 +56,7 @@ public class CloverSnapshotMojoTest extends MockObjectTestCase {
         checking(new Expectations(){{
             oneOf(task).setFile(snapshot);
             oneOf(task).setInitString("target/clover/clover.db");
+            oneOf(task).setDebug(false);
         }});
 
 
