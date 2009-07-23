@@ -259,7 +259,7 @@ under the License.
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-plugin-management-plugin</artifactId>
-                        <version>1.0-atlassian-2</version>
+                        <version>1.0-atlassian-3</version>
                         <executions>
                             <execution>
                                 <id>handle-plugin-staging</id>
