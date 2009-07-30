@@ -49,7 +49,7 @@ under the License.
         <maven>2.0.1</maven>
     </prerequisites>
     <properties>
-        <cloverVersion>2.6.0-SNAPSHOT</cloverVersion>
+        <cloverVersion>2.5.1</cloverVersion>
     </properties>
     <dependencies>
         <dependency>
