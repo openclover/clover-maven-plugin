@@ -2,10 +2,8 @@ package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
-import com.cenqua.clover.CloverNames;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.Project;
-import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.taskdefs.Delete;
 
 import java.io.File;
@@ -32,6 +30,17 @@ public class CloverCleanMojo extends AbstractCloverMojo {
     protected boolean skip;
 
 
+    /**
+     *
+     * A flag to indicate to keep the clover.db but purge all coverage data and other files when clover2:clean is run.
+     *
+     * If set to true, the clover.db file will not be removed.
+     *
+     * @parameter expression="${maven.clover.clean.keepDb}" default-value="false"
+     */
+    protected boolean keepDb;
+
+
     public void execute() throws MojoExecutionException {
         if (skip) {
             return;
@@ -55,6 +64,9 @@ public class CloverCleanMojo extends AbstractCloverMojo {
         getLog().debug("Deleting directory: " + dir.getAbsolutePath());
         Delete delete = createDeleteTaskFor(project);
         delete.setDir(dir);
+        if (keepDb) {
+            delete.setExcludes("**/*.db");
+        }
         delete.execute();
         if (dir.exists()) {
             getLog().warn("clover2:clean could not delete directory: " + dir);
