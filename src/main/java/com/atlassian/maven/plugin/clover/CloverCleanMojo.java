@@ -41,24 +41,46 @@ public class CloverCleanMojo extends AbstractCloverMojo {
         project.setBasedir(getProject().getBasedir().getPath());
         project.addBuildListener(new MvnLogBuildListener(getLog()));
         project.init();
-        // delete just the snapshot
+        // delete just the snapshot and the target/clover directory
         final File snapshotFile = new ConfigUtil(this).resolveSnapshotFile(snapshot);
         removeFile(snapshotFile, project);
+        removeDir(new File(this.cloverOutputDirectory), project);
     }
 
-    private void removeFile(File snapshot, Project project) throws MojoExecutionException {
+    private void removeDir(File dir, Project project) throws MojoExecutionException {
 
-        if (!snapshot.exists() || snapshot.isDirectory()) {
+        if (!dir.exists() || dir.isFile()) {
             return;
         }
+        getLog().debug("Deleting directory: " + dir.getAbsolutePath());
+        Delete delete = createDeleteTaskFor(project);
+        delete.setDir(dir);
+        delete.execute();
+        if (dir.exists()) {
+            getLog().warn("clover2:clean could not delete directory: " + dir);
+        }
+    }
+
+    private Delete createDeleteTaskFor(Project project) {
         Delete delete = new Delete();
         delete.setProject(project);
         delete.setIncludeEmptyDirs(true);
         delete.init();
-        delete.setFile(snapshot);
+        return delete;
+    }
+
+
+    private void removeFile(File file, Project project) throws MojoExecutionException {
+
+        if (!file.exists() || file.isDirectory()) {
+            return;
+        }
+        getLog().debug("Deleting file: " + file.getAbsolutePath());
+        Delete delete = createDeleteTaskFor(project);
+        delete.setFile(file);
         delete.execute();
-        if (snapshot.exists()) {
-            getLog().warn("clover2:clean could not delete file: " + snapshot);
+        if (file.exists()) {
+            getLog().warn("clover2:clean could not delete file: " + file);
         }
     }
 }

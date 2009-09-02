@@ -43,6 +43,16 @@ import com.atlassian.maven.plugin.clover.MvnLogBuildListener;
 public abstract class AbstractCloverMojo extends AbstractMojo implements CloverConfiguration
 {
     /**
+     * The directory where the Clover plugin will put all the files it generates during the build process. For
+     * example the Clover plugin will put instrumented sources somewhere inside this directory.
+     *
+     * @parameter default-value="${project.build.directory}/clover"
+     * @required
+     */
+    protected String cloverOutputDirectory;
+
+
+    /**
      * The location of the <a href="http://confluence.atlassian.com/x/EIBOB">Clover database</a>.
      *
      * @parameter expression="${maven.clover.cloverDatabase}"
