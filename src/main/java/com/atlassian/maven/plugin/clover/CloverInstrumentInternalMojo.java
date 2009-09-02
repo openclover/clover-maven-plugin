@@ -94,6 +94,21 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     private Set includes = new HashSet(Arrays.asList(new String[]{"**/*.java"}));
 
     /**
+     * The comma seperated list of files to include in the instrumentation.
+     * Defaults are **.java which are overwritten if &lt;includes&gt; is set by the user
+     *
+     * @parameter expression="${maven.clover.includesList}"
+     */
+    private String includesList = null;
+
+    /**
+     * The comma seperated list of file to exclude from the instrumentation.
+     * @parameter expression="${maven.clover.excludesList}" 
+     */
+    private String excludesList = null;
+
+
+    /**
      * The list of file to exclude from the instrumentation.
      * @parameter
      */
@@ -500,11 +515,23 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     public Set getIncludes()
     {
+        if (includesList == null) {
+            return this.includes;
+        }
+        if (includesList != null) {
+            return new HashSet(Arrays.asList(includesList.split(",")));
+        }
         return this.includes;
     }
 
     public Set getExcludes()
     {
+        if (excludesList == null) {
+            return this.excludes;
+        }
+        if (excludesList != null) {
+            this.excludes.addAll(Arrays.asList(excludesList.split(",")));
+        }
         return this.excludes;
     }
 
