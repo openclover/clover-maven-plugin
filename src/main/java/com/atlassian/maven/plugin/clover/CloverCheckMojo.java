@@ -202,8 +202,11 @@ public class CloverCheckMojo extends AbstractCloverMojo
         for (Iterator iterator = testSourceRoots.iterator(); iterator.hasNext();) {
             String testDir = (String) iterator.next();
             final FileSet testFiles = new FileSet();
-            testFiles.setDir(new File(testDir));
-            cloverPassTask.addTestSources(testFiles);
+            final File dir = new File(testDir);
+            if (dir.exists()) {
+                testFiles.setDir(dir);
+                cloverPassTask.addTestSources(testFiles);
+            }
         }
     }
 
