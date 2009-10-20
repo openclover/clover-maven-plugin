@@ -218,6 +218,16 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      */
     private long cloveredArtifactExpiryInMillis;
 
+
+    /**
+     *
+     * When creating the clover.jar dependency, what scope to use.
+     * This may be one of: compile, test, provided etc. If not specified - provided will be used.
+     *
+     * @parameter expression="${maven.clover.scope}"
+     */
+    private String scope;
+
     // HACK: this allows us to reset the source directories to the originals
     private static Map originalSrcMap = new HashMap();
     private static Map originalSrcTestMap = new HashMap();
@@ -473,8 +483,9 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
                 "Couldn't find [com.cenqua.clover:clover] artifact in plugin dependencies" );
         }
 
+        final String jarScope = scope == null ? Artifact.SCOPE_PROVIDED : scope;
         cloverArtifact = artifactFactory.createArtifact( cloverArtifact.getGroupId(), cloverArtifact.getArtifactId(),
-            cloverArtifact.getVersion(), Artifact.SCOPE_COMPILE, cloverArtifact.getType() );
+            cloverArtifact.getVersion(), jarScope, cloverArtifact.getType() );
 
         // TODO: use addArtifacts when it's implemented, see http://jira.codehaus.org/browse/MNG-2197
         Set set = new LinkedHashSet( getProject().getDependencyArtifacts() );
