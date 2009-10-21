@@ -300,6 +300,13 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     private String span = Interval.DEFAULT_SPAN.toString();
 
     /**
+     * If set to true, a report will be generated even in the absence of coverage data.
+     *
+     * @parameter expression="${maven.clover.alwaysReport}" default-value="false"
+     */
+    private boolean alwaysReport = false;
+
+    /**
      * @see org.apache.maven.reporting.AbstractMavenReport#executeReport(java.util.Locale)
      */
     public void executeReport(Locale locale) throws MavenReportException {
@@ -405,6 +412,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
         antProject.setProperty("charset", charset);
         antProject.setProperty("type", format);
         antProject.setProperty("span", span);
+        antProject.setProperty("alwaysReport", "" + alwaysReport);
         antProject.setProperty("summary", String.valueOf(summary));
         if (historyOut != null) {
             antProject.setProperty("historyout", historyOut);
