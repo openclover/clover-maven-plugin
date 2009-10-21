@@ -76,7 +76,11 @@ public abstract class AbstractInstrumenter
         // We need to copy excluded files as otherwise they won't be in the new Clover source directory and
         // thus won't be compiled by the compile plugin. This will lead to compilation errors if any other
         // Java file depends on any of these excluded files.
-        copyExcludedFiles( scanner.getExcludedFiles(), outputSourceDirectory );
+
+        if (configuration.copyExcludedFiles())
+        {
+            copyExcludedFiles( scanner.getExcludedFiles(), outputSourceDirectory );
+        }
 
         //won't do its job when include files set is empty!
     }
@@ -169,6 +173,7 @@ public abstract class AbstractInstrumenter
 
                 try
                 {
+                    configuration.getLog().debug("Copying excluded file: " + srcFile.getAbsolutePath() + " to " + targetDirectory );
                     FileUtils.copyFile(srcFile, new File( targetDirectory,
                         srcFile.getPath().substring(sourceRoot.length() ) ) );
                 }

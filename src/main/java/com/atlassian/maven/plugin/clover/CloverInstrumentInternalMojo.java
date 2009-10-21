@@ -228,6 +228,17 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      */
     private String scope;
 
+    /**
+     *
+     * If set, then the maven-clover2-plugin will not copy files that were excluded, across to the target/clover directory.
+     * This is useful if the build is also using plugins such as the maven-gwt-plugin, that scans for resources, and
+     * skips a step if none are found. Otherwise, setting this to false could well cause build failures.
+     *
+     * @parameter expression="${maven.clover.copyExcludedFiles}" default-value="true"
+     */
+    private boolean copyExcludedFiles = true;
+
+
     // HACK: this allows us to reset the source directories to the originals
     private static Map originalSrcMap = new HashMap();
     private static Map originalSrcTestMap = new HashMap();
@@ -573,6 +584,10 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     public String getInstrumentation() {
         return instrumentation;
+    }
+
+    public boolean copyExcludedFiles() {
+        return copyExcludedFiles;
     }
 
     public DistributedCoverage getDistributedCoverage() {
