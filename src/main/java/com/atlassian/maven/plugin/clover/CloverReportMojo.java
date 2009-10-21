@@ -302,9 +302,9 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     /**
      * If set to true, a report will be generated even in the absence of coverage data.
      *
-     * @parameter expression="${maven.clover.alwaysReport}" default-value="false"
+     * @parameter expression="${maven.clover.alwaysReport}" default-value="true"
      */
-    private boolean alwaysReport = false;
+    private boolean alwaysReport = true;
 
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#executeReport(java.util.Locale)
