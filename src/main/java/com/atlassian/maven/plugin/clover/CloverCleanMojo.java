@@ -12,8 +12,8 @@ import java.io.File;
  * The clover2:clean goal should be run directly from the command line,
  * when you are developing using the clover test runner optimizer.
  *
- * This mojo ensures that the file required by Clover to optimize your test is not deleted between builds.
- * 
+ * This mojo deletes the {@link #cloverOutputDirectory} contents and the {@link #snapshot} file used for test optimization.
+ *
  * @goal clean
  * @phase initialize
  */
