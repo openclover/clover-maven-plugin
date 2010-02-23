@@ -132,7 +132,7 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
                 final String[] sourcesToAdd = scanner.getIncludedFiles();
                 configuration.getLog().debug("including files for instrumentation = " + Arrays.asList(sourcesToAdd));
                 if (sourcesToAdd.length > 0) {
-                    files.put(dir.getPath(), sourcesToAdd);
+                    files.put(dir.getAbsolutePath(), sourcesToAdd);
                 }
             }
         });
