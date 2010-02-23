@@ -287,6 +287,7 @@ under the License.
                                 <pomInclude>**/allSrcExcluded/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcExcluded/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcIncluded/pom.xml</pomInclude>
+                                <pomInclude>**/groovy/pom.xml</pomInclude>
                                 <!--pomInclude>**/mclover77a/pom.xml</pomInclude>
                                 <pomInclude>**/mclover77b/pom.xml</pomInclude-->
                                 <!--<pomInclude>**/mclover80/pom.xml</pomInclude>-->
