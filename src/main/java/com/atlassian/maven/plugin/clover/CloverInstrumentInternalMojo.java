@@ -19,13 +19,22 @@ package com.atlassian.maven.plugin.clover;
  * under the License.
  */
 
+import com.atlassian.clover.ant.groovy.GroovycSupport;
+import com.atlassian.clover.instr.java.InstrumentationConfig;
+import com.atlassian.maven.plugin.clover.internal.scanner.GroovySourceScanner;
+import com.atlassian.maven.plugin.clover.internal.scanner.GroovyTestScanner;
+import com.cenqua.clover.tasks.AntInstrumentationConfig;
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.DefaultArtifact;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.artifact.handler.DefaultArtifactHandler;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.handler.ArtifactHandler;
+import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
@@ -33,6 +42,7 @@ import com.atlassian.maven.plugin.clover.internal.instrumentation.MainInstrument
 import com.atlassian.maven.plugin.clover.internal.instrumentation.TestInstrumenter;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -91,7 +101,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      *
      * @parameter
      */
-    private Set includes = new HashSet(Arrays.asList(new String[]{"**/*.java"}));
+    private Set includes = new HashSet(Arrays.asList(new String[]{"**/*.java", "**/*.groovy"}));
 
     /**
      * The comma seperated list of files to include in the instrumentation.
@@ -265,7 +275,8 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
         resetSrcDirsOriginal(getProject().getArtifact(), this);
 
-        String cloverOutputSourceDirectory = new File( this.cloverOutputDirectory, getSrcName()).getPath();
+        final File outDir = new File(this.cloverOutputDirectory, getSrcName());
+        String cloverOutputSourceDirectory = outDir.getPath();
         String cloverOutputTestSourceDirectory = new File( this.cloverOutputDirectory, getSrcTestName()).getPath();
         new File( resolveCloverDatabase() ).getParentFile().mkdirs();
 
@@ -286,10 +297,10 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
             }
         }
 
-
         addCloverDependencyToCompileClasspath();
+        injectGrover(outDir);
+
         swizzleCloverDependencies();
-        
         // Modify Maven model so that it points to the new source directories and to the clovered
         // artifacts instead of the original values.
         String originalSrcDir = mainInstrumenter.redirectSourceDirectories();
@@ -303,6 +314,75 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         redirectArtifact();
 
         logArtifacts( "after changes" );
+    }
+
+    private void injectGrover(File outDir)
+    {
+        // create the groovy config for Clover's ASTTransformer
+        InstrumentationConfig config = new InstrumentationConfig();
+        config.setProjectName(this.getProject().getName());
+        config.setInitstring(this.resolveCloverDatabase());
+        config.setTmpDir(outDir);
+
+        final List includeFiles = calcIncludedFiles();
+        getLog().debug("Clover including the following files for Groovy instrumentation: " + includeFiles);
+        config.setIncludedFiles(includeFiles);
+        config.setEnabled(true);
+        config.setEncoding(this.getEncoding());
+        config.setDistributedConfig(this.getDistributedCoverage());
+
+
+        try
+        {
+            File groverJar = GroovycSupport.extractGroverJar(false);
+            File groverConfigDir = GroovycSupport.newConfigDir(config, new File(getProject().getBuild().getOutputDirectory()));
+            final Resource groverConfigResource = new Resource();
+            groverConfigResource.setDirectory(groverConfigDir.getPath());
+            getProject().addResource(groverConfigResource);
+
+            // get the clover artifact, and use the same version number for grover...
+            Artifact cloverArtifact = findCloverArtifact(this.pluginArtifacts);
+            // add grover to the compilation classpath
+            final Artifact groverArtifact = artifactFactory.createBuildArtifact(cloverArtifact.getGroupId(), "grover", cloverArtifact.getVersion(), "jar");
+            groverArtifact.setFile(groverJar);
+            groverArtifact.setScope(Artifact.SCOPE_COMPILE);
+            groverArtifact.setResolved(true);
+            addArtifactDependency(groverArtifact);
+
+
+
+        }
+        catch (IOException e)
+        {
+            getLog().error("Could not create Clover Groovy configuration file. No Groovy instrumentation will occur. " + e.getMessage(), e);
+        }
+    }
+
+    private List calcIncludedFiles()
+    {
+        GroovySourceScanner gScanner = new GroovySourceScanner(this, getProject().getBuild().getOutputDirectory());
+        GroovyTestScanner gTestScanner = new GroovyTestScanner(this, getProject().getBuild().getOutputDirectory());
+
+        List sources =  extractIncludes(gScanner.getSourceFilesToInstrument());
+        List tests =  extractIncludes(gTestScanner.getSourceFilesToInstrument());
+        List allSource = new ArrayList(sources);
+        allSource.addAll(tests);
+        return allSource;
+    }
+
+    private ArrayList extractIncludes(Map srcFiles)
+    {
+        ArrayList includeFiles = new ArrayList();
+        for (Iterator iterator = srcFiles.keySet().iterator(); iterator.hasNext();)
+        {
+            final String dirName = (String) iterator.next();
+            final String[] includes = (String[]) srcFiles.get(dirName);
+            for (int i = 0; i < includes.length; i++)
+            {
+                includeFiles.add(new File(dirName, includes[i]));
+            }
+        }
+        return includeFiles;
     }
 
     public static void resetSrcDirsOriginal(Artifact artifact, CompilerConfiguration config) {
@@ -497,7 +577,14 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         final String jarScope = scope == null ? Artifact.SCOPE_PROVIDED : scope;
         cloverArtifact = artifactFactory.createArtifact( cloverArtifact.getGroupId(), cloverArtifact.getArtifactId(),
             cloverArtifact.getVersion(), jarScope, cloverArtifact.getType() );
+        
+        addArtifactDependency(cloverArtifact);
 
+
+    }
+
+    private void addArtifactDependency(Artifact cloverArtifact)
+    {
         // TODO: use addArtifacts when it's implemented, see http://jira.codehaus.org/browse/MNG-2197
         Set set = new LinkedHashSet( getProject().getDependencyArtifacts() );
         set.add( cloverArtifact );
