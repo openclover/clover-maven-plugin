@@ -406,7 +406,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
         antProject.setProperty("titleAnchor", titleAnchor == null ? "" : titleAnchor);
         final String projectDir = project.getBasedir().getPath();
         antProject.setProperty("projectDir", projectDir);
-        antProject.setProperty("testPattern", "**/src/test/java/**");
+        antProject.setProperty("testPattern", "**/src/test/**");
         antProject.setProperty("filter", contextFilters != null ? contextFilters : "");
         antProject.setProperty("orderBy", orderBy);
         antProject.setProperty("charset", charset);
