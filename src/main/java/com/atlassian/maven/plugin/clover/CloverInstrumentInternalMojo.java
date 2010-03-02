@@ -577,7 +577,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         final String jarScope = scope == null ? Artifact.SCOPE_PROVIDED : scope;
         cloverArtifact = artifactFactory.createArtifact( cloverArtifact.getGroupId(), cloverArtifact.getArtifactId(),
             cloverArtifact.getVersion(), jarScope, cloverArtifact.getType() );
-        
+        cloverArtifact.setResolved(true);
         addArtifactDependency(cloverArtifact);
 
 
