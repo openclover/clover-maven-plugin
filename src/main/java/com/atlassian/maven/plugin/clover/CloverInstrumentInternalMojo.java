@@ -23,7 +23,6 @@ import com.atlassian.clover.ant.groovy.GroovycSupport;
 import com.atlassian.clover.instr.java.InstrumentationConfig;
 import com.atlassian.maven.plugin.clover.internal.scanner.GroovySourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.GroovyTestScanner;
-import com.cenqua.clover.tasks.AntInstrumentationConfig;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.AbstractArtifactResolutionException;
@@ -41,7 +40,16 @@ import com.atlassian.maven.plugin.clover.internal.instrumentation.TestInstrument
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Instrument source roots.
