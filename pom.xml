@@ -23,7 +23,7 @@ under the License.
     <artifactId>maven-clover2-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Maven Clover Plugin</name>
-    <version>3.0.0-m3</version>
+    <version>3.0.0-m3-SNAPSHOT</version>
     <description>Maven plugin for Clover</description>
     <url>http://confluence.atlassian.com/x/dIDBBQ</url>
     <organization>
@@ -41,7 +41,9 @@ under the License.
         </license>
     </licenses>
     <scm>
-        <url>https://studio.plugins.atlassian.com/svn/CLMVN/trunk</url>
+        <connection>scm:svn:https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/tags/maven-clover2-plugin-3.0.0-m2</connection>
+        <developerConnection>scm:svn:https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/tags/maven-clover2-plugin-3.0.0-m2</developerConnection>
+        <url>https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/tags/maven-clover2-plugin-3.0.0-m2</url>
     </scm>
     <prerequisites>
         <maven>2.0.1</maven>
