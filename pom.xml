@@ -41,9 +41,9 @@ under the License.
         </license>
     </licenses>
     <scm>
-        <connection>scm:svn:https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/tags/maven-clover2-plugin-3.0.0-m3</connection>
-        <developerConnection>scm:svn:https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/tags/maven-clover2-plugin-3.0.0-m3</developerConnection>
-        <url>https://svn.atlassian.com/svn/public/contrib/clover/maven-clover-plugin/tags/maven-clover2-plugin-3.0.0-m3</url>
+        <connection>scm:svn:https://studio.plugins.atlassian.com/svn/CLMVN/trunk/tags/maven-clover2-plugin-3.0.0-m3</connection>
+        <developerConnection>scm:svn:https://studio.plugins.atlassian.com/svn/CLMVN/trunk/tags/maven-clover2-plugin-3.0.0-m3</developerConnection>
+        <url>https://studio.plugins.atlassian.com/svn/CLMVN/trunk/tags/maven-clover2-plugin-3.0.0-m3</url>
     </scm>
     <prerequisites>
         <maven>2.0.1</maven>
