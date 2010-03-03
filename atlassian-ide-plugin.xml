@@ -11,6 +11,7 @@
         <server-id>38bd3d1a-3bc9-4fd1-8729-dfc313476a9f</server-id>
         <name>CLMVN</name>
         <url>http://developer.atlassian.com/jira</url>
+        <dontUseBasicAuth>false</dontUseBasicAuth>
       </jira>
       <fisheye>
         <server-id>36199530-46da-461f-aa89-7452037d4356</server-id>
@@ -24,5 +25,6 @@
     <default-fisheye-server>36199530-46da-461f-aa89-7452037d4356</default-fisheye-server>
     <default-fisheye-repo>public</default-fisheye-repo>
     <fisheye-project-path>contrib/clover/maven-clover-plugin/trunk</fisheye-project-path>
+    <default-jira-server>38bd3d1a-3bc9-4fd1-8729-dfc313476a9f</default-jira-server>
   </project-configuration>
 </atlassian-ide-plugin>
