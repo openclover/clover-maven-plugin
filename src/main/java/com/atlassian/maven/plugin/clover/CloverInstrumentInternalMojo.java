@@ -25,6 +25,10 @@ import com.atlassian.maven.plugin.clover.internal.scanner.GroovySourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.GroovyTestScanner;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
+import org.apache.maven.artifact.repository.DefaultArtifactRepository;
+import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;
+import org.apache.maven.artifact.repository.layout.DefaultRepositoryLayout;
 import org.apache.maven.artifact.resolver.AbstractArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
@@ -351,12 +355,8 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
             // add grover to the compilation classpath
             final Artifact groverArtifact = artifactFactory.createBuildArtifact(cloverArtifact.getGroupId(), "grover", cloverArtifact.getVersion(), "jar");
             groverArtifact.setFile(groverJar);
-            groverArtifact.setScope(Artifact.SCOPE_COMPILE);
-            groverArtifact.setResolved(true);
+            groverArtifact.setScope(Artifact.SCOPE_SYSTEM);
             addArtifactDependency(groverArtifact);
-
-
-
         }
         catch (IOException e)
         {
