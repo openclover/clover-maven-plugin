@@ -49,6 +49,22 @@ public class CloverCheckMojo extends AbstractCloverMojo
     String targetPercentage;
 
     /**
+     * The Test Percentage Method Coverage (TPC) threshold under which the plugin will report an error and fail the build.
+     *
+     * @parameter expression="${maven.clover.methodPercentage}"
+     */
+    String methodPercentage;
+
+
+    /**
+     * The Test Percentage Conditional Coverage (TPC) threshold under which the plugin will report an error and fail the build.
+     *
+     * @parameter expression="${maven.clover.conditionalPercentage}"
+     */
+    String conditionalPercentage;
+
+
+    /**
      * Comma or space separated list of Clover contexts (block, statement or method filers) to exclude before
      * performing the check.
      * @parameter expression="${maven.clover.contextFilters}"
@@ -152,11 +168,21 @@ public class CloverCheckMojo extends AbstractCloverMojo
         cloverPassTask.setInitString( database );
         cloverPassTask.setHaltOnFailure( true );
         cloverPassTask.setFailureProperty( "clovercheckproperty" );
-        
+
         if (this.targetPercentage != null) {
             cloverPassTask.setTarget( new Percentage( this.targetPercentage ) );
-
             getLog().info( "Checking for coverage of [" + targetPercentage + "] for database [" + database + "]");
+            if (this.methodPercentage != null)
+            {
+                cloverPassTask.setMethodTarget(new Percentage(this.methodPercentage));
+                getLog().info("Checking for method coverage of [" + methodPercentage + "] for database [" + database + "]");
+            }
+            if (this.conditionalPercentage != null)
+            {
+                cloverPassTask.setConditionalTarget(new Percentage(this.conditionalPercentage));
+                getLog().info("Checking for conditional coverage of [" + conditionalPercentage + "] for database [" + database + "]");
+            }
+
         } else if (this.historyDir.exists() && this.historyDir.isDirectory()) {
             cloverPassTask.setHistorydir(this.historyDir);
             cloverPassTask.setThreshold(new Percentage(this.historyThreshold));
