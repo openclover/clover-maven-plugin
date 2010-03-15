@@ -56,6 +56,14 @@ public class CloverCheckMojo extends AbstractCloverMojo
      */
     String methodPercentage;
 
+    /**
+     * The Test Percentage Statement Coverage (TPC) threshold under which the plugin will report an error and fail the build.
+     * If maven.clover.targetPercentage is not specified, then this value is ignored.
+     *
+     * @parameter expression="${maven.clover.statementPercentage}"
+     */
+    String statementPercentage;
+
 
     /**
      * The Test Percentage Conditional Coverage (TPC) threshold under which the plugin will report an error and fail the build.
@@ -184,6 +192,13 @@ public class CloverCheckMojo extends AbstractCloverMojo
                 cloverPassTask.setConditionalTarget(new Percentage(this.conditionalPercentage));
                 getLog().info("Checking for conditional coverage of [" + conditionalPercentage + "] for database [" + database + "]");
             }
+
+            if (this.statementPercentage != null)
+            {
+                cloverPassTask.setStatementTarget(new Percentage(this.statementPercentage));
+                getLog().info("Checking for statement coverage of [" + statementPercentage + "] for database [" + database + "]");
+            }
+
 
         } else if (this.historyDir.exists() && this.historyDir.isDirectory()) {
             cloverPassTask.setHistorydir(this.historyDir);
