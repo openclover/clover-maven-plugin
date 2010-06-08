@@ -21,6 +21,7 @@ package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 import com.cenqua.clover.tasks.HistoryPointTask;
 
@@ -57,6 +58,14 @@ public class CloverSaveHistoryMojo extends AbstractCloverMojo
             return;
         }
 
+        // only save the history once, on the very last project.
+        final MavenProject lastProject = (MavenProject) getReactorProjects().get(getReactorProjects().size() - 1);
+        final MavenProject thisProject = getProject();
+        if (isSingleCloverDatabase() && !thisProject.equals(lastProject)) {
+            getLog().info("Skipping Clover history point save until the final project in the reactor.");
+            return;
+        }
+        
         if ( areCloverDatabasesAvailable() )
         {
             super.execute();
