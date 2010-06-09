@@ -2,13 +2,12 @@ package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
-import com.cenqua.clover.tasks.CloverSnapshotTask;
 import com.cenqua.clover.CloverNames;
 import com.cenqua.clover.Logger;
+import com.cenqua.clover.tasks.CloverSnapshotTask;
 import com.cenqua.clover.test.optimization.Snapshot;
 import com.cenqua.clover.test.optimization.SnapshotPrinter;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 
 import java.io.File;
@@ -50,9 +49,7 @@ public class CloverSnapshotMojo extends AbstractCloverMojo {
     public void execute() throws MojoExecutionException {
 
         // only run the snapshot once, on the very last project.
-        final MavenProject lastProject = (MavenProject) getReactorProjects().get(getReactorProjects().size() - 1);
-        final MavenProject thisProject = getProject();
-        if (isSingleCloverDatabase() && !thisProject.equals(lastProject) && !forceSnapshot) {
+        if (isSingleCloverDatabase() && !isLastProjectInReactor() && !forceSnapshot) {
             getLog().info("Skipping snapshot until the final project in the reactor.");
             return;
         }

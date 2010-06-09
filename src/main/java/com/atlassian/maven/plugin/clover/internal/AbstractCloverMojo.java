@@ -407,4 +407,10 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
         return this.singleCloverDatabase;
     }
 
+    protected boolean isLastProjectInReactor()
+    {
+        final MavenProject lastProject = (MavenProject) getReactorProjects().get(getReactorProjects().size() - 1);
+        final MavenProject thisProject = getProject();
+        return thisProject.equals(lastProject);
+    }
 }
