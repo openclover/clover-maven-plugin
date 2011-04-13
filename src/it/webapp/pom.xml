@@ -86,6 +86,10 @@
                             <value>${webapp.url}</value>
                         </property>
 
+                        <property>
+                            <name>clover.server</name>
+                            <value>true</value>
+                        </property>
 
                     </systemProperties>
                 </configuration>
@@ -109,15 +113,17 @@
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-clover2-plugin</artifactId>
                  <configuration>
+                     
                     <singleCloverDatabase>true</singleCloverDatabase>
+                     <distributedCoverage>
+                         <numClients>1</numClients>
+                     </distributedCoverage>
                 </configuration>
                 <executions>
                     <execution>
+                        <phase>process-sources</phase>
                         <goals>
-                            <goal>clean</goal>
                             <goal>setup</goal>
-                            <goal>optimize</goal>
-                            <goal>snapshot</goal>
                         </goals>
                     </execution>
                     <execution>
@@ -125,6 +131,8 @@
                         <phase>verify</phase>
                         <goals>
                             <goal>log</goal>
+                            <goal>check</goal>
+                            <goal>clover</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -137,7 +145,7 @@
                 <configuration>
                     <wait>${cargo.wait}</wait>
                     <container>
-                        <containerId>tomcat5x</containerId>
+                        <containerId>tomcat5x</containerId> 
                         <zipUrlInstaller>
                             <url>
                                 http://repository.atlassian.com/maven2/org/apache/tomcat/apache-tomcat/5.5.25/apache-tomcat-5.5.25.zip
@@ -147,8 +155,7 @@
                         <output>${basedir}/output.log</output>
                         <log>${project.build.directory}/cargo-log.log</log>
                         <systemProperties>
-                            <clover.server>true</clover.server>
-                            <codebase.server>true</codebase.server>
+                            <clover.distributed.coverage>ON</clover.distributed.coverage>
                         </systemProperties>
                     </container>
                     <configuration>
