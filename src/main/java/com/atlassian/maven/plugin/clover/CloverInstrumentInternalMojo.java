@@ -104,6 +104,15 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      * @required
      */
     private ArtifactRepository localRepository;
+    
+    /**
+     * Remote repositories used for the project.
+     *
+     * @parameter expression="${project.remoteArtifactRepositories}"
+     */
+    protected List repositories;
+
+
 
     /**
      * The list of file to include in the instrumentation.
@@ -585,7 +594,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
             cloverArtifact.getVersion(), jarScope, cloverArtifact.getType() );
         try
         {
-            this.artifactResolver.resolve( cloverArtifact, new ArrayList(), localRepository );
+            this.artifactResolver.resolve( cloverArtifact, repositories, localRepository );
         }
         catch (AbstractArtifactResolutionException e)
         {
