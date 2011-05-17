@@ -136,8 +136,8 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
 
     /**
-     * Whether the Clover instrumentation should use the Clover <code>jdk14</code>, <code>jdk15</code> or <code>jdk16</code> flags to
-     * parse sources. Valid values are 1.4, 1.5 and 1.6 .
+     * Whether the Clover instrumentation should use the Clover <code>jdk14</code>, <code>jdk15</code>, <code>jdk16</code> or <code>jdk17</code> flags to
+     * parse sources. Valid values are 1.4, 1.5, 1.6 and 1.7 .
      *
      * @parameter expression="${maven.clover.jdk}"
      */

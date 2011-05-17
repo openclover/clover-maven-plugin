@@ -244,10 +244,15 @@ public abstract class AbstractInstrumenter
                 parameters.add( "--source" );
                 parameters.add( "1.6" );
             }
+            else if ( getConfiguration().getJdk().equals( "1.7" ) )
+            {
+                parameters.add( "--source" );
+                parameters.add( "1.7" );
+            }
             else
             {
                 throw new MojoExecutionException( "Unsupported jdk version [" + getConfiguration().getJdk()
-                    + "]. Valid values are [1.4], [1.5] and [1.6]" );
+                    + "]. Valid values are [1.4], [1.5], [1.6] and [1.7]" );
             }
         }
 
