@@ -21,6 +21,7 @@ package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.clover.ant.groovy.GroovycSupport;
 import com.atlassian.clover.instr.java.InstrumentationConfig;
+import com.cenqua.clover.remote.DistributedConfig ;
 import com.atlassian.maven.plugin.clover.internal.scanner.GroovySourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.GroovyTestScanner;
 import org.apache.maven.artifact.Artifact;
@@ -343,8 +344,10 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         getLog().debug("Clover including the following files for Groovy instrumentation: " + includeFiles);
         config.setIncludedFiles(includeFiles);
         config.setEnabled(true);
-        config.setEncoding(this.getEncoding());
-        config.setDistributedConfig(this.getDistributedCoverage());
+        config.setEncoding(getEncoding());
+        //Don't pass in an instance of DistributedCoverage because it can't be deserialised
+        //by Grover (ClassNotFoundException within the groovyc compiler)
+        config.setDistributedConfig(getDistributedCoverage() == null ? null : new DistributedConfig(getDistributedCoverage().getConfigString()));
 
 
         try
