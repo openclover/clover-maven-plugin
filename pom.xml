@@ -324,9 +324,9 @@ under the License.
             <url>dav:https://maven.atlassian.com/public</url>
         </repository>
         <snapshotRepository>
-            <id>atlassian-private-snapshot</id>
-            <name>Atlassian Private Snapshot Repository</name>
-            <url>dav:https://maven.atlassian.com/private-snapshot</url>
+            <id>atlassian-public-snapshot</id>
+            <name>Atlassian Public Snapshot Repository</name>
+            <url>dav:https://maven.atlassian.com/public-snapshot</url>
         </snapshotRepository>
         <site>
             <id>atlassian-documentation</id>
