@@ -32,7 +32,7 @@ under the License.
     </organization>
     <issueManagement>
         <system>jira</system>
-        <url>http://developer.atlassian.com/jira/browse/CLMVN</url>
+        <url>https://studio.plugins.atlassian.com/browse/CLMVN</url>
     </issueManagement>
     <licenses>
         <license>
@@ -41,14 +41,14 @@ under the License.
         </license>
     </licenses>
     <scm>
-        <connection>scm:svn:https://studio.plugins.atlassian.com/svn/CLMVN/tags/maven-clover2-plugin-3.0.5</connection>
-        <url>https://studio.plugins.atlassian.com/svn/CLMVN/tags/tags/maven-clover2-plugin-3.0.5</url>
+        <connection>scm:svn:https://studio.plugins.atlassian.com/svn/CLMVN/tags/maven-clover2-plugin-3.1.5</connection>
+        <url>https://studio.plugins.atlassian.com/svn/CLMVN/tags/maven-clover2-plugin-3.1.5</url>
     </scm>
     <prerequisites>
         <maven>2.0.1</maven>
     </prerequisites>
     <properties>
-        <cloverVersion>3.1.4</cloverVersion>
+        <cloverVersion>3.1.5</cloverVersion>
     </properties>
     <dependencies>
         <dependency>
