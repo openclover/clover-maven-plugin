@@ -134,11 +134,15 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         }
         getLog().debug("Setting test property to: '" + testPattern + "'");
 
-        if (optimizedTests.size() == 0) { // ensure surefire wont fail if we run no tests
+        if (optimizedTests.size() == 0) {
+            // this test will not be found, obviously. empty -Dtest values cause all tests to be run
+            getProject().getProperties().put("test", "clover/optimized/test/PlaceHolder.java");
+            // ensure surefire wont fail if we run no tests
             getProject().getProperties().put("failIfNoTests", "false");
+        } else {
+            getProject().getProperties().put("test", testPattern.toString());
         }
 
-        getProject().getProperties().put("test", testPattern.toString());
     }
 
     private List configureOptimisedTestSet(Project antProj) {
@@ -187,32 +191,34 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         final List testSources = getProject().getTestCompileSourceRoots();
 
         for (Iterator iterator = testSources.iterator(); iterator.hasNext();) {
-            String testRoot = (String) iterator.next();
-            final File testRootDir = new File(testRoot);
-            if (!testRootDir.exists()) {
-                // if the test dir does not exist, do not add this as a fileset.
-                continue;
-            }
-
-            getLog().info("Adding fileset: directory=" + testRootDir + ", includes=" + includes + ", excludes=" + excludes);
-
-            testsToRun.add(createFileSet(antProj, testRootDir, includes, excludes));
-
-            if (alwaysRunTests != null) {
-                // create  fileset
-                final FileSet alwaysRunFileSet = createFileSet(antProj, testRootDir, alwaysRunTests, null);
-
-                // add it to an AlwaysRunTestSet
-                final CloverAlwaysRunTestSet alwaysRunTestSet = new CloverAlwaysRunTestSet();
-                alwaysRunTestSet.setProject(antProj);
-                alwaysRunTestSet.add(alwaysRunFileSet);
-
-                // then add that to the OptimizedTestSet
-                testsToRun.add(alwaysRunTestSet);
-            }
-
+            addTestRoot(antProj, includes, excludes, testsToRun, (String) iterator.next());
         }
         return testsToRun.getOptimizedTestResource();
+    }
+
+    private void addTestRoot(Project antProj, List includes, List excludes, CloverOptimizedTestSet testsToRun, String testRoot) {
+        final File testRootDir = new File(testRoot);
+        if (!testRootDir.exists()) {
+            // if the test dir does not exist, do not add this as a fileset.
+            return;
+        }
+
+        getLog().info("Adding fileset: directory=" + testRootDir + ", includes=" + includes + ", excludes=" + excludes);
+
+        testsToRun.add(createFileSet(antProj, testRootDir, includes, excludes));
+
+        if (alwaysRunTests != null) {
+            // create  fileset
+            final FileSet alwaysRunFileSet = createFileSet(antProj, testRootDir, alwaysRunTests, null);
+
+            // add it to an AlwaysRunTestSet
+            final CloverAlwaysRunTestSet alwaysRunTestSet = new CloverAlwaysRunTestSet();
+            alwaysRunTestSet.setProject(antProj);
+            alwaysRunTestSet.add(alwaysRunFileSet);
+
+            // then add that to the OptimizedTestSet
+            testsToRun.add(alwaysRunTestSet);
+        }
     }
 
     private FileSet createFileSet(Project antProject, final File directory, List includes, List excludes) {
