@@ -175,10 +175,9 @@ public class CloverCheckMojo extends AbstractCloverMojo
 
         CloverPassTask cloverPassTask = createCloverPassTask(database, antProject);
         cloverPassTask.init();
-        cloverPassTask.setInitString( database );
-        cloverPassTask.setHaltOnFailure( true );
-        cloverPassTask.setFailureProperty( "clovercheckproperty" );
-
+        cloverPassTask.setInitString(database);
+        cloverPassTask.setHaltOnFailure(true);
+        cloverPassTask.setFailureProperty("clovercheckproperty");
         if (this.targetPercentage != null) {
             cloverPassTask.setTarget( new Percentage( this.targetPercentage ) );
             getLog().info( "Checking for coverage of [" + targetPercentage + "] for database [" + database + "]");
@@ -241,15 +240,25 @@ public class CloverCheckMojo extends AbstractCloverMojo
     }
 
     private void setTestSourceRoots(CloverPassTask cloverPassTask) {
+        String originalSrcTestDir = CloverSetupMojo.getOriginalSrcTestDir(getProject().getArtifactId());
+        if (originalSrcTestDir != null) {
+            addTestSrcDir(cloverPassTask, originalSrcTestDir);
+        }
         final List testSourceRoots = getProject().getTestCompileSourceRoots();
+        getLog().warn("has test file source dir = " + (testSourceRoots.size() > 0));
         for (Iterator iterator = testSourceRoots.iterator(); iterator.hasNext();) {
             String testDir = (String) iterator.next();
-            final FileSet testFiles = new FileSet();
-            final File dir = new File(testDir);
-            if (dir.exists()) {
-                testFiles.setDir(dir);
-                cloverPassTask.addTestSources(testFiles);
-            }
+            getLog().warn("test file source dir = " + testDir);
+            addTestSrcDir(cloverPassTask, testDir);
+        }
+    }
+
+    private void addTestSrcDir(CloverPassTask cloverPassTask, String originalSrcTestDir) {
+        final FileSet testFiles = new FileSet();
+        final File dir = new File(originalSrcTestDir);
+        if (dir.exists()) {
+            testFiles.setDir(dir);
+            cloverPassTask.addTestSources(testFiles);
         }
     }
 

@@ -11,7 +11,7 @@ import java.util.Date;
  * <p/>
  * NB: This does not, nor should it, run in a forked lifecycle.
  * This mojo should certainly *not* be called during a release build. This mojo instruments your source and test files
- * to ${build.directory}/clover/src-optimized and test-src-optimized respectively. These directories are then set as the
+ * to ${build.directory}/clover/src-instrumented and test-src-instrumented respectively. These directories are then set as the
  * project's source and test source directories that subsequently get compiled by the compiler MOJO.
  *
  * @goal setup
