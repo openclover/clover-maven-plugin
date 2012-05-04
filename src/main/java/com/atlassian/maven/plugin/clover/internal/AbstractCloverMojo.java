@@ -67,7 +67,6 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      */
     protected File snapshot;
 
-
     /**
      * If true, then a single cloverDatabase will be used for the entire project.
      * This flag will be ignored if a custom cloverDatabase location is specified.
@@ -211,7 +210,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
     protected void registerLicenseFile() throws MojoExecutionException
     {
-        AbstractCloverMojo.registerLicenseFile(
+        registerLicenseFile(
                     this.project,
                     getResourceManager(),
                     this.licenseLocation,

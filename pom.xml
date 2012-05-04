@@ -48,7 +48,7 @@ under the License.
         <maven>2.0.1</maven>
     </prerequisites>
     <properties>
-        <cloverVersion>3.1.5</cloverVersion>
+        <cloverVersion>3.1.6-SNAPSHOT</cloverVersion>
     </properties>
     <dependencies>
         <dependency>
@@ -276,6 +276,7 @@ under the License.
                             <debug>true</debug>
                             <projectsDirectory>src/it</projectsDirectory>
                             <pomIncludes>
+                                <pomInclude>**/reportLogPassMatch/pom.xml</pomInclude>
                                 <pomInclude>**/optmized/pom.xml</pomInclude>
                                 <pomInclude>**/contexts/pom.xml</pomInclude>
                                 <pomInclude>**/simple/pom.xml</pomInclude>
