@@ -6,6 +6,7 @@ import com.cenqua.clover.CloverNames;
 import com.cenqua.clover.types.CloverOptimizedTestSet;
 import com.cenqua.clover.types.CloverAlwaysRunTestSet;
 import org.apache.maven.model.Plugin;
+import org.apache.maven.model.PluginExecution;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
@@ -104,7 +105,6 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
 
     public void execute() throws MojoExecutionException {
-
         if (skip) {
             getLog().info("Skipping build optimization.");
             return;
@@ -134,19 +134,19 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         }
         getLog().debug("Setting test property to: '" + testPattern + "'");
 
+        //Always set this to true because we can't be sure if the filtered list we have will result in no tests being run
+        //because we matched classes under src/test/ which aren't unit tests
+        getProject().getProperties().put("failIfNoTests", "false");
         if (optimizedTests.size() == 0) {
-            // this test will not be found, obviously. empty -Dtest values cause all tests to be run
+            // empty -Dtest values cause all tests to be run so let's put a dummy value
             getProject().getProperties().put("test", "clover/optimized/test/PlaceHolder.java");
             // ensure surefire wont fail if we run no tests
-            getProject().getProperties().put("failIfNoTests", "false");
         } else {
             getProject().getProperties().put("test", testPattern.toString());
         }
-
     }
 
     private List configureOptimisedTestSet(Project antProj) {
-
         List includes = optimizeIncludes;
         List excludes = optimizeExcludes;
         
@@ -155,12 +155,8 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
             final Plugin surefirePlugin = lookupSurefirePlugin();
             if (surefirePlugin != null) {
-                final Xpp3Dom config = (Xpp3Dom) surefirePlugin.getConfiguration();
-                if (config != null) {
-                    // get the includes and excludes from the surefire plugin
-                    includes = extractNestedStrings("includes", config);
-                    excludes = extractNestedStrings("excludes", config);
-                }
+                includes = extractNestedStrings("includes", surefirePlugin);
+                excludes = extractNestedStrings("excludes", surefirePlugin);
             }
             // If there are still no includes use the default ones
             if (includes == null) {
@@ -194,6 +190,11 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
             addTestRoot(antProj, includes, excludes, testsToRun, (String) iterator.next());
         }
         return testsToRun.getOptimizedTestResource();
+    }
+
+    protected List extractNestedStrings(String elementName, Plugin surefirePlugin) {
+        final Xpp3Dom config = (Xpp3Dom) surefirePlugin.getConfiguration();
+        return config == null ? null : extractNestedStrings("includes", config);
     }
 
     private void addTestRoot(Project antProj, List includes, List excludes, CloverOptimizedTestSet testsToRun, String testRoot) {
@@ -239,7 +240,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * @param childname the name of the first subelement that contains the list
      * @param config    the actual config object
      */
-    private List extractNestedStrings(String childname, Xpp3Dom config) {
+    protected List extractNestedStrings(String childname, Xpp3Dom config) {
 
         final Xpp3Dom subelement = config.getChild(childname);
         if (subelement != null) {
