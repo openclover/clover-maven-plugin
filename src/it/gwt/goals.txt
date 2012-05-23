@@ -1,0 +1,1 @@
+clean clover2:setup install clover2:aggregate clover2:clover
