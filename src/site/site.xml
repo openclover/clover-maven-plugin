@@ -31,6 +31,7 @@ under the License.
       <item name="Simple" href="/examples/simple.html"/>
       <item name="Filter Contexts" href="/examples/contexts.html"/>
       <item name="Multiproject" href="/examples/multiproject.html"/>
+      <item name="GWT" href="/examples/gwt.html"/>
     </menu>
     <menu name="Architecture">
       <item name="Overview" href="/architecture/architecture.html"/>
