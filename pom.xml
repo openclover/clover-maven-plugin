@@ -23,7 +23,7 @@ under the License.
     <artifactId>maven-clover2-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Maven Clover Plugin</name>
-    <version>3.1.5-SNAPSHOT</version>
+    <version>3.1.6</version>
     <description>Maven plugin for Clover</description>
     <url>http://confluence.atlassian.com/x/dIDBBQ</url>
     <organization>
@@ -41,8 +41,8 @@ under the License.
         </license>
     </licenses>
     <scm>
-        <connection>scm:svn:https://studio.plugins.atlassian.com/svn/CLMVN/tags/maven-clover2-plugin-3.1.5-SNAPSHOT</connection>
-        <url>https://studio.plugins.atlassian.com/svn/CLMVN/tags/maven-clover2-plugin-3.1.5-SNAPSHOT</url>
+        <connection>scm:svn:https://studio.plugins.atlassian.com/svn/CLMVN/tags/maven-clover2-plugin-3.1.5</connection>
+        <url>https://studio.plugins.atlassian.com/svn/CLMVN/tags/maven-clover2-plugin-3.1.5</url>
     </scm>
     <prerequisites>
         <maven>2.0.1</maven>
@@ -145,7 +145,7 @@ under the License.
                         <generateHistorical>true</generateHistorical>
                         <generateHtml>true</generateHtml>
                         <licenseLocation>${clover.licenseLocation}</licenseLocation>
-                        <jdk>1.5</jdk>       <!-- XXX 1.5 -->
+                        <jdk>1.4</jdk>
                         <reportDescriptor>${basedir}/clover-report.xml</reportDescriptor>
                     </configuration>
                 </plugin>
@@ -155,8 +155,8 @@ under the License.
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
-                        <source>1.5</source> <!-- XXX 1.3 -->
-                        <target>1.5</target> <!-- XXX 1.3 -->
+                        <source>1.3</source>
+                        <target>1.3</target>
                         <excludes>
                             <exclude>foo</exclude>
                         </excludes>
@@ -281,7 +281,6 @@ under the License.
                                 <pomInclude>**/contexts/pom.xml</pomInclude>
                                 <pomInclude>**/simple/pom.xml</pomInclude>
                                 <pomInclude>**/multiproject/pom.xml</pomInclude>
-                                <pomInclude>**/gwt/pom.xml</pomInclude>
                                 <pomInclude>**/license/pom.xml</pomInclude>
                                 <pomInclude>**/xdoclet/pom.xml</pomInclude>
                                 <pomInclude>**/instrument-tests/pom.xml</pomInclude>
