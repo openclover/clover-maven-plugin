@@ -1,0 +1,13 @@
+ ------
+ GWT Example
+ ------
+
+{Contexts Example}
+
+  This example demonstrates how to configure Clover Maven plugin for GWT application.
+
+* {Sources}
+
+  Sources are available {{{http://svn.atlassian.com/fisheye/viewrep/public/contrib/clover/maven-clover-plugin/trunk/src/it/gwt/}here}}.
+
+  To execute the project run either <<<mvn install>>> to verify the TPC or <<<mvn site>>> to generate the Clover report.
