@@ -8,6 +8,6 @@
 
 * {Sources}
 
-  Sources are available {{{http://svn.atlassian.com/fisheye/viewrep/public/contrib/clover/maven-clover-plugin/trunk/src/it/gwt/}here}}.
+  Sources are available {{{https://studio.plugins.atlassian.com/svn/CLMVN/trunk/src/it/gwt/}here}}.
 
   To execute the project run either <<<mvn install>>> to verify the TPC or <<<mvn site>>> to generate the Clover report.
