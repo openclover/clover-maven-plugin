@@ -23,6 +23,7 @@ import com.cenqua.clover.tasks.CloverLogTask;
 import com.cenqua.clover.tasks.CloverPassTask;
 import org.apache.maven.plugin.MojoExecutionException;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
+import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
 
@@ -80,7 +81,7 @@ public class CloverLogMojo extends AbstractCloverMojo {
      *
      * @param database the Clover database to log
      */
-    private void logDatabase(String database) {
+    private void logDatabase(final String database) {
         final Project antProject = new Project();
         antProject.init();
         AbstractCloverMojo.registerCloverAntTasks(antProject, getLog());
@@ -98,22 +99,63 @@ public class CloverLogMojo extends AbstractCloverMojo {
         getLog().info(antProject.getProperty("cloverlogproperty"));
     }
 
-    private void setTestSourceRoots(CloverLogTask cloverPassTask) {
-        String originalSrcTestDir = CloverSetupMojo.getOriginalSrcTestDir(getProject().getArtifactId());
-        if (originalSrcTestDir != null) {
-            addTestSrcDir(cloverPassTask, originalSrcTestDir);
-        }
-        final List testSourceRoots = getProject().getTestCompileSourceRoots();
-        for (Iterator iterator = testSourceRoots.iterator(); iterator.hasNext(); ) {
-            String testDir = (String) iterator.next();
-            addTestSrcDir(cloverPassTask, testDir);
+    /**
+     * Configures test source roots for clover log task. It takes original test directory,
+     * directories from maven compilation and directories from all submodules (aggregation).
+     * @param cloverLogTask
+     */
+    private void setTestSourceRoots(final CloverLogTask cloverLogTask) {
+        // take for current project
+        setTestSourceRootsForProject(cloverLogTask, getProject());
+
+        // do the same but for sub-modules
+        for (Iterator iterator = getDescendentModuleProjects(getProject()).iterator(); iterator.hasNext(); ) {
+            MavenProject project = (MavenProject)iterator.next();
+            setTestSourceRootsForProject(cloverLogTask, project);
         }
     }
 
-    private void addTestSrcDir(CloverLogTask cloverLogTask, String originalSrcTestDir) {
-        final FileSet testFiles = new FileSet();
+    /**
+     * Configures test source roots for clover log task for a single maven project.
+     * It takes original test directory and  directories from maven compilation.
+     * @param cloverLogTask
+     * @param project
+     */
+    private void setTestSourceRootsForProject(final CloverLogTask cloverLogTask, final MavenProject project) {
+        // original src/test directory
+        String originalSrcTestDir = CloverSetupMojo.getOriginalSrcTestDir(project.getArtifactId());
+        if (originalSrcTestDir != null) {
+            addTestSrcDir(cloverLogTask, originalSrcTestDir);
+        }
+
+        // src/test directories from maven compilation
+        final List testSourceRoots = project.getTestCompileSourceRoots();
+        addTestSrcDirs(cloverLogTask, testSourceRoots.iterator());
+    }
+
+    /**
+     * Adds a list of test source directories as an Ant's fileset to clover log task.
+     * @param cloverLogTask
+     * @param iterator Iterator<String>
+     * @see CloverLogTask#addTestSources(org.apache.tools.ant.types.FileSet)
+     */
+    private void addTestSrcDirs(final CloverLogTask cloverLogTask, final Iterator iterator) {
+        while (iterator.hasNext()) {
+            String testDir = (String) iterator.next();
+            addTestSrcDir(cloverLogTask, testDir);
+        }
+    }
+
+    /**
+     * Adds new test source directory as an Ant's fileset to clover log task.
+     * @param cloverLogTask
+     * @param originalSrcTestDir
+     * @see CloverLogTask#addTestSources(org.apache.tools.ant.types.FileSet)
+     */
+    private void addTestSrcDir(final CloverLogTask cloverLogTask, final String originalSrcTestDir) {
         final File dir = new File(originalSrcTestDir);
         if (dir.exists()) {
+            final FileSet testFiles = new FileSet();
             testFiles.setDir(dir);
             cloverLogTask.addTestSources(testFiles);
         }
