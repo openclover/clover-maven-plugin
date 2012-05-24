@@ -29,6 +29,9 @@ import org.codehaus.plexus.resource.ResourceManager;
 import org.codehaus.plexus.resource.loader.FileResourceLoader;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.cenqua.clover.CloverNames;
@@ -411,5 +414,122 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
         final MavenProject lastProject = (MavenProject) getReactorProjects().get(getReactorProjects().size() - 1);
         final MavenProject thisProject = getProject();
         return thisProject.equals(lastProject);
+    }
+
+    /**
+     * Returns true if the supplied potentialModule project is a module
+     * of the specified parentProject.
+     *
+     * @param parentProject
+     *            the parent project.
+     * @param potentialModule
+     *            the potential moduleproject.
+     *
+     * @return true if the potentialModule is indeed a module of the specified
+     *         parent project.
+     */
+    protected boolean isModuleOfProject( MavenProject parentProject,
+                                       MavenProject potentialModule )
+    {
+        boolean result = false;
+
+        List modules = parentProject.getModules();
+
+        if ( modules != null)
+        {
+            File parentBaseDir = parentProject.getBasedir();
+
+            for (Iterator i = modules.iterator(); i.hasNext();)
+            {
+                String module = (String) i.next();
+
+                File moduleBaseDir = new File( parentBaseDir, module );
+
+                try
+                {
+                    // need these to be canonical paths so we can perform a true equality
+                    // operation and remember <module> is a path and for flat multimodule project
+                    // structures they will be like this: <module>../a-project<module>
+
+                    String lhs = potentialModule.getBasedir().getCanonicalPath();
+                    String rhs = moduleBaseDir.getCanonicalPath();
+
+                    if ( lhs.equals( rhs ))
+                    {
+                        result = true;
+                        break;
+                    }
+                }
+                catch (IOException e)
+                {
+                    // surpress the exception (?)
+
+                    getLog().error(
+                            "error encountered trying to resolve canonical module paths" );
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Returns all the projects that are modules, or modules of modules, of the
+     * specified project found witin the reactor.
+     *
+     * The searchLevel parameter controls how many descendent levels of modules
+     * are returned. With a searchLevels equals to 1, only the immediate modules
+     * of the specified project are returned.
+     *
+     * A searchLevel equals to 2 returns those module's modules as well.
+     *
+     * A searchLevel equals to -1 returns the entire module hierarchy beneath the
+     * specified project. Note that this is simply the equivalent to the entire reactor
+     * if the specified project is the root execution project.
+     *
+     * @param project the project to search under
+     * @param levels the number of descendent levels to return (List&lt;MavenProject&gt;)
+     * @return the list of module projects.
+     */
+    protected List getModuleProjects( final MavenProject project, final int levels )
+    {
+        List projects = new ArrayList();
+
+        boolean infinite = (levels == -1);
+
+        if ((getReactorProjects() != null) && (infinite || levels > 0))
+        {
+            for (Iterator i = getReactorProjects().iterator(); i.hasNext();)
+            {
+                MavenProject reactorProject = (MavenProject) i.next();
+
+                if (isModuleOfProject(project, reactorProject))
+                {
+                    projects.add(reactorProject);
+                    if (project == reactorProject) {
+                        projects.add(project); //CLMVN-78 don't recurse if project is the same as reactorProject.
+                    } else {
+                        projects.addAll(getModuleProjects(reactorProject,
+                                infinite ? levels : levels - 1));
+                    }
+                }
+            }
+        }
+
+        return projects;
+    }
+
+
+    /**
+     * returns all the projects that are in the reactor build as
+     * direct or indirect modules of the specified project.
+     *
+     * @param project the project to search beneath
+     * @return the list of modules that are direct or indirect module descendents (List&lt;MavenProject&gt;)
+     * of the specified project
+     */
+    protected List getDescendentModuleProjects( MavenProject project )
+    {
+        return getModuleProjects( project, -1 );
     }
 }
