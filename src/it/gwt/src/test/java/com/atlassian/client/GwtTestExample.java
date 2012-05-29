@@ -7,16 +7,19 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 
 /**
- * GWT JUnit <b>integration</b> tests must extend GWTTestCase.
- * Using <code>"GwtTest*"</code> naming pattern exclude them from running with
- * surefire during the test phase.
+ * Example test using the standard GWTTestCase from gwt-user library, which allows to test
+ * GWT applications with an installed web browser or html-mocking framework (like htmlunit).
+ *
+ * GWT JUnit <b><i>integration</i></b> tests must extend GWTTestCase.
+ * Using naming pattern different tha <code>"Test*"</code> will exclude them from
+ * running with surefire during the <b><i>test</i></b> phase.
  * 
- * If you run the tests using the Maven command line, you will have to 
- * navigate with your browser to a specific url given by Maven. 
- * See http://mojo.codehaus.org/gwt-maven-plugin/user-guide/testing.html 
+ * If you run the tests using the Maven command line, you will have to navigate with your
+ * browser to a specific url given by Maven (unless you're using htmlunit).
+ * See http://mojo.codehaus.org/gwt-maven-plugin/user-guide/testing.html
  * for details.
  */
-public class GwtTestGwtExample extends GWTTestCase {
+public class GwtTestExample extends GWTTestCase {
 
   /**
    * Must refer to a valid module that sources this class.
