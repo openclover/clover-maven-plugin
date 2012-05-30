@@ -6,15 +6,11 @@
             <contains>75%</contains>
         </file>
         <file>
-            <location>
-                target/site/clover/com/atlassian/maven/plugin/clover/samples/somesrcincluded/include/pkg-summary.html
-            </location>
+            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/somesrcincluded/include/pkg-summary.html</location>
             <exists>true</exists>
         </file>
         <file>
-            <location>
-                target/site/clover/com/atlassian/maven/plugin/clover/samples/somesrcincluded/Simple.html
-            </location>
+            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/somesrcincluded/Simple.html</location>
             <exists>false</exists>
         </file>
     </files>
