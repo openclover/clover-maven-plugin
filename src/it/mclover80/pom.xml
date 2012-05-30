@@ -76,14 +76,26 @@ under the License.
                         <goals>
                             <goal>instrument</goal>
                             <goal>aggregate</goal>
-
                             <!-- We save a history point in order to have data to generate a historical report -->
                             <goal>save-history</goal>
-
                         </goals>
                     </execution>
                 </executions>
             </plugin>
+            <!-- <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-verifier-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <id>main</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin> -->
         </plugins>
     </build>
     <modules>
