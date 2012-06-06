@@ -25,10 +25,9 @@
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-clover2-plugin</artifactId>
-                <version>2.5.2-SNAPSHOT</version>
                 <configuration>
                     <singleCloverDatabase>true</singleCloverDatabase>
-                    <snapshot>${project.basedir}/.clover/mvn/clover.snapshot</snapshot>
+                    <snapshot>${project.build.directory}/clover.snapshot</snapshot>
                     <forceSnapshot>true</forceSnapshot>
 
                 </configuration>
