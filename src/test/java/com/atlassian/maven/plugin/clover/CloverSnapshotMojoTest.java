@@ -51,7 +51,7 @@ public class CloverSnapshotMojoTest extends MockObjectTestCase {
         };
         mojo.setLog(log);
         mojo.setProject(project);
-        final File snapshot = new File("test-clover/clover.snapshot");
+        final File snapshot = new File("target/clover.snapshot");
 
         checking(new Expectations(){{
             oneOf(task).setFile(snapshot);
@@ -65,7 +65,7 @@ public class CloverSnapshotMojoTest extends MockObjectTestCase {
         db.getParentFile().mkdirs();
         db.createNewFile();
         mojo.execute();
-        assertTrue(log.contains("Saving snapshot to: test-clover" + File.separator + "clover.snapshot", TestUtil.Level.INFO));
+        assertTrue(log.contains("Saving snapshot to: target" + File.separator + "clover.snapshot", TestUtil.Level.INFO));
         assertTrue(snapshot.getParentFile().exists());
     }
 }
