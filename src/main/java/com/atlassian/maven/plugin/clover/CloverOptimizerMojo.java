@@ -41,7 +41,8 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
     /**
      * A list of Tests to include for build optimization.
-     * If not supplied, the includes specified in the maven-surefire-plugin's configuration will be used.
+     * If neither <i>optimizeIncludes</i> nor <i>optimizeExcludes</i> are supplied, then the
+     * <i>includes</i> specified in the maven-surefire-plugin's configuration will be used.
      *
      * @parameter
      */
@@ -50,7 +51,8 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
     /**
      * A list of Tests to exclude from build optimization.
-     * If not supplied, the excludes specified in the maven-surefire-plugin's configuration will be used.
+     * If neither <i>optimizeIncludes</i> nor <i>optimizeExcludes</i> are supplied, then the
+     * <i>excludes</i> specified in the maven-surefire-plugin's configuration will be used.
      *
      * @parameter
      */
@@ -194,7 +196,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
     protected List extractNestedStrings(String elementName, Plugin surefirePlugin) {
         final Xpp3Dom config = (Xpp3Dom) surefirePlugin.getConfiguration();
-        return config == null ? null : extractNestedStrings("includes", config);
+        return config == null ? null : extractNestedStrings(elementName, config);
     }
 
     private void addTestRoot(Project antProj, List includes, List excludes, CloverOptimizedTestSet testsToRun, String testRoot) {
