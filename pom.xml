@@ -214,6 +214,14 @@ under the License.
                                 <name>parameter</name>
                                 <placement>a</placement>
                             </tag>
+                            <tag>
+                                <name>component</name>
+                                <placement>X</placement>
+                            </tag>
+                            <tag>
+                                <name>required</name>
+                                <placement>X</placement>
+                            </tag>
                         </tags>
                     </configuration>
                 </plugin>
