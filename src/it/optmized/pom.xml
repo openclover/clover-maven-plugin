@@ -53,6 +53,7 @@ under the License.
                     <alwaysRunTests>
                         <alwaysRunTest>**/AlwaysRunTest.java</alwaysRunTest>
                     </alwaysRunTests>
+                    <snapshot>${project.build.directory}/clover.snapshot</snapshot>
                 </configuration>
                 <executions>
                     <execution>
