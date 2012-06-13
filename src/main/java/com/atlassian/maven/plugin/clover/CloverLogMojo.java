@@ -123,7 +123,7 @@ public class CloverLogMojo extends AbstractCloverMojo {
      */
     private void setTestSourceRootsForProject(final CloverLogTask cloverLogTask, final MavenProject project) {
         // original src/test directory
-        String originalSrcTestDir = CloverSetupMojo.getOriginalSrcTestDir(project.getArtifactId());
+        String originalSrcTestDir = CloverSetupMojo.getOriginalSrcTestDir(project.getId());
         if (originalSrcTestDir != null) {
             addTestSrcDir(cloverLogTask, originalSrcTestDir);
         }

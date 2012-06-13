@@ -116,7 +116,8 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         final String sourceDirectory = getProject().getBuild().getSourceDirectory();
         final String testSourceDirectory = getProject().getBuild().getTestSourceDirectory();
         if (!new File(sourceDirectory).exists() && !new File(testSourceDirectory).exists()) {
-            getLog().info(sourceDirectory + " and " + testSourceDirectory + " do not exist. No optimization will be done for: " + getProject().getArtifactId());
+            getLog().info(sourceDirectory + " and " + testSourceDirectory + " do not exist. No optimization will be done for: "
+                    + getProject().getGroupId() + ":" + getProject().getArtifactId());
             return;
         }
 

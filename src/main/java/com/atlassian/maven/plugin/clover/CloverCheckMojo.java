@@ -240,7 +240,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
     }
 
     private void setTestSourceRoots(CloverPassTask cloverPassTask) {
-        String originalSrcTestDir = CloverSetupMojo.getOriginalSrcTestDir(getProject().getArtifactId());
+        String originalSrcTestDir = CloverSetupMojo.getOriginalSrcTestDir(getProject().getId());
         if (originalSrcTestDir != null) {
             addTestSrcDir(cloverPassTask, originalSrcTestDir);
         }

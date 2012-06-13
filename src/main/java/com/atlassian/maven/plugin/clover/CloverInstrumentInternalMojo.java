@@ -320,11 +320,11 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         // Modify Maven model so that it points to the new source directories and to the clovered
         // artifacts instead of the original values.
         String originalSrcDir = mainInstrumenter.redirectSourceDirectories();
-        originalSrcMap.put(getProject().getArtifactId(), originalSrcDir);
+        originalSrcMap.put(getProject().getId(), originalSrcDir);
         if ( this.includesTestSourceRoots )
         {
             String originalSrcTestDir = testInstrumenter.redirectSourceDirectories();
-            originalSrcTestMap.put(getProject().getArtifactId(), originalSrcTestDir);
+            originalSrcTestMap.put(getProject().getId(), originalSrcTestDir);
         }
         redirectOutputDirectories();
         redirectArtifact();
@@ -400,17 +400,15 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     }
 
     public static void resetSrcDirsOriginal(Artifact artifact, CompilerConfiguration config) {
-        if (originalSrcMap.containsKey(artifact.getArtifactId())) {
-            final String sourceDirectory = (String) originalSrcMap.get(artifact.getArtifactId());
-            MainInstrumenter mainInstrumenter =
-                    new MainInstrumenter(config, sourceDirectory);
+        if (originalSrcMap.containsKey(artifact.getId())) {
+            final String sourceDirectory = (String) originalSrcMap.get(artifact.getId());
+            MainInstrumenter mainInstrumenter = new MainInstrumenter(config, sourceDirectory);
             mainInstrumenter.redirectSourceDirectories();
 
         }
-        if (originalSrcTestMap.containsKey(artifact.getArtifactId())) {
-            final String testDirectory = (String)originalSrcTestMap.get(artifact.getArtifactId());
-            TestInstrumenter instrumenter =
-                    new TestInstrumenter(config, testDirectory);
+        if (originalSrcTestMap.containsKey(artifact.getId())) {
+            final String testDirectory = (String) originalSrcTestMap.get(artifact.getId());
+            TestInstrumenter instrumenter = new TestInstrumenter(config, testDirectory);
             instrumenter.redirectSourceDirectories();
         }
     }
