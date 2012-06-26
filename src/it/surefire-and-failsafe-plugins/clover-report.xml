@@ -1,0 +1,30 @@
+<project name="Clover Report" default="current">
+    <clover-setup initString="${cloverdb}"/>
+
+    <target name="historical">
+        <!-- Not interested right now -->
+    </target>
+
+    <target name="current">
+        <clover-report>
+            <current outfile="${output}" title="${title}">
+                <format type="html"/>
+
+                <testsources dir="src/test">
+                    <!-- Use Maven-Failsafe-Plugin naming convention in order to have test files on
+                    a proper tab in html report -->
+                    <include name="**/IT*.java"/>
+                    <include name="**/*IT.java"/>
+                    <include name="**/*ITCase.java"/>
+                    <!-- Use JUnit naming convention too -->
+                    <include name="**/Test*.java"/>
+                    <include name="**/*Test.java"/>
+                    <include name="**/*TestCase.java"/>
+                </testsources>
+                <!-- Tell Clover to get test results from non-standard directory -->
+                <testresults dir="target/test-report" includes="TEST-*.xml"/>
+            </current>
+        </clover-report>
+    </target>
+
+</project>
