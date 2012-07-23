@@ -4,29 +4,25 @@
 
 <web-app>
     <display-name>Sample Clover Webapp</display-name>
-
+    <listener>
+        <listener-class>com.atlassian.maven.plugins.webapp.MyServletContextListener</listener-class>
+    </listener>
     <servlet>
         <servlet-name>remote</servlet-name>
         <servlet-class>com.atlassian.maven.plugins.webapp.RemoteServlet</servlet-class>
-        <load-on-startup>2</load-on-startup>
+        <!--<load-on-startup>2</load-on-startup>-->
     </servlet>
-
     <servlet>
         <servlet-name>my</servlet-name>
         <servlet-class>com.atlassian.maven.plugins.webapp.MyServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
+        <!--<load-on-startup>1</load-on-startup>-->
     </servlet>
-
     <servlet-mapping>
         <servlet-name>my</servlet-name>
         <url-pattern>/my/*</url-pattern>
     </servlet-mapping>
-
-
     <servlet-mapping>
         <servlet-name>remote</servlet-name>
         <url-pattern>/remote/*</url-pattern>
     </servlet-mapping>
-
-
 </web-app>
