@@ -113,7 +113,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     /**
      * The list of file to include in the instrumentation.
-     * Defaults are **.java which are overwritten if &lt;includes&gt; is set by the user
+     * Defaults are '**&#47;.java, **&#47;*.groovy' which are overwritten if &lt;includes&gt; is set by the user
      *
      * @parameter
      */
