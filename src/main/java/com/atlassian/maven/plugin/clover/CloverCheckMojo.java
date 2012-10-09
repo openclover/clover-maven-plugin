@@ -81,6 +81,13 @@ public class CloverCheckMojo extends AbstractCloverMojo
      */
     String contextFilters;
 
+
+    /**
+     * The type of code to log - APPLICATION, TEST or ALL code. Default is set to APPLICATION.
+     * @parameter expression="${maven.clover.codeType}"
+     */
+    String codeType;
+
     /**
      * Do we fail the build on a violation? The default is true but there are some edge cases where you want to be
      * able to check what would fail but without actually failing the build. For example you may want to let the build
@@ -178,6 +185,11 @@ public class CloverCheckMojo extends AbstractCloverMojo
         cloverPassTask.setInitString(database);
         cloverPassTask.setHaltOnFailure(true);
         cloverPassTask.setFailureProperty("clovercheckproperty");
+
+        if (this.codeType != null) {
+            cloverPassTask.setCodeType(codeType);
+        }
+
         if (this.targetPercentage != null) {
             cloverPassTask.setTarget( new Percentage( this.targetPercentage ) );
             getLog().info( "Checking for coverage of [" + targetPercentage + "] for database [" + database + "]");
