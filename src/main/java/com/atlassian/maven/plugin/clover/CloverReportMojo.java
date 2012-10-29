@@ -66,8 +66,9 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     /**
      * Use a custom report descriptor for generating your Clover Reports.
      * The format for the configuration file is identical to an Ant build file which uses the &lt;clover-report/&gt;
-     * task. For a complete reference, please consult the
-     * <a href="http://confluence.atlassian.com/x/34dEB">clover-report documentation</a>
+     * task. For a complete reference, please consult the:
+     *  <a href="https://confluence.atlassian.com/x/TAJtEg">Creating custom reports</a> and
+     *  <a href="https://confluence.atlassian.com/x/34dEB">clover-report documentation</a>
      *
      * @parameter expression="${maven.clover.reportDescriptor}"
      */
