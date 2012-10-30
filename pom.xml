@@ -48,7 +48,7 @@ under the License.
         <maven>2.0.1</maven>
     </prerequisites>
     <properties>
-        <cloverVersion>3.1.7</cloverVersion>
+        <cloverVersion>3.1.8-SNAPSHOT</cloverVersion>
     </properties>
     <dependencies>
         <dependency>
