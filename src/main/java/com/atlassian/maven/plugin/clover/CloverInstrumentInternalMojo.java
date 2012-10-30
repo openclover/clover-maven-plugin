@@ -53,7 +53,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Instrument source roots.
+ * <p>Instrument source roots.</p>
  *
  * <p><b>Note 1: Do not call this MOJO directly. It is meant to be called in a custom forked lifecycle by the other
  * Clover plugin MOJOs.</b></p>
@@ -264,6 +264,41 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      */
     private boolean copyExcludedFiles = true;
 
+    /**
+     * <p>By default, Maven Clover Plugin generates the <code>${java.io.tmpdir}/grover*.jar</code> file during setup,
+     * which is next being added as the dependent artifact to the build. As the file has generated, unique
+     * name and the jar is not being removed at the end of the build, these files can litter the temporary
+     * directory.</p>
+     *
+     * <p>In case when there is no Groovy code in the project, this parameter can be set to <code>true</code> in order
+     * to disable generation of grover.jar artifact.</p>
+     *
+     * @parameter expression="${maven.clover.skipGroverJar}" default-value="false"
+     * @since 3.1.8
+     */
+    private boolean skipGroverJar = false;
+
+    /**
+     * <p>By default, Maven Clover Plugin generates the <code>${java.io.tmpdir}/grover*.jar</code> file during setup,
+     * which is next being added as the dependent artifact to the build. As the file has generated, unique
+     * name and the jar is not being removed at the end of the build, these files can litter the temporary
+     * directory.</p>
+     *
+     * <p>By setting this parameter you can: <br/>
+     * a) specify constant file name for generated artifact, <br/>
+     * b) choose location different than ${java.io.tmpdir}.</p>
+     *
+     * <p>However, you must ensure that: <br/>
+     * a) grover.jar will not be deleted till end of the build (for example don't put into ./target directory
+     * and next run <code>mvn clover2:setup clean</code>) <br/>
+     * b) grover.jar will not be shared among builds with different Maven Clover Plugin versions used (for
+     * example if ProjectA uses Clover v 3.1.8 and ProjectB uses Clover v 3.1.9 then they shall have different
+     * <code>groverJar</code> locations defined)</p>
+     *
+     * @parameter expression="${maven.clover.groverJar}"
+     * @since 3.1.8
+     */
+    private File groverJar;
 
     // HACK: this allows us to reset the source directories to the originals
     private static Map originalSrcMap = new HashMap();
@@ -334,6 +369,11 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     private void injectGrover(File outDir)
     {
+        if (skipGroverJar) {
+            getLog().info("Generation of Clover Groovy configuration is disabled. No Groovy instrumentation will occur.");
+            return;
+        }
+
         // create the groovy config for Clover's ASTTransformer
         InstrumentationConfig config = new InstrumentationConfig();
         config.setProjectName(this.getProject().getName());
@@ -352,7 +392,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
         try
         {
-            File groverJar = GroovycSupport.extractGroverJar(false);
+            File groverJar = GroovycSupport.extractGroverJar(this.groverJar, false);
             File groverConfigDir = GroovycSupport.newConfigDir(config, new File(getProject().getBuild().getOutputDirectory()));
             final Resource groverConfigResource = new Resource();
             groverConfigResource.setDirectory(groverConfigDir.getPath());

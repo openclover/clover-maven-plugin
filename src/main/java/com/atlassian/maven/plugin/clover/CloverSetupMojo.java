@@ -3,16 +3,16 @@ package com.atlassian.maven.plugin.clover;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.plugin.MojoExecutionException;
 
-import java.util.List;
 import java.util.Date;
 
 /**
- * This mojo is to be used mainly for incremental instrumentation and compilation of Java source code.
- * <p/>
- * NB: This does not, nor should it, run in a forked lifecycle.
- * This mojo should certainly *not* be called during a release build. This mojo instruments your source and test files
+ * <p>This mojo is to be used mainly for incremental instrumentation and compilation of Java source code.</p>
+ *
+ * <p>NB: This does not, nor should it, run in a forked lifecycle.</p>
+ *
+ * <p>This mojo should certainly *not* be called during a release build. This mojo instruments your source and test files
  * to ${build.directory}/clover/src-instrumented and test-src-instrumented respectively. These directories are then set as the
- * project's source and test source directories that subsequently get compiled by the compiler MOJO.
+ * project's source and test source directories that subsequently get compiled by the compiler MOJO.</p>
  *
  * @goal setup
  * @phase process-sources
