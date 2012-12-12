@@ -295,6 +295,7 @@ under the License.
                                 <pomInclude>**/xdoclet/pom.xml</pomInclude>
                                 <pomInclude>**/instrument-tests/pom.xml</pomInclude>
                                 <pomInclude>**/allSrcExcluded/pom.xml</pomInclude>
+                                <pomInclude>**/setTestFailureIgnore/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcExcluded/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcIncluded/pom.xml</pomInclude>
                                 <pomInclude>**/groovy/pom.xml</pomInclude>
