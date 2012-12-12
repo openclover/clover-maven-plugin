@@ -50,6 +50,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -300,6 +301,28 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      */
     private File groverJar;
 
+    /**
+     * <p>If set to <code>true</code>, Clover will add several properties to the build configuration which
+     * disable a build failure for following plugins:
+     * <ul>
+     *  <li>maven-surefire-plugin (maven.test.failure.ignore=true)</li>
+     *  <li>maven-failsafe-plugin (maven.test.failure.ignore=true)</li>
+     *  <li>maven-checkstyle-plugin (checkstyle.failOnViolation=false)</li>
+     *  <li>maven-pmd-plugin (pmd.failOnViolation=false)</li>
+     * </ul></p>
+     *
+     * <p>Thanks to this, build continues despite test failures or code validation failures and thus
+     * it is possible to generate a Clover coverage report for failed tests at the end of the build.</p>
+     *
+     * <p>Note: before version 3.1.9 the <i>testFailureIgnore</i> property was set to <i>true</i> for
+     * the forked Clover lifecycle ('instrument' goal) for 'test' and 'integration-test' phases. Since
+     * 3.1.9 it is no longer set.</p>
+     *
+     * @parameter expression="${maven.clover.setTestFailureIgnore}" default-value="false"
+     * @since 3.1.9
+     */
+    private boolean setTestFailureIgnore = false;
+
     // HACK: this allows us to reset the source directories to the originals
     private static Map originalSrcMap = new HashMap();
     private static Map originalSrcTestMap = new HashMap();
@@ -324,6 +347,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
             return;
         }
 
+        configureTestFailureIgnore();
         resetSrcDirsOriginal(getProject().getArtifact(), this);
 
         final File outDir = new File(this.cloverOutputDirectory, getSrcName());
@@ -365,6 +389,21 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         redirectArtifact();
 
         logArtifacts( "after changes" );
+    }
+
+    /**
+     * Sets several properties related with test failures for Surefire, Failsafe, PMD and Checkstyle plugins.
+     * Thanks to this, the build in default or forked lifecycle can continue and we can generate Clover report
+     * even in presence of test failures.
+     */
+    private void configureTestFailureIgnore() {
+        if (setTestFailureIgnore) {
+            getLog().debug("Configuring testFailureIgnore=true and failOnViolation=false");
+            final Properties properties = getProject().getProperties();
+            properties.put("maven.test.failure.ignore", "true");  // surefire and failsafe
+            properties.put("checkstyle.failOnViolation", "false");
+            properties.put("pmd.failOnViolation", "false");
+        }
     }
 
     private void injectGrover(File outDir)

@@ -6,7 +6,6 @@ import com.cenqua.clover.CloverNames;
 import com.cenqua.clover.types.CloverOptimizedTestSet;
 import com.cenqua.clover.types.CloverAlwaysRunTestSet;
 import org.apache.maven.model.Plugin;
-import org.apache.maven.model.PluginExecution;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
@@ -46,7 +45,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      *
      * @parameter
      */
-    private List optimizeIncludes;
+    private List/*<String>*/ optimizeIncludes;
 
 
     /**
@@ -56,14 +55,14 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      *
      * @parameter
      */
-    private List optimizeExcludes;
+    private List/*<String>*/ optimizeExcludes;
 
     /**
      * A list of Tests which should always be run. ie they will never be optimized away.
      * 
      * @parameter
      */
-    private List alwaysRunTests;
+    private List/*<String>*/ alwaysRunTests;
 
     /**
      * <b>NOTE:</b> This currently has no effect, because the maven-surefire-plugin re-orders the tests alphabetically.
@@ -150,8 +149,8 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
     }
 
     private List configureOptimisedTestSet(Project antProj) {
-        List includes = optimizeIncludes;
-        List excludes = optimizeExcludes;
+        List/*<String>*/ includes = optimizeIncludes;
+        List/*<String>*/ excludes = optimizeExcludes;
         
         if (includes == null && excludes == null) {
             getLog().debug("No clover excludes or includes specified. Falling back to Surefire configuration.");
@@ -195,12 +194,12 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         return testsToRun.getOptimizedTestResource();
     }
 
-    protected List extractNestedStrings(String elementName, Plugin surefirePlugin) {
+    protected List/*<String>*/ extractNestedStrings(String elementName, Plugin surefirePlugin) {
         final Xpp3Dom config = (Xpp3Dom) surefirePlugin.getConfiguration();
         return config == null ? null : extractNestedStrings(elementName, config);
     }
 
-    private void addTestRoot(Project antProj, List includes, List excludes, CloverOptimizedTestSet testsToRun, String testRoot) {
+    private void addTestRoot(Project antProj, List/*<String>*/ includes, List/*<String>*/ excludes, CloverOptimizedTestSet testsToRun, String testRoot) {
         final File testRootDir = new File(testRoot);
         if (!testRootDir.exists()) {
             // if the test dir does not exist, do not add this as a fileset.
@@ -225,7 +224,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         }
     }
 
-    private FileSet createFileSet(Project antProject, final File directory, List includes, List excludes) {
+    private FileSet createFileSet(Project antProject, final File directory, List/*<String>*/ includes, List/*<String>*/ excludes) {
         
         FileSet testFileSet = new FileSet();
         testFileSet.setProject(antProject);
@@ -243,11 +242,11 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * @param childname the name of the first subelement that contains the list
      * @param config    the actual config object
      */
-    protected List extractNestedStrings(String childname, Xpp3Dom config) {
+    protected List/*<String>*/ extractNestedStrings(String childname, Xpp3Dom config) {
 
         final Xpp3Dom subelement = config.getChild(childname);
         if (subelement != null) {
-            List result = new LinkedList();
+            List/*<String>*/ result = new LinkedList/*<String>*/();
             final Xpp3Dom[] children = subelement.getChildren();
             for (int i = 0; i < children.length; i++) {
                 final Xpp3Dom child = children[i];
@@ -259,20 +258,22 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         return null;
     }
 
+    /**
+     * Search for maven-surefire-plugin in the list of build plugins. Returns a plugin instance or
+     * <code>null</code> if not found.
+     * @return Plugin maven-surefire-plugin or <code>null</code>
+     */
     private Plugin lookupSurefirePlugin() {
-
         final String key = "org.apache.maven.plugins:maven-surefire-plugin";
-
         final MavenProject mavenProject = getProject();
         if (mavenProject == null) {
             getLog().warn("Maven execution project is null. Surefire configuration will be ignored.");
             return null;
-
         }
-        List plugins = mavenProject.getBuildPlugins();
+        final List plugins = mavenProject.getBuildPlugins();
 
-        for (Iterator iterator = plugins.iterator(); iterator.hasNext();) {
-            Plugin plugin = (Plugin) iterator.next();
+        for (final Iterator iterator = plugins.iterator(); iterator.hasNext();) {
+            final Plugin plugin = (Plugin) iterator.next();
             if (key.equalsIgnoreCase(plugin.getKey())) {
                 return plugin;
             }
