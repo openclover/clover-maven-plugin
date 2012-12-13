@@ -131,9 +131,9 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
         final List optimizedTests = configureOptimisedTestSet(antProj);
 
-        StringBuffer testPattern = new StringBuffer();
-        for (Iterator iterator = optimizedTests.iterator(); iterator.hasNext();) {
-            Resource test = (Resource) iterator.next();
+        final StringBuffer testPattern = new StringBuffer();
+        for (final Iterator iterator = optimizedTests.iterator(); iterator.hasNext();) {
+            final Resource test = (Resource) iterator.next();
             getLog().debug("Running TEST: " + test.getName());
             testPattern.append(test.getName());
             testPattern.append(",");
@@ -152,7 +152,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         }
     }
 
-    protected List configureOptimisedTestSet(Project antProj) {
+    protected List configureOptimisedTestSet(final Project antProj) {
         List/*<String>*/ includes = optimizeIncludes;
         List/*<String>*/ excludes = optimizeExcludes;
         
@@ -180,7 +180,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
         testsToRun.setSnapshotFile(new ConfigUtil(this).resolveSnapshotFile(snapshot));
         if (ordering != null) {
-            CloverOptimizedTestSet.TestOrdering order = new CloverOptimizedTestSet.TestOrdering();
+            final CloverOptimizedTestSet.TestOrdering order = new CloverOptimizedTestSet.TestOrdering();
             order.setValue(ordering);
             testsToRun.setOrdering(order);
         }
@@ -192,13 +192,13 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
         final List testSources = getProject().getTestCompileSourceRoots();
 
-        for (Iterator iterator = testSources.iterator(); iterator.hasNext();) {
+        for (final Iterator iterator = testSources.iterator(); iterator.hasNext();) {
             addTestRoot(antProj, includes, excludes, testsToRun, (String) iterator.next());
         }
         return testsToRun.getOptimizedTestResource();
     }
 
-    protected List/*<String>*/ extractNestedStrings(String elementName, Plugin surefirePlugin) {
+    protected List/*<String>*/ extractNestedStrings(final String elementName, final Plugin surefirePlugin) {
         final Xpp3Dom config = (Xpp3Dom) surefirePlugin.getConfiguration();
         return config == null ? null : extractNestedStrings(elementName, config);
     }
@@ -209,10 +209,10 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * @param childname the name of the first subelement that contains the list
      * @param config    the actual config object
      */
-    static List/*<String>*/ extractNestedStrings(String childname, Xpp3Dom config) {
+    static List/*<String>*/ extractNestedStrings(final String childname, final Xpp3Dom config) {
         final Xpp3Dom subelement = config.getChild(childname);
         if (subelement != null) {
-            List/*<String>*/ result = new LinkedList/*<String>*/();
+            final List/*<String>*/ result = new LinkedList/*<String>*/();
             final Xpp3Dom[] children = subelement.getChildren();
             for (int i = 0; i < children.length; i++) {
                 final Xpp3Dom child = children[i];
@@ -224,7 +224,8 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         return null;
     }
 
-    private void addTestRoot(Project antProj, List/*<String>*/ includes, List/*<String>*/ excludes, CloverOptimizedTestSet testsToRun, String testRoot) {
+    private void addTestRoot(final Project antProj, final List/*<String>*/ includes, final List/*<String>*/ excludes,
+                             final CloverOptimizedTestSet testsToRun, final String testRoot) {
         final File testRootDir = new File(testRoot);
         if (!testRootDir.exists()) {
             // if the test dir does not exist, do not add this as a fileset.
@@ -259,7 +260,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * @param excludes
      * @return FileSet
      */
-    FileSet createFileSet(Project antProject, final File directory, List/*<String>*/ includes, List/*<String>*/ excludes) {
+    FileSet createFileSet(final Project antProject, final File directory, final List/*<String>*/ includes, final List/*<String>*/ excludes) {
         final FileSet testFileSet = new FileSet();
         testFileSet.setProject(antProject);
         testFileSet.setDir(directory);
@@ -329,11 +330,11 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
     }
 
     private static List/*<File>*/ dirTreeMatchingPattern(final File dir, final Pattern pattern) {
-        List/*<File>*/ matchedFiles = new LinkedList/*<File>*/();
+        final List/*<File>*/ matchedFiles = new LinkedList/*<File>*/();
 
         if (dir.isDirectory()) {
             // recursive search
-            String dirContent[] = dir.list();
+            final String dirContent[] = dir.list();
             for (int i = 0; i < dirContent.length; i++) {
                 matchedFiles.addAll(dirTreeMatchingPattern(new File(dir, dirContent[i]), pattern));
             }
@@ -367,13 +368,13 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         final List/*<File>*/ matchedFiles = dirTreeMatchingPattern(directory, pattern);
 
         // convert File->String and add to output list
-        for (Iterator/*<File>*/ iter = matchedFiles.iterator(); iter.hasNext(); ) {
-            File file = (File)iter.next();
+        for (final Iterator/*<File>*/ iter = matchedFiles.iterator(); iter.hasNext(); ) {
+            final File file = (File)iter.next();
             outputList.add(FileUtils.getRelativePath(directory, file));
         }
     }
 
-    private static void splitPathBySeparators(List/*<String>*/ outputList, String path) {
+    private static void splitPathBySeparators(final List/*<String>*/ outputList, final String path) {
         final String ANT_PATTERN_SEPARATOR = "[, ]";
         final String pathSplit[] = path.split(ANT_PATTERN_SEPARATOR);
         for (int i = 0; i < pathSplit.length; i++) {
