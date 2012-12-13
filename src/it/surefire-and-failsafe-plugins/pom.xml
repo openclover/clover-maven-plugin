@@ -53,6 +53,10 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <reportsDirectory>${surefire.and.failsafe.report.dir}</reportsDirectory>
+                    <includes>
+                        <include>**/*Test.java</include>
+                        <include>%regex[.*Tests.*]</include>
+                    </includes>
                 </configuration>
             </plugin>
             <plugin>

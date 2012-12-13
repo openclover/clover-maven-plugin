@@ -5,6 +5,7 @@ import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
 import com.cenqua.clover.CloverNames;
 import com.cenqua.clover.types.CloverOptimizedTestSet;
 import com.cenqua.clover.types.CloverAlwaysRunTestSet;
+import com.cenqua.clover.util.FileUtils;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -18,6 +19,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Sets the 'test' property on the project which is used by the maven-surefire-plugin to determine which tests are run.
@@ -104,6 +106,8 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      */
     private static final List DEFAULT_INCLUDES = Arrays.asList(new String[]{"**/Test*.java", "**/*Test.java", "**/*TestCase.java"});
 
+    private static final String REGEX_START = "%regex[";
+    private static final String REGEX_END = "]";
 
     public void execute() throws MojoExecutionException {
         if (skip) {
@@ -148,7 +152,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         }
     }
 
-    private List configureOptimisedTestSet(Project antProj) {
+    protected List configureOptimisedTestSet(Project antProj) {
         List/*<String>*/ includes = optimizeIncludes;
         List/*<String>*/ excludes = optimizeExcludes;
         
@@ -199,6 +203,27 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         return config == null ? null : extractNestedStrings(elementName, config);
     }
 
+    /**
+     * Extracts nested values from the given config object into a List.
+     *
+     * @param childname the name of the first subelement that contains the list
+     * @param config    the actual config object
+     */
+    static List/*<String>*/ extractNestedStrings(String childname, Xpp3Dom config) {
+        final Xpp3Dom subelement = config.getChild(childname);
+        if (subelement != null) {
+            List/*<String>*/ result = new LinkedList/*<String>*/();
+            final Xpp3Dom[] children = subelement.getChildren();
+            for (int i = 0; i < children.length; i++) {
+                final Xpp3Dom child = children[i];
+                result.add(child.getValue());
+            }
+            return result;
+        }
+
+        return null;
+    }
+
     private void addTestRoot(Project antProj, List/*<String>*/ includes, List/*<String>*/ excludes, CloverOptimizedTestSet testsToRun, String testRoot) {
         final File testRootDir = new File(testRoot);
         if (!testRootDir.exists()) {
@@ -224,38 +249,29 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         }
     }
 
-    private FileSet createFileSet(Project antProject, final File directory, List/*<String>*/ includes, List/*<String>*/ excludes) {
-        
-        FileSet testFileSet = new FileSet();
+    /**
+     * Creates a FileSet for <code>antProject</code> and base <code>directory</code> having a list of files
+     * to be included and excluded, according to <code>includes / excludes</code> wildcard patterns.
+     *
+     * @param antProject
+     * @param directory
+     * @param includes
+     * @param excludes
+     * @return FileSet
+     */
+    FileSet createFileSet(Project antProject, final File directory, List/*<String>*/ includes, List/*<String>*/ excludes) {
+        final FileSet testFileSet = new FileSet();
         testFileSet.setProject(antProject);
         testFileSet.setDir(directory);
-        testFileSet.appendIncludes((String[]) includes.toArray(new String[includes.size()]));
+
+        final List/*<String>*/ includesExpanded = explodePaths(directory, includes);
+        testFileSet.appendIncludes((String[]) includesExpanded.toArray(new String[includesExpanded.size()]));
+
         if (excludes != null && !excludes.isEmpty()) {
-            testFileSet.appendExcludes((String[]) excludes.toArray(new String[excludes.size()]));
+            final List/*<String>*/ excludesExpanded = explodePaths(directory, excludes);
+            testFileSet.appendExcludes((String[]) excludesExpanded.toArray(new String[excludesExpanded.size()]));
         }
         return testFileSet;
-    }
-
-    /**
-     * Extracts nested values from the given config object into a List.
-     *
-     * @param childname the name of the first subelement that contains the list
-     * @param config    the actual config object
-     */
-    protected List/*<String>*/ extractNestedStrings(String childname, Xpp3Dom config) {
-
-        final Xpp3Dom subelement = config.getChild(childname);
-        if (subelement != null) {
-            List/*<String>*/ result = new LinkedList/*<String>*/();
-            final Xpp3Dom[] children = subelement.getChildren();
-            for (int i = 0; i < children.length; i++) {
-                final Xpp3Dom child = children[i];
-                result.add(child.getValue());
-            }
-            return result;
-        }
-
-        return null;
     }
 
     /**
@@ -279,5 +295,91 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
             }
         }
         return null;
+    }
+
+    /**
+     * Resolves exact list of paths using the input <code>paths</code> list, because:
+     *  1) we can have multiple 'includes' tags in Ant FileSet and
+     *  2a) we can have multiple comma- or space-separated patterns in one 'includes'
+     *  2b) we can have regular expression entered (surefire specific feature)
+     *
+     * For 2a) String.split() is used, for 2b) a directory scan is performed
+     *
+     * See:
+     * <li>http://ant.apache.org/manual/Types/fileset.html</li>
+     * <li>http://maven.apache.org/plugins/maven-surefire-plugin/examples/inclusion-exclusion.html</li>
+     *
+     * @param paths list of paths (single or separated by space or comma)
+     * @return List&lt;String&gt;
+     */
+    static List/*<String>*/ explodePaths(final File directory, final List/*<String>*/ paths) {
+        final List/*<String>*/ explodedPaths = new LinkedList/*<String>*/();
+
+        for (final Iterator/*<String>*/ iter = paths.iterator(); iter.hasNext(); ) {
+            final String path = (String)iter.next();
+
+            if (path.trim().startsWith("%regex[")) {
+                splitPathByRegexp(directory, explodedPaths, path);
+            } else {
+                splitPathBySeparators(explodedPaths, path);
+            }
+        }
+
+        return explodedPaths;
+    }
+
+    private static List/*<File>*/ dirTreeMatchingPattern(final File dir, final Pattern pattern) {
+        List/*<File>*/ matchedFiles = new LinkedList/*<File>*/();
+
+        if (dir.isDirectory()) {
+            // recursive search
+            String dirContent[] = dir.list();
+            for (int i = 0; i < dirContent.length; i++) {
+                matchedFiles.addAll(dirTreeMatchingPattern(new File(dir, dirContent[i]), pattern));
+            }
+        } else {
+            // add a file
+            if (pattern.matcher(dir.getPath()).matches()) {
+                matchedFiles.add(dir);
+            }
+        }
+
+        return matchedFiles;
+    }
+
+    /**
+     * Takes <code>pathRegex</code> regular expression in a form like "%regex[.*[Cat|Dog].*Test.*]" (as supported by
+     * surefire plugin) and searches for all files in <code>directory</code> whose path name matches this expression.
+     * Adds relative paths of found files to <code>outputList</code>.
+     *
+     * @param directory  directory to be scanned
+     * @param outputList output list to which names of found files will be added
+     * @param pathRegex  regular expression for file name
+     */
+    private static void splitPathByRegexp(final File directory, final List/*<String>*/ outputList, final String pathRegex) {
+        // extract regular expression from a path entry (we assume that there can be only one regexp)
+        final String regex = pathRegex.substring(
+                pathRegex.indexOf(REGEX_START) + REGEX_START.length(),
+                pathRegex.lastIndexOf(REGEX_END));
+
+        // create pattern for this regexp and find all files in directory matching it
+        final Pattern pattern = Pattern.compile(regex);
+        final List/*<File>*/ matchedFiles = dirTreeMatchingPattern(directory, pattern);
+
+        // convert File->String and add to output list
+        for (Iterator/*<File>*/ iter = matchedFiles.iterator(); iter.hasNext(); ) {
+            File file = (File)iter.next();
+            outputList.add(FileUtils.getRelativePath(directory, file));
+        }
+    }
+
+    private static void splitPathBySeparators(List/*<String>*/ outputList, String path) {
+        final String ANT_PATTERN_SEPARATOR = "[, ]";
+        final String pathSplit[] = path.split(ANT_PATTERN_SEPARATOR);
+        for (int i = 0; i < pathSplit.length; i++) {
+            if (pathSplit[i].length() > 0) {
+                outputList.add(pathSplit[i]);
+            }
+        }
     }
 }
