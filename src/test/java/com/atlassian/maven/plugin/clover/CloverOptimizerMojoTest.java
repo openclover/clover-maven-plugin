@@ -28,13 +28,13 @@ public class CloverOptimizerMojoTest extends TestCase {
         String name;
         DirNode children[];
 
-        public DirNode(String name) {
+        public DirNode(final String name) {
             this.name = name;
             children = new DirNode[0];
             isFile = true;
         }
 
-        public DirNode(String name, DirNode ... children) {
+        public DirNode(final String name, final DirNode ... children) {
             this.name = name;
             this.children = children;
             isFile = false;
@@ -287,33 +287,33 @@ public class CloverOptimizerMojoTest extends TestCase {
      * Test for CloverOptimizerMojo#explodePaths()
      */
     public void testExplodePathsEmptyList() {
-        List<String> inputEmpty = Collections.emptyList();
-        List<String> inputWhitespace = new ArrayList<String>() {{
+        final List<String> inputEmpty = Collections.emptyList();
+        final List<String> inputWhitespace = new ArrayList<String>() {{
             add("     ");
             add("");
         }};
-        List<String> empty = Collections.emptyList();
+        final List<String> empty = Collections.emptyList();
 
         assertListsEqual(empty, mojo.explodePaths(null, inputEmpty));
         assertListsEqual(empty, mojo.explodePaths(null, inputWhitespace));
     }
 
     public void testExplodePathsFlatList() {
-        List<String> input = new ArrayList<String>() {{
+        final List<String> input = new ArrayList<String>() {{
             add("path/one");
             add("path/two");
         }};
-        List<String> expected = input;
+        final List<String> expected = input;
 
         assertListsEqual(expected, mojo.explodePaths(null, input));
     }
 
     public void testExplodePathsNestedList() {
-        List<String> input = new ArrayList<String>() {{
+        final List<String> input = new ArrayList<String>() {{
             add("path/one, path/two   path/three");
             add("path/four");
         }};
-        List<String> expected = new ArrayList<String>() {{
+        final List<String> expected = new ArrayList<String>() {{
             add("path/one");
             add("path/two");
             add("path/three");
@@ -324,10 +324,10 @@ public class CloverOptimizerMojoTest extends TestCase {
     }
 
     public void testExplodePathsRegexp() {
-        List<String> input = new ArrayList<String>() {{
+        final List<String> input = new ArrayList<String>() {{
             add("%regex[.*[GH]oo.*]");
         }};
-        List<String> expected = new ArrayList<String>() {{
+        final List<String> expected = new ArrayList<String>() {{
             add(path.get("Goo"));
             add(path.get("Hoo"));
         }};
@@ -413,8 +413,8 @@ public class CloverOptimizerMojoTest extends TestCase {
         }
     }
 
-    protected void assertListsEqual(List<String> expected, List<String> actual) {
-        String message = "expected=" + expected.toString() + " actual=" + actual.toString();
+    protected void assertListsEqual(final List<String> expected, final List<String> actual) {
+        final String message = "expected=" + expected.toString() + " actual=" + actual.toString();
         assertTrue(message, expected.containsAll(actual));
         assertTrue(message, actual.containsAll(expected));
     }
