@@ -20,10 +20,26 @@ under the License.
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.atlassian.maven.plugins</groupId>
-    <artifactId>maven-clover2-plugin-sample-xdoclet</artifactId>
+    <artifactId>maven-clover2-plugin-sample-forked-lifecycle</artifactId>
     <packaging>jar</packaging>
-    <name>Maven Clover Plugin XDoclet Sample</name>
-    <description>Maven Clover Plugin XDoclet Sample</description>
+    <name>Maven Clover Plugin Forked Lifecycle Sample</name>
+    <description>
+        This is a test case which checks if 'clover2:instrument' goal will create a forked lifecycle (so that compiled
+        artefacts are written to 'target/clover' instead of default 'target' directory).
+
+        Current value of 'project.build.directory' property is written to a file using AntRun plugin.
+        Value from a file is read by a test case executed by Surefire plugin. Test case creates test file in specified location.
+        Existence of the test file is checked by the Verifier plugin.
+
+        Note: we use a hack with a property file because we cannot write '${project.build.directory}' declaration directly
+        in the POM. The reason is that it works only in Maven 2.x. Maven 2.x treats all Maven-related properties
+        (project.* etc) in a special way, updating all references to them in the POM in the forked lifecycle with a
+        current value.
+
+        Since Maven 3.x, all properties are resolved only once, during calculation of effective POM. As a consequence, the
+        ${project.build.directory} variable declared directly in POM has always the same value (even in forked cycle).
+        So the only way to get the current value is to read it 'at runtime' (what the &lt;echoproperties/&gt; does).
+    </description>
     <version>1.0-SNAPSHOT</version>
     <dependencies>
         <dependency>
@@ -38,6 +54,7 @@ under the License.
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-clover2-plugin</artifactId>
+                <version>3.1.11-SNAPSHOT</version>
                 <configuration>
                     <licenseLocation>${clover.licenseLocation}</licenseLocation>
                 </configuration>
@@ -52,38 +69,44 @@ under the License.
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>xdoclet-maven-plugin</artifactId>
-                <configuration>
-                            <tasks>
-                                <mkdir dir="${project.build.directory}"/>
-                                <!-- Create a file that should go in the target/clover/ directory when the XDoclet plugin is called
-                  in the forked lifecycle. We verify that it exists using the verifier plugin below. -->
-                                <touch file="${project.build.directory}/test.clover"/>
-                                <echo>Build Dir: ${project.build.directory}/test.clover</echo>
-                            </tasks>
-                        </configuration>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.6</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
+                        <configuration>
+                            <!-- Hack: use &lt;echoproperties&gt; to get current value of the ${project.build.directory}
+                             (different values for the default and forked lifecycle) -->
+                            <tasks>
+                                <echoproperties destfile="build.properties">
+                                    <propertyset>
+                                        <propertyref name="project.build.directory"/>
+                                    </propertyset>
+                                </echoproperties>
+                            </tasks>
+                        </configuration>
                         <goals>
-                            <goal>xdoclet</goal>
+                            <goal>run</goal>
                         </goals>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>ant</groupId>
-                        <artifactId>ant</artifactId>
-                        <version>1.6.5</version>
-                    </dependency>
-                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12.4</version>
+                <configuration>
+                    <!-- Pass content of build.properties file as system properties for a test case -->
+                    <systemPropertiesFile>build.properties</systemPropertiesFile>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-verifier-plugin</artifactId>
+                <version>1.0</version>
                 <configuration>
                     <failOnError>true</failOnError>
+                    <!-- Verify that the test case has written a test file in correct location -->
                     <verificationFile>${basedir}/src/test/verifier/verifications.xml</verificationFile>
                 </configuration>
                 <executions>

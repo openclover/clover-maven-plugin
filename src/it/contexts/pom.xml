@@ -18,66 +18,69 @@ under the License.
 -->
 
 <project>
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.atlassian.maven.plugins</groupId>
-  <artifactId>maven-clover2-plugin-sample-simple</artifactId>
-  <packaging>jar</packaging>
-  <name>Maven Clover Plugin Contexts Sample</name>
-  <description>Maven Clover Plugin Contexts Sample</description>
-  <version>1.0-SNAPSHOT</version>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-  <reporting>
-    <excludeDefaults>true</excludeDefaults>
-    <plugins>
-      <plugin>
-        <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
-        <configuration>
-          <!-- Verify that context filters work -->
-          <contextFilters>try,main,log</contextFilters>
-            <licenseLocation>${clover.licenseLocation}</licenseLocation>
-        </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
-        <configuration>
-          <!-- Without the block filter the TPC is 50% and with it it's 57,1%. Thus we check for a TPC above of
-               55% to verify the filter has been applied correctly -->
-          <targetPercentage>55%</targetPercentage>
-           <licenseLocation>${clover.licenseLocation}</licenseLocation>
-           <methodContexts>
-             <main>(.* )?public static void main\(String\[\] argv\).*</main>
-           </methodContexts>
-           <statementContexts>
-             <log>System.out.println\(.*\);</log>
-           </statementContexts>
-           <generateXml>true</generateXml>
-            <reportDescriptor>clover-report.xml</reportDescriptor>
-
-        </configuration>
-        <executions>
-          <execution>
-            <id>main</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>instrument</goal>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.atlassian.maven.plugins</groupId>
+    <artifactId>maven-clover2-plugin-sample-simple</artifactId>
+    <packaging>jar</packaging>
+    <name>Maven Clover Plugin Contexts Sample</name>
+    <description>Maven Clover Plugin Contexts Sample</description>
+    <version>1.0-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-clover2-plugin</artifactId>
+                <configuration>
+                    <!-- Verify that context filters work -->
+                    <contextFilters>try,main,log</contextFilters>
+                    <licenseLocation>${clover.licenseLocation}</licenseLocation>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-clover2-plugin</artifactId>
+                <configuration>
+                    <!-- Without the block filter the TPC is 50% and with it it's 57,1%. Thus we check for a TPC above of
+           55% to verify the filter has been applied correctly -->
+                    <targetPercentage>55%</targetPercentage>
+                    <licenseLocation>${clover.licenseLocation}</licenseLocation>
+                    <methodContexts>
+                        <main>(.* )?public static void main\(String\[\] argv\).*</main>
+                    </methodContexts>
+                    <statementContexts>
+                        <log>System.out.println\(.*\);</log>
+                    </statementContexts>
+                    <generateHtml>true</generateHtml>
+                    <generateXml>true</generateXml>
+                    <reportDescriptor>clover-report.xml</reportDescriptor>
+                    <!-- Verify that context filters work -->
+                    <contextFilters>try,main,log</contextFilters>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>main</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>instrument</goal>
+                            <goal>clover</goal>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

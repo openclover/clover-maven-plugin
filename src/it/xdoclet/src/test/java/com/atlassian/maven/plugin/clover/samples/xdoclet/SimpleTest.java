@@ -16,14 +16,29 @@
 package com.atlassian.maven.plugin.clover.samples.xdoclet;
 
 import junit.framework.TestCase;
-import java.util.Properties;
+
+import java.io.File;
 
 public class SimpleTest extends TestCase
 {
     public void testSomeMethod() throws Exception
     {
-        Simple simple = new Simple();
+        final Simple simple = new Simple();
         simple.someMethod();
+
+        final String buildDir = System.getProperty("project.build.directory");
+        if (buildDir != null) {
+            System.out.println("Build directory=" + buildDir);
+            // Create a file in:
+            //  target/test.clover        - default lifecycle
+            //  target/clover/test.clover - forked lifecycle
+            // See also verifications.xml
+            final File cloverTestFile = new File(buildDir, "test.clover");
+            cloverTestFile.createNewFile();
+            assertTrue(cloverTestFile.isFile());
+        } else {
+            fail("The project.build.directory is not found!");
+        }
     }
 }
  
