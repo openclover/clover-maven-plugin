@@ -3,25 +3,27 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <artifactId>maven-clover2-plugin-sample-optimized</artifactId>
-        <groupId>com.atlassian.maven.plugins</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
     <groupId>com.atlassian.maven.plugins</groupId>
-    <artifactId>modulec</artifactId>
+    <artifactId>maven-clover2-plugin-optimized-snapshot-hacking</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>modulec</name>
+    <name>snapshot-hacking</name>
     <url>http://maven.apache.org</url>
+    <dependencies>
+        <dependency>
+            <groupId>com.cenqua.clover</groupId>
+            <artifactId>clover</artifactId>
+            <version>3.1.11-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-clover2-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
                 <configuration>
-                    <singleCloverDatabase>true</singleCloverDatabase>
-                    <snapshot>${project.build.directory}/clover.snapshot</snapshot>
-                    <forceSnapshot>true</forceSnapshot>
+                    <source>1.5</source>
+                    <target>1.5</target>
                 </configuration>
             </plugin>
         </plugins>

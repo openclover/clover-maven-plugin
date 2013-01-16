@@ -72,5 +72,7 @@ under the License.
     <modules>
         <module>module-a</module>
         <module>module-b</module>
+        <module>module-c</module>
+        <module>snapshot-hacking</module>
   </modules>
 </project>
