@@ -37,7 +37,7 @@ under the License.
     </organization>
     <issueManagement>
         <system>jira</system>
-        <url>https://studio.plugins.atlassian.com/browse/CLMVN</url>
+        <url>https://jira.atlassian.com/browse/CLOV</url>
     </issueManagement>
     <licenses>
         <license>
@@ -46,9 +46,9 @@ under the License.
         </license>
     </licenses>
     <scm>
-        <connection>scm:svn:https://studio.plugins.atlassian.com/svn/CLMVN/trunk</connection>
-        <developerConnection>scm:svn:https://studio.plugins.atlassian.com/svn/CLMVN/trunk</developerConnection>
-        <url>https://studio.plugins.atlassian.com/svn/CLMVN/trunk</url>
+        <connection>scm:hg:ssh://hg@bitbucket.org/atlassian/maven-clover2-plugin</connection>
+        <developerConnection>scm:hg:ssh://hg@bitbucket.org/atlassian/maven-clover2-plugin</developerConnection>
+        <url>https://bitbucket.org/atlassian/maven-clover2-plugin/src</url>
     </scm>
     <developers>
         <developer>
