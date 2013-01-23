@@ -31,7 +31,7 @@ Architecture of the clover2:clover goal
   The <<<clover2:clover>>> goal performs source code instrumentation and generates a Clover report.
   Here's how it works:
 
-[../images/clover-report-achitecture.jpg] Clover report goal architecture
+[../images/clover-report-architecture.jpg] Clover report goal architecture
 
   Note that the generation of the Clover database is independent of the <<<clover2:clover>>> goal which expects
   a Clover database to exist prior to calling it. In the architecture diagram we've shown a typical use case
