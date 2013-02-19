@@ -41,8 +41,15 @@ under the License.
     </issueManagement>
     <licenses>
         <license>
-            <name>Apache 2</name>
+            <name>Apache License 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+            <comments>
+                The Clover-for-Maven2and3 Plugin is licensed under the Apache 2.0 license. However, the Clover binary
+                dependency (com.cenqua.clover:clover) is commercial software. Clover is free for use for Open Source
+                projects and non-profit organisations. For more information on Clover's licensing and pricing, see:
+                http://www.atlassian.com/software/clover/licensing.jsp
+            </comments>
         </license>
     </licenses>
     <scm>
