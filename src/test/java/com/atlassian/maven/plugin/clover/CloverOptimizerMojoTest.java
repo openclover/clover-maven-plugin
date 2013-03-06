@@ -1,6 +1,6 @@
 package com.atlassian.maven.plugin.clover;
 
-import com.cenqua.clover.util.FileUtils;
+import com.atlassian.clover.util.FileUtils;
 import junit.framework.TestCase;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
