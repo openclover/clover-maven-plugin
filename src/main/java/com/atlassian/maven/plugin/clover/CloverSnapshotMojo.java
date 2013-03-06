@@ -88,7 +88,7 @@ public class CloverSnapshotMojo extends AbstractCloverMojo {
 
         if (getLog().isDebugEnabled() || debug) {
             final String cpLocation = snapshot != null ? snapshot.getPath() : task.getInitString() + CloverNames.SNAPSHOT_SUFFIX;
-            SnapshotPrinter.prettyPrint(Snapshot.loadFrom(cpLocation), new MvnLogger(getLog()), Logger.LOG_VERBOSE);
+            SnapshotPrinter.textPrint(Snapshot.loadFrom(cpLocation), new MvnLogger(getLog()), Logger.LOG_VERBOSE);
         }
 
     }
