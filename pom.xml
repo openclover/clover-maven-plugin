@@ -346,6 +346,7 @@ under the License.
                                 <pomInclude>**/someSrcExcluded/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcIncluded/pom.xml</pomInclude>
                                 <pomInclude>**/xdoclet/pom.xml</pomInclude>
+                                <!--<pomInclude>**/groovy-eclipse-plugin/pom.xml</pomInclude>TODO-->
                                 <!--pomInclude>**/mclover77a/pom.xml</pomInclude>
                                 <pomInclude>**/mclover77b/pom.xml</pomInclude-->
                                 <!--<pomInclude>**/mclover80/pom.xml</pomInclude>-->
