@@ -30,6 +30,6 @@ public class CloverIntegrationOptimizerMojo extends CloverOptimizerMojo {
             }
         }
 
-        return value == null ? super.extractNestedStrings(elementName, surefirePlugin) : null;
+        return value == null ? super.extractNestedStrings(elementName, surefirePlugin) : value;
     }
 }
