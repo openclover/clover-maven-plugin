@@ -19,7 +19,7 @@
         <gwtTestUtils.version>0.38</gwtTestUtils.version>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <clover.version>3.1.8</clover.version>
+        <maven.clover.version>3.1.12-SNAPSHOT</maven.clover.version>
         <!-- Uncomment it or define such property in ~/.m2/settings.xml -->
         <!-- <clover.licenseLocation>/path/to/your/license/file</clover.licenseLocation>-->
     </properties>
@@ -163,7 +163,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                        <version>${clover.version}</version>
+                        <version>${maven.clover.version}</version>
                         <configuration>
                             <!-- List all server-side packages which has to be instrumented -->
                             <includes>
@@ -243,7 +243,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                        <version>${clover.version}</version>
+                        <version>${maven.clover.version}</version>
                         <configuration>
                             <!-- We don't need <includes> section as everything will be instrumented List all server-side packages which has to be instrumented -->
                         </configuration>

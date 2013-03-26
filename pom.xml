@@ -78,7 +78,7 @@ under the License.
         <maven>2.0.1</maven>
     </prerequisites>
     <properties>
-        <cloverVersion>3.1.11</cloverVersion>
+        <cloverVersion>3.1.12-SNAPSHOT</cloverVersion>
     </properties>
     <dependencies>
         <dependency>
@@ -328,7 +328,9 @@ under the License.
                                     <directory>src/it</directory>
                                     <includes>
                                         <include>**/target</include>
+                                        <include>**/target/**</include>
                                         <include>**/build.log</include>
+                                        <include>xdoclet/build.properties</include>
                                     </includes>
                                 </fileset>
                             </filesets>
