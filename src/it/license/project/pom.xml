@@ -18,49 +18,50 @@ under the License.
 -->
 
 <project>
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.atlassian.maven.plugins</groupId>
-    <artifactId>maven-clover2-plugin-sample-license</artifactId>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.atlassian.maven.plugins.sample</groupId>
+        <artifactId>clover-sample-license</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <groupId>com.atlassian.maven.plugins.sample</groupId>
+    <artifactId>clover-sample-license-project</artifactId>
+    <packaging>jar</packaging>
+    <name>Maven Clover Plugin Project License Sample</name>
+    <description>Maven Clover Plugin Project License Sample</description>
     <version>1.0-SNAPSHOT</version>
-  </parent>
-  <artifactId>maven-clover2-plugin-sample-license-project</artifactId>
-  <packaging>jar</packaging>
-  <name>Maven Clover Plugin Project License Sample</name>
-  <description>Maven Clover Plugin Project License Sample</description>
-  <version>1.0-SNAPSHOT</version>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
-        <dependencies>
-          <dependency>
-            <groupId>com.atlassian.maven.plugins</groupId>
-            <artifactId>maven-clover2-plugin-sample-license-build-tools</artifactId>
-            <version>${version}</version>
-          </dependency>
-        </dependencies>
-        <configuration>
-          <licenseLocation>myclover.license</licenseLocation>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>verify</phase>
-            <goals>
-              <goal>instrument</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-clover2-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.atlassian.maven.plugins</groupId>
+                        <artifactId>maven-clover2-plugin-sample-license-build-tools</artifactId>
+                        <version>${version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <licenseLocation>myclover.license</licenseLocation>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>instrument</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
