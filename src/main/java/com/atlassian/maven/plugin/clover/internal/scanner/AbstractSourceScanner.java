@@ -25,38 +25,29 @@ import org.apache.tools.ant.types.selectors.DependSelector;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.List;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 
 /**
  * Code common to compute the list of source files to instrument (main sources, test sources).
  */
-public abstract class AbstractCloverSourceScanner implements CloverSourceScanner {
+public abstract class AbstractSourceScanner implements CloverSourceScanner {
+
+    private interface SourceRootVisitor {
+        void visitDir(File dir);
+    }
+
     private final CompilerConfiguration configuration;
     private final File targetDir;
 
-    public AbstractCloverSourceScanner(CompilerConfiguration configuration, String outputSourceDirectory) {
+    public AbstractSourceScanner(final CompilerConfiguration configuration, final String outputSourceDirectory) {
         this.configuration = configuration;
         this.targetDir = new File(outputSourceDirectory);
-
-    }
-
-    protected CompilerConfiguration getConfiguration() {
-        return this.configuration;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see CloverSourceScanner#getSourceFilesToInstrument()
-     */
-    public Map getSourceFilesToInstrument() {
-        return computeIncludedFiles(getScanner());
     }
 
     /**
@@ -64,14 +55,34 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
      *
      * @see CloverSourceScanner#getExcludedFiles()
      */
-    public Map getExcludedFiles() {
-
+    public Map/*<String,String[]>*/ getExcludedFiles() {
         return computeExcludedFiles(getScanner());
     }
 
-    protected abstract List getSourceRoots();
+    /**
+     * {@inheritDoc}
+     *
+     * @see CloverSourceScanner#getSourceFilesToInstrument()
+     */
+    public Map/*<String,String[]>*/ getSourceFilesToInstrument() {
+        return getSourceFilesToInstrument(LanguageFileExtensionFilter.ANY_LANGUAGE);
+    }
+
+    /**
+     * @param languageFileFilter extra filter (in addition to includes/excludes) based on programming language
+     * @return Map&lt;File,String[]&gt;
+     */
+    public Map/*<String,String[]>*/ getSourceFilesToInstrument(LanguageFileFilter languageFileFilter) {
+        return computeIncludedFiles(getScanner(), languageFileFilter);
+    }
+
+    protected abstract List/*<String>*/ getSourceRoots();
 
     protected abstract String getSourceDirectory();
+
+    protected CompilerConfiguration getConfiguration() {
+        return this.configuration;
+    }
 
     /**
      * @return a Plexus scanner object that scans a source root and filters files according to inclusion and
@@ -79,28 +90,27 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
      *         to instrument.
      */
     private DirectoryScanner getScanner() {
-
-        Set includes = getConfiguration().getIncludes();
-        Set excludes = getConfiguration().getExcludes();
+        final Set includes = getConfiguration().getIncludes();
+        final Set excludes = getConfiguration().getExcludes();
 
         configuration.getLog().debug("excludes patterns = " + excludes);
         configuration.getLog().debug("includes patterns = " + includes);
-        DirectoryScanner dirScan = new DirectoryScanner();
+        final DirectoryScanner dirScan = new DirectoryScanner();
 
         dirScan.addExcludes((String[]) excludes.toArray(new String[excludes.size()]));
         dirScan.setIncludes((String[]) includes.toArray(new String[includes.size()]));
 
         dirScan.addDefaultExcludes();
 
-        DependSelector selector = new DependSelector();
+        final DependSelector selector = new DependSelector();
         selector.setTargetdir(targetDir);
         dirScan.setSelectors(new FileSelector[]{selector});
 
         return dirScan;
     }
 
-    private Map computeExcludedFiles(final DirectoryScanner scanner) {
-        final Map files = new HashMap();
+    private Map/*<String,String[]>*/ computeExcludedFiles(final DirectoryScanner scanner) {
+        final Map/*<String,String[]>*/ files = new HashMap/*<String,String[]>*/();
 
         visitSourceRoots(new SourceRootVisitor() {
             public void visitDir(File dir) {
@@ -123,15 +133,15 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
         return files;
     }
 
-    private Map computeIncludedFiles(final DirectoryScanner scanner) {
-        final Map files = new HashMap();
+    private Map/*<String,String[]>*/ computeIncludedFiles(final DirectoryScanner scanner, final LanguageFileFilter languageFilter) {
+        final Map/*<String,String[]>*/ files = new HashMap/*<String,String[]>*/();
         visitSourceRoots(new SourceRootVisitor() {
             public void visitDir(File dir) {
                 scanner.setBasedir(dir);
                 scanner.scan();
-                final String[] sourcesToAdd = scanner.getIncludedFiles();
-                configuration.getLog().debug("including files for instrumentation = " + Arrays.asList(sourcesToAdd));
+                final String[] sourcesToAdd = languageFilter.filter(scanner.getIncludedFiles());
                 if (sourcesToAdd.length > 0) {
+                    configuration.getLog().debug("including files for instrumentation = " + Arrays.asList(sourcesToAdd));
                     files.put(dir.getAbsolutePath(), sourcesToAdd);
                 }
             }
@@ -147,15 +157,31 @@ public abstract class AbstractCloverSourceScanner implements CloverSourceScanner
         return result;
     }
 
-    private List getResolvedSourceRoots() {
-
-        return getConfiguration().includesAllSourceRoots() ?
-                getSourceRoots() :
-                Collections.singletonList(getSourceDirectory());
+    private boolean isGeneratedSourcesDirectory(String sourceRoot) {
+        final String generatedSourcesDirectoryName = File.separator + "target" + File.separator + "generated-sources";
+        return sourceRoot.indexOf(generatedSourcesDirectoryName) != -1;
     }
 
-    interface SourceRootVisitor {
-        void visitDir(File dir);
+    /**
+     * Returns list of source roots in which source files shall be searched. If configuration has
+     * <code>includesAllSourceRoots=true</code> then it will return generated sources as well.
+     * @return
+     */
+    private List/*<String>*/ getResolvedSourceRoots() {
+        final List/*<String>*/ sourceRoots = new ArrayList/*<String>*/();
+        if (getConfiguration().includesAllSourceRoots()) {
+            // take all roots
+            sourceRoots.addAll(getSourceRoots());
+        } else {
+            // take non-generated source roots
+            for (Iterator/*<String>*/ iter = getSourceRoots().iterator(); iter.hasNext(); ) {
+                String sourceRoot = (String)iter.next();
+                if (!isGeneratedSourcesDirectory(sourceRoot)) {
+                    sourceRoots.add(sourceRoot);
+                }
+            }
+        }
+        return sourceRoots;
     }
 
 

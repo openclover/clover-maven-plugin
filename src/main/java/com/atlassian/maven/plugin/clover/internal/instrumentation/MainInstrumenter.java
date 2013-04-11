@@ -20,23 +20,21 @@ package com.atlassian.maven.plugin.clover.internal.instrumentation;
  */
 
 import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
-import com.atlassian.maven.plugin.clover.internal.scanner.MainCloverSourceScanner;
+import com.atlassian.maven.plugin.clover.internal.scanner.MainSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 
 import java.util.List;
 
 /**
  * Instruments main sources.
- * 
+ *
  */
-public class MainInstrumenter extends AbstractInstrumenter
-{
-    private MainCloverSourceScanner scanner;
+public class MainInstrumenter extends AbstractInstrumenter {
+    private MainSourceScanner scanner;
 
-    public MainInstrumenter(CompilerConfiguration configuration, String outputSourceDirectory)
-    {
-        super( configuration, outputSourceDirectory );
-        scanner = new MainCloverSourceScanner( configuration, outputSourceDirectory );
+    public MainInstrumenter(CompilerConfiguration configuration, String outputSourceDirectory) {
+        super(configuration, outputSourceDirectory);
+        scanner = new MainSourceScanner(configuration, outputSourceDirectory);
     }
 
     protected CloverSourceScanner getSourceScanner()
