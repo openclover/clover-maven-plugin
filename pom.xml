@@ -361,6 +361,8 @@ under the License.
                                 <pomInclude>**/allSrcExcluded/pom.xml</pomInclude>
                                 <pomInclude>**/contexts/pom.xml</pomInclude>
                                 <pomInclude>**/groovy/pom.xml</pomInclude>
+                                <pomInclude>**/groovy-eclipse-plugin/pom.xml</pomInclude>
+                                <pomInclude>**/groovy-eclipse-plugin-with-java/pom.xml</pomInclude>
                                 <pomInclude>**/gwt/pom.xml</pomInclude>
                                 <pomInclude>**/instrument-tests/pom.xml</pomInclude>
                                 <pomInclude>**/jaxb/pom.xml</pomInclude>
@@ -372,13 +374,12 @@ under the License.
                                 <pomInclude>**/simple/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcExcluded/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcIncluded/pom.xml</pomInclude>
+                                <!--<pomInclude>**/surefire-and-failsafe-plugins/pom.xml</pomInclude>-->
+                                <!--<pomInclude>**/testng/pom.xml</pomInclude>-->
+                                <!--<pomInclude>**/tutorial/pom.xml</pomInclude>-->
+                                <!--<pomInclude>**/webapp/pom.xml</pomInclude>-->
                                 <pomInclude>**/xdoclet/pom.xml</pomInclude>
-                                <pomInclude>**/groovy-eclipse-plugin/pom.xml</pomInclude>
-                                <!--pomInclude>**/mclover77a/pom.xml</pomInclude>
-                                <pomInclude>**/mclover77b/pom.xml</pomInclude-->
-                                <!--<pomInclude>**/mclover80/pom.xml</pomInclude>-->
                             </pomIncludes>
-                            <postBuildHookScript>verify.bsh</postBuildHookScript>
                         </configuration>
                         <executions>
                             <execution>
