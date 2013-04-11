@@ -3,33 +3,46 @@
     <files>
         <!-- check that we have reports for the groovy classes -->
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugins/Example.html</location>
-            <contains>Statistics for file Example.groovy</contains>
-        </file>
-        <file>
             <location>target/site/clover/com/atlassian/maven/plugins/ExampleTest.html</location>
             <contains>Statistics for file ExampleTest.groovy</contains>
         </file>
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugins/HelperTest.html</location>
-            <contains>Statistics for file HelperTest.groovy</contains>
+            <location>target/site/clover/com/atlassian/maven/plugins/GroovyExample.html</location>
+            <contains>Statistics for file GroovyExample.groovy</contains>
         </file>
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugins/Helper.html</location>
-            <contains>Statistics for file Helper.java</contains>
+            <location>target/site/clover/com/atlassian/maven/plugins/GroovyHelper.html</location>
+            <contains>Statistics for file GroovyHelper.groovy</contains>
+        </file>
+        <file>
+            <location>target/site/clover/com/atlassian/maven/plugins/GroovyHelperTest.html</location>
+            <contains>Statistics for file GroovyHelperTest.groovy</contains>
+        </file>
+        <!-- check that we have reports for the java classes -->
+        <file>
+            <location>target/site/clover/com/atlassian/maven/plugins/JavaExample.html</location>
+            <contains>Statistics for file JavaExample.java</contains>
+        </file>
+        <file>
+            <location>target/site/clover/com/atlassian/maven/plugins/JavaHelper.html</location>
+            <contains>Statistics for file JavaHelper.java</contains>
+        </file>
+        <file>
+            <location>target/site/clover/com/atlassian/maven/plugins/JavaHelperTest.html</location>
+            <contains>Statistics for file JavaHelperTest.java</contains>
         </file>
         <!-- Check that we have code coverage -->
         <file>
             <location>target/site/clover/clover.xml</location>
-            <contains><![CDATA[<line .* count="2" .* signature="show\(\) : def"/>]]></contains> <!-- Example.groovy -->
+            <contains><![CDATA[<line .* count="3" .* signature="show\(\) : def"/>]]></contains> <!-- GroovyExample.groovy -->
         </file>
         <file>
             <location>target/site/clover/clover.xml</location>
-            <contains><![CDATA[<line .* count="1" .* signature="help\(Example\) : void"/>]]></contains> <!-- Helper.java -->
+            <contains><![CDATA[<line .* count="1" .* signature="help\(GroovyExample\) : void"/>]]></contains> <!-- JavaHelper.java -->
         </file>
         <file>
             <location>target/site/clover/clover.xml</location>
-            <contains><![CDATA[<line .* count="1" .* signature="testHelp\(\) : void"/>]]></contains> <!-- HelperTest.groovy -->
+            <contains><![CDATA[<line .* count="1" .* signature="testGroovyExampleHelp\(\) : void"/>]]></contains> <!-- GroovyHelperTest.groovy -->
         </file>
         <file>
             <location>target/site/clover/clover.xml</location>

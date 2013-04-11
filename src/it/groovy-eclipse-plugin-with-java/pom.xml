@@ -1,33 +1,30 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.atlassian.maven.plugins.sample</groupId>
-    <artifactId>clover-sample-groovy-eclipse-plugin</artifactId>
+    <artifactId>clover-sample-groovy-eclipse-plugin-with-java</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Sample for maven-clover2-plugin with groovy-eclipse-plugin</name>
     <description>
-        Example how to use Clover-for-Maven with groovy-eclipse-plugin. It uses an approach in which Groovy source
-        files are stored in 'src/main/groovy' and 'src/test/groovy' while Java source files in 'src/main/java' and
-        'src/test/java'. It requires definition of extra source folders using the build-helper-maven-plugin (works
-        for Maven 2.x and 3.x) or using the 'extensions=true' feature of the groovy-eclipse-compiler plugin (works
-        for Maven 3.x).
+        Example how to use Clover-for-Maven with groovy-eclipse-plugin. It uses an approach where Groovy
+        source files are placed in 'src/main/java' and 'src/test/java' folders, so that there is no need
+        to define extra source folders via build-helper-maven-plugin.
 
         See: http://groovy.codehaus.org/Groovy-Eclipse+compiler+plugin+for+Maven
-        chapter "Use the groovy-eclipse-compiler mojo for configuring source folders" and "Use the build-helper-maven-plugin"
-
-        This sample is also an integration test checking binary compatibility with ASM v3, ASM v4, Groovy v1, Groovy v2.
+        chapter "Setting up the source folders / Do nothing"
     </description>
     <properties>
         <groovy.all>RELEASE</groovy.all>
         <groovy.eclipse.batch>RELEASE</groovy.eclipse.batch>
         <groovy.eclipse.compiler>RELEASE</groovy.eclipse.compiler>
         <clover.version>LATEST</clover.version>
+        <junit.version>4.11</junit.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -60,37 +57,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/main/groovy</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>add-test-source</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>add-test-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/test/groovy</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
@@ -104,7 +70,7 @@
                     <version>${clover.version}</version>
                     <configuration>
                         <includesAllSourceRoots>false</includesAllSourceRoots>
-                        <excludesList>**/*ExcludedFile.*</excludesList>
+                        <excludesList>**/ExcludedFile.groovy</excludesList>
                     </configuration>
                 </plugin>
             </plugins>
