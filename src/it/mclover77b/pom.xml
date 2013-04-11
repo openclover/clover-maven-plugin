@@ -19,8 +19,8 @@ under the License.
 
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.atlassian.maven.plugins</groupId>
-  <artifactId>maven-clover2-plugin-it-mclover77b</artifactId>
+  <groupId>com.atlassian.maven.plugins.sample</groupId>
+  <artifactId>clover-sample-mclover77b</artifactId>
   <packaging>jar</packaging>
   <name>Maven Clover Plugin Contexts Sample</name>
   <description>Maven Clover Plugin Contexts Sample</description>

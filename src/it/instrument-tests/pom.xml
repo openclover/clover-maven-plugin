@@ -19,8 +19,8 @@ under the License.
 
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.atlassian.maven.plugins</groupId>
-  <artifactId>maven-clover2-plugin-sample-simple</artifactId>
+  <groupId>com.atlassian.maven.plugins.sample</groupId>
+  <artifactId>clover-sample-instrument-tests</artifactId>
   <packaging>jar</packaging>
   <name>Maven Clover Plugin Instrument Tests Sample</name>
   <description>Maven Clover Plugin Instrument Tests Sample</description>
