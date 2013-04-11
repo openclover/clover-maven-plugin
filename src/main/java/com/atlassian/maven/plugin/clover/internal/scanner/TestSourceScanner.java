@@ -24,23 +24,18 @@ import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 import java.util.List;
 
 /**
- * Computes the list of main source files to instrument.
- *
+ * Computes the list of test source files to instrument.
  */
-public class MainCloverSourceScanner extends AbstractCloverSourceScanner
-{
-    public MainCloverSourceScanner(CompilerConfiguration configuration, String outputSourceDirectory)
-    {
-        super( configuration, outputSourceDirectory );
+public class TestSourceScanner extends AbstractSourceScanner {
+    public TestSourceScanner(CompilerConfiguration configuration, String outputSourceDirectory) {
+        super(configuration, outputSourceDirectory);
     }
 
-    protected List getSourceRoots()
-    {
-        return getConfiguration().getProject().getCompileSourceRoots();
+    protected List/*<String>*/ getSourceRoots() {
+        return getConfiguration().getProject().getTestCompileSourceRoots();
     }
 
-    protected String getSourceDirectory()
-    {
-        return getConfiguration().getProject().getBuild().getSourceDirectory();
+    protected String getSourceDirectory() {
+        return getConfiguration().getProject().getBuild().getTestSourceDirectory();
     }
 }

@@ -28,10 +28,16 @@ import java.util.Map;
 public interface CloverSourceScanner
 {
     /**
-     * @return the list of source files to instrument taking into account the includes and excludes specified by
-     *         the user. The Map is indexed on source roots.
+     * @return Map&lt;String,String[]&gt; - the list of source files to instrument taking into account the includes
+     *  and excludes specified by the user. The Map is indexed on source roots.
      */
-    Map getSourceFilesToInstrument();
+    Map/*<String,String[]>*/ getSourceFilesToInstrument();
+
+    /**
+     * @param languageFileFilter extra filter (in addition to includes/excludes) based on programming language
+     * @return Map&lt;String,String[]&gt;
+     */
+    Map/*<String,String[]>*/ getSourceFilesToInstrument(LanguageFileFilter languageFileFilter);
 
     /**
      * @return the list of excluded files that we'll need to copy. This is required as otherwise the excluded files
@@ -39,6 +45,6 @@ public interface CloverSourceScanner
      *         lead to compilation errors if any other Java file depends on any of them. The Map is indexed on
      *         source roots.
      */
-    Map getExcludedFiles();
+    Map/*<String,String[]>*/ getExcludedFiles();
     
 }

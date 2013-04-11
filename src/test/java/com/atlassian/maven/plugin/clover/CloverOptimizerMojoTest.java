@@ -1,10 +1,11 @@
 package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.clover.util.FileUtils;
-import junit.framework.TestCase;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,10 +16,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Test for {@link CloverOptimizerMojo}
  */
-public class CloverOptimizerMojoTest extends TestCase {
+public class CloverOptimizerMojoTest {
 
     /**
      * Helper class to define directory structure for tests.
@@ -61,6 +66,7 @@ public class CloverOptimizerMojoTest extends TestCase {
     /**
      * Prepare directory structure for tests.
      */
+    @Before
     public void setUp() throws IOException {
         // our test directory layout
         testLayout = createLayout();
@@ -79,6 +85,7 @@ public class CloverOptimizerMojoTest extends TestCase {
      * Test for {@link CloverOptimizerMojo#createFileSet(org.apache.tools.ant.Project, java.io.File, java.util.List, java.util.List)}
      * with empty includes / excludes elements. It should include all files from directory.
      */
+    @Test
     public void testCreateFileSetEmptyIncludeNullExclude() {
         // input
         final List<String> includes = Collections.emptyList();
@@ -109,6 +116,7 @@ public class CloverOptimizerMojoTest extends TestCase {
      * Test for {@link CloverOptimizerMojo#createFileSet(org.apache.tools.ant.Project, java.io.File, java.util.List, java.util.List)}
      * with empty includes / excludes elements. It should include all files from directory.
      */
+    @Test
     public void testCreateFileSetEmptyIncludeExclude() {
         // input
         final List<String> includes = Collections.emptyList();
@@ -139,6 +147,7 @@ public class CloverOptimizerMojoTest extends TestCase {
      * Test for {@link CloverOptimizerMojo#createFileSet(org.apache.tools.ant.Project, java.io.File, java.util.List, java.util.List)}
      * having only one include / exclude expression.
      */
+    @Test
     public void testCreateFileSetOneIncludeExclude() {
         // input
         final List<String> includes = new ArrayList<String>() {{
@@ -179,6 +188,7 @@ public class CloverOptimizerMojoTest extends TestCase {
      * Test for {@link CloverOptimizerMojo#createFileSet(org.apache.tools.ant.Project, java.io.File, java.util.List, java.util.List)}
      * with several includes / excludes elements on lists, where each element contains one path.
      */
+    @Test
     public void testCreateFileSetMultipleIncludeExcludeOnePath() {
         // input
         final List<String> includes = new ArrayList<String>() {{
@@ -216,6 +226,7 @@ public class CloverOptimizerMojoTest extends TestCase {
      * Test for {@link CloverOptimizerMojo#createFileSet(org.apache.tools.ant.Project, java.io.File, java.util.List, java.util.List)}
      * with several includes / excludes elements on lists, where each element contains multiple paths separated by comma.
      */
+    @Test
     public void testCreateFileSetMultipleIncludeExcludeManyPaths() {
         // input
         final List<String> includes = new ArrayList<String>() {{
@@ -252,6 +263,7 @@ public class CloverOptimizerMojoTest extends TestCase {
      * with several includes / excludes containing a regular expression. It should take all files from directory
      * matching a regular expression.
      */
+    @Test
     public void testCreateFileSetIncludeExcludeRegExp() {
         // input
         final List<String> includes = new ArrayList<String>() {{
@@ -286,6 +298,7 @@ public class CloverOptimizerMojoTest extends TestCase {
     /**
      * Test for CloverOptimizerMojo#explodePaths()
      */
+    @Test
     public void testExplodePathsEmptyList() {
         final List<String> inputEmpty = Collections.emptyList();
         final List<String> inputWhitespace = new ArrayList<String>() {{
@@ -298,6 +311,7 @@ public class CloverOptimizerMojoTest extends TestCase {
         assertListsEqual(empty, mojo.explodePaths(null, inputWhitespace));
     }
 
+    @Test
     public void testExplodePathsFlatList() {
         final List<String> input = new ArrayList<String>() {{
             add("path/one");
@@ -308,6 +322,7 @@ public class CloverOptimizerMojoTest extends TestCase {
         assertListsEqual(expected, mojo.explodePaths(null, input));
     }
 
+    @Test
     public void testExplodePathsNestedList() {
         final List<String> input = new ArrayList<String>() {{
             add("path/one, path/two   path/three");
@@ -323,6 +338,7 @@ public class CloverOptimizerMojoTest extends TestCase {
         assertListsEqual(expected, mojo.explodePaths(null, input));
     }
 
+    @Test
     public void testExplodePathsRegexp() {
         final List<String> input = new ArrayList<String>() {{
             add("%regex[.*[GH]oo.*]");

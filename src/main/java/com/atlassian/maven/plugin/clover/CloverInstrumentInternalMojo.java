@@ -22,8 +22,9 @@ package com.atlassian.maven.plugin.clover;
 import com.atlassian.clover.ant.groovy.GroovycSupport;
 import com.atlassian.clover.instr.java.InstrumentationConfig;
 import com.atlassian.clover.remote.DistributedConfig;
-import com.atlassian.maven.plugin.clover.internal.scanner.GroovySourceScanner;
-import com.atlassian.maven.plugin.clover.internal.scanner.GroovyTestScanner;
+import com.atlassian.maven.plugin.clover.internal.scanner.GroovyMainSourceScanner;
+import com.atlassian.maven.plugin.clover.internal.scanner.GroovyTestSourceScanner;
+import com.atlassian.maven.plugin.clover.internal.scanner.LanguageFileExtensionFilter;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.AbstractArtifactResolutionException;
@@ -65,8 +66,7 @@ import java.util.Set;
  * @requiresDependencyResolution test
  *
  */
-public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements CompilerConfiguration
-{
+public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements CompilerConfiguration {
 
     /**
      * List of all artifacts for this Clover plugin provided by Maven. This is used internally to get a handle on
@@ -102,7 +102,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      * @required
      */
     private ArtifactRepository localRepository;
-    
+
     /**
      * Remote repositories used for the project.
      *
@@ -118,7 +118,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      *
      * @parameter
      */
-    private Set includes = new HashSet(Arrays.asList(new String[]{"**/*.java", "**/*.groovy"}));
+    private Set/*<String>*/ includes = new HashSet/*<String>*/(Arrays.asList(new String[]{"**/*.java", "**/*.groovy"}));
 
     /**
      * The comma seperated list of files to include in the instrumentation.
@@ -130,7 +130,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     /**
      * The comma seperated list of file to exclude from the instrumentation.
-     * @parameter expression="${maven.clover.excludesList}" 
+     * @parameter expression="${maven.clover.excludesList}"
      */
     private String excludesList = null;
 
@@ -139,7 +139,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      * The list of file to exclude from the instrumentation.
      * @parameter
      */
-    private Set excludes = new HashSet();
+    private Set/*<String>*/ excludes = new HashSet/*<String>*/();
 
     /**
      * Specifies the custom method contexts to use for filtering specific methods from Clover reports.
@@ -147,7 +147,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      * e.g. <pre>&lt;main&gt;public static void main\(String args\[\]\).*&lt;/main&gt;</pre>
      * will define the context called 'main' which will match all public static void main methods.
      *
-     * @parameter 
+     * @parameter
      */
     private Map methodContexts = new HashMap();
 
@@ -156,7 +156,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      *
      * e.g.<pre>&lt;log&gt;^LOG\..*&lt;/log&gt;<pre>
      * defines a statement context called "log" which matches all LOG statements.
-     * 
+     *
      * @parameter
      */
     private Map statementContexts = new HashMap();
@@ -192,7 +192,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     /**
      * The character encoding to use when parsing source files.
      *
-     * @parameter expression="${maven.clover.encoding}" 
+     * @parameter expression="${maven.clover.encoding}"
      */
     private String encoding;
 
@@ -219,7 +219,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      *   <li><tt>retryPeriod</tt> - the amount of time a client should wait between reconnect attempts. default: <b>1000</b></li>
      *  </ul>
      *
-     * @parameter 
+     * @parameter
      */
     private DistributedCoverage distributedCoverage;
 
@@ -339,9 +339,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      * {@inheritDoc}
      * @see com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo#execute()
      */
-    public void execute()
-        throws MojoExecutionException
-    {
+    public void execute() throws MojoExecutionException {
         if (skip) {
             getLog().info("Skipping clover instrumentation.");
             return;
@@ -351,40 +349,43 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         resetSrcDirsOriginal(getProject().getArtifact(), this);
 
         final File outDir = new File(this.cloverOutputDirectory, getSrcName());
-        String cloverOutputSourceDirectory = outDir.getPath();
-        String cloverOutputTestSourceDirectory = new File( this.cloverOutputDirectory, getSrcTestName()).getPath();
-        new File( resolveCloverDatabase() ).getParentFile().mkdirs();
+        final String cloverOutputSourceDirectory = outDir.getPath();
+        final String cloverOutputTestSourceDirectory = new File(this.cloverOutputDirectory, getSrcTestName()).getPath();
+        new File(resolveCloverDatabase()).getParentFile().mkdirs();
 
         super.execute();
 
         logArtifacts( "before changes" );
 
         // Instrument both the main sources and the test sources if the user has configured it
-        final MainInstrumenter mainInstrumenter = new MainInstrumenter( this, cloverOutputSourceDirectory );
-        final TestInstrumenter testInstrumenter = new TestInstrumenter( this, cloverOutputTestSourceDirectory );
+        final MainInstrumenter mainInstrumenter = new MainInstrumenter(this, cloverOutputSourceDirectory);
+        final TestInstrumenter testInstrumenter = new TestInstrumenter(this, cloverOutputTestSourceDirectory);
 
-        if ( isJavaProject() )
-        {
+        if (isJavaProject()) {
             mainInstrumenter.instrument();
-            if ( this.includesTestSourceRoots )
-            {
+            if (this.includesTestSourceRoots) {
                 testInstrumenter.instrument();
             }
         }
 
+        // add clover.jar to classpath
         addCloverDependencyToCompileClasspath();
-        injectGrover(outDir);
 
+        // deal with '-clover' artifacts in dependencies
         swizzleCloverDependencies();
+
         // Modify Maven model so that it points to the new source directories and to the clovered
         // artifacts instead of the original values.
         String originalSrcDir = mainInstrumenter.redirectSourceDirectories();
         originalSrcMap.put(getProject().getId(), originalSrcDir);
-        if ( this.includesTestSourceRoots )
-        {
+        if (this.includesTestSourceRoots) {
             String originalSrcTestDir = testInstrumenter.redirectSourceDirectories();
             originalSrcTestMap.put(getProject().getId(), originalSrcTestDir);
         }
+
+        // add instrumentation of groovy sources
+        injectGrover(outDir);
+
         redirectOutputDirectories();
         redirectArtifact();
 
@@ -419,7 +420,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         config.setInitstring(this.resolveCloverDatabase());
         config.setTmpDir(outDir);
 
-        final List includeFiles = calcIncludedFiles();
+        final List/*<File>*/ includeFiles = calcIncludedFilesForGroovy();
         getLog().debug("Clover including the following files for Groovy instrumentation: " + includeFiles);
         config.setIncludedFiles(includeFiles);
         config.setEnabled(true);
@@ -451,23 +452,107 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         }
     }
 
-    private List calcIncludedFiles()
-    {
-        GroovySourceScanner gScanner = new GroovySourceScanner(this, getProject().getBuild().getOutputDirectory());
-        GroovyTestScanner gTestScanner = new GroovyTestScanner(this, getProject().getBuild().getOutputDirectory());
+    /**
+     * There are several cases how source folders are handled.
+     * <p/>
+     * <b>1) includeAllSourceRoots = false, java+groovy in 'src/(main|test)/java'</b>
+     * <pre>
+     *  -> source directories are read from getCompileSourceRoots()
+     *  -> *.java files are instrumented in the source and saved in 'src-(test-)instrumented'
+     *  -> *.groovy are copied "as is" to 'src-(test-)instrumented' too
+     *  -> source roots are overridden:
+     *          'src/main/java' -> 'src-instrumented'
+     *          'src/test/java' -> 'src-test-instrumented'
+     *  -> groovyc compiles sources from source roots listed above:
+     *       -> *.java files are already instrumented in the source, compile "as is"
+     *       -> *.groovy files are being instrumented in the AST
+     * </pre>
+     * <p/>
+     * <b>2) includeAllSourceRoots = false, java in 'src/(main|test)/java', groovy in 'src/(main|test)/(java|groovy)'</b>
+     * <pre>
+     *  -> build-helper-maven-plugin adds 'src/(main|test)/groovy' as extra source root
+     *  -> source directories are read from getCompileSourceRoots()
+     *  -> *.java files are instrumented in the source and saved in 'src-(test-)instrumented'
+     *  -> *.groovy files
+     *          from 'src/(main|test)/java' are copied to 'src-(test-)instrumented'
+     *          from 'src/(main|test)/groovy' are not copied anywhere
+     *  -> source roots are switched:
+     *          'src/main/java' -> 'src-instrumented'
+     *          'src/test/java' -> 'src-test-instrumented'
+     *          'src/main/groovy' -> (unchanged)
+     *          'src/test/groovy' -> (unchanged)
+     *  -> groovyc compiles sources from all source roots listed above
+     *       -> *.java files are already instrumented in the source, compile "as is"
+     *       -> *.groovy files are instrumented in the AST
+     * </pre>
+     * <p/>
+     * <b>3) includeAllSourceRoots = false, java in 'src/(main|test)/java', groovy in 'src/(main|test)/(java|groovy)'</b>
+     * <pre>
+     *  -> the 'src/(main|test)/groovy' is NOT added as extra source root
+     *      -> so that getCompileSourceRoots() does not return it in the list
+     *      -> groovy-eclipse-plugin will add the 'src/(main|test)/groovy' location internally (typically after the
+     *         clover2:setup goal is finished)
+     *  -> source directories are read from getCompileSourceRoots()
+     *      -> GroovyMain/TestSourceScanner contains additional hardcoded location for 'src/(main|test)/groovy'
+     *  -> *.java files are instrumented in the source and saved in 'src-(test-)instrumented'
+     *  -> *.groovy files
+     *          from 'src/(main|test)/java' are copied to 'src-(test-)instrumented'
+     *          from 'src/(main|test)/groovy' are not copied anywhere
+     *  -> source roots are switched:
+     *          'src/main/java' -> 'src-instrumented'
+     *          'src/test/java' -> 'src-test-instrumented'
+     *   -> groovyc compiles sources from all source roots listed above
+     *       -> *.java files are already instrumented, compile "as is"
+     *       -> *.groovy files are instrumented in the AST
+     *       -> groovy-eclipse-plugin internally adds 'src/(main|test)/groovy' to the list of source roots
+     * </pre>
+     * <p/>
+     * <b>1b) includeAllSourceRoots = true, java+groovy in 'src/(main|test)/java',
+     * generated sources in 'target/generated-(test-)sources</b>
+     * <pre>
+     *   -> as for case 1) but 'generated-(test-)sources' are instrumented too and stored in 'src-(test-)instrumented'
+     * </pre>
+     * <b>2b) includeAllSourceRoots = true, java in 'src/(main|test)/java', groovy in 'src/(main|test)/(java|groovy)',
+     * generated sources in 'target/generated-(test-)sources</b>
+     * <pre>
+     *   -> as for case 2) but 'generated-(test-)sources' are instrumented too and stored in 'src-(test-)instrumented'
+     * </pre>
+     * <b>3b) includeAllSourceRoots = true, java in 'src/(main|test)/java', groovy in 'src/(main|test)/(java|groovy)'
+     * generated sources in 'target/generated-(test-)sources</b>
+     * <pre>
+     *   -> as for case 3) but 'generated-(test-)sources' are instrumented too and stored in 'src-(test-)instrumented'
+     * </pre>
+     * <b>4) includeAllSourceRoots = false, java in src/xxx/java, no groovy code, no groovy plugin</b>
+     * <pre>
+     *   -> standard behaviour, 'src/(main|test)/java' is instrumented into 'target/clover/src-(test-)instrumented'
+     *   and compiled
+     * </pre>
+     * <b>4b) includeAllSourceRoots = true, java in src/xxx/java, no groovy code, no groovy plugin</b>
+     * <pre>
+     *   -> standard behaviour, 'src/(main|test)/java' as well as 'target/generated-(test-)sources' are instrumented
+     *   into 'target/clover/src-(test-)instrumented' and compiled
+     * </pre>
+     *
+     * @return List&lt;File&gt;
+     * @see com.atlassian.maven.plugin.clover.internal.instrumentation.AbstractInstrumenter#instrument()
+     * @see #redirectOutputDirectories()
+     * @see <a href="http://groovy.codehaus.org/Groovy-Eclipse+compiler+plugin+for+Maven">Groovy-Eclipse+compiler+plugin+for+Maven</a>
+     */
+    private List/*<File>*/ calcIncludedFilesForGroovy() {
+        final GroovyMainSourceScanner groovyMainScanner = new GroovyMainSourceScanner(this, getProject().getBuild().getOutputDirectory());
+        final List/*<File>*/ mainGroovyFiles = extractIncludes(groovyMainScanner.getSourceFilesToInstrument(LanguageFileExtensionFilter.GROOVY_LANGUAGE));
+        final GroovyTestSourceScanner groovyTestScanner = new GroovyTestSourceScanner(this, getProject().getBuild().getOutputDirectory());
+        final List/*<File>*/ testGroovyFiles = extractIncludes(groovyTestScanner.getSourceFilesToInstrument(LanguageFileExtensionFilter.GROOVY_LANGUAGE));
 
-        List sources =  extractIncludes(gScanner.getSourceFilesToInstrument());
-        List tests =  extractIncludes(gTestScanner.getSourceFilesToInstrument());
-        List allSource = new ArrayList(sources);
-        allSource.addAll(tests);
-        return allSource;
+        // combine lists
+        final List/*<File>*/ allSources = new ArrayList/*<File>*/(mainGroovyFiles);
+        allSources.addAll(testGroovyFiles);
+        return allSources;
     }
 
-    private ArrayList extractIncludes(Map srcFiles)
-    {
-        ArrayList includeFiles = new ArrayList();
-        for (Iterator iterator = srcFiles.keySet().iterator(); iterator.hasNext();)
-        {
+    private ArrayList/*<File>*/ extractIncludes(final Map srcFiles) {
+        final ArrayList includeFiles = new ArrayList();
+        for (final Iterator iterator = srcFiles.keySet().iterator(); iterator.hasNext(); ) {
             final String dirName = (String) iterator.next();
             final String[] includes = (String[]) srcFiles.get(dirName);
             for (int i = 0; i < includes.length; i++)
@@ -539,9 +624,9 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
             final String finalName =
                     getProject().getBuild().getFinalName() == null ?
-                    (getProject().getArtifactId() + "-" + getProject().getVersion()) 
+                    (getProject().getArtifactId() + "-" + getProject().getVersion())
                     : getProject().getBuild().getFinalName();
-            
+
             getProject().getBuild().setFinalName(finalName + (useCloverClassifier ? "-clover" : ""));
         }
     }
@@ -725,22 +810,19 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     {
         if (includesList == null) {
             return this.includes;
-        }
-        if (includesList != null) {
+        } else {
             return new HashSet(Arrays.asList(includesList.split(",")));
         }
-        return this.includes;
     }
 
     public Set getExcludes()
     {
         if (excludesList == null) {
-            return this.excludes;
+            return excludes;
+        } else {
+            excludes.addAll(Arrays.asList(excludesList.split(",")));
+            return excludes;
         }
-        if (excludesList != null) {
-            this.excludes.addAll(Arrays.asList(excludesList.split(",")));
-        }
-        return this.excludes;
     }
 
     public boolean includesAllSourceRoots()
