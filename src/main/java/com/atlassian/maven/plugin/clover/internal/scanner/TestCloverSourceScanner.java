@@ -25,22 +25,17 @@ import java.util.List;
 
 /**
  * Computes the list of test source files to instrument.
- *
  */
-public class TestCloverSourceScanner extends AbstractCloverSourceScanner
-{
-    public TestCloverSourceScanner(CompilerConfiguration configuration, String outputSourceDirectory)
-    {
-        super( configuration, outputSourceDirectory);
+public class TestCloverSourceScanner extends AbstractCloverSourceScanner {
+    public TestCloverSourceScanner(final CompilerConfiguration configuration, final String outputSourceDirectory) {
+        super(configuration, outputSourceDirectory);
     }
 
-    protected List getSourceRoots()
-    {
+    protected List<String> getSourceRoots() {
         return getConfiguration().getProject().getTestCompileSourceRoots();
     }
 
-    protected String getSourceDirectory()
-    {
+    protected String getSourceDirectory() {
         return getConfiguration().getProject().getBuild().getTestSourceDirectory();
     }
 }

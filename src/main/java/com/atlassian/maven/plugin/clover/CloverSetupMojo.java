@@ -22,9 +22,8 @@ public class CloverSetupMojo extends CloverInstrumentInternalMojo {
     static Date START_DATE; 
 
     public void execute() throws MojoExecutionException {
-
         // store the start time of the build. ie - the very first compilation with clover.
-        MavenProject firstProject = (MavenProject) getReactorProjects().get(0);
+        final MavenProject firstProject = getReactorProjects().get(0);
         if (firstProject == getProject()) {
             START_DATE = new Date();
         }

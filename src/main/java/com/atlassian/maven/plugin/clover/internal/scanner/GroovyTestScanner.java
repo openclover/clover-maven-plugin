@@ -9,20 +9,16 @@ import java.util.List;
 
 /**
  */
-public class GroovyTestScanner extends AbstractCloverSourceScanner
-{
-    public GroovyTestScanner(CompilerConfiguration configuration, String outputDirectory)
-    {
+public class GroovyTestScanner extends AbstractCloverSourceScanner {
+    public GroovyTestScanner(final CompilerConfiguration configuration, final String outputDirectory) {
         super(configuration, outputDirectory);
     }
 
-    protected List getSourceRoots()
-    {
+    protected List<String> getSourceRoots() {
         return new ArrayList(Arrays.asList(new String[]{"src/test/groovy"}));
     }
 
-    protected String getSourceDirectory()
-    {
+    protected String getSourceDirectory() {
         return new File(getConfiguration().getProject().getBuild().getTestSourceDirectory()).getParent();
     }
 }

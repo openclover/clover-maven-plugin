@@ -37,7 +37,7 @@ public interface CloverConfiguration
 
     MavenProject getProject();
 
-    List getReactorProjects();
+    List<MavenProject> getReactorProjects();
 
     String getCloverDatabase();
 

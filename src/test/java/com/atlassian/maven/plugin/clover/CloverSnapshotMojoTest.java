@@ -35,8 +35,8 @@ public class CloverSnapshotMojoTest extends MockObjectTestCase {
                 return true;
             }
 
-            public List getReactorProjects() {
-                final ArrayList list = new ArrayList();
+            public List<MavenProject> getReactorProjects() {
+                final ArrayList<MavenProject> list = new ArrayList<MavenProject>();
                 list.add(project);
                 return list;
             }

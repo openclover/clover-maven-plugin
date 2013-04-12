@@ -47,7 +47,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      *
      * @parameter
      */
-    private List/*<String>*/ optimizeIncludes;
+    private List<String> optimizeIncludes;
 
 
     /**
@@ -57,14 +57,14 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      *
      * @parameter
      */
-    private List/*<String>*/ optimizeExcludes;
+    private List<String> optimizeExcludes;
 
     /**
      * A list of Tests which should always be run. ie they will never be optimized away.
      * 
      * @parameter
      */
-    private List/*<String>*/ alwaysRunTests;
+    private List<String> alwaysRunTests;
 
     /**
      * <b>NOTE:</b> This currently has no effect, because the maven-surefire-plugin re-orders the tests alphabetically.
@@ -104,7 +104,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
     /**
      * The default test patterns to include.
      */
-    private static final List DEFAULT_INCLUDES = Arrays.asList(new String[]{"**/Test*.java", "**/*Test.java", "**/*TestCase.java"});
+    private static final List<String> DEFAULT_INCLUDES = Arrays.asList(new String[]{"**/Test*.java", "**/*Test.java", "**/*TestCase.java"});
 
     private static final String REGEX_START = "%regex[";
     private static final String REGEX_END = "]";
@@ -128,12 +128,9 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         antProj.init();
         antProj.addBuildListener(new MvnLogBuildListener(getLog()));
 
-
-        final List optimizedTests = configureOptimisedTestSet(antProj);
-
+        final List<Resource> optimizedTests = configureOptimisedTestSet(antProj);
         final StringBuffer testPattern = new StringBuffer();
-        for (final Iterator iterator = optimizedTests.iterator(); iterator.hasNext();) {
-            final Resource test = (Resource) iterator.next();
+        for (final Resource test : optimizedTests) {
             getLog().debug("Running TEST: " + test.getName());
             testPattern.append(test.getName());
             testPattern.append(",");
@@ -152,9 +149,9 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         }
     }
 
-    protected List configureOptimisedTestSet(final Project antProj) {
-        List/*<String>*/ includes = optimizeIncludes;
-        List/*<String>*/ excludes = optimizeExcludes;
+    protected List<Resource> configureOptimisedTestSet(final Project antProj) {
+        List<String> includes = optimizeIncludes;
+        List<String> excludes = optimizeExcludes;
         
         if (includes == null && excludes == null) {
             getLog().debug("No clover excludes or includes specified. Falling back to Surefire configuration.");
@@ -190,15 +187,14 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         antProj.setProperty(CloverNames.PROP_INITSTRING, resolveCloverDatabase());
         antProj.setName(getProject().getName());
 
-        final List testSources = getProject().getTestCompileSourceRoots();
-
-        for (final Iterator iterator = testSources.iterator(); iterator.hasNext();) {
-            addTestRoot(antProj, includes, excludes, testsToRun, (String) iterator.next());
+        final List<String> testSources = getProject().getTestCompileSourceRoots();
+        for (String testSource : testSources) {
+            addTestRoot(antProj, includes, excludes, testsToRun, testSource);
         }
         return testsToRun.getOptimizedTestResource();
     }
 
-    protected List/*<String>*/ extractNestedStrings(final String elementName, final Plugin surefirePlugin) {
+    protected List<String> extractNestedStrings(final String elementName, final Plugin surefirePlugin) {
         final Xpp3Dom config = (Xpp3Dom) surefirePlugin.getConfiguration();
         return config == null ? null : extractNestedStrings(elementName, config);
     }
@@ -209,13 +205,12 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * @param childname the name of the first subelement that contains the list
      * @param config    the actual config object
      */
-    static List/*<String>*/ extractNestedStrings(final String childname, final Xpp3Dom config) {
+    static List<String> extractNestedStrings(final String childname, final Xpp3Dom config) {
         final Xpp3Dom subelement = config.getChild(childname);
         if (subelement != null) {
-            final List/*<String>*/ result = new LinkedList/*<String>*/();
+            final List<String> result = new LinkedList<String>();
             final Xpp3Dom[] children = subelement.getChildren();
-            for (int i = 0; i < children.length; i++) {
-                final Xpp3Dom child = children[i];
+            for (final Xpp3Dom child : children) {
                 result.add(child.getValue());
             }
             return result;
@@ -224,7 +219,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         return null;
     }
 
-    private void addTestRoot(final Project antProj, final List/*<String>*/ includes, final List/*<String>*/ excludes,
+    private void addTestRoot(final Project antProj, final List<String> includes, final List<String> excludes,
                              final CloverOptimizedTestSet testsToRun, final String testRoot) {
         final File testRootDir = new File(testRoot);
         if (!testRootDir.exists()) {
@@ -260,17 +255,17 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * @param excludes
      * @return FileSet
      */
-    FileSet createFileSet(final Project antProject, final File directory, final List/*<String>*/ includes, final List/*<String>*/ excludes) {
+    FileSet createFileSet(final Project antProject, final File directory, final List<String> includes, final List<String> excludes) {
         final FileSet testFileSet = new FileSet();
         testFileSet.setProject(antProject);
         testFileSet.setDir(directory);
 
-        final List/*<String>*/ includesExpanded = explodePaths(directory, includes);
-        testFileSet.appendIncludes((String[]) includesExpanded.toArray(new String[includesExpanded.size()]));
+        final List<String> includesExpanded = explodePaths(directory, includes);
+        testFileSet.appendIncludes(includesExpanded.toArray(new String[includesExpanded.size()]));
 
         if (excludes != null && !excludes.isEmpty()) {
-            final List/*<String>*/ excludesExpanded = explodePaths(directory, excludes);
-            testFileSet.appendExcludes((String[]) excludesExpanded.toArray(new String[excludesExpanded.size()]));
+            final List<String> excludesExpanded = explodePaths(directory, excludes);
+            testFileSet.appendExcludes(excludesExpanded.toArray(new String[excludesExpanded.size()]));
         }
         return testFileSet;
     }
@@ -287,10 +282,9 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
             getLog().warn("Maven execution project is null. Surefire configuration will be ignored.");
             return null;
         }
-        final List plugins = mavenProject.getBuildPlugins();
 
-        for (final Iterator iterator = plugins.iterator(); iterator.hasNext();) {
-            final Plugin plugin = (Plugin) iterator.next();
+        final List<Plugin> plugins = mavenProject.getBuildPlugins();
+        for (final Plugin plugin : plugins) {
             if (key.equalsIgnoreCase(plugin.getKey())) {
                 return plugin;
             }
@@ -313,12 +307,9 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * @param paths list of paths (single or separated by space or comma)
      * @return List&lt;String&gt;
      */
-    static List/*<String>*/ explodePaths(final File directory, final List/*<String>*/ paths) {
-        final List/*<String>*/ explodedPaths = new LinkedList/*<String>*/();
-
-        for (final Iterator/*<String>*/ iter = paths.iterator(); iter.hasNext(); ) {
-            final String path = (String)iter.next();
-
+    static List<String> explodePaths(final File directory, final List<String> paths) {
+        final List<String> explodedPaths = new LinkedList<String>();
+        for (final String path : paths) {
             if (path.trim().startsWith("%regex[")) {
                 splitPathByRegexp(directory, explodedPaths, path);
             } else {
@@ -329,14 +320,13 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         return explodedPaths;
     }
 
-    private static List/*<File>*/ dirTreeMatchingPattern(final File dir, final Pattern pattern) {
-        final List/*<File>*/ matchedFiles = new LinkedList/*<File>*/();
+    private static List<File> dirTreeMatchingPattern(final File dir, final Pattern pattern) {
+        final List<File> matchedFiles = new LinkedList<File>();
 
         if (dir.isDirectory()) {
             // recursive search
-            final String dirContent[] = dir.list();
-            for (int i = 0; i < dirContent.length; i++) {
-                matchedFiles.addAll(dirTreeMatchingPattern(new File(dir, dirContent[i]), pattern));
+            for (String fileName : dir.list()) {
+                matchedFiles.addAll(dirTreeMatchingPattern(new File(dir, fileName), pattern));
             }
         } else {
             // add a file
@@ -357,7 +347,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * @param outputList output list to which names of found files will be added
      * @param pathRegex  regular expression for file name
      */
-    private static void splitPathByRegexp(final File directory, final List/*<String>*/ outputList, final String pathRegex) {
+    private static void splitPathByRegexp(final File directory, final List<String> outputList, final String pathRegex) {
         // extract regular expression from a path entry (we assume that there can be only one regexp)
         final String regex = pathRegex.substring(
                 pathRegex.indexOf(REGEX_START) + REGEX_START.length(),
@@ -365,21 +355,20 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
         // create pattern for this regexp and find all files in directory matching it
         final Pattern pattern = Pattern.compile(regex);
-        final List/*<File>*/ matchedFiles = dirTreeMatchingPattern(directory, pattern);
+        final List<File> matchedFiles = dirTreeMatchingPattern(directory, pattern);
 
         // convert File->String and add to output list
-        for (final Iterator/*<File>*/ iter = matchedFiles.iterator(); iter.hasNext(); ) {
-            final File file = (File)iter.next();
+        for (final File file : matchedFiles) {
             outputList.add(FileUtils.getRelativePath(directory, file));
         }
     }
 
-    private static void splitPathBySeparators(final List/*<String>*/ outputList, final String path) {
+    private static void splitPathBySeparators(final List<String> outputList, final String path) {
         final String ANT_PATTERN_SEPARATOR = "[, ]";
-        final String pathSplit[] = path.split(ANT_PATTERN_SEPARATOR);
-        for (int i = 0; i < pathSplit.length; i++) {
-            if (pathSplit[i].length() > 0) {
-                outputList.add(pathSplit[i]);
+        final String splittedPaths[] = path.split(ANT_PATTERN_SEPARATOR);
+        for (String splittedPath : splittedPaths) {
+            if (splittedPath.length() > 0) {
+                outputList.add(splittedPath);
             }
         }
     }
