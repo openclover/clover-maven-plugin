@@ -109,9 +109,8 @@ public class CloverLogMojo extends AbstractCloverMojo {
         setTestSourceRootsForProject(cloverLogTask, getProject());
 
         // do the same but for sub-modules
-        for (Iterator iterator = getDescendentModuleProjects(getProject()).iterator(); iterator.hasNext(); ) {
-            MavenProject project = (MavenProject)iterator.next();
-            setTestSourceRootsForProject(cloverLogTask, project);
+        for (MavenProject mavenProject : getDescendentModuleProjects(getProject())) {
+            setTestSourceRootsForProject(cloverLogTask, mavenProject);
         }
     }
 
@@ -129,7 +128,7 @@ public class CloverLogMojo extends AbstractCloverMojo {
         }
 
         // src/test directories from maven compilation
-        final List testSourceRoots = project.getTestCompileSourceRoots();
+        final List<String> testSourceRoots = project.getTestCompileSourceRoots();
         addTestSrcDirs(cloverLogTask, testSourceRoots.iterator());
     }
 
@@ -139,9 +138,9 @@ public class CloverLogMojo extends AbstractCloverMojo {
      * @param iterator Iterator<String>
      * @see CloverLogTask#addTestSources(org.apache.tools.ant.types.FileSet)
      */
-    private void addTestSrcDirs(final CloverLogTask cloverLogTask, final Iterator iterator) {
+    private void addTestSrcDirs(final CloverLogTask cloverLogTask, final Iterator<String> iterator) {
         while (iterator.hasNext()) {
-            String testDir = (String) iterator.next();
+            final String testDir = iterator.next();
             addTestSrcDir(cloverLogTask, testDir);
         }
     }

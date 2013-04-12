@@ -272,7 +272,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
      * @parameter expression="${reactorProjects}"
      * @readonly
      */
-    private List reactorProjects;
+    private List<MavenProject> reactorProjects;
 
     /**
      * @parameter expression="${maven.clover.licenseLocation}"
@@ -310,13 +310,13 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#executeReport(java.util.Locale)
      */
-    public void executeReport(Locale locale) throws MavenReportException {
+    public void executeReport(final Locale locale) throws MavenReportException {
         if (!canGenerateReport()) {
             getLog().info("No report being generated for this module.");
         }
 
         // only run the report once, on the very last project.
-        final MavenProject lastProject = (MavenProject) getReactorProjects().get(getReactorProjects().size() - 1);
+        final MavenProject lastProject = getReactorProjects().get(getReactorProjects().size() - 1);
         final MavenProject thisProject = getProject();
         if (isSingleCloverDatabase() && !thisProject.equals(lastProject)) {
             getLog().info("Skipping report generation until the final project in the reactor.");
@@ -366,7 +366,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     /**
      * Example of title prefixes: "Maven Clover", "Maven Aggregated Clover"
      */
-    private void createAllReportTypes(String database, String titlePrefix) throws MavenReportException {
+    private void createAllReportTypes(final String database, final String titlePrefix) throws MavenReportException {
 
         final String outpath = outputDirectory.getAbsolutePath();
         if (this.generateHtml) {
@@ -387,7 +387,8 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
      * Note: We use Clover's <code>clover-report</code> Ant task instead of the Clover CLI APIs because the CLI
      * APIs are limited and do not support historical reports.
      */
-    private void createReport(String database, String format, String title, String output, String historyOut, boolean summary) {
+    private void createReport(final String database, final String format, final String title,
+                              final String output, final String historyOut, final boolean summary) {
         final Project antProject = new Project();
         antProject.init();
 
@@ -425,17 +426,17 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
         antProject.executeTarget(target);
     }
 
-    private void addMavenProperties(Project antProject) {
+    private void addMavenProperties(final Project antProject) {
         final Map properties = getProject().getProperties();
 
-        for (Iterator iterator = properties.entrySet().iterator(); iterator.hasNext();) {
-            Map.Entry entry = (Map.Entry) iterator.next();
+        for (Object objEntry : properties.entrySet()) {
+            Map.Entry entry = (Map.Entry) objEntry;
             getLog().debug("Setting Property: " + entry.getKey().toString() + " = " + entry.getValue().toString());
             antProject.setProperty(entry.getKey().toString(), entry.getValue().toString());
         }
     }
 
-    private boolean isHistoricalDirectoryValid(String outFile) {
+    private boolean isHistoricalDirectoryValid(final String outFile) {
         boolean isValid = false;
 
         File dir = new File(this.historyDir);
@@ -466,11 +467,11 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     /**
      * @see org.apache.maven.reporting.MavenReport#getDescription(java.util.Locale)
      */
-    public String getDescription(Locale locale) {
+    public String getDescription(final Locale locale) {
         return getBundle(locale).getString("report.clover.description");
     }
 
-    private static ResourceBundle getBundle(Locale locale) {
+    private static ResourceBundle getBundle(final Locale locale) {
         return ResourceBundle.getBundle("clover-report", locale, CloverReportMojo.class.getClassLoader());
     }
 
@@ -498,7 +499,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     /**
      * @see org.apache.maven.reporting.MavenReport#getName(java.util.Locale)
      */
-    public String getName(Locale locale) {
+    public String getName(final Locale locale) {
         return getBundle(locale).getString("report.clover.name");
     }
 
@@ -540,7 +541,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#setReportOutputDirectory(java.io.File)
      */
-    public void setReportOutputDirectory(File reportOutputDirectory) {
+    public void setReportOutputDirectory(final File reportOutputDirectory) {
         if ((reportOutputDirectory != null) && (!reportOutputDirectory.getAbsolutePath().endsWith("clover"))) {
             this.outputDirectory = new File(reportOutputDirectory, "clover");
         } else {
@@ -601,7 +602,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
         return new ConfigUtil(this).resolveCloverDatabase();
     }
 
-    public List getReactorProjects() {
+    public List<MavenProject> getReactorProjects() {
         return reactorProjects;
     }
 

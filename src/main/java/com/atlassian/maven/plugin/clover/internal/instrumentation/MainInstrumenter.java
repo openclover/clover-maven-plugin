@@ -27,40 +27,32 @@ import java.util.List;
 
 /**
  * Instruments main sources.
- * 
  */
-public class MainInstrumenter extends AbstractInstrumenter
-{
-    private MainCloverSourceScanner scanner;
+public class MainInstrumenter extends AbstractInstrumenter {
+    private final MainCloverSourceScanner scanner;
 
-    public MainInstrumenter(CompilerConfiguration configuration, String outputSourceDirectory)
-    {
-        super( configuration, outputSourceDirectory );
-        scanner = new MainCloverSourceScanner( configuration, outputSourceDirectory );
+    public MainInstrumenter(final CompilerConfiguration configuration, final String outputSourceDirectory) {
+        super(configuration, outputSourceDirectory);
+        scanner = new MainCloverSourceScanner(configuration, outputSourceDirectory);
     }
 
-    protected CloverSourceScanner getSourceScanner()
-    {
+    protected CloverSourceScanner getSourceScanner() {
         return scanner;
     }
 
-    protected String getSourceDirectory()
-    {
+    protected String getSourceDirectory() {
         return getConfiguration().getProject().getBuild().getSourceDirectory();
     }
 
-    protected void setSourceDirectory(String targetDirectory)
-    {
-        getConfiguration().getProject().getBuild().setSourceDirectory( targetDirectory );
+    protected void setSourceDirectory(final String targetDirectory) {
+        getConfiguration().getProject().getBuild().setSourceDirectory(targetDirectory);
     }
 
-    protected List getCompileSourceRoots()
-    {
+    protected List<String> getCompileSourceRoots() {
         return getConfiguration().getProject().getCompileSourceRoots();
     }
 
-    protected void addCompileSourceRoot(String sourceRoot)
-    {
-        getConfiguration().getProject().addCompileSourceRoot( sourceRoot );
+    protected void addCompileSourceRoot(final String sourceRoot) {
+        getConfiguration().getProject().addCompileSourceRoot(sourceRoot);
     }
 }

@@ -23,15 +23,14 @@ import java.util.Map;
 
 /**
  * Scans source roots and return list of files to instrument.
- *
  */
-public interface CloverSourceScanner
-{
+public interface CloverSourceScanner {
     /**
      * @return the list of source files to instrument taking into account the includes and excludes specified by
      *         the user. The Map is indexed on source roots.
+     *         Map<String,String[]> = Map(sourceRoot,files)
      */
-    Map getSourceFilesToInstrument();
+    Map<String, String[]> getSourceFilesToInstrument();
 
     /**
      * @return the list of excluded files that we'll need to copy. This is required as otherwise the excluded files
@@ -39,6 +38,6 @@ public interface CloverSourceScanner
      *         lead to compilation errors if any other Java file depends on any of them. The Map is indexed on
      *         source roots.
      */
-    Map getExcludedFiles();
-    
+    Map<String, String[]> getExcludedFiles();
+
 }

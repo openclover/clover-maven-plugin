@@ -9,9 +9,9 @@ import java.util.Set;
  */
 public interface CompilerConfiguration extends CloverConfiguration {
 
-    Set getIncludes();
+    Set<String> getIncludes();
 
-    Set getExcludes();
+    Set<String> getExcludes();
 
     boolean includesAllSourceRoots();    
 
@@ -25,9 +25,9 @@ public interface CompilerConfiguration extends CloverConfiguration {
 
     String getEncoding();
 
-    Map getMethodContexts();
+    Map<String,String> getMethodContexts();
 
-    Map getStatementContexts();
+    Map<String,String> getStatementContexts();
 
     DistributedCoverage getDistributedCoverage();
 

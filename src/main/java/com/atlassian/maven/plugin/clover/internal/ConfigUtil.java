@@ -13,7 +13,7 @@ public class ConfigUtil {
 
     final CloverConfiguration config;
 
-    public ConfigUtil(CloverConfiguration config) {
+    public ConfigUtil(final CloverConfiguration config) {
         this.config = config;
     }
 
@@ -32,13 +32,11 @@ public class ConfigUtil {
      */
     public MavenProject resolveMavenProject() {
         // if a singleCloverDatabase should be used, use the execution root build dir
-        return config.isSingleCloverDatabase() ?
-                                        (MavenProject) config.getReactorProjects().get(0) :
-                                        config.getProject();
+        return config.isSingleCloverDatabase() ? config.getReactorProjects().get(0) : config.getProject();
     }
 
 
-    public File resolveSnapshotFile(File snapshot) {
+    public File resolveSnapshotFile(final File snapshot) {
 
         if (snapshot != null) {
             return snapshot;
