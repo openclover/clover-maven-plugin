@@ -123,6 +123,14 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     private String excludesList = null;
 
     /**
+     * The list of file to include in the instrumentation.
+     * Defaults are '**&#47;*.java, **&#47;*.groovy' which are overwritten if &lt;includes&gt; is set by the user
+     *
+     * @parameter
+     */
+    private Set<String> includes = new HashSet<String>(Arrays.asList(new String[]{"**/*.java", "**/*.groovy"}));
+
+    /**
      * The list of file to exclude from the instrumentation.
      * @parameter
      */
@@ -711,12 +719,4 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         return distributedCoverage;
     }
 
-    // THIS PARAMETER MUST BE THE LAST ONE UNTIL http://jira.codehaus.org/browse/QDOX-250 IS RESOLVED
-    /**
-     * The list of file to include in the instrumentation.
-     * Defaults are '**&#47;*.java, **&#47;*.groovy' which are overwritten if &lt;includes&gt; is set by the user
-     *
-     * @parameter
-     */
-    private Set<String> includes = new HashSet<String>(Arrays.asList(new String[]{"**/*.java", "**/*.groovy"}));
 }
