@@ -140,11 +140,13 @@ public abstract class AbstractInstrumenter
                 // original source root
                 addCompileSourceRoot(getSourceDirectory());
             }
-            // ignore the generated sources directory, because a new clover/generated-sources directory has been created by a plugin
-            // during the clover forked lifecycle, which means that we will end up with the same classes included twice
-            // if we use the generated-classes directory added originally
-            else if (!isGeneratedSourcesDirectory(sourceRoot) && !getConfiguration().includesAllSourceRoots())
+
+            else if ( !(getConfiguration().includesAllSourceRoots() && isGeneratedSourcesDirectory(sourceRoot)) )
             {
+                // if includeAllSourceRoots=true then ignore the original generated sources directory (e.g. target/generated/xyz),
+                // because Clover will instrument them and store instrumented version (e.g. target/clover/src-instrumented);
+                // compiler should know only the latter location, otherwise we would end up with the same classes included twice
+                // (one with and one without Clover instrumentation)
                 addCompileSourceRoot( sourceRoot );
             }
         }
@@ -155,8 +157,10 @@ public abstract class AbstractInstrumenter
     }
 
     private boolean isGeneratedSourcesDirectory(String sourceRoot) {
-        String generatedSourcesDirectoryName = File.separator + "target" + File.separator + "generated-sources";
-        return sourceRoot.indexOf(generatedSourcesDirectoryName) != -1;
+        String generatedSrcDirDefaultLifecycle = File.separator + "target" + File.separator + "generated-sources";
+        String generatedSrcDirCloverLifecycle = File.separator + "target" + File.separator + "clover" + File.separator + "generated-sources";
+        return sourceRoot.indexOf(generatedSrcDirDefaultLifecycle) != -1
+                || sourceRoot.indexOf(generatedSrcDirCloverLifecycle) != -1;
     }
 
     private void logSourceDirectories()
