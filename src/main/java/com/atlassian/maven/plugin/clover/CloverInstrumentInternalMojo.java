@@ -162,9 +162,14 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     private Map statementContexts = new HashMap();
 
     /**
-     * Whether the Clover plugin should instrument all source roots (ie even
-     * generated sources) or whether it should only instrument the main source
-     * root.
+     * <p><b>Till 3.1.11:</b> whether the Clover plugin should instrument all source roots (for example
+     * <code>src/main/java, src/main/groovy, target/generated-sources</code>, so including the generated sources)
+     * or whether it should only instrument the main source root (usually <code>src/main/java</code>).</p>
+     * <p/>
+     * <p><b>Since 3.1.12:</b> whether the Clover plugin should instrument all source roots (for example
+     * <code>src/main/java, src/main/groovy, target/generated-sources</code>, so including the generated sources)
+     * or whether it should instrument non-generated source roots (i.e. all roots except <code>target/generated-sources/*</code>)</p>
+     *
      * @parameter expression="${maven.clover.includesAllSourceRoots}" default-value="false"
      */
     private boolean includesAllSourceRoots;
