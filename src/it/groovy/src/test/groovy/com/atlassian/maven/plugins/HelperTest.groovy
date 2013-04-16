@@ -1,7 +1,3 @@
-//
-// Generated from archetype; please customize.
-//
-
 package com.atlassian.maven.plugins
 
 import groovy.util.GroovyTestCase
