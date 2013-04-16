@@ -5,30 +5,52 @@
     <artifactId>clover-sample-groovy</artifactId>
     <name>Example Project</name>
     <version>1.0-SNAPSHOT</version>
+    <description>
+        Example how to use Clover with GMaven plugin
+        See:
+         * https://confluence.atlassian.com/display/CLOVER/Compiling+Groovy+with+GMaven+plugin
+         * http://docs.codehaus.org/display/GMAVEN/Home
+    </description>
+    <properties>
+        <groovy.version>1.8.8</groovy.version>
+        <gmaven.version>1.5</gmaven.version>
+    </properties>
     <dependencies>
         <dependency>
-            <groupId>org.codehaus.groovy.maven.runtime</groupId>
-            <artifactId>gmaven-runtime-1.6</artifactId>
-            <version>1.0-rc-5</version>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>${groovy.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.groovy.maven</groupId>
+                <!-- Note that 'org.codehaus.gmaven group' is used; artifacts in 'org.codehaus.groovy.maven' and
+                'org.kohsuke.gmaven' groups are quite outdated. -->
+                <groupId>org.codehaus.gmaven</groupId>
                 <artifactId>gmaven-plugin</artifactId>
-                <version>1.0-rc-5</version>
+                <version>${gmaven.version}</version>
+                <configuration>
+                    <!-- Remember to select provider version; otherwise build might fail with the following error:
+                    "org.apache.maven.lifecycle.LifecycleExecutionException: Unexpected node: Node[7:1,64,ANNOTATIONS]" -->
+                    <providerSelection>1.8</providerSelection>
+                </configuration>
                 <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.gmaven.runtime</groupId>
+                        <artifactId>gmaven-runtime-1.8</artifactId>
+                        <version>${gmaven.version}</version>
+                    </dependency>
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-all</artifactId>
-                        <version>1.6.5</version>
+                        <version>${groovy.version}</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -44,4 +66,54 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>with-clover-setup</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.atlassian.maven.plugins</groupId>
+                        <artifactId>maven-clover2-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>clover-initialize</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>setup</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>clover-report</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>clover</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>with-clover-instr</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.atlassian.maven.plugins</groupId>
+                        <artifactId>maven-clover2-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>clover-report</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>instrument</goal>
+                                    <goal>clover</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
