@@ -27,11 +27,11 @@ import java.util.List;
  * Computes the list of main source files to instrument.
  */
 public class MainSourceScanner extends AbstractSourceScanner {
-    public MainSourceScanner(CompilerConfiguration configuration, String outputSourceDirectory) {
+    public MainSourceScanner(final CompilerConfiguration configuration, final String outputSourceDirectory) {
         super(configuration, outputSourceDirectory);
     }
 
-    protected List/*<String>*/ getSourceRoots() {
+    protected List<String> getSourceRoots() {
         return getConfiguration().getProject().getCompileSourceRoots();
     }
 

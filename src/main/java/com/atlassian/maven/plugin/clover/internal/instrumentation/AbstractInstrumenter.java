@@ -40,23 +40,19 @@ import java.util.Set;
 
 /**
  * Code common for instrumentation of various source roots (main sources, test sources).
- *
  */
-public abstract class AbstractInstrumenter
-{
+public abstract class AbstractInstrumenter {
     private CompilerConfiguration configuration;
 
     String outputSourceDirectory;
     private static final String PROP_PROJECT_BUILD_SOURCEENCODING = "project.build.sourceEncoding";
 
-    public AbstractInstrumenter(CompilerConfiguration configuration, String outputSourceDirectory)
-    {
+    public AbstractInstrumenter(final CompilerConfiguration configuration, final String outputSourceDirectory) {
         this.configuration = configuration;
         this.outputSourceDirectory = outputSourceDirectory;
     }
 
-    protected CompilerConfiguration getConfiguration()
-    {
+    protected CompilerConfiguration getConfiguration() {
         return this.configuration;
     }
 
@@ -103,38 +99,37 @@ public abstract class AbstractInstrumenter
         }
     }
 
-    public String redirectSourceDirectories()
-    {
-        return redirectSourceDirectories( outputSourceDirectory );
+    public String redirectSourceDirectories() {
+        return redirectSourceDirectories(outputSourceDirectory);
     }
 
     protected abstract CloverSourceScanner getSourceScanner();
+
     protected abstract String getSourceDirectory();
-    protected abstract void setSourceDirectory(String targetDirectory);
-    protected abstract List getCompileSourceRoots();
-    protected abstract void addCompileSourceRoot(String sourceRoot);
 
-    private String redirectSourceDirectories(String targetDirectory)
-    {
-        String oldSourceDirectory = getSourceDirectory();
+    protected abstract void setSourceDirectory(final String targetDirectory);
 
-        if ( new File( oldSourceDirectory ).exists() )
-        {
-            setSourceDirectory( targetDirectory );
+    protected abstract List<String> getCompileSourceRoots();
+
+    protected abstract void addCompileSourceRoot(final String sourceRoot);
+
+    private String redirectSourceDirectories(final String targetDirectory) {
+        final String oldSourceDirectory = getSourceDirectory();
+        if (new File(oldSourceDirectory).exists()) {
+            setSourceDirectory(targetDirectory);
         }
 
-        getConfiguration().getLog().debug( "Clover source directories before change:" );
+        getConfiguration().getLog().debug("Clover source directories before change:");
         logSourceDirectories();
 
         // Maven2 limitation: changing the source directory doesn't change the compile source roots
         // See http://jira.codehaus.org/browse/MNG-1945
-        List/*<String>*/ sourceRoots = new ArrayList/*<String>*/(getCompileSourceRoots());
+        List<String> sourceRoots = new ArrayList<String>(getCompileSourceRoots());
 
         // Clean all source roots to add them again in order to keep the same original order of source roots.
         getCompileSourceRoots().removeAll(sourceRoots);
 
-        for (Iterator/*<String>*/ i = sourceRoots.iterator(); i.hasNext(); ) {
-            String sourceRoot = (String) i.next();
+        for (final String sourceRoot : sourceRoots) {
             if (new File(oldSourceDirectory).exists() && sourceRoot.equals(oldSourceDirectory)) {
                 // add redirected location (e.g. 'src/main/java' -> 'target/clover/src-instrumented') instead of the
                 // original source root
@@ -147,30 +142,26 @@ public abstract class AbstractInstrumenter
                 // because Clover will instrument them and store instrumented version (e.g. target/clover/src-instrumented);
                 // compiler should know only the latter location, otherwise we would end up with the same classes included twice
                 // (one with and one without Clover instrumentation)
-                addCompileSourceRoot( sourceRoot );
+                addCompileSourceRoot(sourceRoot);
             }
         }
 
-        getConfiguration().getLog().debug( "Clover main source directories after change:" );
+        getConfiguration().getLog().debug("Clover main source directories after change:");
         logSourceDirectories();
         return oldSourceDirectory;
     }
 
-    private boolean isGeneratedSourcesDirectory(String sourceRoot) {
+    private boolean isGeneratedSourcesDirectory(final String sourceRoot) {
         String generatedSrcDirDefaultLifecycle = File.separator + "target" + File.separator + "generated-sources";
         String generatedSrcDirCloverLifecycle = File.separator + "target" + File.separator + "clover" + File.separator + "generated-sources";
         return sourceRoot.indexOf(generatedSrcDirDefaultLifecycle) != -1
                 || sourceRoot.indexOf(generatedSrcDirCloverLifecycle) != -1;
     }
 
-    private void logSourceDirectories()
-    {
-        if ( getConfiguration().getLog().isDebugEnabled() )
-        {
-            for ( Iterator i = getCompileSourceRoots().iterator(); i.hasNext(); )
-            {
-                String sourceRoot = (String) i.next();
-                getConfiguration().getLog().debug( "[Clover]  source root [" + sourceRoot + "]" );
+    private void logSourceDirectories() {
+        if (getConfiguration().getLog().isDebugEnabled()) {
+            for (String sourceRoot : getCompileSourceRoots()) {
+                getConfiguration().getLog().debug("[Clover]  source root [" + sourceRoot + "]");
             }
         }
     }
@@ -182,64 +173,55 @@ public abstract class AbstractInstrumenter
      *
      * @throws MojoExecutionException if a failure happens during the copy
      */
-    private void copyExcludedFiles(Map/*<String,String[]*/ excludedFiles, String targetDirectory) throws MojoExecutionException {
-        for (Iterator/*<String>*/ sourceRoots = excludedFiles.keySet().iterator(); sourceRoots.hasNext(); ) {
-            String sourceRoot = (String) sourceRoots.next();
-            String[] filesInSourceRoot = (String[]) excludedFiles.get( sourceRoot );
+    private void copyExcludedFiles(final Map<String, String[]> excludedFiles, final String targetDirectory) throws MojoExecutionException {
+        for (String sourceRoot : excludedFiles.keySet()) {
+            final String[] filesInSourceRoot = excludedFiles.get(sourceRoot);
 
-            for (int i = 0; i < filesInSourceRoot.length; i++) {
-
-                File srcFile = new File(sourceRoot, filesInSourceRoot[i]);
-
-                try
-                {
-                    configuration.getLog().debug("Copying excluded file: " + srcFile.getAbsolutePath() + " to " + targetDirectory );
-                    FileUtils.copyFile(srcFile, new File( targetDirectory,
-                        srcFile.getPath().substring(sourceRoot.length() ) ) );
-                }
-                catch (IOException e)
-                {
-                    throw new MojoExecutionException( "Failed to copy excluded file [" + srcFile + "] to ["
-                        + targetDirectory + "]", e );
+            for (String fileName : filesInSourceRoot) {
+                final File srcFile = new File(sourceRoot, fileName);
+                try {
+                    configuration.getLog().debug("Copying excluded file: " + srcFile.getAbsolutePath() + " to " + targetDirectory);
+                    FileUtils.copyFile(srcFile, new File(targetDirectory,
+                            srcFile.getPath().substring(sourceRoot.length())));
+                } catch (IOException e) {
+                    throw new MojoExecutionException("Failed to copy excluded file [" + srcFile + "] to ["
+                            + targetDirectory + "]", e);
                 }
             }
         }
     }
 
-    private void instrumentSources( Map filesToInstrument, String outputDir ) throws MojoExecutionException {
+    private void instrumentSources(final Map<String, String[]> filesToInstrument, final String outputDir) throws MojoExecutionException {
 
         Logger.setInstance(new MvnLogger(configuration.getLog()));
         // only make dirs when there is src to instrument. see CLMVN-118
         new File(outputDir).mkdirs();
-        int result = CloverInstr.mainImpl( createCliArgs( filesToInstrument, outputDir ) );
-        if ( result != 0 )
-        {
-            throw new MojoExecutionException( "Clover has failed to instrument the source files "
-                + "in the [" + outputDir + "] directory" );
+        int result = CloverInstr.mainImpl(createCliArgs(filesToInstrument, outputDir));
+        if (result != 0) {
+            throw new MojoExecutionException("Clover has failed to instrument the source files "
+                    + "in the [" + outputDir + "] directory");
         }
     }
 
     /**
      * @return the CLI args to be passed to CloverInstr
      */
-    private String[] createCliArgs( Map filesToInstrument,  String outputDir ) throws MojoExecutionException
-    {
-        List parameters = new ArrayList();
+    private String[] createCliArgs(final Map<String, String[]> filesToInstrument, final String outputDir) throws MojoExecutionException {
+        final List<String> parameters = new ArrayList<String>();
 
-        parameters.add( "-p" );
-        parameters.add( getConfiguration().getFlushPolicy() );
-        parameters.add( "-f" );
-        parameters.add( "" + getConfiguration().getFlushInterval() );
+        parameters.add("-p");
+        parameters.add(getConfiguration().getFlushPolicy());
+        parameters.add("-f");
+        parameters.add("" + getConfiguration().getFlushInterval());
 
-        parameters.add( "-i" );
-        parameters.add( getConfiguration().resolveCloverDatabase() );
+        parameters.add("-i");
+        parameters.add(getConfiguration().resolveCloverDatabase());
 
-        parameters.add( "-d" );
-        parameters.add( outputDir );
+        parameters.add("-d");
+        parameters.add(outputDir);
 
-        if ( getConfiguration().getLog().isDebugEnabled() )
-        {
-            parameters.add( "-v" );
+        if (getConfiguration().getLog().isDebugEnabled()) {
+            parameters.add("-v");
         }
 
         if (getConfiguration().getDistributedCoverage() != null && getConfiguration().getDistributedCoverage().isEnabled()) {
@@ -247,37 +229,26 @@ public abstract class AbstractInstrumenter
             parameters.add(getConfiguration().getDistributedCoverage().toString());
         }
 
-        if ( getConfiguration().getJdk() != null )
-        {
-           if ( getConfiguration().getJdk().equals( "1.4" ) )
-            {
-                parameters.add( "--source" );
-                parameters.add( "1.4" );
-            }
-            else if ( getConfiguration().getJdk().equals( "1.5" ) )
-            {
-                parameters.add( "--source" );
-                parameters.add( "1.5" );
-            }
-            else if ( getConfiguration().getJdk().equals( "1.6" ) )
-            {
-                parameters.add( "--source" );
-                parameters.add( "1.6" );
-            }
-            else if ( getConfiguration().getJdk().equals( "1.7" ) )
-            {
-                parameters.add( "--source" );
-                parameters.add( "1.7" );
-            }
-            else
-            {
-                throw new MojoExecutionException( "Unsupported jdk version [" + getConfiguration().getJdk()
-                    + "]. Valid values are [1.4], [1.5], [1.6] and [1.7]" );
+        if (getConfiguration().getJdk() != null) {
+            if (getConfiguration().getJdk().equals("1.4")) {
+                parameters.add("--source");
+                parameters.add("1.4");
+            } else if (getConfiguration().getJdk().equals("1.5")) {
+                parameters.add("--source");
+                parameters.add("1.5");
+            } else if (getConfiguration().getJdk().equals("1.6")) {
+                parameters.add("--source");
+                parameters.add("1.6");
+            } else if (getConfiguration().getJdk().equals("1.7")) {
+                parameters.add("--source");
+                parameters.add("1.7");
+            } else {
+                throw new MojoExecutionException("Unsupported jdk version [" + getConfiguration().getJdk()
+                        + "]. Valid values are [1.4], [1.5], [1.6] and [1.7]");
             }
         }
 
-        if (!getConfiguration().isUseFullyQualifiedJavaLang())
-        {
+        if (!getConfiguration().isUseFullyQualifiedJavaLang()) {
             parameters.add("--dontFullyQualifyJavaLang");
         }
 
@@ -286,7 +257,7 @@ public abstract class AbstractInstrumenter
             parameters.add(getConfiguration().getEncoding());
         } else if (getConfiguration().getProject().getProperties().get(PROP_PROJECT_BUILD_SOURCEENCODING) != null) {
             parameters.add("--encoding");
-            parameters.add(getConfiguration().getProject().getProperties().get(PROP_PROJECT_BUILD_SOURCEENCODING));
+            parameters.add(getConfiguration().getProject().getProperties().get(PROP_PROJECT_BUILD_SOURCEENCODING).toString());
         }
 
         if (getConfiguration().getInstrumentation() != null) {
@@ -294,15 +265,11 @@ public abstract class AbstractInstrumenter
             parameters.add(getConfiguration().getInstrumentation());
         }
 
-        for ( Iterator sourceRoots = filesToInstrument.keySet().iterator(); sourceRoots.hasNext(); )
-        {
-            final String srcDir = (String) sourceRoots.next();
-            String[] filesInSourceRoot = (String[]) filesToInstrument.get(srcDir);
-            for (int i = 0; i < filesInSourceRoot.length; i++) {
-                String s = filesInSourceRoot[i];
-
+        for (final String srcDir : filesToInstrument.keySet()) {
+            final String[] filesInSourceRoot = filesToInstrument.get(srcDir);
+            for (String s : filesInSourceRoot) {
                 File file = new File(srcDir, s);
-                parameters.add( file.getPath() );
+                parameters.add(file.getPath());
             }
         }
 
@@ -311,22 +278,18 @@ public abstract class AbstractInstrumenter
         addCustomContexts(parameters, getConfiguration().getStatementContexts().entrySet(), "-sc");
 
         // Log parameters
-        if ( getConfiguration().getLog().isDebugEnabled() )
-        {
-            getConfiguration().getLog().debug( "Parameter list being passed to Clover CLI:" );
-            for ( Iterator it = parameters.iterator(); it.hasNext(); )
-            {
-                String param = (String) it.next();
-                getConfiguration().getLog().debug( "  parameter = [" + param + "]" );
+        if (getConfiguration().getLog().isDebugEnabled()) {
+            getConfiguration().getLog().debug("Parameter list being passed to Clover CLI:");
+            for (String param : parameters) {
+                getConfiguration().getLog().debug("  parameter = [" + param + "]");
             }
         }
 
-        return (String[]) parameters.toArray( new String[0] );
+        return parameters.toArray(new String[0]);
     }
 
-    private void addCustomContexts(List parameters, Set/*<Map.Entry<<String,<String>>>*/ contexts, String flag) {
-        for (Iterator iterator = contexts.iterator(); iterator.hasNext();) {
-            Map.Entry entry = (Map.Entry) iterator.next();
+    private void addCustomContexts(final List<String> parameters, final Set<Map.Entry<String, String>> contexts, final String flag) {
+        for (final Map.Entry<String, String> entry : contexts) {
             parameters.add(flag);
             parameters.add(entry.getKey() + "=" + entry.getValue());
         }

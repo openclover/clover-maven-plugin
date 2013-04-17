@@ -31,7 +31,6 @@ import org.codehaus.plexus.resource.loader.FileResourceLoader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.cenqua.clover.CloverNames;
@@ -43,8 +42,7 @@ import com.atlassian.maven.plugin.clover.MvnLogBuildListener;
  * @author <a href="mailto:vmassol@apache.org">Vincent Massol</a>
  * @author <a href="mailto:npellow@atlassian.com">Nick Pellow</a>
  */
-public abstract class AbstractCloverMojo extends AbstractMojo implements CloverConfiguration
-{
+public abstract class AbstractCloverMojo extends AbstractMojo implements CloverConfiguration {
     /**
      * The directory where the Clover plugin will put all the files it generates during the build process. For
      * example the Clover plugin will put instrumented sources somewhere inside this directory.
@@ -66,7 +64,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * The location to store the clover snapshot file. This file needs to persist between builds to enable Clover's
      * build optimization feature. If not specified, the snapshot will be stored next to the cloverDatabase.
      *
-     * @parameter expression="${maven.clover.snapshot}" 
+     * @parameter expression="${maven.clover.snapshot}"
      */
     protected File snapshot;
 
@@ -89,10 +87,11 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     /**
      * A Clover license file to be used by the plugin. The plugin tries to resolve this parameter first as a resource,
      * then as a URL, and then as a file location on the filesystem.
-     *
+     * <p/>
      * A trial Clover license can be generated <a href="http://www.atlassian.com/ex/GenerateLicense.jspa?product=Clover&version=2">here</a>.
-     * @see #license
+     *
      * @parameter expression="${maven.clover.licenseLocation}"
+     * @see #license
      */
     protected String licenseLocation;
 
@@ -101,8 +100,8 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * NB. newline chars must be preserved.
      * A trial Clover license can be generated <a href="http://www.atlassian.com/ex/GenerateLicense.jspa?product=Clover&version=2">here</a>.
      *
-     * @see #licenseLocation
      * @parameter expression="${maven.clover.license}"
+     * @see #licenseLocation
      */
     protected String license;
 
@@ -126,7 +125,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     /**
      * If true we'll wait 2*flushInterval to ensure coverage data is flushed to the Clover database before running
      * any query on it.
-     *
+     * <p/>
      * <p>Note: The only use case where you would want to turn this off is if you're running your tests in a separate
      * JVM. In that case the coverage data will be flushed by default upon the JVM shutdown and there would be no need
      * to wait for the data to be flushed. As we can't control whether users want to fork their tests or not, we're
@@ -147,7 +146,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
     /**
      * The Maven project instance for the executing project.
-     *
+     * <p/>
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
      *
      * @parameter expression="${project}"
@@ -157,69 +156,65 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
     /**
      * Resource manager used to locate any Clover license file provided by the user.
+     *
      * @component
      */
     private ResourceManager resourceManager;
 
     /**
-     *
      * A flag to indicate not to run clover for this execution.
-     *
+     * <p/>
      * If set to true, Clover will not be run.
-     * 
+     *
      * @parameter expression="${maven.clover.skip}" default-value="false"
      */
     protected boolean skip;
 
     /**
      * If you wish to enable debug level logging in just the Clover plugin, set this to true.
-     *
+     * <p/>
      * This is useful for integrating Clover into the build
      *
      * @parameter expression="${maven.clover.debug}" default-value="false"
-     *
      */
     protected boolean debug;
 
     /**
      * The projects in the reactor for aggregation report.
-     *
+     * <p/>
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
      *
      * @parameter expression="${reactorProjects}"
      * @readonly
      */
-    private List reactorProjects;
+    private List<MavenProject> reactorProjects;
 
 
     /**
      * {@inheritDoc}
+     *
      * @see org.apache.maven.plugin.AbstractMojo#execute()
      */
-    public void execute() throws MojoExecutionException
-    {
+    public void execute() throws MojoExecutionException {
         registerLicenseFile();
     }
 
-    public void setResourceManager(ResourceManager resourceManager)
-    {
+    public void setResourceManager(final ResourceManager resourceManager) {
         this.resourceManager = resourceManager;
     }
 
-    public ResourceManager getResourceManager()
-    {
+    public ResourceManager getResourceManager() {
         return this.resourceManager;
     }
 
-    protected void registerLicenseFile() throws MojoExecutionException
-    {
+    protected void registerLicenseFile() throws MojoExecutionException {
         registerLicenseFile(
-                    this.project,
-                    getResourceManager(),
-                    this.licenseLocation,
-                    getLog(),
-                    this.getClass().getClassLoader(),
-                    this.license);
+                this.project,
+                getResourceManager(),
+                this.licenseLocation,
+                getLog(),
+                this.getClass().getClassLoader(),
+                this.license);
     }
 
     /**
@@ -234,47 +229,43 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      *
      * @throws MojoExecutionException when the license file cannot be found
      */
-    public static void registerLicenseFile(MavenProject project,
-                                           ResourceManager resourceManager,
+    public static void registerLicenseFile(final MavenProject project,
+                                           final ResourceManager resourceManager,
                                            String licenseLocation,
-                                           Log logger,
-                                           ClassLoader classloader,
-                                           String licenseCert) throws MojoExecutionException
-    {
+                                           final Log logger,
+                                           final ClassLoader classloader,
+                                           final String licenseCert) throws MojoExecutionException {
 
         if (licenseCert != null) {
             logger.debug("Full license supplied. Length: '" + licenseCert.length() +
-                        "'. License location: '" + licenseLocation + "' will be ignored.");
+                    "'. License location: '" + licenseLocation + "' will be ignored.");
             System.setProperty(CloverNames.PROP_LICENSE_CERT, licenseCert);
             return;
         }
-        
-        logger.debug("Using licenseLocation '" + licenseLocation +"'");
+        logger.debug("Using licenseLocation '" + licenseLocation + "'");
 
         if (licenseLocation == null) {
             logger.info("No 'maven.clover.licenseLocation' configured. Using default evaluation license.");
             licenseLocation = "/clover.license";
-
         }
         final File licenseFile = getResourceAsFile(project, resourceManager, licenseLocation, logger, classloader);
 
         logger.debug("Using license file [" + licenseFile.getPath() + "]");
         System.setProperty(CloverNames.PROP_LICENSE_PATH, licenseFile.getPath());
-        
     }
 
-    public static File getResourceAsFile(MavenProject project,
-                                           ResourceManager resourceManager,
-                                           String resourceLocation,
-                                           Log logger,
-                                           ClassLoader classloader) throws MojoExecutionException {
+    public static File getResourceAsFile(final MavenProject project,
+                                         final ResourceManager resourceManager,
+                                         final String resourceLocation,
+                                         final Log logger,
+                                         final ClassLoader classloader) throws MojoExecutionException {
 
-        logger.debug("Getting resource: '" + resourceLocation +"'");
+        logger.debug("Getting resource: '" + resourceLocation + "'");
 
-        resourceManager.addSearchPath( "url", "" );
-        resourceManager.addSearchPath( FileResourceLoader.ID, project.getFile().getParentFile().getAbsolutePath() );
+        resourceManager.addSearchPath("url", "");
+        resourceManager.addSearchPath(FileResourceLoader.ID, project.getFile().getParentFile().getAbsolutePath());
 
-        ClassLoader origLoader = Thread.currentThread().getContextClassLoader();
+        final ClassLoader origLoader = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(classloader);
             try {
@@ -285,11 +276,10 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
             } catch (Exception e) {
                 throw new MojoExecutionException("Failed to load resource as file [" + resourceLocation + "]", e);
             }
+        } finally {
+            Thread.currentThread().setContextClassLoader(origLoader);
         }
-        finally {
-            Thread.currentThread().setContextClassLoader( origLoader );
-        }
-        
+
     }
 
     /**
@@ -299,33 +289,26 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * </p>
      * Note: We're defining this method as static because it is also required in the report mojo and reporting mojos
      * and main mojos cannot share anything right now. See http://jira.codehaus.org/browse/MNG-1886.
-     *
      */
-    public static void registerCloverAntTasks(Project antProject, Log log)
-    {
+    public static void registerCloverAntTasks(final Project antProject, final Log log) {
         antProject.addBuildListener(new MvnLogBuildListener(log));
-        Taskdef taskdef = (Taskdef) antProject.createTask( "taskdef" );
+        final Taskdef taskdef = (Taskdef) antProject.createTask("taskdef");
         taskdef.init();
-        taskdef.setResource( "cloverlib.xml" );
+        taskdef.setResource("cloverlib.xml");
         taskdef.execute();
     }
 
     /**
      * Wait 2*'flush interval' milliseconds to ensure that the coverage data have been flushed to the Clover database.
-     *
+     * <p/>
      * TODO: This method should not be static but we need it static here because we cannot share code
      * between non report mojos and main build mojos. See http://jira.codehaus.org/browse/MNG-1886
      */
-    public static void waitForFlush(boolean waitForFlush, int flushInterval)
-    {
-        if ( waitForFlush )
-        {
-            try
-            {
-                Thread.sleep( 2 * flushInterval );
-            }
-            catch ( InterruptedException e )
-            {
+    public static void waitForFlush(final boolean waitForFlush, final int flushInterval) {
+        if (waitForFlush) {
+            try {
+                Thread.sleep(2 * flushInterval);
+            } catch (InterruptedException e) {
                 // Nothing to do... Just go on and try to check for coverage.
             }
         }
@@ -333,35 +316,30 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
     /**
      * Check if a Clover database exists (either a single module Clover database or an aggregated one).
+     *
      * @return true if a Clover database exists.
      */
-    protected boolean areCloverDatabasesAvailable()
-    {
+    protected boolean areCloverDatabasesAvailable() {
         boolean shouldRun = false;
+        final File singleModuleCloverDatabase = new File(resolveCloverDatabase());
+        final File mergedCloverDatabase = new File(this.cloverMergeDatabase);
 
-        File singleModuleCloverDatabase = new File( resolveCloverDatabase() );
-        File mergedCloverDatabase = new File ( this.cloverMergeDatabase );
-
-        if (singleModuleCloverDatabase.exists() || mergedCloverDatabase.exists() )
-        {
+        if (singleModuleCloverDatabase.exists() || mergedCloverDatabase.exists()) {
             shouldRun = true;
         }
 
         return shouldRun;
     }
 
-    public MavenProject getProject()
-    {
+    public MavenProject getProject() {
         return this.project;
     }
 
-    public boolean getWaitForFlush()
-    {
+    public boolean getWaitForFlush() {
         return this.waitForFlush;
     }
 
-    public String getJdk()
-    {
+    public String getJdk() {
         return this.jdk;
     }
 
@@ -369,39 +347,35 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
         return cloverDatabase;
     }
 
-    public String resolveCloverDatabase()
-    {
+    public String resolveCloverDatabase() {
         return new ConfigUtil(this).resolveCloverDatabase();
     }
 
-    protected String getCloverMergeDatabase()
-    {
+    protected String getCloverMergeDatabase() {
         return this.cloverMergeDatabase;
     }
 
-    public int getFlushInterval()
-    {
+    public int getFlushInterval() {
         return this.flushInterval;
     }
 
-    public String getFlushPolicy()
-    {
+    public String getFlushPolicy() {
         return this.flushPolicy;
     }
 
-    public void setProject(MavenProject project) {
+    public void setProject(final MavenProject project) {
         this.project = project;
     }
 
-    public void setLicenseLocation(String licenseLocation) {
+    public void setLicenseLocation(final String licenseLocation) {
         this.licenseLocation = licenseLocation;
     }
 
-    public void setLicense(String license) {
+    public void setLicense(final String license) {
         this.license = license;
     }
 
-    public List getReactorProjects() {
+    public List<MavenProject> getReactorProjects() {
         return reactorProjects;
     }
 
@@ -409,9 +383,8 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
         return this.singleCloverDatabase;
     }
 
-    protected boolean isLastProjectInReactor()
-    {
-        final MavenProject lastProject = (MavenProject) getReactorProjects().get(getReactorProjects().size() - 1);
+    protected boolean isLastProjectInReactor() {
+        final MavenProject lastProject = getReactorProjects().get(getReactorProjects().size() - 1);
         final MavenProject thisProject = getProject();
         return thisProject.equals(lastProject);
     }
@@ -420,52 +393,35 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * Returns true if the supplied potentialModule project is a module
      * of the specified parentProject.
      *
-     * @param parentProject
-     *            the parent project.
-     * @param potentialModule
-     *            the potential moduleproject.
-     *
+     * @param parentProject   the parent project.
+     * @param potentialModule the potential moduleproject.
      * @return true if the potentialModule is indeed a module of the specified
      *         parent project.
      */
-    protected boolean isModuleOfProject( MavenProject parentProject,
-                                       MavenProject potentialModule )
-    {
+    protected boolean isModuleOfProject(final MavenProject parentProject, final MavenProject potentialModule) {
         boolean result = false;
+        final List<String> modules = parentProject.getModules();
 
-        List modules = parentProject.getModules();
+        if (modules != null) {
+            final File parentBaseDir = parentProject.getBasedir();
 
-        if ( modules != null)
-        {
-            File parentBaseDir = parentProject.getBasedir();
+            for (final String module : modules) {
+                File moduleBaseDir = new File(parentBaseDir, module);
 
-            for (Iterator i = modules.iterator(); i.hasNext();)
-            {
-                String module = (String) i.next();
-
-                File moduleBaseDir = new File( parentBaseDir, module );
-
-                try
-                {
+                try {
                     // need these to be canonical paths so we can perform a true equality
                     // operation and remember <module> is a path and for flat multimodule project
                     // structures they will be like this: <module>../a-project<module>
+                    final String lhs = potentialModule.getBasedir().getCanonicalPath();
+                    final String rhs = moduleBaseDir.getCanonicalPath();
 
-                    String lhs = potentialModule.getBasedir().getCanonicalPath();
-                    String rhs = moduleBaseDir.getCanonicalPath();
-
-                    if ( lhs.equals( rhs ))
-                    {
+                    if (lhs.equals(rhs)) {
                         result = true;
                         break;
                     }
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     // surpress the exception (?)
-
-                    getLog().error(
-                            "error encountered trying to resolve canonical module paths" );
+                    getLog().error("error encountered trying to resolve canonical module paths");
                 }
             }
         }
@@ -476,35 +432,28 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     /**
      * Returns all the projects that are modules, or modules of modules, of the
      * specified project found witin the reactor.
-     *
+     * <p/>
      * The searchLevel parameter controls how many descendent levels of modules
      * are returned. With a searchLevels equals to 1, only the immediate modules
      * of the specified project are returned.
-     *
+     * <p/>
      * A searchLevel equals to 2 returns those module's modules as well.
-     *
+     * <p/>
      * A searchLevel equals to -1 returns the entire module hierarchy beneath the
      * specified project. Note that this is simply the equivalent to the entire reactor
      * if the specified project is the root execution project.
      *
      * @param project the project to search under
-     * @param levels the number of descendent levels to return (List&lt;MavenProject&gt;)
+     * @param levels  the number of descendent levels to return (List&lt;MavenProject&gt;)
      * @return the list of module projects.
      */
-    protected List getModuleProjects( final MavenProject project, final int levels )
-    {
-        List projects = new ArrayList();
+    protected List<MavenProject> getModuleProjects(final MavenProject project, final int levels) {
+        final List<MavenProject> projects = new ArrayList<MavenProject>();
+        final boolean infinite = (levels == -1);
 
-        boolean infinite = (levels == -1);
-
-        if ((getReactorProjects() != null) && (infinite || levels > 0))
-        {
-            for (Iterator i = getReactorProjects().iterator(); i.hasNext();)
-            {
-                MavenProject reactorProject = (MavenProject) i.next();
-
-                if (isModuleOfProject(project, reactorProject))
-                {
+        if ((getReactorProjects() != null) && (infinite || levels > 0)) {
+            for (final MavenProject reactorProject : getReactorProjects()) {
+                if (isModuleOfProject(project, reactorProject)) {
                     projects.add(reactorProject);
                     if (project == reactorProject) {
                         projects.add(project); //CLMVN-78 don't recurse if project is the same as reactorProject.
@@ -526,10 +475,9 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      *
      * @param project the project to search beneath
      * @return the list of modules that are direct or indirect module descendents (List&lt;MavenProject&gt;)
-     * of the specified project
+     *         of the specified project
      */
-    protected List getDescendentModuleProjects( MavenProject project )
-    {
-        return getModuleProjects( project, -1 );
+    protected List<MavenProject> getDescendentModuleProjects(final MavenProject project) {
+        return getModuleProjects(project, -1);
     }
 }

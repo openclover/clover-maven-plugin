@@ -55,7 +55,7 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
      *
      * @see CloverSourceScanner#getExcludedFiles()
      */
-    public Map/*<String,String[]>*/ getExcludedFiles() {
+    public Map<String,String[]> getExcludedFiles() {
         return computeExcludedFiles(getScanner());
     }
 
@@ -64,7 +64,7 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
      *
      * @see CloverSourceScanner#getSourceFilesToInstrument()
      */
-    public Map/*<String,String[]>*/ getSourceFilesToInstrument() {
+    public Map<String,String[]> getSourceFilesToInstrument() {
         return getSourceFilesToInstrument(LanguageFileExtensionFilter.ANY_LANGUAGE);
     }
 
@@ -72,11 +72,11 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
      * @param languageFileFilter extra filter (in addition to includes/excludes) based on programming language
      * @return Map&lt;File,String[]&gt;
      */
-    public Map/*<String,String[]>*/ getSourceFilesToInstrument(LanguageFileFilter languageFileFilter) {
+    public Map<String,String[]> getSourceFilesToInstrument(LanguageFileFilter languageFileFilter) {
         return computeIncludedFiles(getScanner(), languageFileFilter);
     }
 
-    protected abstract List/*<String>*/ getSourceRoots();
+    protected abstract List<String> getSourceRoots();
 
     protected abstract String getSourceDirectory();
 
@@ -90,15 +90,15 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
      *         to instrument.
      */
     private DirectoryScanner getScanner() {
-        final Set includes = getConfiguration().getIncludes();
-        final Set excludes = getConfiguration().getExcludes();
+        final Set<String> includes = getConfiguration().getIncludes();
+        final Set<String> excludes = getConfiguration().getExcludes();
 
         configuration.getLog().debug("excludes patterns = " + excludes);
         configuration.getLog().debug("includes patterns = " + includes);
         final DirectoryScanner dirScan = new DirectoryScanner();
 
-        dirScan.addExcludes((String[]) excludes.toArray(new String[excludes.size()]));
-        dirScan.setIncludes((String[]) includes.toArray(new String[includes.size()]));
+        dirScan.addExcludes(excludes.toArray(new String[excludes.size()]));
+        dirScan.setIncludes(includes.toArray(new String[includes.size()]));
 
         dirScan.addDefaultExcludes();
 
@@ -109,14 +109,14 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
         return dirScan;
     }
 
-    private Map/*<String,String[]>*/ computeExcludedFiles(final DirectoryScanner scanner) {
-        final Map/*<String,String[]>*/ files = new HashMap/*<String,String[]>*/();
+    private Map<String, String[]> computeExcludedFiles(final DirectoryScanner scanner) {
+        final Map<String, String[]> files = new HashMap<String,String[]>();
 
         visitSourceRoots(new SourceRootVisitor() {
             public void visitDir(File dir) {
                 scanner.setBasedir(dir);
 
-                final String[] configuredIncludes = (String[]) getConfiguration().getIncludes().toArray(new String[]{});
+                final String[] configuredIncludes = getConfiguration().getIncludes().toArray(new String[]{});
                 final String[] includes = concatArrays(configuredIncludes, DirectoryScanner.getDefaultExcludes());
                 scanner.setIncludes(includes);// ensure that .svn dirs etc are not considered excluded
                 scanner.scan();
@@ -133,8 +133,8 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
         return files;
     }
 
-    private Map/*<String,String[]>*/ computeIncludedFiles(final DirectoryScanner scanner, final LanguageFileFilter languageFilter) {
-        final Map/*<String,String[]>*/ files = new HashMap/*<String,String[]>*/();
+    private Map<String, String[]> computeIncludedFiles(final DirectoryScanner scanner, final LanguageFileFilter languageFilter) {
+        final Map<String, String[]> files = new HashMap<String,String[]>();
         visitSourceRoots(new SourceRootVisitor() {
             public void visitDir(File dir) {
                 scanner.setBasedir(dir);
@@ -150,14 +150,14 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
         return files;
     }
 
-    private String[] concatArrays(String[] a1, String[] a2) {
+    private String[] concatArrays(final String[] a1, final String[] a2) {
         final String[] result = new String[a1.length + a2.length];
         System.arraycopy(a1, 0, result, 0, a1.length);
         System.arraycopy(a2, 0, result, a1.length, a2.length);
         return result;
     }
 
-    private boolean isGeneratedSourcesDirectory(String sourceRoot) {
+    private boolean isGeneratedSourcesDirectory(final String sourceRoot) {
         final String generatedSourcesDirectoryName = File.separator + "target" + File.separator + "generated-sources";
         return sourceRoot.indexOf(generatedSourcesDirectoryName) != -1;
     }
@@ -167,15 +167,15 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
      * <code>includesAllSourceRoots=true</code> then it will return generated sources as well.
      * @return
      */
-    private List/*<String>*/ getResolvedSourceRoots() {
-        final List/*<String>*/ sourceRoots = new ArrayList/*<String>*/();
+    private List<String> getResolvedSourceRoots() {
+        final List<String> sourceRoots = new ArrayList<String>();
         if (getConfiguration().includesAllSourceRoots()) {
             // take all roots
             sourceRoots.addAll(getSourceRoots());
         } else {
             // take non-generated source roots
-            for (Iterator/*<String>*/ iter = getSourceRoots().iterator(); iter.hasNext(); ) {
-                String sourceRoot = (String)iter.next();
+            for (Iterator<String> iter = getSourceRoots().iterator(); iter.hasNext(); ) {
+                String sourceRoot = iter.next();
                 if (!isGeneratedSourcesDirectory(sourceRoot)) {
                     sourceRoots.add(sourceRoot);
                 }
@@ -185,11 +185,10 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
     }
 
 
-    private void visitSourceRoots(SourceRootVisitor visitor) {
+    private void visitSourceRoots(final SourceRootVisitor visitor) {
         // Decide whether to instrument all source roots or only the main source root.
-        final Iterator sourceRoots = getResolvedSourceRoots().iterator();
-        while (sourceRoots.hasNext()) {
-            final File sourceRoot = new File((String) sourceRoots.next());
+        for (String resolvedSourceRoot : getResolvedSourceRoots()) {
+            final File sourceRoot = new File(resolvedSourceRoot);
             if (sourceRoot.exists()) {
                 visitor.visitDir(sourceRoot);
             }

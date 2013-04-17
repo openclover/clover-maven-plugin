@@ -64,7 +64,6 @@ import java.util.Set;
  * @goal instrumentInternal
  * @phase validate
  * @requiresDependencyResolution test
- *
  */
 public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements CompilerConfiguration {
 
@@ -77,7 +76,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      * @parameter expression="${plugin.artifacts}"
      * @required
      */
-    private List pluginArtifacts;
+    private List<Artifact> pluginArtifacts;
 
     /**
      * @parameter expression="${component.org.apache.maven.artifact.factory.ArtifactFactory}"
@@ -110,16 +109,6 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      */
     protected List repositories;
 
-
-
-    /**
-     * The list of file to include in the instrumentation.
-     * Defaults are '**&#47;.java, **&#47;*.groovy' which are overwritten if &lt;includes&gt; is set by the user
-     *
-     * @parameter
-     */
-    private Set/*<String>*/ includes = new HashSet/*<String>*/(Arrays.asList(new String[]{"**/*.java", "**/*.groovy"}));
-
     /**
      * The comma seperated list of files to include in the instrumentation.
      * Defaults are **.java which are overwritten if &lt;includes&gt; is set by the user
@@ -134,12 +123,19 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      */
     private String excludesList = null;
 
+    /**
+     * The list of file to include in the instrumentation.
+     * Defaults are '**&#47;*.java, **&#47;*.groovy' which are overwritten if &lt;includes&gt; is set by the user
+     *
+     * @parameter
+     */
+    private Set<String> includes = new HashSet<String>(Arrays.asList(new String[]{"**/*.java", "**/*.groovy"}));
 
     /**
      * The list of file to exclude from the instrumentation.
      * @parameter
      */
-    private Set/*<String>*/ excludes = new HashSet/*<String>*/();
+    private Set<String> excludes = new HashSet<String>();
 
     /**
      * Specifies the custom method contexts to use for filtering specific methods from Clover reports.
@@ -149,7 +145,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      *
      * @parameter
      */
-    private Map methodContexts = new HashMap();
+    private Map<String,String> methodContexts = new HashMap<String, String>();
 
     /**
      * Specifies the custom statement contexts to use for filtering specific statements from Clover reports.
@@ -159,7 +155,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      *
      * @parameter
      */
-    private Map statementContexts = new HashMap();
+    private Map<String,String> statementContexts = new HashMap<String, String>();
 
     /**
      * <p><b>Till 3.1.11:</b> whether the Clover plugin should instrument all source roots (for example
@@ -176,7 +172,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
     /**
      * Whether the Clover plugin should instrument test source roots.
-     * @parameter  expression="${maven.clover.includesTestSourceRoots}" default-value="true"
+     * @parameter expression="${maven.clover.includesTestSourceRoots}" default-value="true"
      */
     private boolean includesTestSourceRoots;
 
@@ -205,7 +201,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     /**
      * Sets the granularity in milliseconds of the last modification date for testing whether a source needs reinstrumentation.
      *
-     * @parameter expression="${maven.clover.staleMillis}" default-value=0
+     * @parameter expression="${maven.clover.staleMillis}" default-value="0"
      */
     private int staleMillis;
 
@@ -252,7 +248,6 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
 
     /**
-     *
      * When creating the clover.jar dependency, what scope to use.
      * This may be one of: compile, test, provided etc. If not specified - provided will be used.
      *
@@ -261,7 +256,6 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     private String scope;
 
     /**
-     *
      * If set, then the maven-clover2-plugin will not copy files that were excluded, across to the target/clover directory.
      * This is useful if the build is also using plugins such as the maven-gwt-plugin, that scans for resources, and
      * skips a step if none are found. Otherwise, setting this to false could well cause build failures.
@@ -329,19 +323,20 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     private boolean setTestFailureIgnore = false;
 
     // HACK: this allows us to reset the source directories to the originals
-    private static Map originalSrcMap = new HashMap();
-    private static Map originalSrcTestMap = new HashMap();
+    private static Map<String, String> originalSrcMap = new HashMap<String, String>();
+    private static Map<String, String> originalSrcTestMap = new HashMap<String, String>();
 
-    public static String getOriginalSrcDir(String module) {
-        return (String) originalSrcMap.get(module);
+    public static String getOriginalSrcDir(final String module) {
+        return originalSrcMap.get(module);
     }
 
-    public static String getOriginalSrcTestDir(String module) {
-        return (String) originalSrcTestMap.get(module);
+    public static String getOriginalSrcTestDir(final String module) {
+        return originalSrcTestMap.get(module);
     }
 
     /**
      * {@inheritDoc}
+     *
      * @see com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo#execute()
      */
     public void execute() throws MojoExecutionException {
@@ -360,7 +355,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
         super.execute();
 
-        logArtifacts( "before changes" );
+        logArtifacts("before changes");
 
         // Instrument both the main sources and the test sources if the user has configured it
         final MainInstrumenter mainInstrumenter = new MainInstrumenter(this, cloverOutputSourceDirectory);
@@ -394,7 +389,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         redirectOutputDirectories();
         redirectArtifact();
 
-        logArtifacts( "after changes" );
+        logArtifacts("after changes");
     }
 
     /**
@@ -412,8 +407,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         }
     }
 
-    private void injectGrover(File outDir)
-    {
+    private void injectGrover(final File outDir) {
         if (skipGroverJar) {
             getLog().info("Generation of Clover Groovy configuration is disabled. No Groovy instrumentation will occur.");
             return;
@@ -425,7 +419,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         config.setInitstring(this.resolveCloverDatabase());
         config.setTmpDir(outDir);
 
-        final List/*<File>*/ includeFiles = calcIncludedFilesForGroovy();
+        final List<File> includeFiles = calcIncludedFilesForGroovy();
         getLog().debug("Clover including the following files for Groovy instrumentation: " + includeFiles);
         config.setIncludedFiles(includeFiles);
         config.setEnabled(true);
@@ -435,8 +429,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         config.setDistributedConfig(getDistributedCoverage() == null ? null : new DistributedConfig(getDistributedCoverage().getConfigString()));
 
 
-        try
-        {
+        try {
             File groverJar = GroovycSupport.extractGroverJar(this.groverJar, false);
             File groverConfigDir = GroovycSupport.newConfigDir(config, new File(getProject().getBuild().getOutputDirectory()));
             final Resource groverConfigResource = new Resource();
@@ -450,9 +443,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
             groverArtifact.setFile(groverJar);
             groverArtifact.setScope(Artifact.SCOPE_SYSTEM);
             addArtifactDependency(groverArtifact);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             getLog().error("Could not create Clover Groovy configuration file. No Groovy instrumentation will occur. " + e.getMessage(), e);
         }
     }
@@ -543,40 +534,38 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      * @see #redirectOutputDirectories()
      * @see <a href="http://groovy.codehaus.org/Groovy-Eclipse+compiler+plugin+for+Maven">Groovy-Eclipse+compiler+plugin+for+Maven</a>
      */
-    private List/*<File>*/ calcIncludedFilesForGroovy() {
+    private List<File> calcIncludedFilesForGroovy() {
         final GroovyMainSourceScanner groovyMainScanner = new GroovyMainSourceScanner(this, getProject().getBuild().getOutputDirectory());
-        final List/*<File>*/ mainGroovyFiles = extractIncludes(groovyMainScanner.getSourceFilesToInstrument(LanguageFileExtensionFilter.GROOVY_LANGUAGE));
+        final List<File> mainGroovyFiles = extractIncludes(groovyMainScanner.getSourceFilesToInstrument(LanguageFileExtensionFilter.GROOVY_LANGUAGE));
         final GroovyTestSourceScanner groovyTestScanner = new GroovyTestSourceScanner(this, getProject().getBuild().getOutputDirectory());
-        final List/*<File>*/ testGroovyFiles = extractIncludes(groovyTestScanner.getSourceFilesToInstrument(LanguageFileExtensionFilter.GROOVY_LANGUAGE));
+        final List<File> testGroovyFiles = extractIncludes(groovyTestScanner.getSourceFilesToInstrument(LanguageFileExtensionFilter.GROOVY_LANGUAGE));
 
         // combine lists
-        final List/*<File>*/ allSources = new ArrayList/*<File>*/(mainGroovyFiles);
+        final List<File> allSources = new ArrayList<File>(mainGroovyFiles);
         allSources.addAll(testGroovyFiles);
         return allSources;
     }
 
-    private ArrayList/*<File>*/ extractIncludes(final Map srcFiles) {
-        final ArrayList includeFiles = new ArrayList();
-        for (final Iterator iterator = srcFiles.keySet().iterator(); iterator.hasNext(); ) {
-            final String dirName = (String) iterator.next();
-            final String[] includes = (String[]) srcFiles.get(dirName);
-            for (int i = 0; i < includes.length; i++)
-            {
-                includeFiles.add(new File(dirName, includes[i]));
+    private ArrayList<File> extractIncludes(final Map<String, String[]> srcFiles) {
+        final ArrayList<File> includeFiles = new ArrayList<File>();
+        for (final String dirName : srcFiles.keySet()) {
+            final String[] includes = srcFiles.get(dirName);
+            for (final String include : includes) {
+                includeFiles.add(new File(dirName, include));
             }
         }
         return includeFiles;
     }
 
-    public static void resetSrcDirsOriginal(Artifact artifact, CompilerConfiguration config) {
+    public static void resetSrcDirsOriginal(final Artifact artifact, final CompilerConfiguration config) {
         if (originalSrcMap.containsKey(artifact.getId())) {
-            final String sourceDirectory = (String) originalSrcMap.get(artifact.getId());
+            final String sourceDirectory = originalSrcMap.get(artifact.getId());
             MainInstrumenter mainInstrumenter = new MainInstrumenter(config, sourceDirectory);
             mainInstrumenter.redirectSourceDirectories();
 
         }
         if (originalSrcTestMap.containsKey(artifact.getId())) {
-            final String testDirectory = (String) originalSrcTestMap.get(artifact.getId());
+            final String testDirectory = originalSrcTestMap.get(artifact.getId());
             TestInstrumenter instrumenter = new TestInstrumenter(config, testDirectory);
             instrumenter.redirectSourceDirectories();
         }
@@ -590,47 +579,42 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         return "src";
     }
 
-    private boolean isJavaProject()
-    {
-        ArtifactHandler artifactHandler = getProject().getArtifact().getArtifactHandler();
+    private boolean isJavaProject() {
+        final ArtifactHandler artifactHandler = getProject().getArtifact().getArtifactHandler();
 
-        if ( !"java".equals( artifactHandler.getLanguage() ) )
-        {
-            getLog().warn( "The reported language of this project is " + artifactHandler.getLanguage() + ", attempting to instrument sources anyway.");
+        if (!"java".equals(artifactHandler.getLanguage())) {
+            getLog().warn("The reported language of this project is " + artifactHandler.getLanguage() + ", attempting to instrument sources anyway.");
         }
         return true;
     }
 
-    protected void redirectOutputDirectories()
-    {
+    protected void redirectOutputDirectories() {
         // Explicitely set the output directory to be the Clover one so that all other plugins executing
         // thereafter output files in the Clover output directory and not in the main output directory.
-        getProject().getBuild().setDirectory( this.cloverOutputDirectory );
+        getProject().getBuild().setDirectory(this.cloverOutputDirectory);
 
         // TODO: Ugly hack below. Changing the directory should be enough for changing the values of all other
         // properties depending on it!
-        getProject().getBuild().setOutputDirectory( new File( this.cloverOutputDirectory, "classes" ).getPath() );
-        getProject().getBuild().setTestOutputDirectory(new File( this.cloverOutputDirectory, "test-classes" ).getPath() );
+        getProject().getBuild().setOutputDirectory(new File(this.cloverOutputDirectory, "classes").getPath());
+        getProject().getBuild().setTestOutputDirectory(new File(this.cloverOutputDirectory, "test-classes").getPath());
     }
 
     /**
      * Modify main artifact to add a "clover" classifier to it so that it's not mixed with the main artifact of
      * a normal build.
      */
-    protected void redirectArtifact()
-    {
+    protected void redirectArtifact() {
         // Only redirect main artifact for non-pom projects
-        if ( !getProject().getPackaging().equals( "pom" ) )
-        {
+        if (!getProject().getPackaging().equals("pom")) {
             Artifact oldArtifact = getProject().getArtifact();
-            Artifact newArtifact = this.artifactFactory.createArtifactWithClassifier( oldArtifact.getGroupId(),
-                oldArtifact.getArtifactId(), oldArtifact.getVersion(), oldArtifact.getType(), "clover" );
-            getProject().setArtifact( newArtifact );
+            Artifact newArtifact = this.artifactFactory.createArtifactWithClassifier(oldArtifact.getGroupId(),
+                    oldArtifact.getArtifactId(), oldArtifact.getVersion(), oldArtifact.getType(), "clover");
+            getProject().setArtifact(newArtifact);
 
             final String finalName =
                     getProject().getBuild().getFinalName() == null ?
-                    (getProject().getArtifactId() + "-" + getProject().getVersion())
-                    : getProject().getBuild().getFinalName();
+                            (getProject().getArtifactId() + "-" + getProject().getVersion())
+                            : getProject().getBuild().getFinalName();
 
             getProject().getBuild().setFinalName(finalName + (useCloverClassifier ? "-clover" : ""));
         }
@@ -640,47 +624,39 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
      * Browse through all project dependencies and try to find a clovered version of the dependency. If found
      * replace the main depedencency by the clovered version.
      */
-    private void swizzleCloverDependencies()
-    {
-        final Set swizzledDependencyArtifacts = swizzleCloverDependencies(getProject().getDependencyArtifacts());
-
+    private void swizzleCloverDependencies() {
+        final Set<Artifact> swizzledDependencyArtifacts = swizzleCloverDependencies(getProject().getDependencyArtifacts());
 
         // only swizzle the difference between artifacts and dependency artifacts to ensure no dupes
-        final Set artifacts = getProject().getArtifacts();
-        final Set dependencyArtifacts = getProject().getDependencyArtifacts();
+        final Set<Artifact> artifacts = getProject().getArtifacts();
+        final Set<Artifact> dependencyArtifacts = getProject().getDependencyArtifacts();
         artifacts.removeAll(dependencyArtifacts);
 
-        final Set swizzledArtifacts = swizzleCloverDependencies(artifacts);
+        final Set<Artifact> swizzledArtifacts = swizzleCloverDependencies(artifacts);
         swizzledArtifacts.addAll(swizzledDependencyArtifacts);
 
         getProject().setDependencyArtifacts(swizzledDependencyArtifacts);
         getProject().setArtifacts(swizzledArtifacts);
     }
 
-    protected Set swizzleCloverDependencies( Set artifacts )
-    {
-        Set resolvedArtifacts = new LinkedHashSet();
-        for ( Iterator i = artifacts.iterator(); i.hasNext(); )
-        {
-            Artifact artifact = (Artifact) i.next();
-
+    protected Set<Artifact> swizzleCloverDependencies(final Set<Artifact> artifacts) {
+        Set<Artifact> resolvedArtifacts = new LinkedHashSet<Artifact>();
+        for (Artifact artifact : artifacts) {
             // Do not try to find Clovered versions for artifacts with classifiers. This is because Maven2 only
             // supports a single classifier per artifact and thus if we replace the original classifier with
             // a Clover classifier the artifact will fail to perform properly as intended originally. This is a
             // limitation.
-            if ( artifact.getClassifier() == null )
-            {
-                Artifact cloveredArtifact = this.artifactFactory.createArtifactWithClassifier( artifact.getGroupId(),
-                    artifact.getArtifactId(), artifact.getVersion(), artifact.getType(), "clover" );
+            if (artifact.getClassifier() == null) {
+                Artifact cloveredArtifact = this.artifactFactory.createArtifactWithClassifier(artifact.getGroupId(),
+                        artifact.getArtifactId(), artifact.getVersion(), artifact.getType(), "clover");
 
                 // Try to resolve the artifact with a clover classifier. If it doesn't exist, simply add the original
                 // artifact. If found, use the clovered artifact.
-                try
-                {
-                    this.artifactResolver.resolve( cloveredArtifact, new ArrayList(), localRepository );
+                try {
+                    this.artifactResolver.resolve(cloveredArtifact, new ArrayList(), localRepository);
 
                     // Set the same scope as the main artifact as this is not set by createArtifactWithClassifier.
-                    cloveredArtifact.setScope( artifact.getScope() );
+                    cloveredArtifact.setScope(artifact.getScope());
 
                     // Check the timestamp of the artifact. If the found clovered version is older than the
                     // non-clovered one we need to use the non-clovered version. This is to handle use case such as:
@@ -691,54 +667,42 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
                     //   version between the original A version and the clovered version.
                     //
                     // We provide a 'fudge-factor' of 2 seconds, as the clover artifact is created first.
-                    if ( cloveredArtifact.getFile().lastModified() + cloveredArtifactExpiryInMillis < artifact.getFile().lastModified() )
-                    {
-                        getLog().warn( "Using [" + artifact.getId() + "], built on " + new Date(artifact.getFile().lastModified()) +
+                    if (cloveredArtifact.getFile().lastModified() + cloveredArtifactExpiryInMillis < artifact.getFile().lastModified()) {
+                        getLog().warn("Using [" + artifact.getId() + "], built on " + new Date(artifact.getFile().lastModified()) +
                                 " even though a Clovered version exists "
-                            + "but it's older (lastModified: " + new Date(cloveredArtifact.getFile().lastModified())
+                                + "but it's older (lastModified: " + new Date(cloveredArtifact.getFile().lastModified())
                                 + " ) and could fail the build. Please consider running Clover again on that "
-                            + "dependency's project." );
-                        resolvedArtifacts.add( artifact );
+                                + "dependency's project.");
+                        resolvedArtifacts.add(artifact);
 
+                    } else {
+                        resolvedArtifacts.add(cloveredArtifact);
                     }
-                    else
-                    {
-                        resolvedArtifacts.add( cloveredArtifact );
-                    }
+                } catch (ArtifactResolutionException e) {
+                    getLog().warn("Skipped dependency [" + artifact.getId() + "] due to resolution error: " + e.getMessage());
+                    resolvedArtifacts.add(artifact);
+                } catch (ArtifactNotFoundException e) {
+                    getLog().debug("Skipped dependency [" + artifact.getId() + "] as the clovered artifact could not be found");
+                    resolvedArtifacts.add(artifact);
                 }
-                catch ( ArtifactResolutionException e )
-                {
-                    getLog().warn( "Skipped dependency [" + artifact.getId() + "] due to resolution error: " + e.getMessage() );
-                    resolvedArtifacts.add( artifact );
-                }
-                catch ( ArtifactNotFoundException e )
-                {
-                    getLog().debug( "Skipped dependency [" + artifact.getId() + "] as the clovered artifact could not be found" );
-                    resolvedArtifacts.add( artifact );
-                }
-            }
-            else
-            {
-                getLog().debug( "Skipped dependency [" + artifact.getId() + "] as it has a classifier" );
-                resolvedArtifacts.add( artifact );
+            } else {
+                getLog().debug("Skipped dependency [" + artifact.getId() + "] as it has a classifier");
+                resolvedArtifacts.add(artifact);
             }
         }
 
         return resolvedArtifacts;
     }
 
-    protected Artifact findCloverArtifact( List pluginArtifacts )
-    {
+    protected Artifact findCloverArtifact(final List<Artifact> pluginArtifacts) {
         Artifact cloverArtifact = null;
-        Iterator artifacts = pluginArtifacts.iterator();
-        while ( artifacts.hasNext() && cloverArtifact == null )
-        {
-            Artifact artifact = (Artifact) artifacts.next();
+        Iterator<Artifact> artifactsIterator = pluginArtifacts.iterator();
+        while (artifactsIterator.hasNext() && cloverArtifact == null) {
+            Artifact artifact = artifactsIterator.next();
 
             // We identify the clover JAR by checking the groupId and artifactId.
-            if ( "com.cenqua.clover".equals( artifact.getGroupId() )
-                && "clover".equals( artifact.getArtifactId() ) )
-            {
+            if ("com.cenqua.clover".equals(artifact.getGroupId())
+                    && "clover".equals(artifact.getArtifactId())) {
                 cloverArtifact = artifact;
             }
         }
@@ -746,73 +710,59 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     }
 
     private void addCloverDependencyToCompileClasspath()
-        throws MojoExecutionException
-    {
-        Artifact cloverArtifact = findCloverArtifact( this.pluginArtifacts );
-        if ( cloverArtifact == null )
-        {
+            throws MojoExecutionException {
+        Artifact cloverArtifact = findCloverArtifact(this.pluginArtifacts);
+        if (cloverArtifact == null) {
             throw new MojoExecutionException(
-                "Couldn't find [com.cenqua.clover:clover] artifact in plugin dependencies" );
+                    "Couldn't find [com.cenqua.clover:clover] artifact in plugin dependencies");
         }
 
         final String jarScope = scope == null ? Artifact.SCOPE_PROVIDED : scope;
-        cloverArtifact = artifactFactory.createArtifact( cloverArtifact.getGroupId(), cloverArtifact.getArtifactId(),
-            cloverArtifact.getVersion(), jarScope, cloverArtifact.getType() );
-        try
-        {
-            this.artifactResolver.resolve( cloverArtifact, repositories, localRepository );
-        }
-        catch (AbstractArtifactResolutionException e)
-        {
+        cloverArtifact = artifactFactory.createArtifact(cloverArtifact.getGroupId(), cloverArtifact.getArtifactId(),
+                cloverArtifact.getVersion(), jarScope, cloverArtifact.getType());
+        try {
+            this.artifactResolver.resolve(cloverArtifact, repositories, localRepository);
+        } catch (AbstractArtifactResolutionException e) {
             throw new MojoExecutionException("Could not resolve the clover artifact ( " +
-                                                cloverArtifact.getId() +
-                                                " ) in the localRepository: " + localRepository.getUrl(), e);
+                    cloverArtifact.getId() +
+                    " ) in the localRepository: " + localRepository.getUrl(), e);
         }
 
         addArtifactDependency(cloverArtifact);
     }
 
-    private void addArtifactDependency(Artifact cloverArtifact)
-    {
+    private void addArtifactDependency(final Artifact cloverArtifact) {
         // TODO: use addArtifacts when it's implemented, see http://jira.codehaus.org/browse/MNG-2197
-        Set set = new LinkedHashSet( getProject().getDependencyArtifacts() );
-        set.add( cloverArtifact );
-        getProject().setDependencyArtifacts( set );
+        Set<Artifact> set = new LinkedHashSet<Artifact>(getProject().getDependencyArtifacts());
+        set.add(cloverArtifact);
+        getProject().setDependencyArtifacts(set);
     }
 
-    private void logArtifacts( String message )
-    {
-        if ( getLog().isDebugEnabled() )
-        {
-            getLog().debug( "[Clover] List of dependency artifacts " + message + ":" );
-            logArtifacts( getProject().getDependencyArtifacts() );
+    private void logArtifacts(final String message) {
+        if (getLog().isDebugEnabled()) {
+            getLog().debug("[Clover] List of dependency artifacts " + message + ":");
+            logArtifacts(getProject().getDependencyArtifacts());
 
-            getLog().debug( "[Clover] List of artifacts " + message + ":" );
-            logArtifacts( getProject().getArtifacts() );
+            getLog().debug("[Clover] List of artifacts " + message + ":");
+            logArtifacts(getProject().getArtifacts());
         }
     }
 
-    private void logArtifacts( Set artifacts )
-    {
-        for ( Iterator i = artifacts.iterator(); i.hasNext(); )
-        {
-            Artifact artifact = (Artifact) i.next();
-            getLog().debug( "[Clover]   Artifact [" + artifact.getId() + "], scope = [" + artifact.getScope() + "]" );
+    private void logArtifacts(final Set<Artifact> artifacts) {
+        for (Artifact artifact : artifacts) {
+            getLog().debug("[Clover]   Artifact [" + artifact.getId() + "], scope = [" + artifact.getScope() + "]");
         }
     }
 
-    protected void setArtifactFactory( ArtifactFactory artifactFactory )
-    {
+    protected void setArtifactFactory(final ArtifactFactory artifactFactory) {
         this.artifactFactory = artifactFactory;
     }
 
-    protected void setArtifactResolver( ArtifactResolver artifactResolver )
-    {
+    protected void setArtifactResolver(final ArtifactResolver artifactResolver) {
         this.artifactResolver = artifactResolver;
     }
 
-    public Set getIncludes()
-    {
+    public Set<String> getIncludes() {
         if (includesList == null) {
             return this.includes;
         } else {
@@ -820,8 +770,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         }
     }
 
-    public Set getExcludes()
-    {
+    public Set<String> getExcludes() {
         if (excludesList == null) {
             return excludes;
         } else {
@@ -830,8 +779,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         }
     }
 
-    public boolean includesAllSourceRoots()
-    {
+    public boolean includesAllSourceRoots() {
         return this.includesAllSourceRoots;
     }
 
@@ -843,11 +791,11 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         return encoding;
     }
 
-    public Map getMethodContexts() {
+    public Map<String, String> getMethodContexts() {
         return methodContexts;
     }
 
-    public Map getStatementContexts() {
+    public Map<String, String> getStatementContexts() {
         return statementContexts;
     }
 
@@ -866,4 +814,5 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     public DistributedCoverage getDistributedCoverage() {
         return distributedCoverage;
     }
+
 }

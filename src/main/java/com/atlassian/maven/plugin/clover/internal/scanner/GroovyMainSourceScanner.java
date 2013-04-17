@@ -22,9 +22,9 @@ public class GroovyMainSourceScanner extends AbstractSourceScanner {
      * @see #SRC_MAIN_GROOVY
      * @see #getSourceFilesToInstrument()
      */
-    public static void removeOwnSourceRoots(final Set/*<String>*/ sourceRoots) {
-        for (final Iterator/*<String>*/ iter = sourceRoots.iterator(); iter.hasNext(); ) {
-            final String sourceRoot = (String)iter.next();
+    public static void removeOwnSourceRoots(final Set<String> sourceRoots) {
+        for (final Iterator<String> iter = sourceRoots.iterator(); iter.hasNext(); ) {
+            final String sourceRoot = iter.next();
             if (sourceRoot.endsWith(SRC_MAIN_GROOVY)) {
                 iter.remove();
             }
@@ -36,10 +36,10 @@ public class GroovyMainSourceScanner extends AbstractSourceScanner {
     }
 
     /**
-     * @return List&lt;String&gt; - 'src/main/groovy'
+     * @return List&lt;String&gt; - compile source roots + 'src/main/groovy'
      */
-    protected List/*<String>*/ getSourceRoots() {
-        final List/*<String>*/ roots = new ArrayList/*<String>*/(getConfiguration().getProject().getCompileSourceRoots());
+    protected List<String> getSourceRoots() {
+        final List<String> roots = new ArrayList<String>(getConfiguration().getProject().getCompileSourceRoots());
         roots.add(SRC_MAIN_GROOVY);
         return roots;
     }

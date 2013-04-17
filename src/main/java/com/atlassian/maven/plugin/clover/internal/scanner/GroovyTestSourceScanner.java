@@ -35,13 +35,13 @@ public class GroovyTestSourceScanner extends AbstractSourceScanner {
         super(configuration, outputDirectory);
     }
 
-    protected List/*<String>*/ getSourceRoots() {
-        final List/*<String>*/ roots = new ArrayList/*<String>*/(getConfiguration().getProject().getTestCompileSourceRoots());
+    protected List<String> getSourceRoots() {
+        final List<String> roots = new ArrayList<String>(getConfiguration().getProject().getTestCompileSourceRoots());
         roots.add(SRC_TEST_GROOVY);
         return roots;
     }
 
     protected String getSourceDirectory() {
-        return getConfiguration().getProject().getBuild().getTestSourceDirectory();
+        return getConfiguration().getProject().getBuild().getTestSourceDirectory();   // XXX getParent() ???
     }
 }

@@ -27,11 +27,11 @@ import java.util.List;
  * Computes the list of test source files to instrument.
  */
 public class TestSourceScanner extends AbstractSourceScanner {
-    public TestSourceScanner(CompilerConfiguration configuration, String outputSourceDirectory) {
+    public TestSourceScanner(final CompilerConfiguration configuration, final String outputSourceDirectory) {
         super(configuration, outputSourceDirectory);
     }
 
-    protected List/*<String>*/ getSourceRoots() {
+    protected List<String> getSourceRoots() {
         return getConfiguration().getProject().getTestCompileSourceRoots();
     }
 

@@ -174,7 +174,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
      * @param database the Clover database to verify
      * @throws MojoExecutionException when the TPC is below the threshold
      */
-    private void checkDatabase(String database) throws MojoExecutionException
+    private void checkDatabase(final String database) throws MojoExecutionException
     {
         final Project antProject = new Project();
         antProject.init();
@@ -251,21 +251,20 @@ public class CloverCheckMojo extends AbstractCloverMojo
         }
     }
 
-    private void setTestSourceRoots(CloverPassTask cloverPassTask) {
-        String originalSrcTestDir = CloverSetupMojo.getOriginalSrcTestDir(getProject().getId());
+    private void setTestSourceRoots(final CloverPassTask cloverPassTask) {
+        final String originalSrcTestDir = CloverSetupMojo.getOriginalSrcTestDir(getProject().getId());
         if (originalSrcTestDir != null) {
             addTestSrcDir(cloverPassTask, originalSrcTestDir);
         }
-        final List testSourceRoots = getProject().getTestCompileSourceRoots();
+        final List<String> testSourceRoots = getProject().getTestCompileSourceRoots();
         getLog().warn("has test file source dir = " + (testSourceRoots.size() > 0));
-        for (Iterator iterator = testSourceRoots.iterator(); iterator.hasNext();) {
-            String testDir = (String) iterator.next();
+        for (String testDir : testSourceRoots) {
             getLog().warn("test file source dir = " + testDir);
             addTestSrcDir(cloverPassTask, testDir);
         }
     }
 
-    private void addTestSrcDir(CloverPassTask cloverPassTask, String originalSrcTestDir) {
+    private void addTestSrcDir(final CloverPassTask cloverPassTask, final String originalSrcTestDir) {
         final FileSet testFiles = new FileSet();
         final File dir = new File(originalSrcTestDir);
         if (dir.exists()) {
@@ -274,7 +273,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
         }
     }
 
-    CloverPassTask createCloverPassTask(String database, Project antProject) {
+    CloverPassTask createCloverPassTask(final String database, final Project antProject) {
         return (CloverPassTask) antProject.createTask( "clover-check" );
     }
 
