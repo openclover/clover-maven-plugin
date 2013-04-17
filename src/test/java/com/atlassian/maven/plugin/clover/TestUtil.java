@@ -19,7 +19,7 @@ public class TestUtil {
         return LOG;
     }
 
-    public static void setPrivateField(Class clazz, Object target, String fieldName, Object value) throws MojoExecutionException {
+    public static void setPrivateField(final Class clazz, final Object target, final String fieldName, final Object value) throws MojoExecutionException {
         try {
             final Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
@@ -32,7 +32,7 @@ public class TestUtil {
     }
 
 
-    public static void setPrivateParentField(Class clazz, Object target, String fieldName, Object value) throws MojoExecutionException {
+    public static void setPrivateParentField(final Class clazz, final Object target, final String fieldName, final Object value) throws MojoExecutionException {
         try {
             final Field field = clazz.getSuperclass().getDeclaredField(fieldName);
             field.setAccessible(true);
@@ -49,7 +49,7 @@ public class TestUtil {
      */
     static class RecordingLogger extends SystemStreamLog {
 
-        final List buffer = new LinkedList();
+        final List<LogEvent> buffer = new LinkedList<LogEvent>();
 
         public boolean contains(String msg, Throwable e, int level) {
             // look for a log event matching the parameter in the log buffer
