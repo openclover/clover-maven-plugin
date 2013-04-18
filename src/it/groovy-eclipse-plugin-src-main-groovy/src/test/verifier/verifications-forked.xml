@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<verifications>
+    <files>
+        <!-- check that we have reports for the groovy classes -->
+        <file>
+            <location>target/site/clover/com/atlassian/maven/plugins/Example.html</location>
+            <contains>Statistics for file Example.groovy</contains>
+        </file>
+        <file>
+            <location>target/site/clover/com/atlassian/maven/plugins/ExampleTest.html</location>
+            <contains>Statistics for file ExampleTest.groovy</contains>
+        </file>
+        <!-- Check that we have code coverage -->
+        <file>
+            <location>target/site/clover/clover.xml</location>
+            <contains><![CDATA[<line .* count="1" .* signature="show\(\) : def"/>]]></contains> <!-- Example.groovy -->
+        </file>
+        <file>
+            <location>target/site/clover/clover.xml</location>
+            <contains><![CDATA[<line .* count="1" .* signature="testShow\(\) : void"/>]]></contains> <!-- ExampleTest.groovy -->
+        </file>
+        <!-- Check that we have compiled some classes, which were out of scope of instrumentation -->
+        <file>
+            <location>target/classes/com/atlassian/maven/plugins/NotInstrumented.class</location>
+        </file>
+        <file>
+            <location>target/surefire-reports/com.atlassian.maven.plugins.ExampleTest-output.txt</location>
+            <contains>NotInstrumented.hello</contains>
+        </file>
+        <!-- Check that we have compiled in both 'default' and 'clover' life cycle -->
+        <file>
+            <location>target/classes/com/atlassian/maven/plugins/Example.class</location>
+        </file>
+        <file>
+            <location>target/classes/com/atlassian/maven/plugins/NotInstrumented.class</location>
+        </file>
+        <file>
+            <location>target/test-classes/com/atlassian/maven/plugins/ExampleTest.class</location>
+        </file>
+        <file>
+            <location>target/clover/classes/com/atlassian/maven/plugins/Example.class</location>
+        </file>
+        <file>
+            <location>target/clover/classes/com/atlassian/maven/plugins/NotInstrumented.class</location>
+        </file>
+        <file>
+            <location>target/clover/test-classes/com/atlassian/maven/plugins/ExampleTest.class</location>
+        </file>
+    </files>
+</verifications>

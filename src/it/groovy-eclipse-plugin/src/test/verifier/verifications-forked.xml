@@ -74,16 +74,84 @@
         </file>
         <!-- Check that we have instrumented java sources -->
         <file>
-            <location>target/clover/src-instrumented/com/atlassian/maven/plugins/JavaExample.java</location>
+            <location>target/clover/src/com/atlassian/maven/plugins/JavaExample.java</location>
             <contains>This file has been instrumented by Clover</contains>
         </file>
         <file>
-            <location>target/clover/src-instrumented/com/atlassian/maven/plugins/JavaHelper.java</location>
+            <location>target/clover/src/com/atlassian/maven/plugins/JavaHelper.java</location>
             <contains>This file has been instrumented by Clover</contains>
         </file>
         <file>
-            <location>target/clover/src-test-instrumented/com/atlassian/maven/plugins/JavaHelperTest.java</location>
+            <location>target/clover/src-test/com/atlassian/maven/plugins/JavaHelperTest.java</location>
             <contains>This file has been instrumented by Clover</contains>
+        </file>
+        <!-- Check that we have compiled classes in 'default' life cycle -->
+        <file>
+            <location>target/classes/com/atlassian/maven/plugins/JavaExample.class</location>
+        </file>
+        <file>
+            <location>target/classes/com/atlassian/maven/plugins/JavaExcludedFile.class</location>
+        </file>
+        <file>
+            <location>target/classes/com/atlassian/maven/plugins/JavaHelper.class</location>
+        </file>
+        <file>
+            <location>target/classes/com/atlassian/maven/plugins/GroovyExample.class</location>
+        </file>
+        <file>
+            <location>target/classes/com/atlassian/maven/plugins/GroovyExcludedFile.class</location>
+        </file>
+        <file>
+            <location>target/classes/com/atlassian/maven/plugins/GroovyHelper.class</location>
+        </file>
+        <file>
+            <location>target/test-classes/com/atlassian/maven/plugins/ExampleTest.class</location>
+        </file>
+        <file>
+            <location>target/test-classes/com/atlassian/maven/plugins/JavaExcludedFileTest.class</location>
+        </file>
+        <file>
+            <location>target/test-classes/com/atlassian/maven/plugins/JavaHelperTest.class</location>
+        </file>
+        <file>
+            <location>target/test-classes/com/atlassian/maven/plugins/GroovyExcludedFileTest.class</location>
+        </file>
+        <file>
+            <location>target/test-classes/com/atlassian/maven/plugins/GroovyHelperTest.class</location>
+        </file>
+        <!-- Check that we have compiled classes in 'clover' life cycle -->
+        <file>
+            <location>target/clover/classes/com/atlassian/maven/plugins/JavaExample.class</location>
+        </file>
+        <file>
+            <location>target/clover/classes/com/atlassian/maven/plugins/JavaExcludedFile.class</location>
+        </file>
+        <file>
+            <location>target/clover/classes/com/atlassian/maven/plugins/JavaHelper.class</location>
+        </file>
+        <file>
+            <location>target/clover/classes/com/atlassian/maven/plugins/GroovyExample.class</location>
+        </file>
+        <file>
+            <location>target/clover/classes/com/atlassian/maven/plugins/GroovyExcludedFile.class</location>
+        </file>
+        <file>
+            <location>target/clover/classes/com/atlassian/maven/plugins/GroovyHelper.class</location>
+        </file>
+        <file>
+            <location>target/clover/test-classes/com/atlassian/maven/plugins/ExampleTest.class</location>
+        </file>
+        <file>
+            <location>target/clover/test-classes/com/atlassian/maven/plugins/JavaExcludedFileTest.class</location>
+        </file>
+        <file>
+            <location>target/clover/test-classes/com/atlassian/maven/plugins/JavaHelperTest.class</location>
+        </file>
+        <file>
+            <location>target/clover/test-classes/com/atlassian/maven/plugins/GroovyExcludedFileTest.class</location>
+        </file>
+        <file>
+            <location>target/clover/test-classes/com/atlassian/maven/plugins/GroovyHelperTest.class</location>
         </file>
     </files>
 </verifications>
