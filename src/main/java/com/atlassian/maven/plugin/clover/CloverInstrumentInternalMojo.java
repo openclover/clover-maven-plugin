@@ -22,9 +22,9 @@ package com.atlassian.maven.plugin.clover;
 import com.atlassian.clover.ant.groovy.GroovycSupport;
 import com.atlassian.clover.instr.java.InstrumentationConfig;
 import com.atlassian.clover.remote.DistributedConfig;
-import com.atlassian.maven.plugin.clover.internal.scanner.GroovyMainSourceScanner;
-import com.atlassian.maven.plugin.clover.internal.scanner.GroovyTestSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.LanguageFileExtensionFilter;
+import com.atlassian.maven.plugin.clover.internal.scanner.MainSourceScanner;
+import com.atlassian.maven.plugin.clover.internal.scanner.TestSourceScanner;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.AbstractArtifactResolutionException;
@@ -53,6 +53,143 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
+/*
+ * TRICKY PART HOW JAVA AND GROOVY SOURCE FOLDERS ARE HANDLED
+ *
+ * PROBLEM DIMENSIONS:
+ *  #1 language:
+ *      -> java only
+ *      -> java + groovy
+ *      -> groovy only
+ *  #2 source folders:
+ *      -> src/xxx/java
+ *      -> src/xxx/groovy
+ *      -> generated-sources/xxx
+ *  #3 location of java source files:
+ *      -> in src/xxx/java
+ *      -> in src/xxx/groovy - NOT SUPPORTED BY CLOVER (see reasons below)
+ *  #4 location of groovy source files:
+ *      -> src/xxx/java
+ *      -> src/xxx/groovy
+ *  #5 definition of groovy source folders
+ *      -> by <sourceDirectory>, <testSourceDirectory> parameters in POM
+ *      -> by add-source, add-test-source goals in build-helper-maven-plugin
+ *      -> by extensions=true option in groovy-eclipse-compiler
+ *      -> not defined at all (but src/xxx/groovy location is then internally added by gmaven or groovy-eclipse-plugin)
+ *  #6 groovy plugins
+ *      -> gmaven
+ *      -> groovy-eclipse-plugin
+ *  #7 instrumentation scope
+ *      -> non-generated sources
+ *      -> all sources
+ *  #8 java/groovy compilation
+ *      -> separated (maven-compiler compiles java, gmaven compiles groovy)
+ *      -> joint compilation (groovy-eclipse-plugin compiles both java and groovy)
+ *  #9 build lifecycle
+ *      -> non-forked (clover2:setup)
+ *      -> forked (clover2:instrument)
+ *
+ * =====================================================================================================================
+ * 1) includeAllSourceRoots = false, java+groovy in 'src/(main|test)/java'
+ *
+ *  -> source directories are read from getCompileSourceRoots()
+ *  -> *.java files are instrumented in the source and saved in 'src-(test-)instrumented'
+ *  -> *.groovy are copied "as is" to 'src-(test-)instrumented' too
+ *  -> source roots are overridden:
+ *          'src/main/java' -> 'src-instrumented'
+ *          'src/test/java' -> 'src-test-instrumented'
+ *  -> groovyc compiles sources from source roots listed above:
+ *       -> *.java files are already instrumented in the source, compile "as is"
+ *       -> *.groovy files are being instrumented in the AST
+ *
+ * =====================================================================================================================
+ * 1b) includeAllSourceRoots = true, java+groovy in 'src/(main|test)/java', generated sources in
+ * 'target/generated-(test-)sources'
+ *
+ *   -> as for case 1) but 'generated-(test-)sources' are instrumented too and stored in 'src-(test-)instrumented'
+ *
+ * =====================================================================================================================
+ * 2) includeAllSourceRoots = false, java in 'src/(main|test)/java', groovy in 'src/(main|test)/(java|groovy)'
+ *
+ *  -> build-helper-maven-plugin adds 'src/(main|test)/groovy' as extra source root
+ *  -> source directories are read from getCompileSourceRoots()
+ *  -> *.java files are instrumented in the source and saved in 'src-(test-)instrumented'
+ *  -> *.groovy files
+ *          from 'src/(main|test)/java' are copied to 'src-(test-)instrumented'
+ *          from 'src/(main|test)/groovy' are not copied anywhere
+ *  -> source roots are switched:
+ *          'src/main/java' -> 'src-instrumented'
+ *          'src/test/java' -> 'src-test-instrumented'
+ *          'src/main/groovy' -> (unchanged)
+ *          'src/test/groovy' -> (unchanged)
+ *  -> groovyc compiles sources from all source roots listed above
+ *       -> *.java files are already instrumented in the source, compile "as is"
+ *       -> *.groovy files are instrumented in the AST
+ *
+ * =====================================================================================================================
+ * 2b) includeAllSourceRoots = true, java in 'src/(main|test)/java', groovy in 'src/(main|test)/(java|groovy)',
+ * generated sources in 'target/generated-(test-)sources
+ *
+ *   -> as for case 2) but 'generated-(test-)sources' are instrumented too and stored in 'src-(test-)instrumented'
+ *
+ * =====================================================================================================================
+ * 3) includeAllSourceRoots = false, java in 'src/(main|test)/java', groovy in 'src/(main|test)/(java|groovy)'
+ *
+ *  -> the 'src/(main|test)/groovy' is NOT added as extra source root
+ *      -> so that getCompileSourceRoots() does not return it in the list
+ *      -> groovy-eclipse-plugin will add the 'src/(main|test)/groovy' location internally (typically after the
+ *         clover2:setup goal is finished)
+ *  -> source directories are read from getCompileSourceRoots()
+ *      -> GroovyMain/TestSourceScanner contains additional hardcoded location for 'src/(main|test)/groovy'
+ *  -> *.java files are instrumented in the source and saved in 'src-(test-)instrumented'
+ *  -> *.groovy files
+ *          from 'src/(main|test)/java' are copied to 'src-(test-)instrumented'
+ *          from 'src/(main|test)/groovy' are not copied anywhere
+ *  -> source roots are switched:
+ *          'src/main/java' -> 'src-instrumented'
+ *          'src/test/java' -> 'src-test-instrumented'
+ *   -> groovyc compiles sources from all source roots listed above
+ *       -> *.java files are already instrumented, compile "as is"
+ *       -> *.groovy files are instrumented in the AST
+ *       -> groovy-eclipse-plugin internally adds 'src/(main|test)/groovy' to the list of source roots
+ *
+ * =====================================================================================================================
+ * 3b) includeAllSourceRoots = true, java in 'src/(main|test)/java', groovy in 'src/(main|test)/(java|groovy)'
+ * generated sources in 'target/generated-(test-)sources
+ *
+ *   -> as for case 3) but 'generated-(test-)sources' are instrumented too and stored in 'src-(test-)instrumented'
+ *
+ * =====================================================================================================================
+ * 4) includeAllSourceRoots = false, no java code, groovy in 'src/(main|test)/groovy',
+ * sourceDirectory/testSourceDirectory are used on POM
+ *
+ *   -> the 'src/(main|test)/groovy' is added as sourceDirectory and testSourceDirectory
+ *      -> so that getProject().getBuild().getSourceDirectory() returns it
+ *      -> so that getProject().getCompileSourceRoots() returns it
+ *   -> *.groovy files are not copied anywhere
+ *   -> source roots are NOT switched
+ *   -> groovyc compiles sources from original source roots ('src/(main|test)/groovy')
+ *
+ * =====================================================================================================================
+ * 4b) includeAllSourceRoots = true, no java code, groovy in 'src/(main|test)/groovy',
+ * sourceDirectory/testSourceDirectory are used on POM
+ *
+ *   -> as for case 4) but 'generated-(test-)sources' are passed to groovyc
+ *
+ * =====================================================================================================================
+ * 5) includeAllSourceRoots = false, java in src/xxx/java, no groovy code, no groovy plugin
+ *
+ *   -> standard behaviour, 'src/(main|test)/java' is instrumented into 'target/clover/src-(test-)instrumented'
+ *   and compiled
+ *
+ * =====================================================================================================================
+ * 5b) includeAllSourceRoots = true, java in src/xxx/java, no groovy code, no groovy plugin
+ *
+ *   -> standard behaviour, 'src/(main|test)/java' as well as 'target/generated-(test-)sources' are instrumented
+ *   into 'target/clover/src-(test-)instrumented' and compiled
+ */
+
 
 /**
  * <p>Instrument source roots.</p>
@@ -376,10 +513,10 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
 
         // Modify Maven model so that it points to the new source directories and to the clovered
         // artifacts instead of the original values.
-        String originalSrcDir = mainInstrumenter.redirectSourceDirectories();
+        final String originalSrcDir = mainInstrumenter.redirectSourceDirectories();
         originalSrcMap.put(getProject().getId(), originalSrcDir);
         if (this.includesTestSourceRoots) {
-            String originalSrcTestDir = testInstrumenter.redirectSourceDirectories();
+            final String originalSrcTestDir = testInstrumenter.redirectSourceDirectories();
             originalSrcTestMap.put(getProject().getId(), originalSrcTestDir);
         }
 
@@ -407,6 +544,10 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         }
     }
 
+    /**
+     *
+     * @param outDir - output directory for temporary artifacts
+     */
     private void injectGrover(final File outDir) {
         if (skipGroverJar) {
             getLog().info("Generation of Clover Groovy configuration is disabled. No Groovy instrumentation will occur.");
@@ -449,96 +590,19 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
     }
 
     /**
-     * There are several cases how source folders are handled.
-     * <p/>
-     * <b>1) includeAllSourceRoots = false, java+groovy in 'src/(main|test)/java'</b>
-     * <pre>
-     *  -> source directories are read from getCompileSourceRoots()
-     *  -> *.java files are instrumented in the source and saved in 'src-(test-)instrumented'
-     *  -> *.groovy are copied "as is" to 'src-(test-)instrumented' too
-     *  -> source roots are overridden:
-     *          'src/main/java' -> 'src-instrumented'
-     *          'src/test/java' -> 'src-test-instrumented'
-     *  -> groovyc compiles sources from source roots listed above:
-     *       -> *.java files are already instrumented in the source, compile "as is"
-     *       -> *.groovy files are being instrumented in the AST
-     * </pre>
-     * <p/>
-     * <b>2) includeAllSourceRoots = false, java in 'src/(main|test)/java', groovy in 'src/(main|test)/(java|groovy)'</b>
-     * <pre>
-     *  -> build-helper-maven-plugin adds 'src/(main|test)/groovy' as extra source root
-     *  -> source directories are read from getCompileSourceRoots()
-     *  -> *.java files are instrumented in the source and saved in 'src-(test-)instrumented'
-     *  -> *.groovy files
-     *          from 'src/(main|test)/java' are copied to 'src-(test-)instrumented'
-     *          from 'src/(main|test)/groovy' are not copied anywhere
-     *  -> source roots are switched:
-     *          'src/main/java' -> 'src-instrumented'
-     *          'src/test/java' -> 'src-test-instrumented'
-     *          'src/main/groovy' -> (unchanged)
-     *          'src/test/groovy' -> (unchanged)
-     *  -> groovyc compiles sources from all source roots listed above
-     *       -> *.java files are already instrumented in the source, compile "as is"
-     *       -> *.groovy files are instrumented in the AST
-     * </pre>
-     * <p/>
-     * <b>3) includeAllSourceRoots = false, java in 'src/(main|test)/java', groovy in 'src/(main|test)/(java|groovy)'</b>
-     * <pre>
-     *  -> the 'src/(main|test)/groovy' is NOT added as extra source root
-     *      -> so that getCompileSourceRoots() does not return it in the list
-     *      -> groovy-eclipse-plugin will add the 'src/(main|test)/groovy' location internally (typically after the
-     *         clover2:setup goal is finished)
-     *  -> source directories are read from getCompileSourceRoots()
-     *      -> GroovyMain/TestSourceScanner contains additional hardcoded location for 'src/(main|test)/groovy'
-     *  -> *.java files are instrumented in the source and saved in 'src-(test-)instrumented'
-     *  -> *.groovy files
-     *          from 'src/(main|test)/java' are copied to 'src-(test-)instrumented'
-     *          from 'src/(main|test)/groovy' are not copied anywhere
-     *  -> source roots are switched:
-     *          'src/main/java' -> 'src-instrumented'
-     *          'src/test/java' -> 'src-test-instrumented'
-     *   -> groovyc compiles sources from all source roots listed above
-     *       -> *.java files are already instrumented, compile "as is"
-     *       -> *.groovy files are instrumented in the AST
-     *       -> groovy-eclipse-plugin internally adds 'src/(main|test)/groovy' to the list of source roots
-     * </pre>
-     * <p/>
-     * <b>1b) includeAllSourceRoots = true, java+groovy in 'src/(main|test)/java',
-     * generated sources in 'target/generated-(test-)sources</b>
-     * <pre>
-     *   -> as for case 1) but 'generated-(test-)sources' are instrumented too and stored in 'src-(test-)instrumented'
-     * </pre>
-     * <b>2b) includeAllSourceRoots = true, java in 'src/(main|test)/java', groovy in 'src/(main|test)/(java|groovy)',
-     * generated sources in 'target/generated-(test-)sources</b>
-     * <pre>
-     *   -> as for case 2) but 'generated-(test-)sources' are instrumented too and stored in 'src-(test-)instrumented'
-     * </pre>
-     * <b>3b) includeAllSourceRoots = true, java in 'src/(main|test)/java', groovy in 'src/(main|test)/(java|groovy)'
-     * generated sources in 'target/generated-(test-)sources</b>
-     * <pre>
-     *   -> as for case 3) but 'generated-(test-)sources' are instrumented too and stored in 'src-(test-)instrumented'
-     * </pre>
-     * <b>4) includeAllSourceRoots = false, java in src/xxx/java, no groovy code, no groovy plugin</b>
-     * <pre>
-     *   -> standard behaviour, 'src/(main|test)/java' is instrumented into 'target/clover/src-(test-)instrumented'
-     *   and compiled
-     * </pre>
-     * <b>4b) includeAllSourceRoots = true, java in src/xxx/java, no groovy code, no groovy plugin</b>
-     * <pre>
-     *   -> standard behaviour, 'src/(main|test)/java' as well as 'target/generated-(test-)sources' are instrumented
-     *   into 'target/clover/src-(test-)instrumented' and compiled
-     * </pre>
      *
      * @return List&lt;File&gt;
      * @see com.atlassian.maven.plugin.clover.internal.instrumentation.AbstractInstrumenter#instrument()
      * @see #redirectOutputDirectories()
      * @see <a href="http://groovy.codehaus.org/Groovy-Eclipse+compiler+plugin+for+Maven">Groovy-Eclipse+compiler+plugin+for+Maven</a>
      */
-    private List<File> calcIncludedFilesForGroovy() {
-        final GroovyMainSourceScanner groovyMainScanner = new GroovyMainSourceScanner(this, getProject().getBuild().getOutputDirectory());
-        final List<File> mainGroovyFiles = extractIncludes(groovyMainScanner.getSourceFilesToInstrument(LanguageFileExtensionFilter.GROOVY_LANGUAGE));
-        final GroovyTestSourceScanner groovyTestScanner = new GroovyTestSourceScanner(this, getProject().getBuild().getOutputDirectory());
-        final List<File> testGroovyFiles = extractIncludes(groovyTestScanner.getSourceFilesToInstrument(LanguageFileExtensionFilter.GROOVY_LANGUAGE));
+    protected List<File> calcIncludedFilesForGroovy() {
+        final MainSourceScanner groovyMainScanner = new MainSourceScanner(this, getProject().getBuild().getOutputDirectory());
+        final List<File> mainGroovyFiles = extractIncludes(
+                groovyMainScanner.getSourceFilesToInstrument(LanguageFileExtensionFilter.GROOVY_LANGUAGE, false));
+        final TestSourceScanner groovyTestScanner = new TestSourceScanner(this, getProject().getBuild().getOutputDirectory());
+        final List<File> testGroovyFiles = extractIncludes(
+                groovyTestScanner.getSourceFilesToInstrument(LanguageFileExtensionFilter.GROOVY_LANGUAGE, false));
 
         // combine lists
         final List<File> allSources = new ArrayList<File>(mainGroovyFiles);
@@ -766,7 +830,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverMojo implements 
         if (includesList == null) {
             return this.includes;
         } else {
-            return new HashSet(Arrays.asList(includesList.split(",")));
+            return new HashSet<String>(Arrays.asList(includesList.split(",")));
         }
     }
 

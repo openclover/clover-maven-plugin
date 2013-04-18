@@ -23,6 +23,7 @@ import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.types.selectors.FileSelector;
 import org.apache.tools.ant.types.selectors.DependSelector;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,7 +35,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 /**
- * Code common to compute the list of source files to instrument (main sources, test sources).
+ * Code common to compute the list of source files to instrument (main sources, test sources) for Java and Groovy
+ * languages.
  */
 public abstract class AbstractSourceScanner implements CloverSourceScanner {
 
@@ -42,10 +44,18 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
         void visitDir(File dir);
     }
 
+    @NotNull
     private final CompilerConfiguration configuration;
+
+    @NotNull
     private final File targetDir;
 
-    public AbstractSourceScanner(final CompilerConfiguration configuration, final String outputSourceDirectory) {
+    /**
+     *
+     * @param configuration
+     * @param outputSourceDirectory
+     */
+    public AbstractSourceScanner(@NotNull final CompilerConfiguration configuration, @NotNull final String outputSourceDirectory) {
         this.configuration = configuration;
         this.targetDir = new File(outputSourceDirectory);
     }
@@ -53,10 +63,20 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
     /**
      * {@inheritDoc}
      *
+     * This method handles a special case: don't return excludes from native Groovy source directory (src/main/groovy
+     * or src/test/groovy) because such files shall not be copied to instrumented sources directory
+     * (target/clover/src-instrumented or target/clover/src-test/instrumented); a reason is that gmaven-plugin and
+     * groovy-eclipse-plugin have the src/xxx/groovy location hardcoded and they will compile this source root
+     * no matter what other compilation source roots or source directory are provided; it means that we would end
+     * up with a 'duplicate class' build error if files are copied.
+     *
      * @see CloverSourceScanner#getExcludedFiles()
      */
     public Map<String,String[]> getExcludedFiles() {
-        return computeExcludedFiles(getScanner());
+        Map<String, String[]> excludedFiles = computeExcludedFiles(getDirectoryScanner());
+        // special case: don't return excludes from 'src/(main|test)/groovy'
+        removeGroovySourceRoot(excludedFiles.keySet());
+        return excludedFiles;
     }
 
     /**
@@ -65,18 +85,38 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
      * @see CloverSourceScanner#getSourceFilesToInstrument()
      */
     public Map<String,String[]> getSourceFilesToInstrument() {
-        return getSourceFilesToInstrument(LanguageFileExtensionFilter.ANY_LANGUAGE);
+        return getSourceFilesToInstrument(LanguageFileExtensionFilter.ANY_LANGUAGE, false);
     }
 
     /**
-     * @param languageFileFilter extra filter (in addition to includes/excludes) based on programming language
+     *
+     * This method can handle a special case: don't return excludes from native Groovy source directory (src/main/groovy
+     * or src/test/groovy) because such files shall not be copied to instrumented sources directory
+     * (target/clover/src-instrumented or target/clover/src-test/instrumented); a reason is that gmaven and
+     * groovy-eclipse-plugin have the src/xxx/groovy location hardcoded and they will compile this source root
+     * no matter what other compilation source roots or source directory are provided; it means that we would end
+     * up with a 'duplicate class' build error if files would be copied.
+     *
+     * Please note however than in case when Groovy sources are located in a native Java source directory (src/main/java
+     * or src/test/java) then such files must be copied. A reason is that source roots will be redirected to the
+     * Clover's instrumented directory (target/clover/src-instrumented or target/clover/src-test/instrumented) and the
+     * groovy compiler must find both Java and Groovy files.
+     *
+     * @param languageFileFilter extra filter (in addition to includes/excludes) based on the programming language
+     * @param skipGroovySourceDirectory if <code>true</code> then it will not return files located under Groovy
+     *                                  source directory (i.e. 'src/main/groovy' or 'src/test/groovy')
      * @return Map&lt;File,String[]&gt;
      */
-    public Map<String,String[]> getSourceFilesToInstrument(LanguageFileFilter languageFileFilter) {
-        return computeIncludedFiles(getScanner(), languageFileFilter);
+    public Map<String,String[]> getSourceFilesToInstrument(LanguageFileFilter languageFileFilter, boolean skipGroovySourceDirectory) {
+        Map<String, String[]> includedFiles = computeIncludedFiles(getDirectoryScanner(), languageFileFilter);
+        // special case: don't return includes from 'src/(main|test)/groovy'
+        if (skipGroovySourceDirectory) {
+            removeGroovySourceRoot(includedFiles.keySet());
+        }
+        return includedFiles;
     }
 
-    protected abstract List<String> getSourceRoots();
+    protected abstract List<String> getCompileSourceRoots();
 
     protected abstract String getSourceDirectory();
 
@@ -85,11 +125,30 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
     }
 
     /**
-     * @return a Plexus scanner object that scans a source root and filters files according to inclusion and
-     *         exclusion patterns. In our case at hand we include only Java sources as these are the only files we want
-     *         to instrument.
+     * From a list of provided <code>sourceRoots</code> remove those which specific for this scanner,
+     * unless the specific folder points to the same location as the {@link #getSourceDirectory()}.
+     *
+     * @param sourceRoots list to be modified
+     * @see #getSourceFilesToInstrument()
      */
-    private DirectoryScanner getScanner() {
+    protected abstract void removeGroovySourceRoot(@NotNull final Set<String> sourceRoots);
+
+    protected void removeSourceRoot(final Set<String> sourceRoots, String sourceRootToRemove) {
+        for (final Iterator<String> iter = sourceRoots.iterator(); iter.hasNext(); ) {
+            final String sourceRoot = iter.next();
+            if (sourceRoot.endsWith(sourceRootToRemove)) {
+                iter.remove();
+            }
+        }
+    }
+
+    /**
+     * Returns a Plexus scanner object that scans a source root and filters files according to inclusion and
+     * exclusion patterns. In our case at hand we include only Java sources as these are the only files we want
+     * to instrument.
+     * @return DirectoryScanner
+     */
+    private DirectoryScanner getDirectoryScanner() {
         final Set<String> includes = getConfiguration().getIncludes();
         final Set<String> excludes = getConfiguration().getExcludes();
 
@@ -116,8 +175,10 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
             public void visitDir(File dir) {
                 scanner.setBasedir(dir);
 
-                final String[] configuredIncludes = getConfiguration().getIncludes().toArray(new String[]{});
-                final String[] includes = concatArrays(configuredIncludes, DirectoryScanner.getDefaultExcludes());
+                final Set<String> configurationIncludes = getConfiguration().getIncludes();
+                final String[] includes = concatArrays(
+                        configurationIncludes.toArray(new String[configurationIncludes.size()]),
+                        DirectoryScanner.getDefaultExcludes());
                 scanner.setIncludes(includes);// ensure that .svn dirs etc are not considered excluded
                 scanner.scan();
 
@@ -158,24 +219,25 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
     }
 
     private boolean isGeneratedSourcesDirectory(final String sourceRoot) {
-        final String generatedSourcesDirectoryName = File.separator + "target" + File.separator + "generated-sources";
-        return sourceRoot.indexOf(generatedSourcesDirectoryName) != -1;
+        final String generatedSrcDirDefaultLifecycle = File.separator + "target" + File.separator + "generated-sources";
+        final String generatedSrcDirCloverLifecycle = File.separator + "target" + File.separator + "clover" + File.separator + "generated-sources";
+        return sourceRoot.indexOf(generatedSrcDirDefaultLifecycle) != -1
+                || sourceRoot.indexOf(generatedSrcDirCloverLifecycle) != -1;
     }
 
     /**
      * Returns list of source roots in which source files shall be searched. If configuration has
      * <code>includesAllSourceRoots=true</code> then it will return generated sources as well.
-     * @return
+     * @return List&lt;String&gt;
      */
     private List<String> getResolvedSourceRoots() {
         final List<String> sourceRoots = new ArrayList<String>();
         if (getConfiguration().includesAllSourceRoots()) {
             // take all roots
-            sourceRoots.addAll(getSourceRoots());
+            sourceRoots.addAll(getCompileSourceRoots());
         } else {
             // take non-generated source roots
-            for (Iterator<String> iter = getSourceRoots().iterator(); iter.hasNext(); ) {
-                String sourceRoot = iter.next();
+            for (String sourceRoot : getCompileSourceRoots()) {
                 if (!isGeneratedSourcesDirectory(sourceRoot)) {
                     sourceRoots.add(sourceRoot);
                 }

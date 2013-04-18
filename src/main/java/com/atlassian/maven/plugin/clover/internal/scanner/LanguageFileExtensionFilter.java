@@ -12,23 +12,23 @@ public abstract class LanguageFileExtensionFilter implements LanguageFileFilter 
 
     public abstract String[] filter(String[] inputFiles);
 
-    protected String[] filter(final String[] inputFiles, final Set/*<String>*/ fileExtensions) {
+    protected String[] filter(final String[] inputFiles, final Set<String> fileExtensions) {
         if (inputFiles == null) {
             return null;
         }
 
-        final ArrayList/*<String>*/ filteredFiles = new ArrayList/*<String>*/(inputFiles.length);
+        final ArrayList<String> filteredFiles = new ArrayList<String>(inputFiles.length);
         // copy files matching the extension(s)
-        for (int i = 0; i < inputFiles.length; i++) {
-            final int lastDotIndex = inputFiles[i].lastIndexOf('.');
+        for (String inputFile : inputFiles) {
+            final int lastDotIndex = inputFile.lastIndexOf('.');
             if (lastDotIndex != -1) {
-                final String fileExt = inputFiles[i].substring(lastDotIndex); // get extension
+                final String fileExt = inputFile.substring(lastDotIndex); // get extension
                 if (fileExtensions.contains(fileExt)) {
-                    filteredFiles.add(inputFiles[i]);
+                    filteredFiles.add(inputFile);
                 }
             }
         }
-        return (String[]) filteredFiles.toArray(new String[0]);
+        return filteredFiles.toArray(new String[filteredFiles.size()]);
     }
 
     /**

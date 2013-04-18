@@ -19,23 +19,63 @@ package com.atlassian.maven.plugin.clover.internal.scanner;
  * under the License.
  */
 
+import com.atlassian.clover.spi.lang.Language;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Computes the list of test source files to instrument.
  */
 public class TestSourceScanner extends AbstractSourceScanner {
+
+    @NotNull
+    public static final String SRC_TEST_JAVA = "src" + File.separator + "test" + File.separator + "java";
+
+    @NotNull
+    public static final String SRC_TEST_GROOVY = "src" + File.separator + "test" + File.separator + "groovy";
+
     public TestSourceScanner(final CompilerConfiguration configuration, final String outputSourceDirectory) {
         super(configuration, outputSourceDirectory);
     }
 
-    protected List<String> getSourceRoots() {
-        return getConfiguration().getProject().getTestCompileSourceRoots();
+    /**
+     * From a list of provided <code>sourceRoots</code> remove SRC_TEST_GROOVY root
+     *
+     * @param sourceRoots
+     * @see #SRC_TEST_GROOVY
+     * @see #getSourceFilesToInstrument()
+     */
+    @Override
+    public void removeGroovySourceRoot(@NotNull final Set<String> sourceRoots) {
+        removeSourceRoot(sourceRoots, SRC_TEST_GROOVY);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected List<String> getCompileSourceRoots() {
+        // take all compilation roots as defined in POM or added by other maven plugins
+        final List<String> roots = new ArrayList<String>(getConfiguration().getProject().getTestCompileSourceRoots());
+        // add hardcoded SRC_TEST_GROOVY (clover2:setup might be called before the groovy-eclipse-plugin adds it
+        // as a compilation root)
+        roots.add(SRC_TEST_GROOVY);
+        return roots;
     }
 
     protected String getSourceDirectory() {
         return getConfiguration().getProject().getBuild().getTestSourceDirectory();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isSourceRootForLanguage(@NotNull String sourceRoot, @NotNull Language language) {
+        return (language.getName().equals(Language.Builtin.JAVA.getName()) && sourceRoot.endsWith(SRC_TEST_JAVA))
+                || (language.getName().equals(Language.Builtin.GROOVY.getName()) && sourceRoot.endsWith(SRC_TEST_GROOVY));
     }
 }

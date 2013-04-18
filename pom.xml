@@ -132,6 +132,11 @@ under the License.
             <version>${cloverVersion}</version>
         </dependency>
         <dependency>
+            <groupId>com.intellij</groupId>
+            <artifactId>annotations</artifactId>
+            <version>9.0.4</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
@@ -365,9 +370,11 @@ under the License.
                             <pomIncludes>
                                 <pomInclude>**/allSrcExcluded/pom.xml</pomInclude>
                                 <pomInclude>**/contexts/pom.xml</pomInclude>
-                                <pomInclude>**/groovy/pom.xml</pomInclude>
+                                <pomInclude>**/gmaven-plugin/pom.xml</pomInclude>
+                                <pomInclude>**/gmaven-plugin-no-java/pom.xml</pomInclude>
                                 <pomInclude>**/groovy-eclipse-plugin/pom.xml</pomInclude>
-                                <pomInclude>**/groovy-eclipse-plugin-with-java/pom.xml</pomInclude>
+                                <pomInclude>**/groovy-eclipse-plugin-src-main-java/pom.xml</pomInclude>
+                                <pomInclude>**/groovy-eclipse-plugin-src-main-groovy/pom.xml</pomInclude>
                                 <pomInclude>**/gwt/pom.xml</pomInclude>
                                 <pomInclude>**/instrument-tests/pom.xml</pomInclude>
                                 <pomInclude>**/jaxb/pom.xml</pomInclude>
