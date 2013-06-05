@@ -22,13 +22,15 @@ public class CloverSaveHistoryMojoTest extends MockObjectTestCase {
 
     final MavenProject project = new MavenProject();
     private TestUtil.RecordingLogger log = new TestUtil.RecordingLogger();
+    private File db;
 
     protected void setUp() throws Exception {
         super.setUp();
         setImposteriser(ClassImposteriser.INSTANCE);
-        project.getBuild().setDirectory("target");
 
+        project.getBuild().setDirectory("target");
         task = mock(HistoryPointTask.class);
+
         mojo = new CloverSaveHistoryMojo() {
 
             public List<MavenProject> getReactorProjects() {
@@ -60,14 +62,24 @@ public class CloverSaveHistoryMojoTest extends MockObjectTestCase {
             }
         };
 
+        mojo.setLog(log);
+        mojo.setProject(project);
+
+        db = new File(mojo.resolveCloverDatabase());
+        db.getParentFile().mkdirs();
+        db.createNewFile();
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        db.delete();
+        super.tearDown();
     }
 
     public void testExecuteCloverSaveHistoryWithPathRelative() throws MojoExecutionException, IOException {
 
         final String historyDir = ".cloverhistory";
 
-        mojo.setLog(log);
-        mojo.setProject(project);
         TestUtil.setPrivateField(CloverSaveHistoryMojo.class, mojo, "historyDir", historyDir);
 
         checking(new Expectations() {{
@@ -85,8 +97,6 @@ public class CloverSaveHistoryMojoTest extends MockObjectTestCase {
 
         final String historyDir = new File (project.getBasedir(), ".cloverhistory").getAbsolutePath();
 
-        mojo.setLog(log);
-        mojo.setProject(project);
         TestUtil.setPrivateField(CloverSaveHistoryMojo.class, mojo, "historyDir", historyDir);
 
         checking(new Expectations() {{
