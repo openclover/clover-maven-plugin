@@ -97,7 +97,7 @@ public class CloverSaveHistoryMojo extends AbstractCloverMojo
      *
      * @param database the Clover database to save
      */
-    private void saveDatabase(String database)
+    private void saveDatabase(final String database)
     {
         final Project antProject = new Project();
         antProject.init();
@@ -106,7 +106,7 @@ public class CloverSaveHistoryMojo extends AbstractCloverMojo
         getLog().info( "Saving Clover history point for database [" + database + "] in ["
             + this.historyDir + "]" );
 
-        HistoryPointTask cloverHistoryTask = getHistoryTask(antProject);
+        HistoryPointTask cloverHistoryTask = createHistoryTask(antProject);
         cloverHistoryTask.init();
         cloverHistoryTask.setInitString( database );
         if (new File(this.historyDir).isAbsolute()) {
@@ -121,7 +121,7 @@ public class CloverSaveHistoryMojo extends AbstractCloverMojo
         cloverHistoryTask.execute();
     }
 
-    HistoryPointTask getHistoryTask(Project antProject) {
+    HistoryPointTask createHistoryTask(Project antProject) {
         return (HistoryPointTask) antProject.createTask( "clover-historypoint" );
     }
 }

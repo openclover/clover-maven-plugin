@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Test for {@link CloverSaveHistoryMojo}
  */
 public class CloverSaveHistoryMojoTest extends MockObjectTestCase {
 
@@ -39,7 +40,7 @@ public class CloverSaveHistoryMojoTest extends MockObjectTestCase {
                 return list;
             }
 
-            HistoryPointTask getHistoryTask(Project antProject) {
+            HistoryPointTask createHistoryTask(Project antProject) {
                 return task;
             }
 
