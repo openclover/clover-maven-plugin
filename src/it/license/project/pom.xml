@@ -45,8 +45,8 @@ under the License.
                 <artifactId>maven-clover2-plugin</artifactId>
                 <dependencies>
                     <dependency>
-                        <groupId>com.atlassian.maven.plugins</groupId>
-                        <artifactId>maven-clover2-plugin-sample-license-build-tools</artifactId>
+                        <groupId>com.atlassian.maven.plugins.sample</groupId>
+                        <artifactId>clover-sample-license-build-tools</artifactId>
                         <version>${version}</version>
                     </dependency>
                 </dependencies>
