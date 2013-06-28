@@ -105,5 +105,5 @@ Maven Clover Plugin
 
 * Examples
 
-  Check the {{{http://svn.atlassian.com/fisheye/browse/public/contrib/clover/maven-clover-plugin/trunk/src/it/}plugin test suite}}
+  Check the {{{https://bitbucket.org/atlassian/maven-clover2-plugin}plugin test suite (src/it directory)}}
   for example of how to use this plugin.
