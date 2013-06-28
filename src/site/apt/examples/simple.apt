@@ -33,6 +33,6 @@
 
 * {Sources}
 
-  Sources are available {{{https://studio.plugins.atlassian.com/svn/CLMVN/trunk/src/it/simple/}here}}.
+  Sources are available {{{https://bitbucket.org/atlassian/maven-clover2-plugin}on Bitbucket in src/it/simple directory}}.
 
   To execute the project run either <<<mvn install>>> to verify the TPC or <<<mvn site>>> to generate the Clover report.

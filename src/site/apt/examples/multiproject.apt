@@ -34,7 +34,7 @@
 
 * {Sources}
 
-  Sources are available {{{https://studio.plugins.atlassian.com/svn/CLMVN/trunk/src/it/multiproject/}here}}.
+  Sources are available {{{https://bitbucket.org/atlassian/maven-clover2-plugin}on Bitbucket in src/it/multiproject directory}}.
 
   To execute the project run <<<mvn install>>> to generate the Clover report.
 
