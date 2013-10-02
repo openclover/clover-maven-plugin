@@ -46,7 +46,7 @@ import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.atlassian.maven.plugin.clover.internal.AntPropertyHelper;
 import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
 import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
-import com.cenqua.clover.cfg.Interval;
+import com.atlassian.clover.cfg.Interval;
 
 
 /**

@@ -1,12 +1,12 @@
 package com.atlassian.maven.plugin.clover;
 
+import com.atlassian.clover.CloverNames;
+import com.atlassian.clover.Logger;
+import com.atlassian.clover.ant.tasks.CloverSnapshotTask;
+import com.atlassian.clover.optimization.Snapshot;
+import com.atlassian.clover.optimization.SnapshotPrinter;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
-import com.cenqua.clover.CloverNames;
-import com.cenqua.clover.Logger;
-import com.cenqua.clover.tasks.CloverSnapshotTask;
-import com.cenqua.clover.test.optimization.Snapshot;
-import com.cenqua.clover.test.optimization.SnapshotPrinter;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.Project;
 

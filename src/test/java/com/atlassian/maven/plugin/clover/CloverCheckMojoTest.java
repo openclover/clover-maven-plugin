@@ -11,9 +11,9 @@ import org.codehaus.plexus.resource.loader.FileResourceLoader;
 import org.codehaus.plexus.resource.loader.FileResourceCreationException;
 import org.codehaus.plexus.resource.loader.ResourceNotFoundException;
 
+import com.atlassian.clover.ant.tasks.CloverPassTask;
+import com.atlassian.clover.cfg.Percentage;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
-import com.cenqua.clover.tasks.CloverPassTask;
-import com.cenqua.clover.cfg.Percentage;
 
 import java.io.File;
 import java.io.IOException;

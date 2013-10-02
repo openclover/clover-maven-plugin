@@ -19,13 +19,13 @@ package com.atlassian.maven.plugin.clover.internal.instrumentation;
  * under the License.
  */
 
+import com.atlassian.clover.CloverInstr;
+import com.atlassian.clover.Logger;
 import com.atlassian.clover.spi.lang.Language;
 import com.atlassian.maven.plugin.clover.MvnLogger;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.LanguageFileExtensionFilter;
-import com.cenqua.clover.CloverInstr;
-import com.cenqua.clover.Logger;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.FileUtils;
 

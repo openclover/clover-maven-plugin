@@ -19,10 +19,10 @@ package com.atlassian.maven.plugin.clover;
  * under the License.
  */
 
-import com.cenqua.clover.cfg.Percentage;
-import com.cenqua.clover.tasks.CloverPassTask;
-import org.apache.maven.plugin.MojoExecutionException;
+import com.atlassian.clover.cfg.Percentage;
+import com.atlassian.clover.ant.tasks.CloverPassTask;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;

@@ -78,7 +78,7 @@ under the License.
         <maven>2.0.1</maven>
     </prerequisites>
     <properties>
-        <cloverVersion>3.1.12.1</cloverVersion>
+        <cloverVersion>3.2.0-SNAPSHOT</cloverVersion>
     </properties>
     <dependencies>
         <dependency>
@@ -187,28 +187,6 @@ under the License.
                 <configuration>
                     <encoding>UTF-8</encoding>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>retrotranslator-maven-plugin</artifactId>
-                <version>1.0-alpha-4</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>translate</goal>
-                        </goals>
-                        <configuration>
-                            <filesets>
-                                <fileset>
-                                    <directory>${project.build.outputDirectory}</directory>
-                                    <includes>
-                                        <include>**/*.class</include>
-                                    </includes>
-                                </fileset>
-                            </filesets>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -1,6 +1,6 @@
 package com.atlassian.maven.plugin.clover;
 
-import com.cenqua.clover.tasks.HistoryPointTask;
+import com.atlassian.clover.ant.tasks.HistoryPointTask;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
