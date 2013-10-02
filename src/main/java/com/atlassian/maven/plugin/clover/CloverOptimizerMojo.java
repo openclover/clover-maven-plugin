@@ -2,9 +2,9 @@ package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
-import com.cenqua.clover.CloverNames;
-import com.atlassian.clover.types.CloverOptimizedTestSet;
-import com.atlassian.clover.types.CloverAlwaysRunTestSet;
+import com.atlassian.clover.CloverNames;
+import com.atlassian.clover.ant.types.CloverOptimizedTestSet;
+import com.atlassian.clover.ant.types.CloverAlwaysRunTestSet;
 import com.atlassian.clover.util.FileUtils;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecutionException;

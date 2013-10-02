@@ -20,8 +20,8 @@ package com.atlassian.maven.plugin.clover;
  */
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
-import com.cenqua.clover.CloverMerge;
-import com.cenqua.clover.cfg.Interval;
+import com.atlassian.clover.CloverMerge;
+import com.atlassian.clover.cfg.Interval;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 

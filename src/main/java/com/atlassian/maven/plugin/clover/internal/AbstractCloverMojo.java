@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cenqua.clover.CloverNames;
+import com.atlassian.clover.CloverNames;
 import com.atlassian.maven.plugin.clover.MvnLogBuildListener;
 
 /**

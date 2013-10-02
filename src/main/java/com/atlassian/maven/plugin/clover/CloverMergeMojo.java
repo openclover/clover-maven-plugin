@@ -27,8 +27,8 @@ import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 
 import java.io.File;
 
-import com.cenqua.clover.cfg.Interval;
-import com.cenqua.clover.tasks.CloverMergeTask;
+import com.atlassian.clover.cfg.Interval;
+import com.atlassian.clover.ant.tasks.CloverMergeTask;
 
 /**
  * Merge arbitrary number of clover databases into one.

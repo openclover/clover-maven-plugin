@@ -20,7 +20,7 @@ package com.atlassian.maven.plugin.clover;
  */
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
-import com.cenqua.clover.tasks.HistoryPointTask;
+import com.atlassian.clover.ant.tasks.HistoryPointTask;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.tools.ant.Project;
 

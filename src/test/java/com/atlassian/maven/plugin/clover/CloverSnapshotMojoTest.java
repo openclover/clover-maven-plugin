@@ -1,15 +1,16 @@
 package com.atlassian.maven.plugin.clover;
 
+import com.atlassian.clover.ant.tasks.CloverSnapshotTask;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.jmock.Expectations;
 import org.jmock.integration.junit3.MockObjectTestCase;
+import org.jmock.lib.legacy.ClassImposteriser;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import com.cenqua.clover.tasks.CloverSnapshotTask;
-import org.jmock.lib.legacy.ClassImposteriser;
 
 /**
  */

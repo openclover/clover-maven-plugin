@@ -32,8 +32,8 @@ import org.codehaus.plexus.resource.loader.ResourceNotFoundException;
 
 import java.io.File;
 
-import com.cenqua.clover.CloverNames;
-import static org.hamcrest.Matchers.*;
+import com.atlassian.clover.CloverNames;
+import static org.hamcrest.Matchers.startsWith;
 
 /**
  * Unit tests for {@link com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo}.

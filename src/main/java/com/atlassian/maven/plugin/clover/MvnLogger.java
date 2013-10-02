@@ -1,6 +1,6 @@
 package com.atlassian.maven.plugin.clover;
 
-import com.cenqua.clover.Logger;
+import com.atlassian.clover.Logger;
 import org.apache.maven.plugin.logging.Log;
 
 /**

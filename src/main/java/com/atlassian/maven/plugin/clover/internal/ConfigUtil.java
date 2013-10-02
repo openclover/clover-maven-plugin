@@ -4,7 +4,7 @@ import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 
-import com.cenqua.clover.CloverNames;
+import com.atlassian.clover.CloverNames;
 
 /**
  * A helper class to manage configuration of the maven-clover2-plugin
