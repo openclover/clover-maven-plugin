@@ -137,8 +137,17 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
 
     /**
-     * Whether the Clover instrumentation should use the Clover <code>jdk14</code>, <code>jdk15</code>, <code>jdk16</code> or <code>jdk17</code> flags to
-     * parse sources. Valid values are 1.4, 1.5, 1.6 and 1.7 .
+     * Which Java language level Clover shall use to parse sources. Valid values are:
+     * <ul>
+     *     <li>1.3</li>
+     *     <li>1.4 (introduces 'assert' keyword)</li>
+     *     <li>1.5 ('enum' keyword and generics)</li>
+     *     <li>1.6 (no language changes)</li>
+     *     <li>1.7 (String in switch, try with resources, binary literals, underscores in literals)</li>
+     *     <li>1.8 (lambda expressions, default methods in interfaces)</li>
+     * </ul>
+     *
+     * By default Clover instruments using the highest language level supported.
      *
      * @parameter expression="${maven.clover.jdk}"
      */
