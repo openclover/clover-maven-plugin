@@ -235,22 +235,14 @@ public abstract class AbstractInstrumenter {
             parameters.add(getConfiguration().getDistributedCoverage().toString());
         }
 
-        if (getConfiguration().getJdk() != null) {
-            if (getConfiguration().getJdk().equals("1.4")) {
+        final String javaLevel = getConfiguration().getJdk();
+        if (javaLevel != null) {
+            if (javaLevel.matches("1\\.[345678]")) {
                 parameters.add("--source");
-                parameters.add("1.4");
-            } else if (getConfiguration().getJdk().equals("1.5")) {
-                parameters.add("--source");
-                parameters.add("1.5");
-            } else if (getConfiguration().getJdk().equals("1.6")) {
-                parameters.add("--source");
-                parameters.add("1.6");
-            } else if (getConfiguration().getJdk().equals("1.7")) {
-                parameters.add("--source");
-                parameters.add("1.7");
+                parameters.add(javaLevel);
             } else {
-                throw new MojoExecutionException("Unsupported jdk version [" + getConfiguration().getJdk()
-                        + "]. Valid values are [1.4], [1.5], [1.6] and [1.7]");
+                throw new MojoExecutionException("Unsupported java language level version [" + javaLevel
+                        + "]. Valid values are [1.3], [1.4], [1.5], [1.6], [1.7] and [1.8]");
             }
         }
 
