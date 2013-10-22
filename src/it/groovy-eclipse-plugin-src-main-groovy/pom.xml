@@ -14,6 +14,7 @@
         enable the 'with-clover-instr' profile. See invoker.properties file how goals can be called.
     </description>
     <properties>
+        <maven.compiler>2.5.1</maven.compiler>
         <groovy.all>RELEASE</groovy.all>
         <groovy.eclipse.batch>RELEASE</groovy.eclipse.batch>
         <groovy.eclipse.compiler>RELEASE</groovy.eclipse.compiler>
@@ -39,7 +40,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>${maven.compiler}</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
