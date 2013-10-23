@@ -3,7 +3,7 @@ package com.atlassian.maven.plugins.sample.optimized;
 import com.atlassian.clover.api.CloverException;
 import com.atlassian.clover.CloverDatabase;
 import com.atlassian.clover.CoverageDataSpec;
-import com.atlassian.clover.registry.TestCaseInfo;
+import com.atlassian.clover.registry.entities.TestCaseInfo;
 import com.atlassian.clover.optimization.Snapshot;
 
 import java.io.IOException;
