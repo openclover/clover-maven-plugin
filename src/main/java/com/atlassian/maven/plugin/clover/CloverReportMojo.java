@@ -226,6 +226,32 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     private String contextFilters;
 
     /**
+     * Whether to show inner functions, i.e. functions declared inside methods in the report. This applies to Java8
+     * lambda functions for instance. If set to <code>false</code> then they are hidden on the list of methods, but
+     * code metrics still include them.
+     *
+     * Note: if you will use showLambdaFunctions=true and showInnerFunctions=false then only lambda functions declared
+     * as a class field will be listed.
+     *
+     * @parameter expression="${maven.clover.showInnerFunctions}" default-value="false"
+     * @since 3.2.0
+     */
+    private boolean showInnerFunctions;
+
+    /**
+     * Whether to show lambda functions in the report. Lambda functions can be either declared inside method body
+     * or as a class field. If set to <code>false</code> then they are hidden on the list of methods, but code
+     * metrics still include them.
+     *
+     * Note: if you will use showLambdaFunctions=true and showInnerFunctions=false then only lambda functions declared
+     * as a class field will be listed.
+     *
+     * @parameter expression="${maven.clover.showLambdaFunctions}" default-value="false"
+     * @since 3.2.0
+     */
+    private boolean showLambdaFunctions;
+
+    /**
      * Title of the report
      * 
      * @parameter expression="${maven.clover.title}" default-value="${project.name} ${project.version}"
@@ -416,9 +442,12 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
         antProject.setProperty("span", span);
         antProject.setProperty("alwaysReport", "" + alwaysReport);
         antProject.setProperty("summary", String.valueOf(summary));
+        antProject.setProperty("showInnerFunctions", String.valueOf(showInnerFunctions));
+        antProject.setProperty("showLambdaFunctions", String.valueOf(showLambdaFunctions));
         if (historyOut != null) {
             antProject.setProperty("historyout", historyOut);
         }
+
         AbstractCloverMojo.registerCloverAntTasks(antProject, getLog());
         ProjectHelper.configureProject(antProject, reportDescriptor);
         antProject.setBaseDir(project.getBasedir());
