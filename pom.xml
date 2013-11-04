@@ -273,22 +273,6 @@ under the License.
                 </configuration>
             </plugin>
         </plugins>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.atlassian.maven.plugins</groupId>
-                    <artifactId>maven-clover2-plugin</artifactId>
-                    <version>${project.version}</version>
-                    <configuration>
-                        <generateHistorical>true</generateHistorical>
-                        <generateHtml>true</generateHtml>
-                        <licenseLocation>${clover.licenseLocation}</licenseLocation>
-                        <jdk>1.4</jdk>
-                        <reportDescriptor>${basedir}/clover-report.xml</reportDescriptor>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
     <profiles>
         <profile>
