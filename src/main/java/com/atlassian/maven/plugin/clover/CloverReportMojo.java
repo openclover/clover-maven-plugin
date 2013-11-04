@@ -234,7 +234,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
      * as a class field will be listed.
      *
      * @parameter expression="${maven.clover.showInnerFunctions}" default-value="false"
-     * @since 3.2.0
+     * @since 3.2.1
      */
     private boolean showInnerFunctions;
 
@@ -247,7 +247,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
      * as a class field will be listed.
      *
      * @parameter expression="${maven.clover.showLambdaFunctions}" default-value="false"
-     * @since 3.2.0
+     * @since 3.2.1
      */
     private boolean showLambdaFunctions;
 
