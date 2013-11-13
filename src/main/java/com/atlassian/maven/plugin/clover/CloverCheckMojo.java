@@ -43,6 +43,12 @@ public class CloverCheckMojo extends AbstractCloverMojo
 {
     /**
      * The Test Percentage Coverage (TPC) threshold under which the plugin will report an error and fail the build.
+     * <p/>
+     * IMPORTANT: comparison of actual value with an expected percentage is performed with such numerical precision as
+     * number of fractional digits set for a targetPercentage.
+     * <p/>
+     * For example, if actual coverage value is <b>99.9%</b> then for the targetPercentage=<b>"100%"</b> it will PASS,
+     * whereas for the targetPercentage=<b>"100.000000%"</b> it will FAIL.
      *
      * @parameter expression="${maven.clover.targetPercentage}" 
      */
@@ -51,6 +57,9 @@ public class CloverCheckMojo extends AbstractCloverMojo
     /**
      * The Test Percentage Method Coverage (TPC) threshold under which the plugin will report an error and fail the build.
      * If maven.clover.targetPercentage is not specified, then this value is ignored.
+     * <p/>
+     * IMPORTANT: comparison of actual value with an expected percentage is performed with such numerical precision as
+     * number of fractional digits set for a methodPercentage.
      *
      * @parameter expression="${maven.clover.methodPercentage}"
      */
@@ -59,6 +68,9 @@ public class CloverCheckMojo extends AbstractCloverMojo
     /**
      * The Test Percentage Statement Coverage (TPC) threshold under which the plugin will report an error and fail the build.
      * If maven.clover.targetPercentage is not specified, then this value is ignored.
+     * <p/>
+     * IMPORTANT: comparison of actual value with an expected percentage is performed with such numerical precision as
+     * number of fractional digits set for a statementPercentage.
      *
      * @parameter expression="${maven.clover.statementPercentage}"
      */
@@ -68,7 +80,10 @@ public class CloverCheckMojo extends AbstractCloverMojo
     /**
      * The Test Percentage Conditional Coverage (TPC) threshold under which the plugin will report an error and fail the build.
      * If maven.clover.targetPercentage is not specified, then this value is ignored.
-     * 
+     * <p/>
+     * IMPORTANT: comparison of actual value with an expected percentage is performed with such numerical precision as
+     * number of fractional digits set for a conditionalPercentage.
+     *
      * @parameter expression="${maven.clover.conditionalPercentage}"
      */
     String conditionalPercentage;
