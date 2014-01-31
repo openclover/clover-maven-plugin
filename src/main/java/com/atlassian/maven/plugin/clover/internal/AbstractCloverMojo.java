@@ -52,7 +52,6 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      */
     protected String cloverOutputDirectory;
 
-
     /**
      * The location of the <a href="http://confluence.atlassian.com/x/EIBOB">Clover database</a>.
      *
@@ -105,15 +104,6 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      */
     protected String license;
 
-
-    /**
-     * The <a href="http://confluence.atlassian.com/x/O4BOB">Clover flush policy</a> to use.
-     * Valid values are <code>directed</code>, <code>interval</code> and <code>threaded</code>.
-     *
-     * @parameter expression="${maven.clover.flushPolicy}" default-value="threaded"
-     */
-    private String flushPolicy;
-
     /**
      * When the Clover Flush Policy is set to "interval" or threaded this value is the minimum period between flush
      * operations (in milliseconds).
@@ -134,24 +124,6 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * @parameter expression="${maven.clover.waitForFlush}" default-value="true"
      */
     private boolean waitForFlush;
-
-
-    /**
-     * Which Java language level Clover shall use to parse sources. Valid values are:
-     * <ul>
-     *     <li>1.3</li>
-     *     <li>1.4 (introduces 'assert' keyword)</li>
-     *     <li>1.5 ('enum' keyword and generics)</li>
-     *     <li>1.6 (no language changes)</li>
-     *     <li>1.7 (String in switch, try with resources, binary literals, underscores in literals)</li>
-     *     <li>1.8 (lambda expressions, default methods in interfaces)</li>
-     * </ul>
-     *
-     * By default Clover instruments using the highest language level supported.
-     *
-     * @parameter expression="${maven.clover.jdk}"
-     */
-    private String jdk;
 
     /**
      * The Maven project instance for the executing project.
@@ -348,10 +320,6 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
         return this.waitForFlush;
     }
 
-    public String getJdk() {
-        return this.jdk;
-    }
-
     public String getCloverDatabase() {
         return cloverDatabase;
     }
@@ -366,10 +334,6 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
     public int getFlushInterval() {
         return this.flushInterval;
-    }
-
-    public String getFlushPolicy() {
-        return this.flushPolicy;
     }
 
     public void setProject(final MavenProject project) {
@@ -476,7 +440,6 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
         return projects;
     }
-
 
     /**
      * returns all the projects that are in the reactor build as

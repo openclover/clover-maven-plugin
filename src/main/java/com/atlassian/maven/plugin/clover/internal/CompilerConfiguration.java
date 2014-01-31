@@ -13,7 +13,7 @@ public interface CompilerConfiguration extends CloverConfiguration {
 
     Set<String> getExcludes();
 
-    boolean includesAllSourceRoots();    
+    boolean isIncludesAllSourceRoots();
 
     String getJdk();
 
@@ -35,5 +35,5 @@ public interface CompilerConfiguration extends CloverConfiguration {
 
     String getInstrumentation();
 
-    boolean copyExcludedFiles();
+    boolean isCopyExcludedFiles();
 }

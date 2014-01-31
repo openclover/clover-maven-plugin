@@ -232,7 +232,7 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
      */
     private List<String> getResolvedSourceRoots() {
         final List<String> sourceRoots = new ArrayList<String>();
-        if (getConfiguration().includesAllSourceRoots()) {
+        if (getConfiguration().isIncludesAllSourceRoots()) {
             // take all roots
             sourceRoots.addAll(getCompileSourceRoots());
         } else {
