@@ -86,14 +86,14 @@ public class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements 
      * name and the jar is not being removed at the end of the build, these files can litter the temporary
      * directory.</p>
      *
-     * <p>By setting this parameter you can: <br/>
-     * a) specify constant file name for generated artifact, <br/>
-     * b) choose location different than ${java.io.tmpdir}.</p>
+     * <p>By setting this parameter you can:</p>
+     * <p> a) specify constant file name for generated artifact,</p>
+     * <p> b) choose location different than ${java.io.tmpdir}.</p>
      *
-     * <p>However, you must ensure that: <br/>
-     * a) grover.jar will not be deleted till end of the build (for example don't put into ./target directory
-     * and next run <code>mvn clover2:setup clean</code>) <br/>
-     * b) grover.jar will not be shared among builds with different Maven Clover Plugin versions used (for
+     * <p>However, you must ensure that:</p>
+     * <p> a) grover.jar will not be deleted till end of the build (for example don't put into ./target directory
+     * and next run <code>mvn clover2:setup clean</code>)</p>
+     * <p> b) grover.jar will not be shared among builds with different Maven Clover Plugin versions used (for
      * example if ProjectA uses Clover v 3.1.8 and ProjectB uses Clover v 3.1.9 then they shall have different
      * <code>groverJar</code> locations defined)</p>
      *
@@ -122,7 +122,7 @@ public class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements 
      * <p><b>Till 3.1.11:</b> whether the Clover plugin should instrument all source roots (for example
      * <code>src/main/java, src/main/groovy, target/generated-sources</code>, so including the generated sources)
      * or whether it should only instrument the main source root (usually <code>src/main/java</code>).</p>
-     * <p/>
+     *
      * <p><b>Since 3.1.12:</b> whether the Clover plugin should instrument all source roots (for example
      * <code>src/main/java, src/main/groovy, target/generated-sources</code>, so including the generated sources)
      * or whether it should instrument non-generated source roots (i.e. all roots except <code>target/generated-sources/*</code>)</p>
@@ -148,6 +148,20 @@ public class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements 
     protected String instrumentation;
 
     /**
+     * Define whether lambda functions shall be instrumented: Valid values are:
+     * <ul>
+     *     <li>none - do not instrument lambda functions (note: statements inside lambdas will become a part of a parent function)</li>
+     *     <li>expression - instrument only expression-like lambdas, e.g. <code>(a,b) -> a + b</code></li>
+     *     <li>block - instrument block lambdas, e.g. <code>() -> { foo(); }</code></li>
+     *     <li>all - instrument all forms of lambda functions</li>
+     * </ul>
+     * Default is 'all'.
+     *
+     * @parameter expression="${maven.clover.instrumentLambda}" default-value="all"
+     */
+    private String instrumentLambda;
+
+    /**
      * Which Java language level Clover shall use to parse sources. Valid values are:
      * <ul>
      *     <li>1.3</li>
@@ -163,7 +177,6 @@ public class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements 
      * @parameter expression="${maven.clover.jdk}"
      */
     protected String jdk;
-
 
     /**
      * Specifies the custom method contexts to use for filtering specific methods from Clover reports.
@@ -185,13 +198,14 @@ public class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements 
 
     /**
      * <p>If set to <code>true</code>, Clover will add several properties to the build configuration which
-     * disable a build failure for following plugins:
+     * disable a build failure for following plugins:</p>
+     *
      * <ul>
      *  <li>maven-surefire-plugin (maven.test.failure.ignore=true)</li>
      *  <li>maven-failsafe-plugin (maven.test.failure.ignore=true)</li>
      *  <li>maven-checkstyle-plugin (checkstyle.failOnViolation=false)</li>
      *  <li>maven-pmd-plugin (pmd.failOnViolation=false)</li>
-     * </ul></p>
+     * </ul>
      *
      * <p>Thanks to this, build continues despite test failures or code validation failures and thus
      * it is possible to generate a Clover coverage report for failed tests at the end of the build.</p>
@@ -222,7 +236,7 @@ public class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements 
     /**
      * Specifies the custom statement contexts to use for filtering specific statements from Clover reports.
      *
-     * e.g.<pre>&lt;log&gt;^LOG\..*&lt;/log&gt;<pre>
+     * e.g.<pre>&lt;log&gt;^LOG\..*&lt;/log&gt;</pre>
      * defines a statement context called "log" which matches all LOG statements.
      *
      * @parameter
@@ -242,14 +256,12 @@ public class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements 
      * @parameter expression="${maven.clover.useCloverClassifier}" default-value="true"
      */
     protected boolean useCloverClassifier;
-
     /**
      * Use the fully qualified package name for java.lang.* classes.
      *
      * @parameter expression="${maven.clover.useFullyQualifiedJavaLang}" default-value="true"
      */
     protected boolean useFullyQualifiedJavaLang;
-
 
 
     public boolean isCopyExcludedFiles() {
@@ -287,6 +299,10 @@ public class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements 
 
     public String getInstrumentation() {
         return instrumentation;
+    }
+
+    public String getInstrumentLambda() {
+        return instrumentLambda;
     }
 
     public String getJdk() {
