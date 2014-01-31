@@ -20,7 +20,7 @@ package com.atlassian.maven.plugin.clover;
  */
 
 import com.atlassian.clover.ant.groovy.GroovycSupport;
-import com.atlassian.clover.instr.java.InstrumentationConfig;
+import com.atlassian.clover.cfg.instr.InstrumentationConfig;
 import com.atlassian.clover.remote.DistributedConfig;
 import com.atlassian.maven.plugin.clover.internal.scanner.LanguageFileExtensionFilter;
 import com.atlassian.maven.plugin.clover.internal.scanner.MainSourceScanner;
