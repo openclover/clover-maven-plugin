@@ -46,7 +46,7 @@ public class TestSourceScanner extends AbstractSourceScanner {
     /**
      * From a list of provided <code>sourceRoots</code> remove SRC_TEST_GROOVY root
      *
-     * @param sourceRoots
+     * @param sourceRoots list of source roots
      * @see #SRC_TEST_GROOVY
      * @see #getSourceFilesToInstrument()
      */
