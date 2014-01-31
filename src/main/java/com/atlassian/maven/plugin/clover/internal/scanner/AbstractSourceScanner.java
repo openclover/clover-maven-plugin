@@ -52,8 +52,8 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
 
     /**
      *
-     * @param configuration
-     * @param outputSourceDirectory
+     * @param configuration compiler configuration
+     * @param outputSourceDirectory where to put instrumented sources
      */
     public AbstractSourceScanner(@NotNull final CompilerConfiguration configuration, @NotNull final String outputSourceDirectory) {
         this.configuration = configuration;

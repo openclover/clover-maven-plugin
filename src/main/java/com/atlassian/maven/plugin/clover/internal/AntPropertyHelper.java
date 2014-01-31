@@ -33,8 +33,8 @@ public class AntPropertyHelper
     private MavenProject mavenProject;
 
     /**
-     * @param project
-     * @param l
+     * @param project maven project instance
+     * @param l  logger instance
      */
     public AntPropertyHelper( MavenProject project, Log l )
     {
@@ -52,13 +52,6 @@ public class AntPropertyHelper
         return getPropertyHook( ns, name, user, mavenProject );
     }
 
-    /**
-     * @param ns
-     * @param name
-     * @param user
-     * @param mavenProject
-     * @return
-     */
     private Object getPropertyHook( String ns, String name, boolean user, MavenProject mavenProject )
     {
         Object val = null;

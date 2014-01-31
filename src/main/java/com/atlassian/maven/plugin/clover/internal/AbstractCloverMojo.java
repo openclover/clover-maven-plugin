@@ -85,9 +85,8 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
     /**
      * A Clover license file to be used by the plugin. The plugin tries to resolve this parameter first as a resource,
-     * then as a URL, and then as a file location on the filesystem.
-     * <p/>
-     * A trial Clover license can be generated <a href="http://www.atlassian.com/ex/GenerateLicense.jspa?product=Clover&version=2">here</a>.
+     * then as a URL, and then as a file location on the filesystem. A trial Clover license can be generated
+     * <a href="http://www.atlassian.com/ex/GenerateLicense.jspa?product=Clover&version=2">here</a>.
      *
      * @parameter expression="${maven.clover.licenseLocation}"
      * @see #license
@@ -143,18 +142,15 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     private ResourceManager resourceManager;
 
     /**
-     * A flag to indicate not to run clover for this execution.
-     * <p/>
-     * If set to true, Clover will not be run.
+     * A flag to indicate not to run clover for this execution. If set to true, Clover will not be run.
      *
      * @parameter expression="${maven.clover.skip}" default-value="false"
      */
     protected boolean skip;
 
     /**
-     * If you wish to enable debug level logging in just the Clover plugin, set this to true.
-     * <p/>
-     * This is useful for integrating Clover into the build
+     * If you wish to enable debug level logging in just the Clover plugin, set this to true. This is useful for
+     * integrating Clover into the build.
      *
      * @parameter expression="${maven.clover.debug}" default-value="false"
      */
@@ -204,7 +200,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * resource, then as a URL, and then as a file location on the filesystem. If the <code>licenseLocation</code>
      * parameter has not been defined by the user we look up a default Clover license in the classpath in
      * <code>/clover.license</code>.
-     * </p>
+     *
      * Note: We're defining this method as static because it is also required in the report mojo and reporting mojos
      * and main mojos cannot share anything right now. See http://jira.codehaus.org/browse/MNG-1886.
      *
@@ -267,7 +263,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * Register the Clover Ant tasks against a fake Ant {{@link Project}} object so that we can the tasks later on.
      * This is the Java equivalent of the <code>taskdef</code> call that you would need in your Ant
      * <code>build.xml</code> file if you wanted to use the Clover Ant tasks from Ant.
-     * </p>
+     *
      * Note: We're defining this method as static because it is also required in the report mojo and reporting mojos
      * and main mojos cannot share anything right now. See http://jira.codehaus.org/browse/MNG-1886.
      */
@@ -281,7 +277,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
     /**
      * Wait 2*'flush interval' milliseconds to ensure that the coverage data have been flushed to the Clover database.
-     * <p/>
+     *
      * TODO: This method should not be static but we need it static here because we cannot share code
      * between non report mojos and main build mojos. See http://jira.codehaus.org/browse/MNG-1886
      */
@@ -404,14 +400,14 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
     /**
      * Returns all the projects that are modules, or modules of modules, of the
-     * specified project found witin the reactor.
-     * <p/>
+     * specified project found within the reactor.
+     *
      * The searchLevel parameter controls how many descendent levels of modules
      * are returned. With a searchLevels equals to 1, only the immediate modules
      * of the specified project are returned.
-     * <p/>
+     *
      * A searchLevel equals to 2 returns those module's modules as well.
-     * <p/>
+     *
      * A searchLevel equals to -1 returns the entire module hierarchy beneath the
      * specified project. Note that this is simply the equivalent to the entire reactor
      * if the specified project is the root execution project.
