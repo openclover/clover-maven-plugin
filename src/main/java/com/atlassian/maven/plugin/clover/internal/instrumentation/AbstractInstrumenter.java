@@ -92,7 +92,7 @@ public abstract class AbstractInstrumenter {
         // We need to copy excluded files too as otherwise they won't be in the new Clover source directory and
         // thus won't be compiled by the compile plugin. This will lead to compilation errors if any other
         // file depends on any of these excluded files.
-        if (configuration.copyExcludedFiles()) {
+        if (configuration.isCopyExcludedFiles()) {
             final Map<String, String[]> explicitlyExcludedFiles = scanner.getExcludedFiles();
             // 'src/(main|test)/groovy' is already filtered-out in getExcludedFiles()
             copyExcludedFiles(explicitlyExcludedFiles, outputSourceDirectory);
@@ -143,7 +143,7 @@ public abstract class AbstractInstrumenter {
                 } else {
                     addCompileSourceRoot(getSourceDirectory());
                 }
-            } else if ( !(getConfiguration().includesAllSourceRoots() && isGeneratedSourcesDirectory(sourceRoot)) ) {
+            } else if ( !(getConfiguration().isIncludesAllSourceRoots() && isGeneratedSourcesDirectory(sourceRoot)) ) {
                 // if includeAllSourceRoots=true then ignore the original generated sources directory (e.g. target/generated/xyz),
                 // because Clover will instrument them and store instrumented version (e.g. target/clover/src-instrumented);
                 // compiler should know only the latter location, otherwise we would end up with the same classes included twice

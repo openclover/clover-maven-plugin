@@ -19,6 +19,7 @@ package com.atlassian.maven.plugin.clover;
  * under the License.
  */
 
+import com.atlassian.maven.plugin.clover.internal.AbstractCloverInstrumentMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 
@@ -36,7 +37,7 @@ import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
  * @execute phase="install" lifecycle="clover"
  *
  */
-public class CloverInstrumentMojo extends AbstractCloverMojo
+public class CloverInstrumentMojo extends AbstractCloverInstrumentMojo
 {
     /**
      * {@inheritDoc}
