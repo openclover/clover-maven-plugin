@@ -56,7 +56,7 @@ public abstract class AbstractInstrumenter {
 
     /**
      *
-     * @throws MojoExecutionException
+     * @throws MojoExecutionException when instrumentation fails
      * @see com.atlassian.maven.plugin.clover.CloverInstrumentInternalMojo#calcIncludedFilesForGroovy()
      * @see com.atlassian.maven.plugin.clover.CloverInstrumentInternalMojo#redirectOutputDirectories()
      */
@@ -261,6 +261,11 @@ public abstract class AbstractInstrumenter {
         if (getConfiguration().getInstrumentation() != null) {
             parameters.add("--instrlevel");
             parameters.add(getConfiguration().getInstrumentation());
+        }
+
+        if (getConfiguration().getInstrumentLambda() != null) {
+            parameters.add("--instrlambda");
+            parameters.add(getConfiguration().getInstrumentLambda());
         }
 
         for (final String srcDir : filesToInstrument.keySet()) {

@@ -35,5 +35,7 @@ public interface CompilerConfiguration extends CloverConfiguration {
 
     String getInstrumentation();
 
+    String getInstrumentLambda();
+
     boolean isCopyExcludedFiles();
 }
