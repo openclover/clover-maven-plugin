@@ -23,7 +23,7 @@ under the License.
     <artifactId>maven-clover2-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Maven Clover Plugin</name>
-    <version>3.3.0-SNAPSHOT</version>
+    <version>3.2.2-SNAPSHOT</version>
     <description>Maven plugin for Clover</description>
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -384,7 +384,7 @@ under the License.
                         <configuration>
                             <!-- Copy current version only. Staging repo will be created on the fly. Requires later promotion via web interface. -->
                             <sourceId>atlassian-public</sourceId>
-                            <source>https://maven.atlassian.com/content/repositories/atlassian-public/com/atlassian/maven/plugins/maven-clover2-plugin/${project.version}</source>
+                            <source>https://maven.atlassian.com/content/groups/public/com/atlassian/maven/plugins/maven-clover2-plugin/${project.version}</source>
                             <targetId>sonatype-nexus-staging</targetId>
                             <target>https://oss.sonatype.org/service/local/staging/deploy/maven2/com/atlassian/maven/plugins/maven-clover2-plugin/${project.version}</target>
                         </configuration>
