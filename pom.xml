@@ -23,7 +23,7 @@ under the License.
     <artifactId>maven-clover2-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Maven Clover Plugin</name>
-    <version>3.3.0-SNAPSHOT</version>
+    <version>3.2.2-SNAPSHOT</version>
     <description>Maven plugin for Clover</description>
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -446,12 +446,12 @@ under the License.
         <repository>
             <id>atlassian-m2-repository</id>
             <name>Atlassian Public Repository</name>
-            <url>dav:https://maven.atlassian.com/public</url>
+            <url>https://maven.atlassian.com/public</url>
         </repository>
         <snapshotRepository>
             <id>atlassian-public-snapshot</id>
             <name>Atlassian Public Snapshot Repository</name>
-            <url>dav:https://maven.atlassian.com/public-snapshot</url>
+            <url>https://maven.atlassian.com/public-snapshot</url>
         </snapshotRepository>
         <site>
             <id>atlassian-documentation</id>
