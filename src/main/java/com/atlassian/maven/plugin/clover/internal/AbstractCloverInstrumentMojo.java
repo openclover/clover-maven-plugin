@@ -158,6 +158,7 @@ public class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements 
      * Default is 'all'.
      *
      * @parameter expression="${maven.clover.instrumentLambda}" default-value="all"
+     * @since 3.2.2
      */
     private String instrumentLambda;
 
