@@ -148,14 +148,23 @@ public class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements 
     protected String instrumentation;
 
     /**
-     * Define whether lambda functions shall be instrumented: Valid values are:
+     * <p>Define whether lambda functions shall be instrumented: Valid values are:</p>
+     *
      * <ul>
      *     <li>none - do not instrument lambda functions (note: statements inside lambdas will become a part of a parent function)</li>
      *     <li>expression - instrument only expression-like lambdas, e.g. <code>(a,b) -> a + b</code></li>
      *     <li>block - instrument block lambdas, e.g. <code>() -> { foo(); }</code></li>
      *     <li>all - instrument all forms of lambda functions</li>
      * </ul>
-     * Default is 'all'.
+     *
+     * <p>Default is 'all'.</p>
+     *
+     * <p>IMPORTANT: Due to Clover's restrictions related with code instrumentation and javac compiler's type inference
+     * capabilities, you may get compilation errors when expression-like lambda functions are passed to generic methods
+     * or types. In such case disable instrumentation of expression-like form (i.e. use the 'none' or 'block' setting).
+     * See the <a href="https://confluence.atlassian.com/display/CLOVERKB/Java+8+code+instrumented+by+Clover+fails+to+compile">
+     * Java 8 code instrumented by Clover fails to compile</a> Knowledge Base article for more details.
+     * </p>
      *
      * @parameter expression="${maven.clover.instrumentLambda}" default-value="all"
      * @since 3.2.2
