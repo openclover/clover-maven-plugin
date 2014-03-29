@@ -34,19 +34,19 @@
         <!-- Check that we have code coverage -->
         <file>
             <location>target/site/clover/clover.xml</location>
-            <contains><![CDATA[<line .* count="3" .* signature="show\(\) : def"/>]]></contains> <!-- GroovyExample.groovy -->
+            <contains><![CDATA[<line .*(count="3".*|signature="show\(\) : def".*){2}/>]]></contains> <!-- GroovyExample.groovy -->
         </file>
         <file>
             <location>target/site/clover/clover.xml</location>
-            <contains><![CDATA[<line .* count="1" .* signature="help\(GroovyExample\) : void"/>]]></contains> <!-- JavaHelper.java -->
+            <contains><![CDATA[<line .*(count="1".*|signature="help\(GroovyExample\) : void".*){2}/>]]></contains> <!-- JavaHelper.java -->
         </file>
         <file>
             <location>target/site/clover/clover.xml</location>
-            <contains><![CDATA[<line .* count="1" .* signature="testGroovyExampleHelp\(\) : void"/>]]></contains> <!-- GroovyHelperTest.groovy -->
+            <contains><![CDATA[<line .*(count="1".*|signature="testGroovyExampleHelp\(\) : void".*){2}/>]]></contains> <!-- GroovyHelperTest.groovy -->
         </file>
         <file>
             <location>target/site/clover/clover.xml</location>
-            <contains><![CDATA[<line .* count="1" .* signature="testShow\(\) : void"/>]]></contains> <!-- ExampleTest.groovy -->
+            <contains><![CDATA[<line .*(count="1".*|signature="testShow\(\) : void".*){2}/>]]></contains> <!-- ExampleTest.groovy -->
         </file>
         <!-- Check that we have compiled some classes, which were out of scope of instrumentation -->
         <file>
