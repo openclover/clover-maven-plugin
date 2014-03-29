@@ -40,6 +40,16 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
                 <!-- Note that 'org.codehaus.gmaven group' is used; artifacts in 'org.codehaus.groovy.maven' and
                 'org.kohsuke.gmaven' groups are quite outdated. -->
                 <groupId>org.codehaus.gmaven</groupId>

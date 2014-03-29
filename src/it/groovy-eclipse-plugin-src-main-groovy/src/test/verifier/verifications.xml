@@ -13,11 +13,11 @@
         <!-- Check that we have code coverage -->
         <file>
             <location>target/site/clover/clover.xml</location>
-            <contains><![CDATA[<line .* count="1" .* signature="show\(\) : def"/>]]></contains> <!-- Example.groovy -->
+            <contains><![CDATA[<line .*(count="1".*|signature="show\(\) : def".*){2}/>]]></contains> <!-- Example.groovy -->
         </file>
         <file>
             <location>target/site/clover/clover.xml</location>
-            <contains><![CDATA[<line .* count="1" .* signature="testShow\(\) : void"/>]]></contains> <!-- ExampleTest.groovy -->
+            <contains><![CDATA[<line .*(count="1".*|signature="testShow\(\) : void".*){2}/>]]></contains> <!-- ExampleTest.groovy -->
         </file>
         <!-- Check that we have compiled some classes, which were out of scope of instrumentation -->
         <file>
