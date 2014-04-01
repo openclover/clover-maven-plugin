@@ -22,7 +22,7 @@ under the License.
     <artifactId>maven-clover2-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Maven Clover Plugin</name>
-    <version>3.3.0</version>
+    <version>3.3.1-SNAPSHOT</version>
     <description>Maven plugin for Clover</description>
     <parent>
         <groupId>org.sonatype.oss</groupId>
