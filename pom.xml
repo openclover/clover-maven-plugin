@@ -340,6 +340,7 @@ under the License.
                             <projectsDirectory>src/it</projectsDirectory>
                             <pomIncludes>
                                 <pomInclude>**/allSrcExcluded/pom.xml</pomInclude>
+                                <pomInclude>**/build-helper/pom.xml</pomInclude>
                                 <pomInclude>**/contexts/pom.xml</pomInclude>
                                 <pomInclude>**/gmaven-plugin/pom.xml</pomInclude>
                                 <pomInclude>**/gmaven-plugin-no-java/pom.xml</pomInclude>

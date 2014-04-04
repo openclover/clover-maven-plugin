@@ -36,23 +36,33 @@ public class MainInstrumenter extends AbstractInstrumenter {
         scanner = new MainSourceScanner(configuration, outputSourceDirectory);
     }
 
+    @Override
     protected CloverSourceScanner getSourceScanner() {
         return scanner;
     }
 
+    @Override
     protected String getSourceDirectory() {
         return getConfiguration().getProject().getBuild().getSourceDirectory();
     }
 
+    @Override
     protected void setSourceDirectory(final String targetDirectory) {
         getConfiguration().getProject().getBuild().setSourceDirectory(targetDirectory);
     }
 
+    @Override
     protected List<String> getCompileSourceRoots() {
         return getConfiguration().getProject().getCompileSourceRoots();
     }
 
+    @Override
     protected void addCompileSourceRoot(final String sourceRoot) {
         getConfiguration().getProject().addCompileSourceRoot(sourceRoot);
+    }
+
+    @Override
+    protected String getSourceType() {
+        return "main";
     }
 }
