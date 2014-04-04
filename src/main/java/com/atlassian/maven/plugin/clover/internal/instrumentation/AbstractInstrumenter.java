@@ -119,7 +119,7 @@ public abstract class AbstractInstrumenter {
             setSourceDirectory(targetDirectory);
         }
 
-        getConfiguration().getLog().debug("Clover source directories before change:");
+        getConfiguration().getLog().debug("Clover " + getSourceType() + " source directories before change:");
         logSourceDirectories();
 
         // Maven2 limitation: changing the source directory doesn't change the compile source roots
@@ -131,37 +131,38 @@ public abstract class AbstractInstrumenter {
 
         final CloverSourceScanner scanner = getSourceScanner();
         for (final String sourceRoot : sourceRoots) {
-            if (new File(oldSourceDirectory).exists() && sourceRoot.equals(oldSourceDirectory)) {
-                // if compilation root is the same as original source directory:
-                // a) if it's a Java directory then use location of instrumented sources instead of the original source
-                // root (e.g. 'src/main/java' -> 'target/clover/src-instrumented')
-                // b) if it's a Groovy directory then don't change the location because we don't instrument Groovy on
-                // a source level, so the Clover's instrumented folder is empty; Groovy files will be instrumented
-                // during compilation on the AST level (e.g. 'src/main/groovy' -> 'src/main/groovy')
-                if (scanner.isSourceRootForLanguage(sourceRoot, Language.Builtin.GROOVY))  {
-                    addCompileSourceRoot(sourceRoot);
-                } else {
-                    addCompileSourceRoot(getSourceDirectory());
-                }
-            } else if ( !(getConfiguration().isIncludesAllSourceRoots() && isGeneratedSourcesDirectory(sourceRoot)) ) {
-                // if includeAllSourceRoots=true then ignore the original generated sources directory (e.g. target/generated/xyz),
-                // because Clover will instrument them and store instrumented version (e.g. target/clover/src-instrumented);
-                // compiler should know only the latter location, otherwise we would end up with the same classes included twice
-                // (one with and one without Clover instrumentation)
+            // if includeAllSourceRoots=true then all source roots will be redirected to the location of instrumented sources
+            // if includeAllSourceRoots=false then we don't redirect generated source roots
+            boolean needsRedirection = getConfiguration().isIncludesAllSourceRoots() ||
+                    !isGeneratedSourcesDirectory(sourceRoot);
+
+            // a) if it's a Java directory then use location of instrumented sources instead of the original source
+            // root (e.g. 'src/main/java' -> 'target/clover/src-instrumented')
+            // b) if it's a Groovy directory then don't change the location because we don't instrument Groovy on
+            // a source level, so the Clover's instrumented folder is empty; Groovy files will be instrumented
+            // during compilation on the AST level (e.g. 'src/main/groovy' -> 'src/main/groovy')
+            if (scanner.isSourceRootForLanguage(sourceRoot, Language.Builtin.GROOVY))  {
                 addCompileSourceRoot(sourceRoot);
+            } else {
+                addCompileSourceRoot(needsRedirection ? getSourceDirectory() : sourceRoot);
             }
         }
 
-        getConfiguration().getLog().debug("Clover main source directories after change:");
+        getConfiguration().getLog().debug("Clover " + getSourceType() + " source directories after change:");
         logSourceDirectories();
         return oldSourceDirectory;
     }
 
     private boolean isGeneratedSourcesDirectory(final String sourceRoot) {
         String generatedSrcDirDefaultLifecycle = File.separator + "target" + File.separator + "generated-sources";
+        String generatedSrcTestDirDefaultLifecycle = File.separator + "target" + File.separator + "generated-test-sources";
         String generatedSrcDirCloverLifecycle = File.separator + "target" + File.separator + "clover" + File.separator + "generated-sources";
+        String generatedSrcTestDirCloverLifecycle = File.separator + "target" + File.separator + "clover" + File.separator + "generated-test-sources";
+
         return sourceRoot.indexOf(generatedSrcDirDefaultLifecycle) != -1
-                || sourceRoot.indexOf(generatedSrcDirCloverLifecycle) != -1;
+                || sourceRoot.indexOf(generatedSrcTestDirDefaultLifecycle) != -1
+                || sourceRoot.indexOf(generatedSrcDirCloverLifecycle) != -1
+                || sourceRoot.indexOf(generatedSrcTestDirCloverLifecycle) != -1;
     }
 
     private void logSourceDirectories() {
@@ -297,5 +298,7 @@ public abstract class AbstractInstrumenter {
             parameters.add(entry.getKey() + "=" + entry.getValue());
         }
     }
+
+    protected abstract String getSourceType();
 }
 

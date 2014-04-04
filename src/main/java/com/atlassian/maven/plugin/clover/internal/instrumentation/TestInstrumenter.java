@@ -36,23 +36,33 @@ public class TestInstrumenter extends AbstractInstrumenter {
         scanner = new TestSourceScanner(configuration, outputSourceDirectory);
     }
 
+    @Override
     protected CloverSourceScanner getSourceScanner() {
         return scanner;
     }
 
+    @Override
     protected String getSourceDirectory() {
         return getConfiguration().getProject().getBuild().getTestSourceDirectory();
     }
 
+    @Override
     protected void setSourceDirectory(final String targetDirectory) {
         getConfiguration().getProject().getBuild().setTestSourceDirectory(targetDirectory);
     }
 
+    @Override
     protected List<String> getCompileSourceRoots() {
         return getConfiguration().getProject().getTestCompileSourceRoots();
     }
 
+    @Override
     protected void addCompileSourceRoot(final String sourceRoot) {
         getConfiguration().getProject().addTestCompileSourceRoot(sourceRoot);
+    }
+
+    @Override
+    protected String getSourceType() {
+        return "test";
     }
 }
