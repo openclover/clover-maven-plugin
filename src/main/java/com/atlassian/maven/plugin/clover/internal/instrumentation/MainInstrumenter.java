@@ -23,6 +23,7 @@ import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.MainSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -59,6 +60,14 @@ public class MainInstrumenter extends AbstractInstrumenter {
     @Override
     protected void addCompileSourceRoot(final String sourceRoot) {
         getConfiguration().getProject().addCompileSourceRoot(sourceRoot);
+    }
+
+    @Override
+    protected boolean isGeneratedSourcesDirectory(final String sourceRoot) {
+        String generatedSrcDirDefaultLifecycle = File.separator + "target" + File.separator + "generated-sources";
+        String generatedSrcDirCloverLifecycle = File.separator + "target" + File.separator + "clover" + File.separator + "generated-sources";
+        return sourceRoot.indexOf(generatedSrcDirDefaultLifecycle) != -1
+                || sourceRoot.indexOf(generatedSrcDirCloverLifecycle) != -1;
     }
 
     @Override

@@ -113,6 +113,8 @@ public abstract class AbstractInstrumenter {
 
     protected abstract void addCompileSourceRoot(final String sourceRoot);
 
+    protected abstract boolean isGeneratedSourcesDirectory(final String sourceRoot);
+
     private String redirectSourceDirectories(final String targetDirectory) {
         final String oldSourceDirectory = getSourceDirectory();
         if (new File(oldSourceDirectory).exists()) {
@@ -151,18 +153,6 @@ public abstract class AbstractInstrumenter {
         getConfiguration().getLog().debug("Clover " + getSourceType() + " source directories after change:");
         logSourceDirectories();
         return oldSourceDirectory;
-    }
-
-    private boolean isGeneratedSourcesDirectory(final String sourceRoot) {
-        String generatedSrcDirDefaultLifecycle = File.separator + "target" + File.separator + "generated-sources";
-        String generatedSrcTestDirDefaultLifecycle = File.separator + "target" + File.separator + "generated-test-sources";
-        String generatedSrcDirCloverLifecycle = File.separator + "target" + File.separator + "clover" + File.separator + "generated-sources";
-        String generatedSrcTestDirCloverLifecycle = File.separator + "target" + File.separator + "clover" + File.separator + "generated-test-sources";
-
-        return sourceRoot.indexOf(generatedSrcDirDefaultLifecycle) != -1
-                || sourceRoot.indexOf(generatedSrcTestDirDefaultLifecycle) != -1
-                || sourceRoot.indexOf(generatedSrcDirCloverLifecycle) != -1
-                || sourceRoot.indexOf(generatedSrcTestDirCloverLifecycle) != -1;
     }
 
     private void logSourceDirectories() {
