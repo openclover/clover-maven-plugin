@@ -65,7 +65,9 @@
                     </execution>
                     <execution>
                         <id>add-test-source</id>
-                        <phase>generate-test-sources</phase>
+                        <!-- Note: not in the generate-test-sources phase, because clover2:setup is called in
+                        process-sources, see below -->
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>add-test-source</goal>
                         </goals>
