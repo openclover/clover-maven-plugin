@@ -226,6 +226,13 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     private String contextFilters;
 
     /**
+     * Style of the HTML report: ADG (default) or CLASSIC (deprecated).
+     *
+     * @parameter expression="${maven.clover.reportStyle}" default-value="ADG"
+     */
+    private String reportStyle;
+
+    /**
      * Whether to show inner functions, i.e. functions declared inside methods in the report. This applies to Java8
      * lambda functions for instance. If set to <code>false</code> then they are hidden on the list of methods, but
      * code metrics still include them.
@@ -438,6 +445,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
         antProject.setProperty("filter", contextFilters != null ? contextFilters : "");
         antProject.setProperty("orderBy", orderBy);
         antProject.setProperty("charset", charset);
+        antProject.setProperty("reportStyle", reportStyle);
         antProject.setProperty("type", format);
         antProject.setProperty("span", span);
         antProject.setProperty("alwaysReport", "" + alwaysReport);
