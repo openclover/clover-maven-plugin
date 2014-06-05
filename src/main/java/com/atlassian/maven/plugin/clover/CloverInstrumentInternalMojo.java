@@ -202,6 +202,9 @@ import java.util.Set;
  */
 public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
 
+    public static final String CLOVER_CORE_GROUP_ID = "com.atlassian.clover";
+    public static final String CLOVER_CORE_ARTIFACT_ID = "clover";
+
     /**
      * List of all artifacts for this Clover plugin provided by Maven. This is used internally to get a handle on
      * the Clover JAR artifact.
@@ -550,8 +553,8 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
             Artifact artifact = artifactsIterator.next();
 
             // We identify the clover JAR by checking the groupId and artifactId.
-            if ("com.cenqua.clover".equals(artifact.getGroupId())
-                    && "clover".equals(artifact.getArtifactId())) {
+            if (CLOVER_CORE_GROUP_ID.equals(artifact.getGroupId())
+                    && CLOVER_CORE_ARTIFACT_ID.equals(artifact.getArtifactId())) {
                 cloverArtifact = artifact;
             }
         }
@@ -563,7 +566,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
         Artifact cloverArtifact = findCloverArtifact(this.pluginArtifacts);
         if (cloverArtifact == null) {
             throw new MojoExecutionException(
-                    "Couldn't find [com.cenqua.clover:clover] artifact in plugin dependencies");
+                    "Couldn't find [" + CLOVER_CORE_GROUP_ID + ":" + CLOVER_CORE_ARTIFACT_ID + "] artifact in plugin dependencies");
         }
 
         final String jarScope = scope == null ? Artifact.SCOPE_PROVIDED : scope;
