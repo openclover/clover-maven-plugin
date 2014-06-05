@@ -21,28 +21,28 @@ under the License.
     <files>
         <!-- Check that all main classes were found and treated as application code -->
         <file>
-            <location>target/site/clover/default-pkg/pkg-app.html</location>
+            <location>target/site/clover/default-pkg/pkg-summary.html</location>
             <contains>GroovyMain</contains>
         </file>
         <file>
-            <location>target/site/clover/default-pkg/pkg-app.html</location>
+            <location>target/site/clover/default-pkg/pkg-summary.html</location>
             <contains>JavaExtraMain</contains>
         </file>
         <file>
-            <location>target/site/clover/default-pkg/pkg-app.html</location>
+            <location>target/site/clover/default-pkg/pkg-summary.html</location>
             <contains>JavaMain</contains>
         </file>
         <!-- Check that all main classes were found and treated as test code -->
         <file>
-            <location>target/site/clover/default-pkg/pkg-test.html</location>
+            <location>target/site/clover/default-pkg/testsrc-pkg-summary.html</location>
             <contains>GroovyTest</contains>
         </file>
         <file>
-            <location>target/site/clover/default-pkg/pkg-test.html</location>
+            <location>target/site/clover/default-pkg/testsrc-pkg-summary.html</location>
             <contains>JavaExtraTest</contains>
         </file>
         <file>
-            <location>target/site/clover/default-pkg/pkg-test.html</location>
+            <location>target/site/clover/default-pkg/testsrc-pkg-summary.html</location>
             <contains>JavaTest</contains>
         </file>
     </files>
