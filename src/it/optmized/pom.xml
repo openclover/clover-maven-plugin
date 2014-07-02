@@ -56,7 +56,6 @@ under the License.
                     </alwaysRunTests>
                     <snapshot>${project.build.directory}/clover.snapshot</snapshot>
                     <licenseLocation>${clover.licenseLocation}</licenseLocation>
-                    <jdk>1.3</jdk>
                 </configuration>
                 <executions>
                     <execution>

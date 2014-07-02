@@ -36,7 +36,6 @@
                     <includes>
                         <include>**/include/*.java</include>
                     </includes>
-                    <jdk>1.3</jdk>
                 </configuration>
                 <executions>
                     <execution>

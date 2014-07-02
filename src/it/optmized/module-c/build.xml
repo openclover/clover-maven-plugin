@@ -37,7 +37,7 @@
     <target name="code.compile"
             description="Creates ${app.build} directory and compiles sources from ${src} to ${app.build}">
         <mkdir dir="${app.build}"/>
-        <javac srcdir="${src}" destdir="${app.build}" classpathref="build.classpath" source="1.5"/>
+        <javac srcdir="${src}" destdir="${app.build}" classpathref="build.classpath" source="1.6"/>
     </target>
 
     <target name="test.compile" depends="code.compile"
@@ -45,7 +45,7 @@
         <mkdir dir="${test.build}"/>
         <javac srcdir="${test.src}"
                destdir="${test.build}"
-               classpathref="testbuild.classpath" source="1.5"/>
+               classpathref="testbuild.classpath" source="1.6"/>
     </target>
 
     <target name="test.run" depends="test.compile" description="Runs the tests">

@@ -179,8 +179,8 @@ under the License.
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.5.1</version>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.6</source>
+                    <target>1.6</target>
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
@@ -292,7 +292,7 @@ under the License.
                             <generateHistorical>true</generateHistorical>
                             <generateHtml>true</generateHtml>
                             <licenseLocation>${clover.licenseLocation}</licenseLocation>
-                            <jdk>1.4</jdk>
+                            <jdk>1.6</jdk>
                         </configuration>
                     </plugin>
                 </plugins>

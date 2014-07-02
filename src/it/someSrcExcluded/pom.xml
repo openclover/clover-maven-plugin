@@ -36,7 +36,6 @@
                     <excludes>
                         <exclude>**/exclude/*.java</exclude>
                     </excludes>
-                    <jdk>1.3</jdk>
                 </configuration>
                 <executions>
                     <execution>
