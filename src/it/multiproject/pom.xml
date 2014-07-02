@@ -56,7 +56,6 @@ under the License.
                     <flushInterval>100</flushInterval>
                     <targetPercentage>25%</targetPercentage>
                     <licenseLocation>${clover.licenseLocation}</licenseLocation>
-                    <jdk>1.3</jdk>
                 </configuration>
                 <executions>
                     <execution>

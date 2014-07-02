@@ -21,7 +21,7 @@ under the License.
 <verifications>
   <files>
     <file>
-      <location>target/site/clover/pkg-test.html</location>
+      <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/instrumenttests/Simple.html</location>
       <contains>SimpleTest</contains>
     </file>
   </files>

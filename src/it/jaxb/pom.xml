@@ -8,7 +8,7 @@
     <name>Generate customizations from DTDs</name>
 
     <properties>
-        <java.version>1.5</java.version>
+        <java.version>1.6</java.version>
         <jaxb.version>2.1</jaxb.version>
         <junit.version>4.7</junit.version>
     </properties>
