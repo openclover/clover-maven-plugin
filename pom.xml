@@ -25,9 +25,9 @@ under the License.
     <version>4.0.0-SNAPSHOT</version>
     <description>Maven plugin for Clover</description>
     <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>9</version>
+        <groupId>com.atlassian.pom</groupId>
+        <artifactId>central-pom</artifactId>
+        <version>3.0.26</version>
     </parent>
     <url>http://confluence.atlassian.com/x/dIDBBQ</url>
     <organization>
@@ -277,6 +277,17 @@ under the License.
                 </configuration>
             </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <configuration>
+                        <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
     <profiles>
         <profile>
@@ -378,60 +389,6 @@ under the License.
                 </plugins>
             </build>
         </profile>
-        <profile>
-            <id>deploy-to-sonatype-staging</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>wagon-maven-plugin</artifactId>
-                        <version>1.0-beta-4</version>
-                        <configuration>
-                            <!-- Copy current version only. Staging repo will be created on the fly. Requires later promotion via web interface. -->
-                            <sourceId>atlassian-public</sourceId>
-                            <source>https://maven.atlassian.com/content/groups/public/com/atlassian/maven/plugins/maven-clover2-plugin/${project.version}</source>
-                            <targetId>sonatype-nexus-staging</targetId>
-                            <target>https://oss.sonatype.org/service/local/staging/deploy/maven2/com/atlassian/maven/plugins/maven-clover2-plugin/${project.version}</target>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>deploy</phase>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>deploy-to-sonatype-snapshots</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>wagon-maven-plugin</artifactId>
-                        <version>1.0-beta-4</version>
-                        <configuration>
-                            <!-- Copy ALL snapshots from Atlassian Maven to OSS Sonatype (merges maven-metadata.xml) -->
-                            <sourceId>atlassian-public-snapshot</sourceId>
-                            <source>https://maven.atlassian.com/content/repositories/atlassian-public-snapshot/com/atlassian/maven/plugins/maven-clover2-plugin</source>
-                            <targetId>sonatype-nexus-snapshots</targetId>
-                            <target>https://oss.sonatype.org/content/repositories/snapshots/com/atlassian/maven/plugins/maven-clover2-plugin</target>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>deploy</phase>
-                                <goals>
-                                    <goal>merge-maven-repos</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
     </profiles>
     <reporting>
         <plugins>
@@ -448,16 +405,6 @@ under the License.
         </plugins>
     </reporting>
     <distributionManagement>
-        <repository>
-            <id>atlassian-m2-repository</id>
-            <name>Atlassian Public Repository</name>
-            <url>https://maven.atlassian.com/public</url>
-        </repository>
-        <snapshotRepository>
-            <id>atlassian-public-snapshot</id>
-            <name>Atlassian Public Snapshot Repository</name>
-            <url>https://maven.atlassian.com/public-snapshot</url>
-        </snapshotRepository>
         <site>
             <id>atlassian-documentation</id>
             <url>scpexe://docs-app.internal.atlassian.com/var/www/domains/docs.atlassian.com/${project.artifactId}/${project.version}</url>
