@@ -78,7 +78,10 @@ under the License.
         <maven>2.0.1</maven>
     </prerequisites>
     <properties>
+        <!-- Clover Core version -->
         <cloverVersion>4.0.0</cloverVersion>
+        <!-- Don't perform automatic releasing of a staging repository in the Atlassian Central repository -->
+        <staging.automatic.release>false</staging.automatic.release>
     </properties>
     <dependencies>
         <dependency>
@@ -278,17 +281,6 @@ under the License.
                 </configuration>
             </plugin>
         </plugins>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <configuration>
-                        <autoReleaseAfterClose>false</autoReleaseAfterClose>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
     <profiles>
         <profile>
