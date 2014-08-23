@@ -33,6 +33,9 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <jdk>1.6</jdk>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -62,6 +65,9 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <jdk>1.6</jdk>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
