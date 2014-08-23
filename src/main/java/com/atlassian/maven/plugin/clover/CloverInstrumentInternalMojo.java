@@ -302,10 +302,10 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
         // Modify Maven model so that it points to the new source directories and to the clovered
         // artifacts instead of the original values.
         final String originalSrcDir = mainInstrumenter.redirectSourceDirectories();
-        originalSrcMap.put(getProject().getId(), originalSrcDir);
+        originalSrcMap.put(getProject().getArtifact().getId(), originalSrcDir);
         if (this.includesTestSourceRoots) {
             final String originalSrcTestDir = testInstrumenter.redirectSourceDirectories();
-            originalSrcTestMap.put(getProject().getId(), originalSrcTestDir);
+            originalSrcTestMap.put(getProject().getArtifact().getId(), originalSrcTestDir);
         }
 
         // add instrumentation of groovy sources
