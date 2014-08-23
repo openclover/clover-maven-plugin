@@ -29,6 +29,7 @@
                     <generateXml>true</generateXml>
                     <generatePdf>true</generatePdf>
                     <generateHtml>true</generateHtml>
+                    <jdk>1.6</jdk>
                 </configuration>
                 <executions>
                     <execution>
@@ -52,6 +53,7 @@
                     <licenseLocation>${clover.licenseLocation}</licenseLocation>
                     <reportDescriptor>${clover.reportConfig}</reportDescriptor>
                     <resolveReportDescriptor>false</resolveReportDescriptor>
+                    <jdk>1.6</jdk>
                 </configuration>
             </plugin>
         </plugins>
