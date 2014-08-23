@@ -68,6 +68,7 @@ under the License.
                     <reportDescriptor>clover-report.xml</reportDescriptor>
                     <!-- Verify that context filters work -->
                     <contextFilters>try,main,log</contextFilters>
+                    <jdk>1.6</jdk>
                 </configuration>
                 <executions>
                     <execution>
