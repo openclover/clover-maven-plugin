@@ -1,0 +1,92 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.atlassian.maven.plugins.sample</groupId>
+    <artifactId>clover-sample-generated-sources</artifactId>
+    <version>1.0</version>
+    <name>
+        Test how Clover deals with a module containing generated sources only (i.e. there's neither src/main/java
+        nor src/test/java folder.
+    </name>
+    <properties>
+        <java.version>1.6</java.version>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.atlassian.maven.plugins</groupId>
+                <artifactId>maven-clover2-plugin</artifactId>
+                <version>4.0.1-SNAPSHOT</version>
+                <configuration>
+                    <!-- Instrument all source files, also generated ones. -->
+                    <includesAllSourceRoots>true</includesAllSourceRoots>
+                    <licenseLocation>${clover.licenseLocation}</licenseLocation>
+                    <alwaysReport>true</alwaysReport>
+                </configuration>
+                <executions>
+                    <execution>
+                        <!-- Call the clover2:setup after sources are generated but before compilation -->
+                        <id>main1</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>setup</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <!-- Call the clover2:clover and generate reports -->
+                        <id>main2</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>clover</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <target name="generate">
+                                <mkdir dir="target/generated-sources"/>
+                                <echo message="public class HelloWorld { void sayHello() { System.out.println(&quot;Hello world!&quot;); } }"
+                                      file="target/generated-sources/HelloWorld.java"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>target/generated-sources</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
