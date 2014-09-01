@@ -79,7 +79,7 @@ under the License.
     </prerequisites>
     <properties>
         <!-- Clover Core version -->
-        <cloverVersion>4.0.1-SNAPSHOT</cloverVersion>
+        <cloverVersion>4.0.1</cloverVersion>
         <!-- Don't perform automatic releasing of a staging repository in the Atlassian Central repository -->
         <staging.automatic.release>false</staging.automatic.release>
     </properties>
