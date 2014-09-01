@@ -22,6 +22,7 @@
                 <artifactId>maven-clover2-plugin</artifactId>
                 <configuration>
                     <licenseLocation>${clover.licenseLocation}</licenseLocation>
+                    <jdk>1.6</jdk>
                 </configuration>
             </plugin>
         </plugins>
@@ -36,6 +37,7 @@
                     <excludes>
                         <exclude>**/exclude/*.java</exclude>
                     </excludes>
+                    <jdk>1.6</jdk>
                 </configuration>
                 <executions>
                     <execution>
