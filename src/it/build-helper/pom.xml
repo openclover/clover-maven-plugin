@@ -90,7 +90,7 @@
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-clover2-plugin</artifactId>
-                <version>4.0.1-SNAPSHOT</version>
+                <version>4.0.2-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <id>setup</id>
