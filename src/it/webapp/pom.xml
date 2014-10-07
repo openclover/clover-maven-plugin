@@ -23,6 +23,7 @@
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.4</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.jwebunit</groupId>
@@ -157,7 +158,7 @@
                     <container>
                         <containerId>tomcat5x</containerId> 
                         <zipUrlInstaller>
-                            <url>http://repository.atlassian.com/maven2/org/apache/tomcat/apache-tomcat/5.5.25/apache-tomcat-5.5.25.zip</url>
+                            <url>https://maven.atlassian.com/content/groups/public/org/apache/tomcat/apache-tomcat/5.5.25/apache-tomcat-5.5.25.zip</url>
                         </zipUrlInstaller>
                         <output>${project.build.directory}/cargo-output.log</output>
                         <log>${project.build.directory}/cargo-log.log</log>
