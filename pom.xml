@@ -22,7 +22,7 @@ under the License.
     <artifactId>maven-clover2-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Maven Clover Plugin</name>
-    <version>4.0.2-SNAPSHOT</version>
+    <version>4.0.2</version>
     <description>Maven plugin for Clover</description>
     <parent>
         <groupId>com.atlassian.pom</groupId>
@@ -55,7 +55,7 @@ under the License.
         <connection>scm:hg:ssh://hg@bitbucket.org/atlassian/maven-clover2-plugin</connection>
         <developerConnection>scm:hg:ssh://hg@bitbucket.org/atlassian/maven-clover2-plugin</developerConnection>
         <url>https://bitbucket.org/atlassian/maven-clover2-plugin/src</url>
-      <tag>HEAD</tag>
+      <tag>maven-clover2-plugin-4.0.2</tag>
   </scm>
     <developers>
         <developer>
