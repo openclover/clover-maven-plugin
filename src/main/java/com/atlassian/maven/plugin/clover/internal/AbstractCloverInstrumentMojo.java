@@ -157,7 +157,7 @@ public class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements 
      *     <li>all - instrument all forms of lambda functions</li>
      * </ul>
      *
-     * <p>Default is 'all'.</p>
+     * <p>Default is 'all' for 3.2.2-4.0.2 and 'none' since 4.0.3.</p>
      *
      * <p>IMPORTANT: Due to Clover's restrictions related with code instrumentation and javac compiler's type inference
      * capabilities, you may get compilation errors when expression-like lambda functions are passed to generic methods
@@ -166,7 +166,7 @@ public class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements 
      * Java 8 code instrumented by Clover fails to compile</a> Knowledge Base article for more details.
      * </p>
      *
-     * @parameter expression="${maven.clover.instrumentLambda}" default-value="all"
+     * @parameter expression="${maven.clover.instrumentLambda}" default-value="none"
      * @since 3.2.2
      */
     private String instrumentLambda;
