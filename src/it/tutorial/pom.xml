@@ -22,7 +22,6 @@
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-clover2-plugin</artifactId>
                 <configuration>
-                    <licenseLocation>${clover.licenseLocation}</licenseLocation>
                     <reportDescriptor>${clover.reportConfig}</reportDescriptor>
                     <resolveReportDescriptor>false</resolveReportDescriptor>
                     <generateJson>true</generateJson>
@@ -50,7 +49,6 @@
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-clover2-plugin</artifactId>
                 <configuration>
-                    <licenseLocation>${clover.licenseLocation}</licenseLocation>
                     <reportDescriptor>${clover.reportConfig}</reportDescriptor>
                     <resolveReportDescriptor>false</resolveReportDescriptor>
                     <jdk>1.6</jdk>

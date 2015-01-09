@@ -42,7 +42,6 @@ under the License.
                 <configuration>
                     <jdk>1.8</jdk>
                     <instrumentLambda>block</instrumentLambda>
-                    <licenseLocation>${clover.licenseLocation}</licenseLocation>
                     <showInnerFunctions>true</showInnerFunctions>
                     <showLambdaFunctions>true</showLambdaFunctions>
                 </configuration>

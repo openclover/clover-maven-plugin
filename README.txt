@@ -17,7 +17,7 @@ Developer documentation: https://confluence.atlassian.com/x/zoFyCw
 To run the integration tests you need a clover.license file. You can define it in ~/.m2/settings.xml, for instance:
 
 <properties>
-    <clover.licenseLocation>file:///path/to/the/clover.license</clover.licenseLocation>
+    <maven.clover.licenseLocation>file:///path/to/the/clover.license</maven.clover.licenseLocation>
 <properties>
 
 Useful Maven targets:

@@ -42,7 +42,6 @@ under the License.
                 <configuration>
                     <!-- Verify that context filters work -->
                     <contextFilters>try,main,log</contextFilters>
-                    <licenseLocation>${clover.licenseLocation}</licenseLocation>
                 </configuration>
             </plugin>
         </plugins>
@@ -56,7 +55,6 @@ under the License.
                     <!-- Without the block filter the TPC is 50% and with it it's 57,1%. Thus we check for a TPC above of
            55% to verify the filter has been applied correctly -->
                     <targetPercentage>55%</targetPercentage>
-                    <licenseLocation>${clover.licenseLocation}</licenseLocation>
                     <methodContexts>
                         <main>(.* )?public static void main\(String\[\] argv\).*</main>
                     </methodContexts>

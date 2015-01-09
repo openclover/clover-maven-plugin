@@ -41,7 +41,6 @@ under the License.
                 <artifactId>maven-clover2-plugin</artifactId>
                 <configuration>
                     <generateHistorical>true</generateHistorical>
-                     <licenseLocation>${clover.licenseLocation}</licenseLocation>
                 </configuration>
             </plugin>
         </plugins>
@@ -55,7 +54,6 @@ under the License.
                     <flushPolicy>threaded</flushPolicy>
                     <flushInterval>100</flushInterval>
                     <targetPercentage>25%</targetPercentage>
-                     <licenseLocation>${clover.licenseLocation}</licenseLocation>
                 </configuration>
                 <executions>
                     <execution>

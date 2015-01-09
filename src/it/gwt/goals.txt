@@ -1,1 +1,1 @@
--Pwith.clover.serveronly clean install -Dmaven.clover.licenseLocation=${clover.licenseLocation}
+-Pwith.clover.serveronly clean install -Dmaven.clover.licenseLocation=${maven.clover.licenseLocation}
