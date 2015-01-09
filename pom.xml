@@ -295,7 +295,6 @@ under the License.
                         <configuration>
                             <generateHistorical>true</generateHistorical>
                             <generateHtml>true</generateHtml>
-                            <licenseLocation>${clover.licenseLocation}</licenseLocation>
                             <jdk>1.6</jdk>
                         </configuration>
                     </plugin>

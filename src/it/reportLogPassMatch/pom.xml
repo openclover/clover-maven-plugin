@@ -47,7 +47,6 @@
 				<groupId>com.atlassian.maven.plugins</groupId>
 				<artifactId>maven-clover2-plugin</artifactId>
 				<configuration>
-                    <licenseLocation>${clover.licenseLocation}</licenseLocation>
                     <contextFilters>static,property,constructor,Log,IfLog,IfThisLog,ThisLog,SomeMethod</contextFilters>
 					<statementContexts>
 						<Log>^(\w*\.)?(log|LOG)\..*</Log>

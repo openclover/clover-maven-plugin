@@ -21,7 +21,6 @@
                 <configuration>
                     <!-- Instrument all source files, also generated ones. -->
                     <includesAllSourceRoots>true</includesAllSourceRoots>
-                    <licenseLocation>${clover.licenseLocation}</licenseLocation>
                     <alwaysReport>true</alwaysReport>
                 </configuration>
                 <executions>

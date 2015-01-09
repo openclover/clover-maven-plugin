@@ -65,9 +65,6 @@ under the License.
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-clover2-plugin</artifactId>
                 <version>4.0.3-SNAPSHOT</version>
-                <configuration>
-                    <licenseLocation>${clover.licenseLocation}</licenseLocation>
-                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>

@@ -21,7 +21,6 @@
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-clover2-plugin</artifactId>
                 <configuration>
-                    <licenseLocation>${clover.licenseLocation}</licenseLocation>
                     <jdk>1.6</jdk>
                 </configuration>
             </plugin>
@@ -33,7 +32,6 @@
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-clover2-plugin</artifactId>
                 <configuration>
-                    <licenseLocation>${clover.licenseLocation}</licenseLocation>
                     <excludes>
                         <exclude>**/exclude/*.java</exclude>
                     </excludes>

@@ -100,7 +100,6 @@ under the License.
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-clover2-plugin</artifactId>
                 <configuration>
-                    <licenseLocation>${clover.licenseLocation}</licenseLocation>
                     <setTestFailureIgnore>true</setTestFailureIgnore>
                 </configuration>
                 <executions>
@@ -150,9 +149,6 @@ under the License.
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-clover2-plugin</artifactId>
-                <configuration>
-                    <licenseLocation>${clover.licenseLocation}</licenseLocation>
-                </configuration>
             </plugin>
         </plugins>
     </reporting>
