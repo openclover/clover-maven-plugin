@@ -369,6 +369,9 @@ under the License.
                                 <!--<pomInclude>**/webapp/pom.xml</pomInclude>-->
                                 <pomInclude>**/xdoclet/pom.xml</pomInclude>
                             </pomIncludes>
+                            <properties>
+                                <maven.clover.licenseLocation>${maven.clover.licenseLocation}</maven.clover.licenseLocation>
+                            </properties>
                         </configuration>
                         <executions>
                             <execution>
