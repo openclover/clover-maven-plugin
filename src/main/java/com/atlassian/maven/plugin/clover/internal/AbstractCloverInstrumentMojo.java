@@ -61,13 +61,13 @@ public class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements 
     protected String encoding;
 
     /**
-     * The list of file to exclude from the instrumentation.
+     * The list of file to exclude from the instrumentation. Patterns are resolved against source roots.
      * @parameter
      */
     protected Set<String> excludes = new HashSet<String>();
 
     /**
-     * The comma seperated list of file to exclude from the instrumentation.
+     * The comma seperated list of file to exclude from the instrumentation. Patterns are resolved against source roots.
      * @parameter expression="${maven.clover.excludesList}"
      */
     protected String excludesList = null;
@@ -103,7 +103,7 @@ public class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements 
     protected File groverJar;
 
     /**
-     * The list of file to include in the instrumentation.
+     * The list of file to include in the instrumentation. Patterns are resolved against source roots.
      * Defaults are '**&#47;*.java, **&#47;*.groovy' which are overwritten if &lt;includes&gt; is set by the user
      *
      * @parameter
@@ -111,7 +111,7 @@ public class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements 
     protected Set<String> includes = new HashSet<String>(Arrays.asList(new String[]{"**/*.java", "**/*.groovy" }));
 
     /**
-     * The comma seperated list of files to include in the instrumentation.
+     * The comma seperated list of files to include in the instrumentation. Patterns are resolved against source roots.
      * Defaults are **.java which are overwritten if &lt;includes&gt; is set by the user
      *
      * @parameter expression="${maven.clover.includesList}"
