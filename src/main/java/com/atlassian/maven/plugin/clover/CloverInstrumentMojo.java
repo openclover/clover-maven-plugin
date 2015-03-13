@@ -24,14 +24,32 @@ import org.apache.maven.plugin.MojoExecutionException;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 
 /**
- * Instrument all sources using Clover and forks a custom lifecycle to execute project's tests on the instrumented
- * code so that a Clover database is created.
+ * <p>Fork a custom build lifecycle in which all sources will be instrumented by Clover and next execute this
+ * lifecycle till the <code>install</code> phase. All instrumented classes will be stored in a separate directory. Similarly,
+ * artifacts produced will have the 'clover' classifier.</p>
  *
- * <p>Note: We're forking a lifecycle because we don't want the Clover instrumentation to affect the main lifecycle
+ * <p>This goal is forking a lifecycle because we don't want the Clover instrumentation to affect the main lifecycle
  * build. This will prevent instrumented sources to be put in production by error. Thus running
  * <code>mvn install</code> on a project where this <code>instrument</code> goal has been specified will run the
  * build twice: once for building the project as usual and another time for instrumenting the sources with Clover
  * and generating the Clover database.</p>
+ *
+ * <p><b>Attention: Maven does not support multiple classifiers for an artifact.</b>
+ * In case your project creates artifacts with classfiers, it may happen that the 'clover' classifier will be lost and
+ * an instrumented artifact will be installed as non-instrumented one. </p>
+ *
+ * <p>Example: clover2:instrument + jar:test-jar + install:install</p>
+ *
+ * <pre>
+ *     [INFO] --- maven-jar-plugin:2.6:test-jar (default) @ moneybags ---
+ *     [INFO] Building jar: .../moneybags-1.0-SNAPSHOT-clover-tests.jar &lt;&lt;&lt; file with double classifier was created
+ *     [INFO] --- maven-install-plugin:2.5.2:install (default-install) @ moneybags ---
+ *     [INFO] Installing .../moneybags-1.0-SNAPSHOT-clover-tests.jar to
+ *            ~/.m2/.../moneybags-1.0-SNAPSHOT-tests.jar &lt;&lt;&lt; but 'clover' classifier was lost
+ * </pre>
+ *
+ * <p>In order to avoid this, you can use the <code>instrument-test</code> goal, which runs a forked lifecycle till
+ * the <code>test</code> phase.</p>
  *
  * @goal instrument
  * @execute phase="install" lifecycle="clover"
