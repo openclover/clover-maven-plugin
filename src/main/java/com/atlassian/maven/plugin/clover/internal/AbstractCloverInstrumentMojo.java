@@ -206,7 +206,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     /**
      * Try to protect your build from installing instrumented artifacts into local ~/.m2 cache
-     * or deploying them to a binaries repository. If option is enabled, Clover will fail a build whenever
+     * or deploying them to a binaries repository. If this option is enabled, Clover will fail a build whenever
      * it detects that 'install' or 'deploy' phase is about to be called. It will also fail a build if
      * it detects that an artifact having multiple classifiers (e.g. "-clover-tests.jar"), which are not supported by
      * Maven, is about to be installed under original name (e.g. "-tests.jar").
@@ -395,7 +395,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      */
     protected void failIfInstallPhaseIsPresent() throws MojoExecutionException {
         final boolean installPresent = false;         // TODO
-        if (installPresent) {
+        if (installPresent && (!useCloverClassifier || !shouldRedirectArtifacts())) {
             throw new MojoExecutionException(PROTECTION_ENABLED_MSG
                     + "Your build runs 'install' phase which can put instrumented JARs into ~/.m2 local cache. "
                     + "Remove this phase to fix it. You can also disable pollution protection if this is intentional.");
@@ -409,7 +409,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      */
     protected void failIfDeployPhaseIsPresent() throws MojoExecutionException {
         final boolean deployPresent = false;        // TODO
-        if (deployPresent) {
+        if (deployPresent && (!useCloverClassifier || !shouldRedirectArtifacts())) {
             throw new MojoExecutionException(PROTECTION_ENABLED_MSG
                     + "Your build runs 'deploy' phase which can upload instrumented JARs into your repository. "
                     + "Remove this phase to fix it. You can also disable pollution protection if this is intentional.");
