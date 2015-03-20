@@ -23,22 +23,22 @@ import com.atlassian.clover.ant.groovy.GroovycSupport;
 import com.atlassian.clover.cfg.instr.InstrumentationConfig;
 import com.atlassian.clover.remote.DistributedConfig;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverInstrumentMojo;
+import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
+import com.atlassian.maven.plugin.clover.internal.instrumentation.MainInstrumenter;
+import com.atlassian.maven.plugin.clover.internal.instrumentation.TestInstrumenter;
 import com.atlassian.maven.plugin.clover.internal.scanner.LanguageFileExtensionFilter;
 import com.atlassian.maven.plugin.clover.internal.scanner.MainSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.TestSourceScanner;
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.AbstractArtifactResolutionException;
-import org.apache.maven.artifact.resolver.ArtifactResolver;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
-import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.handler.ArtifactHandler;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.resolver.AbstractArtifactResolutionException;
+import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
+import org.apache.maven.artifact.resolver.ArtifactResolutionException;
+import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
-import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
-import com.atlassian.maven.plugin.clover.internal.instrumentation.MainInstrumenter;
-import com.atlassian.maven.plugin.clover.internal.instrumentation.TestInstrumenter;
 
 import java.io.File;
 import java.io.IOException;
@@ -191,7 +191,7 @@ import java.util.Set;
 
 /**
  * <p>Instrument source roots.</p>
- *
+ * <p/>
  * <p><b>Note 1: Do not call this MOJO directly. It is meant to be called in a custom forked lifecycle by the other
  * Clover plugin MOJOs.</b></p>
  * <p><b>Note 2: We bind this mojo to the "validate" phase so that it executes prior to any other mojos</b></p>
@@ -208,7 +208,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     /**
      * List of all artifacts for this Clover plugin provided by Maven. This is used internally to get a handle on
      * the Clover JAR artifact.
-     *
+     * <p/>
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
      *
      * @parameter expression="${plugin.artifacts}"
@@ -264,6 +264,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
      *
      * @see com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo#execute()
      */
+    @Override
     public void execute() throws MojoExecutionException {
         if (skip) {
             getLog().info("Skipping clover instrumentation.");
@@ -317,6 +318,16 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
         logArtifacts("after changes");
     }
 
+    @Override
+    protected boolean shouldRedirectArtifacts() {
+        return true;
+    }
+
+    @Override
+    protected boolean shouldRedirectOutputDirectories() {
+        return true;
+    }
+
     /**
      * Sets several properties related with test failures for Surefire, Failsafe, PMD and Checkstyle plugins.
      * Thanks to this, the build in default or forked lifecycle can continue and we can generate Clover report
@@ -333,7 +344,6 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     }
 
     /**
-     *
      * @param outDir - output directory for temporary artifacts
      */
     private void injectGrover(final File outDir) {
@@ -378,7 +388,6 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     }
 
     /**
-     *
      * @return List&lt;File&gt;
      * @see com.atlassian.maven.plugin.clover.internal.instrumentation.AbstractInstrumenter#instrument()
      * @see #redirectOutputDirectories()
@@ -441,14 +450,16 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     }
 
     protected void redirectOutputDirectories() {
-        // Explicitely set the output directory to be the Clover one so that all other plugins executing
-        // thereafter output files in the Clover output directory and not in the main output directory.
-        getProject().getBuild().setDirectory(this.cloverOutputDirectory);
+        if (shouldRedirectOutputDirectories()) {
+            // Explicitly set the output directory to be the Clover one so that all other plugins executing
+            // thereafter output files in the Clover output directory and not in the main output directory.
+            getProject().getBuild().setDirectory(this.cloverOutputDirectory);
 
-        // TODO: Ugly hack below. Changing the directory should be enough for changing the values of all other
-        // properties depending on it!
-        getProject().getBuild().setOutputDirectory(new File(this.cloverOutputDirectory, "classes").getPath());
-        getProject().getBuild().setTestOutputDirectory(new File(this.cloverOutputDirectory, "test-classes").getPath());
+            // TODO: Ugly hack below. Changing the directory should be enough for changing the values of all other
+            // properties depending on it!
+            getProject().getBuild().setOutputDirectory(new File(this.cloverOutputDirectory, "classes").getPath());
+            getProject().getBuild().setTestOutputDirectory(new File(this.cloverOutputDirectory, "test-classes").getPath());
+        }
     }
 
     /**
@@ -456,19 +467,21 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
      * a normal build.
      */
     protected void redirectArtifact() {
-        // Only redirect main artifact for non-pom projects
-        if (!getProject().getPackaging().equals("pom")) {
-            Artifact oldArtifact = getProject().getArtifact();
-            Artifact newArtifact = this.artifactFactory.createArtifactWithClassifier(oldArtifact.getGroupId(),
-                    oldArtifact.getArtifactId(), oldArtifact.getVersion(), oldArtifact.getType(), "clover");
-            getProject().setArtifact(newArtifact);
+        if (shouldRedirectArtifacts()) {
+            // Only redirect main artifact for non-pom projects
+            if (!getProject().getPackaging().equals("pom")) {
+                Artifact oldArtifact = getProject().getArtifact();
+                Artifact newArtifact = this.artifactFactory.createArtifactWithClassifier(oldArtifact.getGroupId(),
+                        oldArtifact.getArtifactId(), oldArtifact.getVersion(), oldArtifact.getType(), "clover");
+                getProject().setArtifact(newArtifact);
 
-            final String finalName =
-                    getProject().getBuild().getFinalName() == null ?
-                            (getProject().getArtifactId() + "-" + getProject().getVersion())
-                            : getProject().getBuild().getFinalName();
+                final String finalName =
+                        getProject().getBuild().getFinalName() == null ?
+                                (getProject().getArtifactId() + "-" + getProject().getVersion())
+                                : getProject().getBuild().getFinalName();
 
-            getProject().getBuild().setFinalName(finalName + (useCloverClassifier ? "-clover" : ""));
+                getProject().getBuild().setFinalName(finalName + (useCloverClassifier ? "-clover" : ""));
+            }
         }
     }
 

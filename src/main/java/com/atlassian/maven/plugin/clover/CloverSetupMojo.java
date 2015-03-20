@@ -21,6 +21,7 @@ public class CloverSetupMojo extends CloverInstrumentInternalMojo {
 
     static Date START_DATE; 
 
+    @Override
     public void execute() throws MojoExecutionException {
         // store the start time of the build. ie - the very first compilation with clover.
         final MavenProject firstProject = getReactorProjects().get(0);
@@ -30,20 +31,24 @@ public class CloverSetupMojo extends CloverInstrumentInternalMojo {
         super.execute();
     }
 
+    @Override
+    protected boolean shouldRedirectArtifacts() {
+        return false;
+    }
 
+    @Override
+    protected boolean shouldRedirectOutputDirectories() {
+        return false;
+    }
+
+    @Override
     protected String getSrcName() {
         return super.getSrcName() + "-instrumented";
     }
 
+    @Override
     protected String getSrcTestName() {
         return super.getSrcTestName() + "-instrumented";
     }
 
-    protected void redirectOutputDirectories() {
-
-    }
-
-    protected void redirectArtifact() {
-
-    }
 }
