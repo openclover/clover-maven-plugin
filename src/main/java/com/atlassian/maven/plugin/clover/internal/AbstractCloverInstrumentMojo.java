@@ -323,14 +323,14 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     ///////////////////////////////////////////////////////////////////////////
 
 
-    private final static String PROTECTION_ENABLED_MSG = "Clover's repository pollution protection is enabled.";
+    private final static String PROTECTION_ENABLED_MSG = "Clover's repository pollution protection is enabled. ";
 
     @Override
     public void execute() throws MojoExecutionException {
         super.execute();
         if (repositoryPollutionProtection) {
-            failIfInstallPhaseIsPresent();
             failIfDeployPhaseIsPresent();
+            failIfInstallPhaseIsPresent();
             failIfCustomClassifierIsPresent();
         }
     }

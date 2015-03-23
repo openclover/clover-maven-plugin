@@ -48,12 +48,12 @@ public class BuildLifecycleAnalyzer {
     protected boolean isMaven2() {
         try {
             // test that all methods we need to call are avialable
-            LifecycleExecutor.class.getMethod("getPhaseToLifecycleMap");
-            LifecycleExecutor.class.getMethod("getLifecycleForPhase",
+            lifecycleExecutor.getClass().getMethod("getPhaseToLifecycleMap");
+            lifecycleExecutor.getClass().getDeclaredMethod("getLifecycleForPhase",
                     String.class);
-            LifecycleExecutor.class.getMethod("constructLifecycleMappings",
+            lifecycleExecutor.getClass().getDeclaredMethod("constructLifecycleMappings",
                     MavenSession.class, String.class, MavenProject.class, Lifecycle.class);
-            LifecycleExecutor.class.getMethod("processGoalChain",
+            lifecycleExecutor.getClass().getDeclaredMethod("processGoalChain",
                     String.class, Map.class, Lifecycle.class);
             // passed, seems to be Maven 2
             return true;

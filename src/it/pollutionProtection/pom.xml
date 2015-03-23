@@ -20,6 +20,25 @@
 				<groupId>com.atlassian.maven.plugins</groupId>
 				<artifactId>maven-clover2-plugin</artifactId>
 			</plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
+    <distributionManagement>
+        <repository>
+            <id>fake</id>
+            <name>Fake Repository</name>
+            <url>http://localhost</url>
+        </repository>
+        <snapshotRepository>
+            <id>fake</id>
+            <name>Fake Repository</name>
+            <url>http://localhost</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
