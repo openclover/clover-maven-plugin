@@ -1,0 +1,17 @@
+<lifecycles>
+  <lifecycle>
+    <id>fork</id>
+    <phases>
+      <phase>
+        <id>install</id>
+        <executions>
+          <execution>
+            <goals>
+              <goal>fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </phase>
+    </phases>
+  </lifecycle>
+</lifecycles>
