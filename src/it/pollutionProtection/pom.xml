@@ -21,6 +21,7 @@
 				<artifactId>maven-clover2-plugin</artifactId>
 			</plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>1.6</source>
@@ -29,6 +30,28 @@
             </plugin>
 		</plugins>
 	</build>
+    <profiles>
+        <profile>
+            <id>with-fork</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.atlassian.maven.plugins.sample</groupId>
+                        <artifactId>fork-maven-plugin</artifactId>
+                        <version>1.0-SNAPSHOT</version>
+                        <executions>
+                            <execution>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <distributionManagement>
         <repository>
             <id>fake</id>
