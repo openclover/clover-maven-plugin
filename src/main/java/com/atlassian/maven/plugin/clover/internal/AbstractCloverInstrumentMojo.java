@@ -2,7 +2,10 @@ package com.atlassian.maven.plugin.clover.internal;
 
 import com.atlassian.maven.plugin.clover.DistributedCoverage;
 import org.apache.commons.lang.StringUtils;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.lifecycle.LifecycleExecutor;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.util.Arrays;
@@ -292,6 +295,33 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      */
     protected boolean useFullyQualifiedJavaLang;
 
+    ///////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Used to learn about lifecycles and phases
+     * @component role="org.apache.maven.lifecycle.LifecycleExecutor"
+     * @required
+     * @readonly
+     */
+    private LifecycleExecutor lifecycleExecutor;
+
+    /**
+     * Used to learn about current build session.
+     * @component role="org.apache.maven.execution.MavenSession"
+     * @required
+     * @readonly
+     */
+    private MavenSession mavenSession;
+
+    /**
+     * @component role="org.apache.maven.project.MavenProject"
+     * @required
+     * @readonly
+     */
+    private MavenProject mavenProject;
+
+    ///////////////////////////////////////////////////////////////////////////
+
 
     private final static String PROTECTION_ENABLED_MSG = "Clover's repository pollution protection is enabled.";
 
@@ -394,7 +424,9 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * @throws org.apache.maven.plugin.MojoExecutionException if 'install' phase is present
      */
     protected void failIfInstallPhaseIsPresent() throws MojoExecutionException {
-        final boolean installPresent = false;         // TODO
+        final BuildLifecycleAnalyzer lifecycleAnalyzer = new BuildLifecycleAnalyzer(
+                getLog(), lifecycleExecutor, mavenProject, mavenSession);
+        final boolean installPresent = lifecycleAnalyzer.findGoalsToBeExecuted().contains("install");
         if (installPresent && (!useCloverClassifier || !shouldRedirectArtifacts())) {
             throw new MojoExecutionException(PROTECTION_ENABLED_MSG
                     + "Your build runs 'install' phase which can put instrumented JARs into ~/.m2 local cache. "
@@ -408,7 +440,9 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * @throws org.apache.maven.plugin.MojoExecutionException if 'deploy' phase is present
      */
     protected void failIfDeployPhaseIsPresent() throws MojoExecutionException {
-        final boolean deployPresent = false;        // TODO
+        final BuildLifecycleAnalyzer lifecycleAnalyzer = new BuildLifecycleAnalyzer(
+                getLog(), lifecycleExecutor, mavenProject, mavenSession);
+        final boolean deployPresent = lifecycleAnalyzer.findGoalsToBeExecuted().contains("deploy");
         if (deployPresent && (!useCloverClassifier || !shouldRedirectArtifacts())) {
             throw new MojoExecutionException(PROTECTION_ENABLED_MSG
                     + "Your build runs 'deploy' phase which can upload instrumented JARs into your repository. "
