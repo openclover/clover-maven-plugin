@@ -67,7 +67,7 @@ public class BuildLifecycleAnalyzer {
     }
 
     /**
-     * Based on analysis of Maven's DefaultLifecycleExecutor.executeGoal().
+     * Based on analysis of Maven's DefaultLifecycleExecutor
      */
     @NotNull
     protected List<String> findGoalsToBeExecutedInMaven2() {
@@ -75,7 +75,7 @@ public class BuildLifecycleAnalyzer {
 
         // mavenSession.getGoals() returns list of goals/phases defined in command line, which are called tasks
         for (Object taskObj : mavenSession.getGoals()) {
-            final String task = (String) taskObj;
+            final String task = taskObj.toString();
             final List<String> allGoalsForTask;
             // every task may be a build phase
             if (reflection_getPhaseToLifecycleMap(lifecycleExecutor).containsKey(task)) {
@@ -84,15 +84,9 @@ public class BuildLifecycleAnalyzer {
                 Map<String, List<MojoExecution>> lifecycleMappings = reflection_constructLifecycleMappings(
                         lifecycleExecutor, mavenSession, task, mavenProject, lifecycle);
 
-                //executeGoalWithLifecycle( task, forkEntryPoints, session, lifecycleMappings, project, lifecycle );
-                final List<MojoExecution> mojoGoals = reflection_processGoalChain(lifecycleExecutor,
-                        task, lifecycleMappings, lifecycle);
-                allGoalsForTask = Lists.transform(mojoGoals, new Function<MojoExecution, String>() {
-                    @Override
-                    public String apply(MojoExecution mojoExecution) {
-                        return mojoExecution.getMojoDescriptor().getPhase();
-                    }
-                });
+                // TODO check which one returns better results, keep one of them
+                allGoalsForTask = getGoalsFromLifecycleMappings(lifecycleMappings);
+//                allGoalsForTask = getGoalsFromProcessGoalChain(task, lifecycleMappings, lifecycle);
             } else {
                 // ... or is just a single goal; in such case, there's no need to find lifecycle
                 allGoalsForTask = Lists.newArrayList(task);
@@ -103,6 +97,36 @@ public class BuildLifecycleAnalyzer {
         }
 
         return allGoalsForAllTasks;
+    }
+
+    private List<String> getGoalsFromLifecycleMappings(Map<String, List<MojoExecution>> lifecycleMappings) {
+        List<String> phases = Lists.newArrayList();
+        for (Map.Entry<String, List<MojoExecution>> mapping : lifecycleMappings.entrySet()) {
+            for (MojoExecution mojoExecution : mapping.getValue()) {
+                String defaultPhase = mojoExecution.getMojoDescriptor().getPhase();
+                if (defaultPhase != null) {
+                    phases.add(defaultPhase);
+                }
+                String forkedPhase = mojoExecution.getMojoDescriptor().getExecutePhase();
+                if (forkedPhase != null) {
+                    phases.add(forkedPhase);
+                }
+            }
+        }
+        return phases;
+    }
+
+    private List<String> getGoalsFromProcessGoalChain(String task,
+                                                      Map<String, List<MojoExecution>> lifecycleMappings,
+                                                      Lifecycle lifecycle) {
+        final List<MojoExecution> mojoGoals = reflection_processGoalChain(lifecycleExecutor,
+                task, lifecycleMappings, lifecycle);
+        return Lists.transform(mojoGoals, new Function<MojoExecution, String>() {
+            @Override
+            public String apply(MojoExecution mojoExecution) {
+                return mojoExecution.getMojoDescriptor().getPhase();
+            }
+        });
     }
 
     @NotNull
