@@ -245,7 +245,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
      *
      * @parameter expression="${project.remoteArtifactRepositories}"
      */
-    protected List repositories;
+    protected List<ArtifactRepository> repositories;
 
     // HACK: this allows us to reset the source directories to the originals
     private static Map<String, String> originalSrcMap = new HashMap<String, String>();
@@ -271,6 +271,8 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
             return;
         }
 
+        super.execute();
+
         configureTestFailureIgnore();
         resetSrcDirsOriginal(getProject().getArtifact(), this);
 
@@ -278,8 +280,6 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
         final String cloverOutputSourceDirectory = outDir.getPath();
         final String cloverOutputTestSourceDirectory = new File(this.cloverOutputDirectory, getSrcTestName()).getPath();
         new File(resolveCloverDatabase()).getParentFile().mkdirs();
-
-        super.execute();
 
         logArtifacts("before changes");
 
