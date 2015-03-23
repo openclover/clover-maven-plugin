@@ -94,7 +94,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
      *
      * @parameter expression="${project.remoteArtifactRepositories}"
      */
-    protected List repositories;
+    protected List<ArtifactRepository> repositories;
 
     /**
      * The component used for creating artifact instances.
@@ -464,10 +464,8 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     }
 
     private void addMavenProperties(final Project antProject) {
-        final Map properties = getProject().getProperties();
-
-        for (Object objEntry : properties.entrySet()) {
-            Map.Entry entry = (Map.Entry) objEntry;
+        final Map<Object, Object> properties = getProject().getProperties();
+        for (Map.Entry<Object, Object> entry : properties.entrySet()) {
             getLog().debug("Setting Property: " + entry.getKey().toString() + " = " + entry.getValue().toString());
             antProject.setProperty(entry.getKey().toString(), entry.getValue().toString());
         }
