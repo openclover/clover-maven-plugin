@@ -11,6 +11,8 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +65,13 @@ public class BuildLifecycleAnalyzer {
     }
 
     protected boolean isMaven3() {
-        return false; // TODO
+        try {
+            lifecycleExecutor.getClass().getField("defaultLifeCycles");
+            // TODO
+            return true;
+        } catch (NoSuchFieldException ex) {
+            return false;
+        }
     }
 
     /**
@@ -138,8 +146,10 @@ public class BuildLifecycleAnalyzer {
             final String task = (String) taskObj;
             final List<String> allGoalsForTask;
 
+            lifecycleExecutor.getLifecycles();
+
             // phase or goal?
-            if (false) {
+            if (reflection_defaultLifeCycles_getPhaseToLifecycleMap(lifecycleExecutor).containsKey(task)) {
                 // build phase - find it's build life cycle and all phases required to run
                 allGoalsForTask = Lists.newArrayList(task); // TODO HANDLE MAVEN 3
             } else {
@@ -172,11 +182,29 @@ public class BuildLifecycleAnalyzer {
         }
     }
 
+    /**
+     * Maven 2
+     */
     private Map<String, Lifecycle> reflection_getPhaseToLifecycleMap(@NotNull final LifecycleExecutor lifecycleExecutor) {
         try {
             return (Map<String, Lifecycle>) ReflectionUtils.invokeVirtualImplicit("getPhaseToLifecycleMap", lifecycleExecutor);
         } catch (Exception e) {
-            return null;
+            return Collections.emptyMap();
+        }
+    }
+
+    /**
+     * Maven 3
+     */
+    private Map<String, Lifecycle> reflection_defaultLifeCycles_getPhaseToLifecycleMap(
+            @NotNull final LifecycleExecutor lifecycleExecutor) {
+        try {
+            final Field defaultLifeCyclesField = lifecycleExecutor.getClass().getField("defaultLifeCycles");
+            defaultLifeCyclesField.setAccessible(true);
+            final Object defaultLifeCyclesObj = defaultLifeCyclesField.get(lifecycleExecutor);
+            return (Map<String, Lifecycle>) ReflectionUtils.invokeVirtualImplicit("getPhaseToLifecycleMap", defaultLifeCyclesObj);
+        } catch (Exception ex) {
+            return Collections.emptyMap();
         }
     }
 
@@ -190,5 +218,6 @@ public class BuildLifecycleAnalyzer {
             return null;
         }
     }
+
 
 }
