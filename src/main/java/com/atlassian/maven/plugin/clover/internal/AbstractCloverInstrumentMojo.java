@@ -457,7 +457,10 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * @throws org.apache.maven.plugin.MojoExecutionException if custom classifier is present
      */
     protected void failIfCustomClassifierIsPresent() throws MojoExecutionException {
-        final boolean customClassifierUsed = StringUtils.isNotEmpty(getProject().getArtifact().getClassifier());
+        final String classifier = getProject().getArtifact().getClassifier();
+        final boolean customClassifierUsed = StringUtils.isNotEmpty(classifier)
+                && !"javadoc".equals(classifier)
+                && !"sources".equals(classifier);
         if (customClassifierUsed && useCloverClassifier && shouldRedirectArtifacts()) {
             throw new MojoExecutionException(PROTECTION_ENABLED_MSG
                     + "Your build produces an artifact with a custom classifier. As Maven does not support multiple "
