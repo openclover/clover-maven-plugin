@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -120,8 +121,8 @@ public class BuildLifecycleAnalyzer {
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         // Using reflections as the following classes/methods are not available in Maven 2
         // MavenExecutionPlan plan = lifecycleExecutor.calculateExecutionPlan(...)
-        final Object plan = lifecycleExecutor_calculateExecutionPlan(lifecycleExecutor,
-                mavenSession, mavenSession.getGoals().toArray());
+        final String[] tasks = ((List<String>) mavenSession.getGoals()).toArray(new String[0]);
+        final Object plan = lifecycleExecutor_calculateExecutionPlan(lifecycleExecutor, mavenSession, tasks);
         return getPhasesFromMojoExecutions(mavenExecutionPlan_getMojoExecutions(plan));
     }
 
@@ -160,11 +161,12 @@ public class BuildLifecycleAnalyzer {
 
     private Object/*MavenExecutionPlan*/ lifecycleExecutor_calculateExecutionPlan(
             @NotNull final LifecycleExecutor lifecycleExecutor,
-            MavenSession mavenSession, Object[] tasks)
+            MavenSession mavenSession, String[] tasks)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         // return lifecycleExecutor.calculateExecutionPlan(...)
-        return ReflectionUtils.invokeVirtualImplicit("calculateExecutionPlan", lifecycleExecutor,
-                mavenSession, tasks);
+        final Method calculateExecutionPlan = lifecycleExecutor.getClass().getDeclaredMethod(
+                "calculateExecutionPlan", MavenSession.class, String[].class);
+        return calculateExecutionPlan.invoke(lifecycleExecutor, mavenSession, tasks);
     }
 
     private List<MojoExecution> mavenExecutionPlan_getMojoExecutions(Object/*MavenExecutionPlan*/ plan)
