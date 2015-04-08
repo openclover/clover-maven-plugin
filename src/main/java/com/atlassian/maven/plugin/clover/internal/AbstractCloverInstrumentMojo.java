@@ -20,12 +20,10 @@ import java.util.Set;
 public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements CompilerConfiguration {
 
     /**
-     * The difference (in milliseconds) that a -clover classified artifact can have to a non-clover classified artifact.
-     * <p/>
-     * If the -clover classified artifact is more than cloveredArtifactExpiryInMillis older than the non-clover classified
-     * artifact, then the non-classified artifact will be used.
-     * <p/>
-     * This setting defaults to 2000.
+     * <p>The difference (in milliseconds) that a -clover classified artifact can have to a non-clover classified artifact.</p>
+     * <p>If the -clover classified artifact is more than cloveredArtifactExpiryInMillis older than the non-clover classified
+     * artifact, then the non-classified artifact will be used.</p>
+     * <p>This setting defaults to 2000.</p>
      *
      * @parameter expression="${maven.clover.cloveredArtifactExpiryInMillis}" default-value=2000
      */
@@ -41,11 +39,9 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected boolean copyExcludedFiles = true;
 
     /**
-     * The configuration for distributed coverage collection by Clover.
-     * <p/>
-     * If present, default values will be used and coverage will be collected across JVMs.
-     * <p/>
-     * Optional nested elements (and their defaults) of distributedCoverage are:
+     * <p>The configuration for distributed coverage collection by Clover.</p>
+     * <p>If present, default values will be used and coverage will be collected across JVMs.</p>
+     * <p>Optional nested elements (and their defaults) of distributedCoverage are:</p>
      * <ul>
      * <li><tt>host</tt> - the host name of the JVM running the tests. default: <b>localhost</b></li>
      * <li><tt>port</tt> - the port that Clover can bind to in the host JVM. default: <b>1198</b></li>
@@ -93,11 +89,9 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * which is next being added as the dependent artifact to the build. As the file has generated, unique
      * name and the jar is not being removed at the end of the build, these files can litter the temporary
      * directory.</p>
-     * <p/>
      * <p>By setting this parameter you can:</p>
      * <p> a) specify constant file name for generated artifact,</p>
      * <p> b) choose location different than ${java.io.tmpdir}.</p>
-     * <p/>
      * <p>However, you must ensure that:</p>
      * <p> a) grover.jar will not be deleted till end of the build (for example don't put into ./target directory
      * and next run <code>mvn clover2:setup clean</code>)</p>
@@ -130,7 +124,6 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <p><b>Till 3.1.11:</b> whether the Clover plugin should instrument all source roots (for example
      * <code>src/main/java, src/main/groovy, target/generated-sources</code>, so including the generated sources)
      * or whether it should only instrument the main source root (usually <code>src/main/java</code>).</p>
-     * <p/>
      * <p><b>Since 3.1.12:</b> whether the Clover plugin should instrument all source roots (for example
      * <code>src/main/java, src/main/groovy, target/generated-sources</code>, so including the generated sources)
      * or whether it should instrument non-generated source roots (i.e. all roots except <code>target/generated-sources/*</code>)</p>
@@ -147,10 +140,9 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected boolean includesTestSourceRoots;
 
     /**
-     * The level to instrument to. Valid values are 'method' or 'statement'. Default is 'statement'.
-     * <p/>
-     * Setting this to 'method' greatly reduces the overhead of enabling Clover, however limited or no reporting is
-     * available. The current use of setting this to method is for Test Optimization only.
+     * <p>The level to instrument to. Valid values are 'method' or 'statement'. Default is 'statement'.</p>
+     * <p>Setting this to 'method' greatly reduces the overhead of enabling Clover, however limited or no reporting is
+     * available. The current use of setting this to method is for Test Optimization only.</p>
      *
      * @parameter expression="${maven.clover.instrumentation}"
      */
@@ -158,16 +150,13 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     /**
      * <p>Define whether lambda functions shall be instrumented: Valid values are:</p>
-     * <p/>
      * <ul>
      * <li>none - do not instrument lambda functions (note: statements inside lambdas will become a part of a parent function)</li>
      * <li>expression - instrument only expression-like lambdas, e.g. <code>(a,b) -> a + b</code></li>
      * <li>block - instrument block lambdas, e.g. <code>() -> { foo(); }</code></li>
      * <li>all - instrument all forms of lambda functions</li>
      * </ul>
-     * <p/>
      * <p>Default is 'all' for 3.2.2-4.0.2 and 'none' since 4.0.3.</p>
-     * <p/>
      * <p>IMPORTANT: Due to Clover's restrictions related with code instrumentation and javac compiler's type inference
      * capabilities, you may get compilation errors when expression-like lambda functions are passed to generic methods
      * or types. In such case disable instrumentation of expression-like form (i.e. use the 'none' or 'block' setting).
@@ -181,7 +170,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     private String instrumentLambda;
 
     /**
-     * Which Java language level Clover shall use to parse sources. Valid values are:
+     * <p>Which Java language level Clover shall use to parse sources. Valid values are:</p>
      * <ul>
      * <li>1.3</li>
      * <li>1.4 (introduces 'assert' keyword)</li>
@@ -190,31 +179,28 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <li>1.7 (String in switch, try with resources, binary literals, underscores in literals)</li>
      * <li>1.8 (lambda expressions, default methods in interfaces)</li>
      * </ul>
-     * <p/>
-     * By default Clover instruments using the highest language level supported.
+     * <p>By default Clover instruments using the highest language level supported.</p>
      *
      * @parameter expression="${maven.clover.jdk}"
      */
     protected String jdk;
 
     /**
-     * Specifies the custom method contexts to use for filtering specific methods from Clover reports.
-     * <p/>
+     * <p>Specifies the custom method contexts to use for filtering specific methods from Clover reports.</p>
      * e.g. <pre>&lt;main&gt;public static void main\(String args\[\]\).*&lt;/main&gt;</pre>
-     * will define the context called 'main' which will match all public static void main methods.
+     * <p>will define the context called 'main' which will match all public static void main methods.</p>
      *
      * @parameter
      */
     protected Map<String, String> methodContexts = new HashMap<String, String>();
 
     /**
-     * Try to protect your build from installing instrumented artifacts into local ~/.m2 cache
+     * <p>Try to protect your build from installing instrumented artifacts into local ~/.m2 cache
      * or deploying them to a binaries repository. If this option is enabled, Clover will fail a build whenever
      * it detects that 'install' or 'deploy' phase is about to be called. It will also fail a build if
      * it detects that an artifact having multiple classifiers (e.g. "-clover-tests.jar"), which are not supported by
-     * Maven, is about to be installed under original name (e.g. "-tests.jar").
-     * <p/>
-     * Please note that this flag may not protect from all possible cases.
+     * Maven, is about to be installed under original name (e.g. "-tests.jar").</p>
+     * <p>Please note that this flag may not protect from all possible cases.</p>
      *
      * @parameter expression="${maven.clover.repositoryPollutionProtection}" default-value="false"
      */
@@ -231,17 +217,14 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     /**
      * <p>If set to <code>true</code>, Clover will add several properties to the build configuration which
      * disable a build failure for following plugins:</p>
-     * <p/>
      * <ul>
      * <li>maven-surefire-plugin (maven.test.failure.ignore=true)</li>
      * <li>maven-failsafe-plugin (maven.test.failure.ignore=true)</li>
      * <li>maven-checkstyle-plugin (checkstyle.failOnViolation=false)</li>
      * <li>maven-pmd-plugin (pmd.failOnViolation=false)</li>
      * </ul>
-     * <p/>
      * <p>Thanks to this, build continues despite test failures or code validation failures and thus
      * it is possible to generate a Clover coverage report for failed tests at the end of the build.</p>
-     * <p/>
      * <p>Note: before version 3.1.9 the <i>testFailureIgnore</i> property was set to <i>true</i> for
      * the forked Clover lifecycle ('instrument' goal) for 'test' and 'integration-test' phases. Since
      * 3.1.9 it is no longer set.</p>
@@ -256,7 +239,6 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * which is next being added as the dependent artifact to the build. As the file has generated, unique
      * name and the jar is not being removed at the end of the build, these files can litter the temporary
      * directory.</p>
-     * <p/>
      * <p>In case when there is no Groovy code in the project, this parameter can be set to <code>true</code> in order
      * to disable generation of grover.jar artifact.</p>
      *
@@ -267,7 +249,6 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     /**
      * Specifies the custom statement contexts to use for filtering specific statements from Clover reports.
-     * <p/>
      * e.g.<pre>&lt;log&gt;^LOG\..*&lt;/log&gt;</pre>
      * defines a statement context called "log" which matches all LOG statements.
      *

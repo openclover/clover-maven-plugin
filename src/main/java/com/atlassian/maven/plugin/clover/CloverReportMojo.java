@@ -145,8 +145,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     private File outputDirectory;
 
     /**
-     * The location where historical Clover data will be saved.
-     * <p/>
+     * <p>The location where historical Clover data will be saved.</p>
      * <p>Note: It's recommended to modify the location of this directory so that it points to a more permanent
      * location as the <code>${project.build.directory}</code> directory is erased when the project is cleaned.</p>
      *
@@ -287,8 +286,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     private Renderer siteRenderer;
 
     /**
-     * The Maven project instance for the executing project.
-     * <p/>
+     * <p>The Maven project instance for the executing project.</p>
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
      *
      * @parameter expression="${project}"
@@ -298,8 +296,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     private MavenProject project;
 
     /**
-     * The projects in the reactor for aggregation report.
-     * <p/>
+     * <p>The projects in the reactor for aggregation report.</p>
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
      *
      * @parameter expression="${reactorProjects}"
