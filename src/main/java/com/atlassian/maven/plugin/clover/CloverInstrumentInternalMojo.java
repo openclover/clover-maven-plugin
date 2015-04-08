@@ -191,7 +191,6 @@ import java.util.Set;
 
 /**
  * <p>Instrument source roots.</p>
- * <p/>
  * <p><b>Note 1: Do not call this MOJO directly. It is meant to be called in a custom forked lifecycle by the other
  * Clover plugin MOJOs.</b></p>
  * <p><b>Note 2: We bind this mojo to the "validate" phase so that it executes prior to any other mojos</b></p>
@@ -206,9 +205,8 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     public static final String CLOVER_CORE_ARTIFACT_ID = "clover";
 
     /**
-     * List of all artifacts for this Clover plugin provided by Maven. This is used internally to get a handle on
-     * the Clover JAR artifact.
-     * <p/>
+     * <p>List of all artifacts for this Clover plugin provided by Maven. This is used internally to get a handle on
+     * the Clover JAR artifact.</p>
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
      *
      * @parameter expression="${plugin.artifacts}"

@@ -112,9 +112,8 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     private int flushInterval;
 
     /**
-     * If true we'll wait 2*flushInterval to ensure coverage data is flushed to the Clover database before running
-     * any query on it.
-     * <p/>
+     * <p>If true we'll wait 2*flushInterval to ensure coverage data is flushed to the Clover database before running
+     * any query on it.</p>
      * <p>Note: The only use case where you would want to turn this off is if you're running your tests in a separate
      * JVM. In that case the coverage data will be flushed by default upon the JVM shutdown and there would be no need
      * to wait for the data to be flushed. As we can't control whether users want to fork their tests or not, we're
@@ -125,8 +124,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     private boolean waitForFlush;
 
     /**
-     * The Maven project instance for the executing project.
-     * <p/>
+     * <p>The Maven project instance for the executing project.</p>
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
      *
      * @parameter expression="${project}"
@@ -157,8 +155,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     protected boolean debug;
 
     /**
-     * The projects in the reactor for aggregation report.
-     * <p/>
+     * <p>The projects in the reactor for aggregation report.</p>
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
      *
      * @parameter expression="${reactorProjects}"
@@ -204,6 +201,12 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * Note: We're defining this method as static because it is also required in the report mojo and reporting mojos
      * and main mojos cannot share anything right now. See http://jira.codehaus.org/browse/MNG-1886.
      *
+     * @param project maven project
+     * @param resourceManager resource manager
+     * @param licenseLocation path to license file
+     * @param logger logger
+     * @param classloader class loader
+     * @param licenseCert license key
      * @throws MojoExecutionException when the license file cannot be found
      */
     public static void registerLicenseFile(final MavenProject project,
@@ -266,6 +269,9 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      *
      * Note: We're defining this method as static because it is also required in the report mojo and reporting mojos
      * and main mojos cannot share anything right now. See http://jira.codehaus.org/browse/MNG-1886.
+     *
+     * @param antProject project
+     * @param log logger
      */
     public static void registerCloverAntTasks(final Project antProject, final Log log) {
         antProject.addBuildListener(new MvnLogBuildListener(log));
@@ -280,6 +286,9 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      *
      * TODO: This method should not be static but we need it static here because we cannot share code
      * between non report mojos and main build mojos. See http://jira.codehaus.org/browse/MNG-1886
+     *
+     * @param waitForFlush whether to pause until flush occurs
+     * @param flushInterval current interval
      */
     public static void waitForFlush(final boolean waitForFlush, final int flushInterval) {
         if (waitForFlush) {

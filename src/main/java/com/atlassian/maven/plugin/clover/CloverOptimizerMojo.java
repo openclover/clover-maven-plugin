@@ -31,10 +31,9 @@ import java.util.regex.Pattern;
 public class CloverOptimizerMojo extends AbstractCloverMojo {
 
     /**
-     * The number of builds to run, before the snapshot file gets deleted.
-     * <p/>
-     * The snapshot stores the mapping between your test cases and source code. Over time, this becomes stale,
-     * so it is recommended to regenerate this file, by running all tests, on a regular basis.
+     * <p>The number of builds to run, before the snapshot file gets deleted.</p>
+     * <p>The snapshot stores the mapping between your test cases and source code. Over time, this becomes stale,
+     * so it is recommended to regenerate this file, by running all tests, on a regular basis.</p>
      *
      * @parameter expression="${maven.clover.fullRunEvery}" default-value="10"
      */

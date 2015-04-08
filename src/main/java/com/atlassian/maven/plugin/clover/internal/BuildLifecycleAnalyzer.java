@@ -82,14 +82,12 @@ public class BuildLifecycleAnalyzer {
         }
     }
 
-    /**
-     * Based on analysis of Maven's DefaultLifecycleExecutor
-     */
     @NotNull
     protected List<String> findGoalsToBeExecutedInMaven2()
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         final List<String> allGoalsForAllTasks = Lists.newArrayList();
 
+        // Based on analysis of Maven's DefaultLifecycleExecutor
         // mavenSession.getGoals() returns list of goals/phases defined in command line, which are called tasks
         for (Object taskObj : mavenSession.getGoals()) {
             final String task = taskObj.toString();
