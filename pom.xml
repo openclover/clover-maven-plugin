@@ -82,6 +82,10 @@ under the License.
         <cloverVersion>4.0.4-SNAPSHOT</cloverVersion>
         <!-- Don't perform automatic releasing of a staging repository in the Atlassian Central repository -->
         <staging.automatic.release>false</staging.automatic.release>
+
+        <maven.invoker.plugin.version>1.10</maven.invoker.plugin.version>
+        <maven.site.plugin.version>3.4</maven.site.plugin.version>
+        <maven.release.plugin.version>2.5.1</maven.release.plugin.version>
     </properties>
     <dependencies>
         <dependency>
@@ -260,8 +264,13 @@ under the License.
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven.release.plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.2</version>
+                <version>${maven.site.plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -288,6 +297,43 @@ under the License.
         </plugins>
     </build>
     <profiles>
+        <profile>
+            <!-- This profile is used to build and run integration tests against the lowest Maven version supported -->
+            <id>integration-tests-maven-20</id>
+            <properties>
+                <!-- downgrade some plugins -->
+                <maven.invoker.plugin.version>1.7</maven.invoker.plugin.version>
+                <maven.site.plugin.version>2.1</maven.site.plugin.version>
+                <maven.release.plugin.version>2.0</maven.release.plugin.version>
+                <enforcer.skip>true</enforcer.skip>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-invoker-plugin</artifactId>
+                        <version>${maven.invoker.plugin.version}</version>
+                        <configuration>
+                            <debug>true</debug>
+                            <projectsDirectory>src/it</projectsDirectory>
+                            <pomIncludes>
+                                <pomInclude>**/pollutionProtection/pom.xml</pomInclude>
+                            </pomIncludes>
+                            <properties>
+                                <maven.clover.licenseLocation>${maven.clover.licenseLocation}</maven.clover.licenseLocation>
+                            </properties>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>install</goal>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>integration-tests</id>
             <reporting>
@@ -342,7 +388,7 @@ under the License.
                     </plugin>
                     <plugin>
                         <artifactId>maven-invoker-plugin</artifactId>
-                        <version>1.9</version>
+                        <version>${maven.invoker.plugin.version}</version>
                         <configuration>
                             <debug>true</debug>
                             <projectsDirectory>src/it</projectsDirectory>
@@ -403,7 +449,7 @@ under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.2</version>
+                <version>${maven.site.plugin.version}</version>
             </plugin>
         </plugins>
     </reporting>
