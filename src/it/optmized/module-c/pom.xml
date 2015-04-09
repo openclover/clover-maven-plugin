@@ -4,12 +4,11 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>maven-clover2-plugin-sample-optimized</artifactId>
-        <groupId>com.atlassian.maven.plugins</groupId>
+        <groupId>com.atlassian.maven.plugins.sample</groupId>
+        <artifactId>clover-sample-optimized</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>com.atlassian.maven.plugins</groupId>
-    <artifactId>modulec</artifactId>
+    <artifactId>clover-sample-optimized-modulec</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>modulec</name>
     <url>http://maven.apache.org</url>

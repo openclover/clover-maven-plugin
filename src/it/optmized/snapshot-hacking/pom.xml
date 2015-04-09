@@ -3,8 +3,8 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.atlassian.maven.plugins</groupId>
-    <artifactId>maven-clover2-plugin-optimized-snapshot-hacking</artifactId>
+    <groupId>com.atlassian.maven.plugins.sample</groupId>
+    <artifactId>clover-sample-optimized-snapshot-hacking</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>snapshot-hacking</name>
     <url>http://maven.apache.org</url>
