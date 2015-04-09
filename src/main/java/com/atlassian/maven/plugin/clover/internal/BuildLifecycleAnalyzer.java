@@ -76,6 +76,7 @@ public class BuildLifecycleAnalyzer {
         try {
             // method present since Maven 3
             lifecycleExecutor.getClass().getDeclaredMethod("calculateExecutionPlan", MavenSession.class, String[].class);
+            // passed, seems to be Maven 3
             return true;
         } catch (NoSuchMethodException e) {
             return false;
@@ -99,9 +100,7 @@ public class BuildLifecycleAnalyzer {
                 Map<String, List<MojoExecution>> lifecycleMappings = lifecycleExecutor_constructLifecycleMappings(
                         lifecycleExecutor, mavenSession, task, mavenProject, lifecycle);
 
-                // TODO check which one returns better results, keep one of them
                 allGoalsForTask = getPhasesFromLifecycleMappings(lifecycleMappings);
-//                allGoalsForTask = getGoalsFromProcessGoalChain(task, lifecycleMappings, lifecycle);
             } else {
                 // ... or is just a single goal; in such case, there's no need to find lifecycle
                 allGoalsForTask = Lists.newArrayList(task);
@@ -173,18 +172,6 @@ public class BuildLifecycleAnalyzer {
         return (List<MojoExecution>) ReflectionUtils.invokeVirtualImplicit("getMojoExecutions", plan);
     }
 
-    //    private List<String> getGoalsFromProcessGoalChain(String task,
-//                                                      Map<String, List<MojoExecution>> lifecycleMappings,
-//                                                      Lifecycle lifecycle) {
-//        final List<MojoExecution> mojoGoals = lifecycleExecutor_processGoalChain(lifecycleExecutor,
-//                task, lifecycleMappings, lifecycle);
-//        return Lists.transform(mojoGoals, new Function<MojoExecution, String>() {
-//            @Override
-//            public String apply(MojoExecution mojoExecution) {
-//                return mojoExecution.getMojoDescriptor().getPhase();
-//            }
-//        });
-
     private Map<String, List<MojoExecution>> lifecycleExecutor_constructLifecycleMappings(
             @NotNull final LifecycleExecutor lifecycleExecutor,
             MavenSession mavenSession, String task, MavenProject mavenProject, Lifecycle lifecycle)
@@ -212,17 +199,5 @@ public class BuildLifecycleAnalyzer {
         // return lifecycleExecutor.getPhaseToLifecycleMap()
         return (Map<String, Lifecycle>) ReflectionUtils.invokeVirtualImplicit("getPhaseToLifecycleMap", lifecycleExecutor);
     }
-
-//    private List<MojoExecution> lifecycleExecutor_processGoalChain(
-//            @NotNull final LifecycleExecutor lifecycleExecutor,
-//            String task, Map<String, List<MojoExecution>> lifecycleMappings, Lifecycle lifecycle) {
-//        try {
-//            return (List<MojoExecution>) ReflectionUtils.invokeVirtualImplicit("processGoalChain", lifecycleExecutor,
-//                    task, lifecycleMappings, lifecycle);
-//        } catch (Exception e) {
-//            return null;
-//        }
-//    }
-
 
 }
