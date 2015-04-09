@@ -317,6 +317,7 @@ under the License.
                             <projectsDirectory>src/it</projectsDirectory>
                             <pomIncludes>
                                 <pomInclude>**/pollutionProtection/pom.xml</pomInclude>
+                                <pomInclude>**/pollutionProtectionClassifier/pom.xml</pomInclude>
                             </pomIncludes>
                             <properties>
                                 <maven.clover.licenseLocation>${maven.clover.licenseLocation}</maven.clover.licenseLocation>
@@ -411,6 +412,7 @@ under the License.
                                 <pomInclude>**/multiproject/pom.xml</pomInclude>
                                 <pomInclude>**/optmized/pom.xml</pomInclude>
                                 <pomInclude>**/pollutionProtection/pom.xml</pomInclude>
+                                <pomInclude>**/pollutionProtectionClassifier/pom.xml</pomInclude>
                                 <pomInclude>**/reportLogPassMatch/pom.xml</pomInclude>
                                 <pomInclude>**/setTestFailureIgnore/pom.xml</pomInclude>
                                 <pomInclude>**/simple/pom.xml</pomInclude>
