@@ -6,6 +6,7 @@ import com.atlassian.clover.CloverNames;
 import com.atlassian.clover.ant.types.CloverOptimizedTestSet;
 import com.atlassian.clover.ant.types.CloverAlwaysRunTestSet;
 import com.atlassian.clover.util.FileUtils;
+import com.google.common.collect.Iterables;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -16,7 +17,6 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -260,11 +260,11 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         testFileSet.setDir(directory);
 
         final List<String> includesExpanded = explodePaths(directory, includes);
-        testFileSet.appendIncludes(includesExpanded.toArray(new String[includesExpanded.size()]));
+        testFileSet.appendIncludes(Iterables.toArray(includesExpanded, String.class));
 
         if (excludes != null && !excludes.isEmpty()) {
             final List<String> excludesExpanded = explodePaths(directory, excludes);
-            testFileSet.appendExcludes(excludesExpanded.toArray(new String[excludesExpanded.size()]));
+            testFileSet.appendExcludes(Iterables.toArray(excludesExpanded, String.class));
         }
         return testFileSet;
     }

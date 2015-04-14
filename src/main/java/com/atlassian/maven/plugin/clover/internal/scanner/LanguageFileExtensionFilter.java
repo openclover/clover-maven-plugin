@@ -1,6 +1,7 @@
 package com.atlassian.maven.plugin.clover.internal.scanner;
 
 import com.atlassian.clover.spi.lang.Language;
+import com.google.common.collect.Iterables;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -28,7 +29,7 @@ public abstract class LanguageFileExtensionFilter implements LanguageFileFilter 
                 }
             }
         }
-        return filteredFiles.toArray(new String[filteredFiles.size()]);
+        return Iterables.toArray(filteredFiles, String.class);
     }
 
     /**

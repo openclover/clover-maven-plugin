@@ -26,6 +26,7 @@ import com.atlassian.maven.plugin.clover.MvnLogger;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.LanguageFileExtensionFilter;
+import com.google.common.collect.Iterables;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -279,7 +280,7 @@ public abstract class AbstractInstrumenter {
             }
         }
 
-        return parameters.toArray(new String[parameters.size()]);
+        return Iterables.toArray(parameters, String.class);
     }
 
     private void addCustomContexts(final List<String> parameters, final Set<Map.Entry<String, String>> contexts, final String flag) {
