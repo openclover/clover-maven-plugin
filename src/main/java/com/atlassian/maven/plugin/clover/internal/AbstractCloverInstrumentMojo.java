@@ -1,6 +1,7 @@
 package com.atlassian.maven.plugin.clover.internal;
 
 import com.atlassian.maven.plugin.clover.DistributedCoverage;
+import com.atlassian.maven.plugin.clover.internal.lifecycle.BuildLifecycleAnalyzer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.LifecycleExecutor;
@@ -407,8 +408,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected void failIfInstallPhaseIsPresent() throws MojoExecutionException {
         final BuildLifecycleAnalyzer lifecycleAnalyzer = new BuildLifecycleAnalyzer(
                 getLog(), lifecycleExecutor, mavenProject, mavenSession);
-        final boolean installPresent = lifecycleAnalyzer.findGoalsToBeExecuted().contains("install");
-        if (installPresent && (!useCloverClassifier || !shouldRedirectArtifacts())) {
+        if (lifecycleAnalyzer.isInstallPresent() && (!useCloverClassifier || !shouldRedirectArtifacts())) {
             throw new MojoExecutionException(PROTECTION_ENABLED_MSG
                     + "Your build runs 'install' phase which can put instrumented JARs into ~/.m2 local cache. "
                     + "Remove this phase to fix it. You can also disable pollution protection if this is intentional.");
@@ -423,8 +423,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected void failIfDeployPhaseIsPresent() throws MojoExecutionException {
         final BuildLifecycleAnalyzer lifecycleAnalyzer = new BuildLifecycleAnalyzer(
                 getLog(), lifecycleExecutor, mavenProject, mavenSession);
-        final boolean deployPresent = lifecycleAnalyzer.findGoalsToBeExecuted().contains("deploy");
-        if (deployPresent && (!useCloverClassifier || !shouldRedirectArtifacts())) {
+        if (lifecycleAnalyzer.isDeployPresent() && (!useCloverClassifier || !shouldRedirectArtifacts())) {
             throw new MojoExecutionException(PROTECTION_ENABLED_MSG
                     + "Your build runs 'deploy' phase which can upload instrumented JARs into your repository. "
                     + "Remove this phase to fix it. You can also disable pollution protection if this is intentional.");
@@ -432,8 +431,9 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     }
 
     /**
-     * Check if the any artifact has a custom classifier (except the 'javadoc' and 'sources' ones).
-     * If a custom classifier is present then adding a second 'clover' classifier may not work correctly.
+     * Check if an artifact has a custom classifier (except the 'javadoc' and 'sources' ones).
+     * If a custom classifier is present then adding a second 'clover' classifier may not work correctly
+     * as Maven does not support multiple classifiers.
      *
      * @throws org.apache.maven.plugin.MojoExecutionException if custom classifier is present
      */
