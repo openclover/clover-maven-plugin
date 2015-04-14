@@ -1,7 +1,7 @@
 package com.atlassian.maven.plugin.clover.internal.lifecycle;
 
-import clover.com.google.common.collect.Lists;
 import com.atlassian.clover.api.CloverException;
+import com.google.common.collect.Lists;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.LifecycleExecutor;
 import org.apache.maven.plugin.MojoExecution;

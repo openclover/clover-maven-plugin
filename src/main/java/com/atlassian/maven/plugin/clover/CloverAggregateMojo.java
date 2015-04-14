@@ -22,6 +22,7 @@ package com.atlassian.maven.plugin.clover;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.atlassian.clover.CloverMerge;
 import com.atlassian.clover.cfg.Interval;
+import com.google.common.collect.Iterables;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 
@@ -119,7 +120,7 @@ public class CloverAggregateMojo extends AbstractCloverMojo {
 
         parameters.addAll(dbFiles);
 
-        int mergeResult = CloverMerge.mainImpl(parameters.toArray(new String[parameters.size()]));
+        int mergeResult = CloverMerge.mainImpl(Iterables.toArray(parameters, String.class));
         if (mergeResult != 0) {
             throw new MojoExecutionException("Clover has failed to merge the children module databases");
         }

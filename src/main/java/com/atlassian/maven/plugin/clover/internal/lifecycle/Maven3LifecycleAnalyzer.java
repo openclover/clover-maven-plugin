@@ -2,6 +2,7 @@ package com.atlassian.maven.plugin.clover.internal.lifecycle;
 
 import com.atlassian.clover.api.CloverException;
 import com.atlassian.clover.util.ReflectionUtils;
+import com.google.common.collect.Iterables;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.LifecycleExecutor;
 import org.apache.maven.plugin.MojoExecution;
@@ -54,7 +55,7 @@ public class Maven3LifecycleAnalyzer extends MavenLifecycleAnalyzer {
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         // Using reflections as the following classes/methods are not available in Maven 2
         // MavenExecutionPlan plan = lifecycleExecutor.calculateExecutionPlan(...)
-        final String[] tasks = ((List<String>) mavenSession.getGoals()).toArray(new String[0]);
+        final String[] tasks = Iterables.toArray((List<String>) mavenSession.getGoals(), String.class);
         final Object plan = lifecycleExecutor_calculateExecutionPlan(lifecycleExecutor, mavenSession, tasks);
         return getPhasesFromMojoExecutions(mavenExecutionPlan_getMojoExecutions(plan));
     }

@@ -19,6 +19,7 @@ package com.atlassian.maven.plugin.clover.internal.scanner;
  * under the License.
  */
 
+import com.google.common.collect.Iterables;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.types.selectors.FileSelector;
 import org.apache.tools.ant.types.selectors.DependSelector;
@@ -156,8 +157,8 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
         configuration.getLog().debug("includes patterns = " + includes);
         final DirectoryScanner dirScan = new DirectoryScanner();
 
-        dirScan.addExcludes(excludes.toArray(new String[excludes.size()]));
-        dirScan.setIncludes(includes.toArray(new String[includes.size()]));
+        dirScan.addExcludes(Iterables.toArray(excludes, String.class));
+        dirScan.setIncludes(Iterables.toArray(includes, String.class));
 
         dirScan.addDefaultExcludes();
 
@@ -177,7 +178,7 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
 
                 final Set<String> configurationIncludes = getConfiguration().getIncludes();
                 final String[] includes = concatArrays(
-                        configurationIncludes.toArray(new String[configurationIncludes.size()]),
+                        Iterables.toArray(configurationIncludes, String.class),
                         DirectoryScanner.getDefaultExcludes());
                 scanner.setIncludes(includes);// ensure that .svn dirs etc are not considered excluded
                 scanner.scan();
