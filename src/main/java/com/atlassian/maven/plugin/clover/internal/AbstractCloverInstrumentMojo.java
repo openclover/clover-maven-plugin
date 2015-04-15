@@ -304,9 +304,6 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     ///////////////////////////////////////////////////////////////////////////
 
-
-    private final static String PROTECTION_ENABLED_MSG = "Clover's repository pollution protection is enabled. ";
-
     @Override
     public void execute() throws MojoExecutionException {
         super.execute();
@@ -400,6 +397,12 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
         return useFullyQualifiedJavaLang;
     }
 
+
+    private static final String PROTECTION_ENABLED_MSG = "Clover's repository pollution protection is enabled. ";
+
+    private static final String DISABLING_PROTECTION_MSG =
+            "You can also disable repository pollution protection (-Dmaven.clover.repositoryPollutionProtection=false) if this is intentional.";
+
     /**
      * Check if the build life cycle contains the 'install' phase.
      *
@@ -411,7 +414,10 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
         if (lifecycleAnalyzer.isInstallPresent() && (!useCloverClassifier || !shouldRedirectArtifacts())) {
             throw new MojoExecutionException(PROTECTION_ENABLED_MSG
                     + "Your build runs 'install' phase which can put instrumented JARs into ~/.m2 local cache. "
-                    + "Remove this phase to fix it. You can also disable pollution protection if this is intentional.");
+                    + "In order to fix this: \n"
+                    + " - run a build till the 'verify' phase (the latest)\n"
+                    + " - check if some build plug-in does not fork a parallel build cycle which runs till the 'install' phase\n"
+                    + DISABLING_PROTECTION_MSG);
         }
     }
 
@@ -426,7 +432,10 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
         if (lifecycleAnalyzer.isDeployPresent() && (!useCloverClassifier || !shouldRedirectArtifacts())) {
             throw new MojoExecutionException(PROTECTION_ENABLED_MSG
                     + "Your build runs 'deploy' phase which can upload instrumented JARs into your repository. "
-                    + "Remove this phase to fix it. You can also disable pollution protection if this is intentional.");
+                    + "In order to fix this: \n"
+                    + " - run a build till the 'verify' phase (the latest)\n"
+                    + " - check if some build plug-in does not fork a parallel build cycle which runs till the 'deploy' phase\n"
+                    + DISABLING_PROTECTION_MSG);
         }
     }
 
@@ -446,7 +455,8 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
             throw new MojoExecutionException(PROTECTION_ENABLED_MSG
                     + "Your build produces an artifact with a custom classifier. As Maven does not support multiple "
                     + "classifiers for an artifact, appending second 'clover' classifier may not be handled correctly. "
-                    + "Remove custom classifier to fix it. You can also disable pollution protection if you know "
+                    + "Remove a custom classifier to fix it. You can also disable pollution protection "
+                    + "(-Dmaven.clover.repositoryPollutionProtection=false) if you know "
                     + "that it doesn't affect your project. ");
         }
     }
