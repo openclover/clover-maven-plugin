@@ -2,6 +2,7 @@ package com.atlassian.maven.plugin.clover.internal.lifecycle;
 
 import com.atlassian.clover.api.CloverException;
 import com.atlassian.clover.util.ReflectionUtils;
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.Lifecycle;
@@ -31,7 +32,7 @@ public class Maven2LifecycleAnalyzer extends MavenLifecycleAnalyzer {
     @Override
     public List<String> getPhasesToBeExecuted() throws CloverException {
         try {
-            return findGoalsToBeExecutedInMaven2();
+            return findPhasesToBeExecutedInMaven2();
         } catch (NoSuchMethodException ex) {
             throw new CloverException(ex);
         } catch (InvocationTargetException ex) {
@@ -59,15 +60,15 @@ public class Maven2LifecycleAnalyzer extends MavenLifecycleAnalyzer {
     }
 
     @NotNull
-    protected List<String> findGoalsToBeExecutedInMaven2()
+    protected List<String> findPhasesToBeExecutedInMaven2()
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        final List<String> allGoalsForAllTasks = Lists.newArrayList();
+        final List<String> allPhasesForAllTasks = Lists.newArrayList();
 
         // Based on analysis of Maven's DefaultLifecycleExecutor
         // mavenSession.getGoals() returns list of goals/phases defined in command line, which are called tasks
         for (Object taskObj : mavenSession.getGoals()) {
             final String task = taskObj.toString();
-            final List<String> allGoalsForTask;
+            final List<String> allPhasesForTask;
             // every task may be a build phase
             if (lifecycleExecutor_getPhaseToLifecycleMap(lifecycleExecutor).containsKey(task)) {
                 // in such case find it's build life cycle and all goals required to run
@@ -75,23 +76,42 @@ public class Maven2LifecycleAnalyzer extends MavenLifecycleAnalyzer {
                 Map<String, List<MojoExecution>> lifecycleMappings = lifecycleExecutor_constructLifecycleMappings(
                         lifecycleExecutor, mavenSession, task, mavenProject, lifecycle);
 
-                allGoalsForTask = getPhasesFromLifecycleMappings(lifecycleMappings);
+                allPhasesForTask = getPhasesFromProcessGoalChain(task, lifecycleMappings, lifecycle);
             } else {
-                // ... or is just a single goal; in such case, there's no need to find lifecycle
-                allGoalsForTask = Lists.newArrayList(task);
+                // ... or is just a single goal; in such case, there's no need to find phases
+                allPhasesForTask = Lists.newArrayList();
             }
 
             // collect all goals
-            allGoalsForAllTasks.addAll(allGoalsForTask);
+            allPhasesForAllTasks.addAll(allPhasesForTask);
         }
 
-        return allGoalsForAllTasks;
+        return allPhasesForAllTasks;
     }
 
     private List<String> getPhasesFromLifecycleMappings(@NotNull final Map<String, List<MojoExecution>> lifecycleMappings) {
         final List<String> phases = Lists.newArrayList();
         for (final Map.Entry<String, List<MojoExecution>> mapping : lifecycleMappings.entrySet()) {
             phases.addAll(getPhasesFromMojoExecutions(mapping.getValue()));
+        }
+        return phases;
+    }
+
+    private static final Function<MojoExecution, String> GET_PHASE_FROM_DESCRIPTOR = new Function<MojoExecution, String>() {
+        @Override
+        public String apply(MojoExecution mojoExecution) {
+            return mojoExecution.getMojoDescriptor().getPhase();
+        }
+    };
+
+    private List<String> getPhasesFromProcessGoalChain(String task,
+                                                       Map<String, List<MojoExecution>> lifecycleMappings,
+                                                       Lifecycle lifecycle) {
+        final List<MojoExecution> mojoGoals = lifecycleExecutor_processGoalChain(lifecycleExecutor,
+                task, lifecycleMappings, lifecycle);
+        final List<String> phases = Lists.newArrayList();
+        for (MojoExecution mojoExecution : mojoGoals) {
+            phases.addAll(getPhasesFromMojoExecution(mojoExecution));
         }
         return phases;
     }
@@ -121,5 +141,19 @@ public class Maven2LifecycleAnalyzer extends MavenLifecycleAnalyzer {
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         // return lifecycleExecutor.getLifecycleForPhase(task)
         return (Lifecycle) ReflectionUtils.invokeVirtualImplicit("getLifecycleForPhase", lifecycleExecutor, task);
+    }
+
+
+    private List<MojoExecution> lifecycleExecutor_processGoalChain(
+            @NotNull final LifecycleExecutor lifecycleExecutor,
+            String task,
+            Map<String, List<MojoExecution>> lifecycleMappings,
+            Lifecycle lifecycle) {
+        try {
+            return (List<MojoExecution>) ReflectionUtils.invokeVirtualImplicit("processGoalChain", lifecycleExecutor,
+                    task, lifecycleMappings, lifecycle);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
