@@ -321,6 +321,7 @@ under the License.
                             <debug>true</debug>
                             <projectsDirectory>src/it</projectsDirectory>
                             <pomIncludes>
+                                <pomInclude>**/fork-maven-plugin/pom.xml</pomInclude>
                                 <pomInclude>**/pollutionProtection/pom.xml</pomInclude>
                                 <pomInclude>**/pollutionProtectionClassifier/pom.xml</pomInclude>
                                 <pomInclude>**/pollutionProtectionCycles/pom.xml</pomInclude>
