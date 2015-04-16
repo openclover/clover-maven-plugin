@@ -308,8 +308,10 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     public void execute() throws MojoExecutionException {
         super.execute();
         if (repositoryPollutionProtection) {
-            failIfDeployPhaseIsPresent();
-            failIfInstallPhaseIsPresent();
+            final BuildLifecycleAnalyzer lifecycleAnalyzer = new BuildLifecycleAnalyzer(
+                    getLog(), lifecycleExecutor, mavenProject, mavenSession);
+            failIfDeployPhaseIsPresent(lifecycleAnalyzer);
+            failIfInstallPhaseIsPresent(lifecycleAnalyzer);
             failIfCustomClassifierIsPresent();
         }
     }
@@ -408,9 +410,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      *
      * @throws org.apache.maven.plugin.MojoExecutionException if 'install' phase is present
      */
-    protected void failIfInstallPhaseIsPresent() throws MojoExecutionException {
-        final BuildLifecycleAnalyzer lifecycleAnalyzer = new BuildLifecycleAnalyzer(
-                getLog(), lifecycleExecutor, mavenProject, mavenSession);
+    protected void failIfInstallPhaseIsPresent(final BuildLifecycleAnalyzer lifecycleAnalyzer) throws MojoExecutionException {
         if (lifecycleAnalyzer.isInstallPresent() && (!useCloverClassifier || !shouldRedirectArtifacts())) {
             throw new MojoExecutionException(PROTECTION_ENABLED_MSG
                     + "Your build runs 'install' phase which can put instrumented JARs into ~/.m2 local cache. "
@@ -426,9 +426,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      *
      * @throws org.apache.maven.plugin.MojoExecutionException if 'deploy' phase is present
      */
-    protected void failIfDeployPhaseIsPresent() throws MojoExecutionException {
-        final BuildLifecycleAnalyzer lifecycleAnalyzer = new BuildLifecycleAnalyzer(
-                getLog(), lifecycleExecutor, mavenProject, mavenSession);
+    protected void failIfDeployPhaseIsPresent(final BuildLifecycleAnalyzer lifecycleAnalyzer) throws MojoExecutionException {
         if (lifecycleAnalyzer.isDeployPresent() && (!useCloverClassifier || !shouldRedirectArtifacts())) {
             throw new MojoExecutionException(PROTECTION_ENABLED_MSG
                     + "Your build runs 'deploy' phase which can upload instrumented JARs into your repository. "
