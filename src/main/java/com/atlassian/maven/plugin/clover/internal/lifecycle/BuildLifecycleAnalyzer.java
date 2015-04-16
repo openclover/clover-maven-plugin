@@ -16,6 +16,7 @@ public class BuildLifecycleAnalyzer {
     private final LifecycleExecutor lifecycleExecutor;
     private final MavenProject mavenProject;
     private final MavenSession mavenSession;
+    private final List<String> phases;
 
     public BuildLifecycleAnalyzer(@NotNull final Log log,
                                   @NotNull final LifecycleExecutor lifecycleExecutor,
@@ -25,14 +26,15 @@ public class BuildLifecycleAnalyzer {
         this.lifecycleExecutor = lifecycleExecutor;
         this.mavenProject = mavenProject;
         this.mavenSession = mavenSession;
+        this.phases = getPhasesToBeExecuted();
     }
 
     public boolean isInstallPresent() {
-        return getPhasesToBeExecuted().contains("install");
+        return phases.contains("install");
     }
 
     public boolean isDeployPresent() {
-        return getPhasesToBeExecuted().contains("deploy");
+        return phases.contains("deploy");
     }
 
     @NotNull
