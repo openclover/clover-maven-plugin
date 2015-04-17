@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 
 public class Maven3LifecycleAnalyzer extends MavenLifecycleAnalyzer {
 
@@ -27,7 +28,7 @@ public class Maven3LifecycleAnalyzer extends MavenLifecycleAnalyzer {
     }
 
     @Override
-    public List<String> getPhasesToBeExecuted() throws CloverException {
+    public Set<String> getPhasesToBeExecuted() throws CloverException {
         try {
             return findGoalsToBeExecutedInMaven3();
         } catch (NoSuchMethodException ex) {
@@ -51,7 +52,7 @@ public class Maven3LifecycleAnalyzer extends MavenLifecycleAnalyzer {
     }
 
     @NotNull
-    protected List<String> findGoalsToBeExecutedInMaven3()
+    protected Set<String> findGoalsToBeExecutedInMaven3()
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         // Using reflections as the following classes/methods are not available in Maven 2
         // MavenExecutionPlan plan = lifecycleExecutor.calculateExecutionPlan(...)

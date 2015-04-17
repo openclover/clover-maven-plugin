@@ -1,6 +1,7 @@
 package com.atlassian.maven.plugin.clover.internal.lifecycle;
 
 import com.atlassian.clover.api.CloverException;
+import com.google.common.collect.Sets;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.LifecycleExecutor;
 import org.apache.maven.plugin.logging.Log;
@@ -8,7 +9,7 @@ import org.apache.maven.project.MavenProject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 public class BuildLifecycleAnalyzer {
 
@@ -16,7 +17,7 @@ public class BuildLifecycleAnalyzer {
     private final LifecycleExecutor lifecycleExecutor;
     private final MavenProject mavenProject;
     private final MavenSession mavenSession;
-    private final List<String> phases;
+    private final Set<String> phases;
 
     public BuildLifecycleAnalyzer(@NotNull final Log log,
                                   @NotNull final LifecycleExecutor lifecycleExecutor,
@@ -27,6 +28,11 @@ public class BuildLifecycleAnalyzer {
         this.mavenProject = mavenProject;
         this.mavenSession = mavenSession;
         this.phases = getPhasesToBeExecuted();
+
+        log.debug("CLOVER: " + getClass().getSimpleName() + " found following build phases:");
+        for (String phase : Sets.newTreeSet(phases)) {
+            log.debug("CLOVER: " + phase);
+        }
     }
 
     public boolean isInstallPresent() {
@@ -38,7 +44,7 @@ public class BuildLifecycleAnalyzer {
     }
 
     @NotNull
-    protected List<String> getPhasesToBeExecuted() {
+    protected Set<String> getPhasesToBeExecuted() {
         final String FAILED_POLLUTION_PROTECTION =
                 "CLOVER: Failed to call Maven's internals via reflections, possibly this Maven version is "
                         + "incompatible with Clover. Maven's build lifecycle could not be analyzed. Repository "
@@ -53,11 +59,11 @@ public class BuildLifecycleAnalyzer {
                 return maven3Analyzer.getPhasesToBeExecuted();
             } else {
                 log.warn(FAILED_POLLUTION_PROTECTION);
-                return Collections.emptyList();
+                return Collections.emptySet();
             }
         } catch (CloverException ex) {
             log.warn(FAILED_POLLUTION_PROTECTION);
-            return Collections.emptyList();
+            return Collections.emptySet();
         }
     }
 

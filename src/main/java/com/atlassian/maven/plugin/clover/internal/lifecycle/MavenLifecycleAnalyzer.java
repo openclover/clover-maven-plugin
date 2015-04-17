@@ -2,6 +2,7 @@ package com.atlassian.maven.plugin.clover.internal.lifecycle;
 
 import com.atlassian.clover.api.CloverException;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.LifecycleExecutor;
 import org.apache.maven.plugin.MojoExecution;
@@ -9,6 +10,7 @@ import org.apache.maven.project.MavenProject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Set;
 
 public abstract class MavenLifecycleAnalyzer {
 
@@ -34,13 +36,13 @@ public abstract class MavenLifecycleAnalyzer {
     /**
      * Return list of build phases which will be executed. It may also return goals passed from a command line.
      *
-     * @return List&lt;String&gt;
+     * @return Set&lt;String&gt;
      * @throws CloverException in case when build analysis has failed
      */
-    public abstract List<String> getPhasesToBeExecuted() throws CloverException;
+    public abstract Set<String> getPhasesToBeExecuted() throws CloverException;
 
-    protected List<String> getPhasesFromMojoExecutions(@NotNull final List<MojoExecution> mojoExecutions) {
-        final List<String> phases = Lists.newArrayList();
+    protected Set<String> getPhasesFromMojoExecutions(@NotNull final List<MojoExecution> mojoExecutions) {
+        final Set<String> phases = Sets.newHashSet();
         for (final MojoExecution mojoExecution : mojoExecutions) {
             phases.addAll(getPhasesFromMojoExecution(mojoExecution));
         }
