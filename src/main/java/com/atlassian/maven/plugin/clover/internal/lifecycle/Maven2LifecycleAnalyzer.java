@@ -2,8 +2,7 @@ package com.atlassian.maven.plugin.clover.internal.lifecycle;
 
 import com.atlassian.clover.api.CloverException;
 import com.atlassian.clover.util.ReflectionUtils;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.Lifecycle;
 import org.apache.maven.lifecycle.LifecycleExecutor;
@@ -14,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Maven2LifecycleAnalyzer extends MavenLifecycleAnalyzer {
 
@@ -30,7 +30,7 @@ public class Maven2LifecycleAnalyzer extends MavenLifecycleAnalyzer {
     }
 
     @Override
-    public List<String> getPhasesToBeExecuted() throws CloverException {
+    public Set<String> getPhasesToBeExecuted() throws CloverException {
         try {
             return findPhasesToBeExecutedInMaven2();
         } catch (NoSuchMethodException ex) {
@@ -60,15 +60,15 @@ public class Maven2LifecycleAnalyzer extends MavenLifecycleAnalyzer {
     }
 
     @NotNull
-    protected List<String> findPhasesToBeExecutedInMaven2()
+    protected Set<String> findPhasesToBeExecutedInMaven2()
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        final List<String> allPhasesForAllTasks = Lists.newArrayList();
+        final Set<String> allPhasesForAllTasks = Sets.newHashSet();
 
         // Based on analysis of Maven's DefaultLifecycleExecutor
         // mavenSession.getGoals() returns list of goals/phases defined in command line, which are called tasks
         for (Object taskObj : mavenSession.getGoals()) {
             final String task = taskObj.toString();
-            final List<String> allPhasesForTask;
+            final Set<String> allPhasesForTask;
             // every task may be a build phase
             if (lifecycleExecutor_getPhaseToLifecycleMap(lifecycleExecutor).containsKey(task)) {
                 // in such case find it's build life cycle and all goals required to run
@@ -79,7 +79,7 @@ public class Maven2LifecycleAnalyzer extends MavenLifecycleAnalyzer {
                 allPhasesForTask = getPhasesFromProcessGoalChain(task, lifecycleMappings, lifecycle);
             } else {
                 // ... or is just a single goal; in such case, there's no need to find phases
-                allPhasesForTask = Lists.newArrayList();
+                allPhasesForTask = Sets.newHashSet();
             }
 
             // collect all goals
@@ -89,29 +89,16 @@ public class Maven2LifecycleAnalyzer extends MavenLifecycleAnalyzer {
         return allPhasesForAllTasks;
     }
 
-    private List<String> getPhasesFromLifecycleMappings(@NotNull final Map<String, List<MojoExecution>> lifecycleMappings) {
-        final List<String> phases = Lists.newArrayList();
-        for (final Map.Entry<String, List<MojoExecution>> mapping : lifecycleMappings.entrySet()) {
-            phases.addAll(getPhasesFromMojoExecutions(mapping.getValue()));
-        }
-        return phases;
-    }
-
-    private static final Function<MojoExecution, String> GET_PHASE_FROM_DESCRIPTOR = new Function<MojoExecution, String>() {
-        @Override
-        public String apply(MojoExecution mojoExecution) {
-            return mojoExecution.getMojoDescriptor().getPhase();
-        }
-    };
-
-    private List<String> getPhasesFromProcessGoalChain(String task,
+    private Set<String> getPhasesFromProcessGoalChain(String task,
                                                        Map<String, List<MojoExecution>> lifecycleMappings,
                                                        Lifecycle lifecycle) {
         final List<MojoExecution> mojoGoals = lifecycleExecutor_processGoalChain(lifecycleExecutor,
                 task, lifecycleMappings, lifecycle);
-        final List<String> phases = Lists.newArrayList();
-        for (MojoExecution mojoExecution : mojoGoals) {
-            phases.addAll(getPhasesFromMojoExecution(mojoExecution));
+        final Set<String> phases = Sets.newHashSet();
+        if (mojoGoals != null) {
+            for (MojoExecution mojoExecution : mojoGoals) {
+                phases.addAll(getPhasesFromMojoExecution(mojoExecution));
+            }
         }
         return phases;
     }
