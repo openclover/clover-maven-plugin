@@ -64,7 +64,7 @@ under the License.
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-clover2-plugin</artifactId>
-                <version>4.0.4-SNAPSHOT</version>
+                <version>4.0.5-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
