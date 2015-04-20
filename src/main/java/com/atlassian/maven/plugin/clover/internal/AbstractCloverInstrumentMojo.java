@@ -451,11 +451,13 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
                 && !"sources".equals(classifier);
         if (customClassifierUsed && useCloverClassifier && shouldRedirectArtifacts()) {
             throw new MojoExecutionException(PROTECTION_ENABLED_MSG
-                    + "Your build produces an artifact with a custom classifier. As Maven does not support multiple "
+                    + "Your build produces an artifact (" + getProject().getArtifact() + ") with a custom classifier. "
+                    + "As Maven does not support multiple "
                     + "classifiers for an artifact, appending second 'clover' classifier may not be handled correctly. "
-                    + "Remove a custom classifier to fix it. You can also disable pollution protection "
+                    + "You can: \n - remove a custom classifier or\n - configure Clover to not append the '-clover' classifier \n"
+                    + "to fix it. You can also disable pollution protection "
                     + "(-Dmaven.clover.repositoryPollutionProtection=false) if you know "
-                    + "that it doesn't affect your project. ");
+                    + "that it doesn't affect your build. ");
         }
     }
 
