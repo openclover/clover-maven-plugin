@@ -33,7 +33,7 @@ import org.apache.maven.plugin.MojoExecutionException;
  * and generating the Clover database.</p>
  *
  * <p><b>Attention: Maven does not support multiple classifiers for an artifact.</b>
- * In case your project creates artifacts with classfiers, it may happen that the 'clover' classifier will be lost and
+ * In case your project creates artifacts with classifiers, it may happen that the 'clover' classifier will be lost and
  * an instrumented artifact will be installed as non-instrumented one. </p>
  *
  * <p>Example: clover2:instrument + jar:test-jar + install:install</p>
