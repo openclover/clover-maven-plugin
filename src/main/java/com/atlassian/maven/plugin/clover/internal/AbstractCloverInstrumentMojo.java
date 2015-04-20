@@ -204,6 +204,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <p>Please note that this flag may not protect from all possible cases.</p>
      *
      * @parameter expression="${maven.clover.repositoryPollutionProtection}" default-value="false"
+     * @since 4.0.4
      */
     protected boolean repositoryPollutionProtection;
 
