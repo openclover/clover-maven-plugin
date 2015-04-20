@@ -17,7 +17,7 @@
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-clover2-plugin</artifactId>
-                <version>4.0.4-SNAPSHOT</version>
+                <version>4.0.5-SNAPSHOT</version>
                 <configuration>
                     <!-- Instrument all source files, also generated ones. -->
                     <includesAllSourceRoots>true</includesAllSourceRoots>
