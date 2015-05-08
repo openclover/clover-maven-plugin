@@ -442,7 +442,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
         final ArtifactHandler artifactHandler = getProject().getArtifact().getArtifactHandler();
 
         if (!"java".equals(artifactHandler.getLanguage())) {
-            getLog().warn("The reported language of this project is " + artifactHandler.getLanguage() + ", attempting to instrument sources anyway.");
+            getLog().debug("The reported language of this project is " + artifactHandler.getLanguage() + ", attempting to instrument sources anyway.");
         }
         return true;
     }
