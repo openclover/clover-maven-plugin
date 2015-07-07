@@ -322,9 +322,6 @@ under the License.
                             <projectsDirectory>src/it</projectsDirectory>
                             <pomIncludes>
                                 <pomInclude>**/fork-maven-plugin/pom.xml</pomInclude>
-                                <!--<pomInclude>**/pollutionProtection/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/pollutionProtectionClassifier/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/pollutionProtectionCycles/pom.xml</pomInclude>-->
                                 <pomInclude>**/pollutionProtectionRoot/pom.xml</pomInclude>
                             </pomIncludes>
                             <properties>
@@ -419,16 +416,13 @@ under the License.
                                 <pomInclude>**/license/pom.xml</pomInclude>
                                 <pomInclude>**/multiproject/pom.xml</pomInclude>
                                 <pomInclude>**/optmized/pom.xml</pomInclude>
-                                <!--<pomInclude>**/pollutionProtection/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/pollutionProtectionClassifier/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/pollutionProtectionCycles/pom.xml</pomInclude>-->
                                 <pomInclude>**/pollutionProtectionRoot/pom.xml</pomInclude>
                                 <pomInclude>**/reportLogPassMatch/pom.xml</pomInclude>
                                 <pomInclude>**/setTestFailureIgnore/pom.xml</pomInclude>
                                 <pomInclude>**/simple/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcExcluded/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcIncluded/pom.xml</pomInclude>
-                                <pomInclude>**/surefire-and-failsafe-plugins/pom.xml</pomInclude>
+                                <!--<pomInclude>**/surefire-and-failsafe-plugins/pom.xml</pomInclude>-->
                                 <!--<pomInclude>**/testng/pom.xml</pomInclude>-->
                                 <!--<pomInclude>**/tutorial/pom.xml</pomInclude>-->
                                 <!--<pomInclude>**/webapp/pom.xml</pomInclude>-->
