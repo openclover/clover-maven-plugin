@@ -155,6 +155,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <li>none - do not instrument lambda functions (note: statements inside lambdas will become a part of a parent function)</li>
      * <li>expression - instrument only expression-like lambdas, e.g. <code>(a,b) -> a + b</code></li>
      * <li>block - instrument block lambdas, e.g. <code>() -> { foo(); }</code></li>
+     * <li>all_but_reference - instrument lambdas written in any form except method references, e.g. <code>Math::abs</code></li>
      * <li>all - instrument all forms of lambda functions</li>
      * </ul>
      * <p>Default is 'all' for 3.2.2-4.0.2 and 'none' since 4.0.3.</p>
