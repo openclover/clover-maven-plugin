@@ -20,7 +20,7 @@ under the License.
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.atlassian.maven.plugins.sample</groupId>
     <artifactId>clover-pollution-protection-root</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <name>Maven Clover Plugin</name>
 
     <version>1.0.0-SNAPSHOT</version>
