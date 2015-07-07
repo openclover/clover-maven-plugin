@@ -322,9 +322,10 @@ under the License.
                             <projectsDirectory>src/it</projectsDirectory>
                             <pomIncludes>
                                 <pomInclude>**/fork-maven-plugin/pom.xml</pomInclude>
-                                <pomInclude>**/pollutionProtection/pom.xml</pomInclude>
-                                <pomInclude>**/pollutionProtectionClassifier/pom.xml</pomInclude>
-                                <pomInclude>**/pollutionProtectionCycles/pom.xml</pomInclude>
+                                <!--<pomInclude>**/pollutionProtection/pom.xml</pomInclude>-->
+                                <!--<pomInclude>**/pollutionProtectionClassifier/pom.xml</pomInclude>-->
+                                <!--<pomInclude>**/pollutionProtectionCycles/pom.xml</pomInclude>-->
+                                <pomInclude>**/pollutionProtectionRoot/pom.xml</pomInclude>
                             </pomIncludes>
                             <properties>
                                 <maven.clover.licenseLocation>${maven.clover.licenseLocation}</maven.clover.licenseLocation>
@@ -401,32 +402,33 @@ under the License.
                             <debug>true</debug>
                             <projectsDirectory>src/it</projectsDirectory>
                             <pomIncludes>
-                                <!--<pomInclude>**/allSrcExcluded/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/build-helper/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/contexts/pom.xml</pomInclude>-->
+                                <pomInclude>**/allSrcExcluded/pom.xml</pomInclude>
+                                <pomInclude>**/build-helper/pom.xml</pomInclude>
+                                <pomInclude>**/contexts/pom.xml</pomInclude>
                                 <pomInclude>**/fork-maven-plugin/pom.xml</pomInclude>
-                                <!--<pomInclude>**/generated-sources/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/gmaven-plugin/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/gmaven-plugin-no-java/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/groovy-eclipse-plugin/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/groovy-eclipse-plugin-src-main-java/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/groovy-eclipse-plugin-src-main-groovy/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/gwt/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/instrument-tests/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/jaxb/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/java8/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/license/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/multiproject/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/optmized/pom.xml</pomInclude>-->
-                                <pomInclude>**/pollutionProtection/pom.xml</pomInclude>
-                                <pomInclude>**/pollutionProtectionClassifier/pom.xml</pomInclude>
-                                <pomInclude>**/pollutionProtectionCycles/pom.xml</pomInclude>
-                                <!--<pomInclude>**/reportLogPassMatch/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/setTestFailureIgnore/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/simple/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/someSrcExcluded/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/someSrcIncluded/pom.xml</pomInclude>-->
-                                <!--<pomInclude>**/surefire-and-failsafe-plugins/pom.xml</pomInclude>-->
+                                <pomInclude>**/generated-sources/pom.xml</pomInclude>
+                                <pomInclude>**/gmaven-plugin/pom.xml</pomInclude>
+                                <pomInclude>**/gmaven-plugin-no-java/pom.xml</pomInclude>
+                                <pomInclude>**/groovy-eclipse-plugin/pom.xml</pomInclude>
+                                <pomInclude>**/groovy-eclipse-plugin-src-main-java/pom.xml</pomInclude>
+                                <pomInclude>**/groovy-eclipse-plugin-src-main-groovy/pom.xml</pomInclude>
+                                <pomInclude>**/gwt/pom.xml</pomInclude>
+                                <pomInclude>**/instrument-tests/pom.xml</pomInclude>
+                                <pomInclude>**/jaxb/pom.xml</pomInclude>
+                                <pomInclude>**/java8/pom.xml</pomInclude>
+                                <pomInclude>**/license/pom.xml</pomInclude>
+                                <pomInclude>**/multiproject/pom.xml</pomInclude>
+                                <pomInclude>**/optmized/pom.xml</pomInclude>
+                                <!--<pomInclude>**/pollutionProtection/pom.xml</pomInclude>-->
+                                <!--<pomInclude>**/pollutionProtectionClassifier/pom.xml</pomInclude>-->
+                                <!--<pomInclude>**/pollutionProtectionCycles/pom.xml</pomInclude>-->
+                                <pomInclude>**/pollutionProtectionRoot/pom.xml</pomInclude>
+                                <pomInclude>**/reportLogPassMatch/pom.xml</pomInclude>
+                                <pomInclude>**/setTestFailureIgnore/pom.xml</pomInclude>
+                                <pomInclude>**/simple/pom.xml</pomInclude>
+                                <pomInclude>**/someSrcExcluded/pom.xml</pomInclude>
+                                <pomInclude>**/someSrcIncluded/pom.xml</pomInclude>
+                                <pomInclude>**/surefire-and-failsafe-plugins/pom.xml</pomInclude>
                                 <!--<pomInclude>**/testng/pom.xml</pomInclude>-->
                                 <!--<pomInclude>**/tutorial/pom.xml</pomInclude>-->
                                 <!--<pomInclude>**/webapp/pom.xml</pomInclude>-->
