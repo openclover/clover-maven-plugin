@@ -19,7 +19,7 @@
         <gwtTestUtils.version>0.38</gwtTestUtils.version>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.clover.version>4.0.4-SNAPSHOT</maven.clover.version>
+        <maven.clover.version>4.0.5-SNAPSHOT</maven.clover.version>
     </properties>
 
     <dependencies>
