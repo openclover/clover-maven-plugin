@@ -22,7 +22,7 @@ under the License.
     <artifactId>maven-clover2-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Maven Clover Plugin</name>
-    <version>4.0.6-SNAPSHOT</version>
+    <version>4.0.5.1</version>
     <description>Maven plugin for Clover</description>
     <parent>
         <groupId>com.atlassian.pom</groupId>
