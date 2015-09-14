@@ -66,6 +66,12 @@ Maven Clover Plugin
 
   Instructions on how to use Maven Clover Plugin can be found {{{usage.html}here}}.
 
+* Migration notice
+
+  Since next major Clover release this plugin will be renamed to
+  {{com.atlassian.maven.plugins:clover-maven-plugin}}. Thus, goals will also be renamed, e.g.
+  {{clover2:setup}} will become {{clover:setup}}.
+
 * Goals Overview
 
   The <<<maven-clover2-plugin>>> has seven goals, but only six are called directly by the user. The full description
