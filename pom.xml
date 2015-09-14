@@ -23,7 +23,10 @@ under the License.
     <packaging>maven-plugin</packaging>
     <name>Maven Clover Plugin</name>
     <version>4.0.6-SNAPSHOT</version>
-    <description>Maven plugin for Clover</description>
+    <description>Maven plugin for Clover.
+        MIGRATION NOTICE: Since next major Clover release this plugin will be renamed to
+        com.atlassian.maven.plugins:clover-maven-plugin. Thus, goals will also be renamed, e.g.
+        'clover2:setup' will become 'clover:setup'.</description>
     <parent>
         <groupId>com.atlassian.pom</groupId>
         <artifactId>central-pom</artifactId>
