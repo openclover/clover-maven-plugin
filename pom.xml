@@ -58,7 +58,7 @@ under the License.
         <connection>scm:hg:ssh://hg@bitbucket.org/atlassian/maven-clover2-plugin</connection>
         <developerConnection>scm:hg:ssh://hg@bitbucket.org/atlassian/maven-clover2-plugin</developerConnection>
         <url>https://bitbucket.org/atlassian/maven-clover2-plugin/src</url>
-        <tag>maven-clover2-plugin-4.0.5</tag>
+        <tag>maven-clover2-plugin-4.0.6</tag>
     </scm>
     <developers>
         <developer>
@@ -82,7 +82,7 @@ under the License.
     </prerequisites>
     <properties>
         <!-- Clover Core version -->
-        <cloverVersion>4.0.6</cloverVersion>
+        <cloverVersion>4.0.7-SNAPSHOT</cloverVersion>
         <!-- Don't perform automatic releasing of a staging repository in the Atlassian Central repository -->
         <staging.automatic.release>false</staging.automatic.release>
 
