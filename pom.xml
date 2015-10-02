@@ -30,7 +30,7 @@ under the License.
     <parent>
         <groupId>com.atlassian.pom</groupId>
         <artifactId>central-pom</artifactId>
-        <version>3.0.90</version>
+        <version>3.0.98</version>
     </parent>
     <url>http://confluence.atlassian.com/x/dIDBBQ</url>
     <organization>
@@ -78,7 +78,7 @@ under the License.
         </developer>
     </developers>
     <prerequisites>
-        <maven>2.0.1</maven>
+        <maven>3.2.5</maven>
     </prerequisites>
     <properties>
         <!-- Clover Core version -->
