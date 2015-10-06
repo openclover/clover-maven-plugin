@@ -78,7 +78,7 @@ under the License.
         </developer>
     </developers>
     <prerequisites>
-        <maven>3.2.5</maven>
+        <maven>2.1.0</maven>
     </prerequisites>
     <properties>
         <!-- Clover Core version -->
