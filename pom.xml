@@ -30,7 +30,7 @@ under the License.
     <parent>
         <groupId>com.atlassian.pom</groupId>
         <artifactId>central-pom</artifactId>
-        <version>3.0.90</version>
+        <version>3.0.98</version>
     </parent>
     <url>http://confluence.atlassian.com/x/dIDBBQ</url>
     <organization>
@@ -58,7 +58,7 @@ under the License.
         <connection>scm:hg:ssh://hg@bitbucket.org/atlassian/maven-clover2-plugin</connection>
         <developerConnection>scm:hg:ssh://hg@bitbucket.org/atlassian/maven-clover2-plugin</developerConnection>
         <url>https://bitbucket.org/atlassian/maven-clover2-plugin/src</url>
-        <tag>maven-clover2-plugin-4.0.5</tag>
+        <tag>maven-clover2-plugin-4.0.6</tag>
     </scm>
     <developers>
         <developer>
@@ -78,7 +78,7 @@ under the License.
         </developer>
     </developers>
     <prerequisites>
-        <maven>2.0.1</maven>
+        <maven>2.1.0</maven>
     </prerequisites>
     <properties>
         <!-- Clover Core version -->
