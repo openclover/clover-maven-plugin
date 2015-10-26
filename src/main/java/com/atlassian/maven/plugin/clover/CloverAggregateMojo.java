@@ -61,18 +61,21 @@ public class CloverAggregateMojo extends AbstractCloverMojo {
         // If we're in a module with children modules, then aggregate the children clover databases.
         if (getProject().getModules() != null && getProject().getModules().size() > 0) {
             super.execute();
+            getLog().debug("Project " + getProject().getId() + " (" + getProject().getBasedir()
+                    + ") has " + getProject().getModules().size() + " child modules");
 
             // Ensure all databases are flushed
             AbstractCloverMojo.waitForFlush(getWaitForFlush(), getFlushInterval());
 
-            if (getChildrenCloverDatabases().size() > 0) {
+            final List<String> childrenDatabases = getChildrenCloverDatabases();
+            if (childrenDatabases.size() > 0) {
                 // Ensure the merged database output directory exists
                 new File(getCloverMergeDatabase()).getParentFile().mkdirs();
 
                 // Merge the databases
-                mergeCloverDatabases();
+                mergeCloverDatabases(childrenDatabases);
             } else {
-                getLog().warn("No Clover databases found in children projects - No merge done");
+                getLog().warn("No Clover databases found in children projects, no merge done. Run a build with debug logging for more details.");
             }
         }
     }
@@ -95,17 +98,20 @@ public class CloverAggregateMojo extends AbstractCloverMojo {
         final List<MavenProject> projects = getDescendentModuleProjects(getProject());
 
         for (MavenProject childProject : projects) {
+            getLog().debug("Looking for Clover database for module " + childProject.getId() + " (" + childProject.getBasedir() + ")");
             final File cloverDb = new File(childProject.getBasedir(), relativeCloverDatabasePath);
             if (cloverDb.exists()) {
+                getLog().debug("Database found at " + cloverDb.getAbsolutePath() + " . Adding for merge.");
                 dbFiles.add(cloverDb.getPath());
+            } else {
+                getLog().debug("No database at " + cloverDb.getAbsolutePath());
             }
         }
 
         return dbFiles;
     }
 
-    private void mergeCloverDatabases() throws MojoExecutionException {
-        final List<String> dbFiles = getChildrenCloverDatabases();
+    private void mergeCloverDatabases(final List<String> dbFiles) throws MojoExecutionException {
         final List<String> parameters = new ArrayList<String>();
 
         parameters.add("-s");
