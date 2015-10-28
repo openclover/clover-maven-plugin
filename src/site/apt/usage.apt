@@ -75,7 +75,7 @@
     <plugins>
       <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
+        <artifactId>clover-maven-plugin</artifactId>
         <configuration>
           [...]
         </configuration>
@@ -114,7 +114,7 @@
 +--------
   <plugin>
     <groupId>com.atlassian.maven.plugins</groupId>
-    <artifactId>maven-clover2-plugin</artifactId>
+    <artifactId>clover-maven-plugin</artifactId>
     <configuration>
       <includes>
         <include>**/api/**/*.java</include>
@@ -147,7 +147,7 @@
     <plugins>
       <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
+        <artifactId>clover-maven-plugin</artifactId>
         <configuration>
           <targetPercentage>50%</targetPercentage>
         </configuration>
@@ -188,7 +188,7 @@
     <plugins>
       <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
+        <artifactId>clover-maven-plugin</artifactId>
         <configuration>
           <targetPercentage>50%</targetPercentage>
         </configuration>
@@ -234,7 +234,7 @@
     <plugins>
       <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
+        <artifactId>clover-maven-plugin</artifactId>
         <configuration>
           <contextFilters>try,static</contextFilters>
         </configuration>
@@ -256,7 +256,7 @@
     <plugins>
       <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
+        <artifactId>clover-maven-plugin</artifactId>
         <configuration>
           <jdk>1.4</jdk>
 [...]
@@ -279,7 +279,7 @@
     <plugins>
       <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
+        <artifactId>clover-maven-plugin</artifactId>
         <configuration>
           <flushPolicy>threaded</flushPolicy>
           <flushInterval>5000</flushInterval>
@@ -307,7 +307,7 @@ mvn clover2:clover
       [...]
       <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
+        <artifactId>clover-maven-plugin</artifactId>
         <configuration>
           [...]
         </configuration>
@@ -336,7 +336,7 @@ mvn clover2:instrument clover2:clover
     <plugins>
       <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
+        <artifactId>clover-maven-plugin</artifactId>
         <configuration>
           [...]
         </configuration>
@@ -357,7 +357,7 @@ mvn clover2:instrument clover2:clover
       [...]
       <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
+        <artifactId>clover-maven-plugin</artifactId>
         <configuration>
           [...]
         </configuration>
@@ -388,7 +388,7 @@ mvn clover2:instrument clover2:clover
 [...]
   <plugin>
     <groupId>com.atlassian.maven.plugins</groupId>
-    <artifactId>maven-clover2-plugin</artifactId>
+    <artifactId>clover-maven-plugin</artifactId>
     <configuration>
       <generatePdf>true</generatePdf>
       <generateXml>true</generateXml>
@@ -423,7 +423,7 @@ mvn clover2:instrument clover2:clover
     <plugins>
       <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
+        <artifactId>clover-maven-plugin</artifactId>
         <configuration>
           <generateHtml>false</generateHtml>
           <generatePdf>true</generatePdf>
@@ -460,7 +460,7 @@ mvn clover2:instrument clover2:clover
     <plugins>
       <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
+        <artifactId>clover-maven-plugin</artifactId>
         <configuration>
           <generateHistorical>true</generateHistorical>
           [...]
@@ -494,7 +494,7 @@ mvn clover2:instrument clover2:clover
     <plugins>
       <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
+        <artifactId>clover-maven-plugin</artifactId>
         <configuration>
           <generateHistorical>true</generateHistorical>
           <historyDir>${myHistoryDir}</historyDir>
@@ -557,7 +557,7 @@ myproject
       [...]
       <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
+        <artifactId>clover-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </reporting>
@@ -566,7 +566,7 @@ myproject
     <plugins>
       <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
+        <artifactId>clover-maven-plugin</artifactId>
         <executions>
           <execution>
             <phase>pre-site</phase>
@@ -642,7 +642,7 @@ Coverage Overview -
     <plugins>
       <plugin>
         <groupId>com.atlassian.maven.plugins</groupId>
-        <artifactId>maven-clover2-plugin</artifactId>
+        <artifactId>clover-maven-plugin</artifactId>
         <configuration>
           <licenseLocation>${basedir}/src/test/clover/myclover.license</licenseLocation>
         </configuration>
