@@ -25,7 +25,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <!-- Call the clover2:setup after sources are generated but before compilation -->
+                        <!-- Call the clover:setup after sources are generated but before compilation -->
                         <id>main1</id>
                         <phase>process-sources</phase>
                         <goals>
@@ -33,7 +33,7 @@
                         </goals>
                     </execution>
                     <execution>
-                        <!-- Call the clover2:clover and generate reports -->
+                        <!-- Call the clover:clover and generate reports -->
                         <id>main2</id>
                         <phase>verify</phase>
                         <goals>

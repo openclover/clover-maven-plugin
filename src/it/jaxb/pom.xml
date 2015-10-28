@@ -39,7 +39,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <!-- Call the clover2:setup after JAXB sources are generated but before compilation -->
+                        <!-- Call the clover:setup after JAXB sources are generated but before compilation -->
                         <id>main1</id>
                         <phase>process-sources</phase>
                         <goals>
@@ -47,7 +47,7 @@
                         </goals>
                     </execution>
                     <execution>
-                        <!-- Call the clover2:clover and generate report after tests are run -->
+                        <!-- Call the clover:clover and generate report after tests are run -->
                         <id>main2</id>
                         <phase>verify</phase>
                         <goals>

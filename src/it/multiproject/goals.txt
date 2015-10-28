@@ -1,1 +1,1 @@
-clean install clover2:instrument clover2:aggregate clover2:clover verifier:verify
+clean install clover:instrument clover:aggregate clover:clover verifier:verify

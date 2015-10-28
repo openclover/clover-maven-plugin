@@ -24,7 +24,7 @@ under the License.
     <packaging>jar</packaging>
     <name>Maven Clover Plugin Forked Lifecycle Sample</name>
     <description>
-        This is a test case which checks if 'clover2:instrument' goal will create a forked lifecycle (so that compiled
+        This is a test case which checks if 'clover:instrument' goal will create a forked lifecycle (so that compiled
         artefacts are written to 'target/clover' instead of default 'target' directory).
 
         Current value of 'project.build.directory' property is written to a file using AntRun plugin.
