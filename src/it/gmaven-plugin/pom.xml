@@ -10,9 +10,9 @@
          * https://confluence.atlassian.com/display/CLOVER/Compiling+Groovy+with+GMaven+plugin
          * http://docs.codehaus.org/display/GMAVEN/Home
 
-        In order to instrument the code using clover2:setup, run a build using 'with-clover-setup' profile.
+        In order to instrument the code using clover:setup, run a build using 'with-clover-setup' profile.
 
-        It is also possible to use clover2:instrument goal, but it has a limitation: you cannot use GMaven's
+        It is also possible to use clover:instrument goal, but it has a limitation: you cannot use GMaven's
         generateStubs or generateTestStubs goals. A reason is that GMaven adds both
         /target/generated-sources/groovy-stubs and /target/clover/generated-sources/groovy-stubs to the list
         of source roots; as a consequence groovyc compiler fails with a "duplicate class" error.

@@ -11,7 +11,7 @@
          * http://docs.codehaus.org/display/GMAVEN/Home
 
         This project contains no java sources, so there is no need to call generateStubs / generateTestStubs
-        and thus it's possible to  use both clover2:setup and clover2:instrument. In order to use Clover
+        and thus it's possible to  use both clover:setup and clover:instrument. In order to use Clover
         call a build with either 'with-clover-setup' or 'with-clover-instr' profile.
 
         See invoker.properties file how goals can be used.

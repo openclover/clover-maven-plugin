@@ -1,1 +1,1 @@
-clean test clover2:clover verifier:verify
+clean test clover:clover verifier:verify

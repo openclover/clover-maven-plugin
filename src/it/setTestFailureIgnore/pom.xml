@@ -103,7 +103,7 @@ under the License.
                     <setTestFailureIgnore>true</setTestFailureIgnore>
                 </configuration>
                 <executions>
-                    <!-- Test clover2:setup in the default lifecycle -->
+                    <!-- Test clover:setup in the default lifecycle -->
                     <execution>
                         <id>default-init</id>
                         <phase>validate</phase>
@@ -118,7 +118,7 @@ under the License.
                             <goal>clover</goal>
                         </goals>
                     </execution>
-                    <!-- Test clover2:instrument in the site lifecycle -->
+                    <!-- Test clover:instrument in the site lifecycle -->
                     <execution>
                         <id>site</id>
                         <phase>pre-site</phase>

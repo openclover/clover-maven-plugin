@@ -15,7 +15,7 @@
         See: http://groovy.codehaus.org/Groovy-Eclipse+compiler+plugin+for+Maven
         chapter "Use the groovy-eclipse-compiler mojo for configuring source folders" and "Use the build-helper-maven-plugin"
 
-        It is assumed that clover2:setup goal will be used. If you'd like to use clover2:instrument then
+        It is assumed that clover:setup goal will be used. If you'd like to use clover:instrument then
         enable the 'with-clover-instr' profile. See invoker.properties file how goals can be called.
 
         This sample is also an integration test checking binary compatibility with ASM v3, ASM v4, Groovy v1, Groovy v2.
@@ -163,7 +163,7 @@
                         </configuration>
                         <executions>
                             <execution>
-                                <!-- Call the clover2:setup after JAXB sources are generated but before compilation -->
+                                <!-- Call the clover:setup after JAXB sources are generated but before compilation -->
                                 <id>main1</id>
                                 <phase>process-sources</phase>
                                 <goals>
@@ -171,7 +171,7 @@
                                 </goals>
                             </execution>
                             <execution>
-                                <!-- Call the clover2:clover and generate report after tests are run -->
+                                <!-- Call the clover:clover and generate report after tests are run -->
                                 <id>main2</id>
                                 <phase>verify</phase>
                                 <goals>

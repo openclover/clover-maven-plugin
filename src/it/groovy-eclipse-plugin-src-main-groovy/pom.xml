@@ -10,7 +10,7 @@
         source files are placed in 'src/main/groovy' and 'src/test/groovy' folders, there are no Java sources,
         and sourceDirectory / testSourceDirectory options are used to redefine source root.
 
-        It is assumed that clover2:setup goal will be used. If you'd like to use clover2:instrument then
+        It is assumed that clover:setup goal will be used. If you'd like to use clover:instrument then
         enable the 'with-clover-instr' profile. See invoker.properties file how goals can be called.
     </description>
     <properties>
