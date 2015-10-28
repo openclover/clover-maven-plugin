@@ -36,7 +36,7 @@ import org.apache.maven.plugin.MojoExecutionException;
  * In case your project creates artifacts with classifiers, it may happen that the 'clover' classifier will be lost and
  * an instrumented artifact will be installed as non-instrumented one. </p>
  *
- * <p>Example: clover2:instrument + jar:test-jar + install:install</p>
+ * <p>Example: clover:instrument + jar:test-jar + install:install</p>
  *
  * <pre>
  *     [INFO] --- maven-jar-plugin:2.6:test-jar (default) @ moneybags ---

@@ -61,7 +61,7 @@ public class TestSourceScanner extends AbstractSourceScanner {
     protected List<String> getCompileSourceRoots() {
         // take all compilation roots as defined in POM or added by other maven plugins
         final List<String> roots = new ArrayList<String>(getConfiguration().getProject().getTestCompileSourceRoots());
-        // add hardcoded SRC_TEST_GROOVY (clover2:setup might be called before the groovy-eclipse-plugin adds it
+        // add hardcoded SRC_TEST_GROOVY (clover:setup might be called before the groovy-eclipse-plugin adds it
         // as a compilation root)
         roots.add(SRC_TEST_GROOVY);
         return roots;

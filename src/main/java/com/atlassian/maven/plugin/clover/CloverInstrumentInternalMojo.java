@@ -85,8 +85,8 @@ import java.util.Set;
  *      -> separated (maven-compiler compiles java, gmaven compiles groovy)
  *      -> joint compilation (groovy-eclipse-plugin compiles both java and groovy)
  *  #9 build lifecycle
- *      -> non-forked (clover2:setup)
- *      -> forked (clover2:instrument)
+ *      -> non-forked (clover:setup)
+ *      -> forked (clover:instrument)
  *
  * =====================================================================================================================
  * 1) includeAllSourceRoots = false, java+groovy in 'src/(main|test)/java'
@@ -137,7 +137,7 @@ import java.util.Set;
  *  -> the 'src/(main|test)/groovy' is NOT added as extra source root
  *      -> so that getCompileSourceRoots() does not return it in the list
  *      -> groovy-eclipse-plugin will add the 'src/(main|test)/groovy' location internally (typically after the
- *         clover2:setup goal is finished)
+ *         clover:setup goal is finished)
  *  -> source directories are read from getCompileSourceRoots()
  *      -> GroovyMain/TestSourceScanner contains additional hardcoded location for 'src/(main|test)/groovy'
  *  -> *.java files are instrumented in the source and saved in 'src-(test-)instrumented'

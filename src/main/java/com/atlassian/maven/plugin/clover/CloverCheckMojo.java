@@ -229,7 +229,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
                             this.historyDir + " +/-" + this.historyThreshold +
                            " ] for database [" + database + "]");
         } else {
-            getLog().warn("Skipping clover2:check as 'maven.clover.targetPercentage' is not defined " +
+            getLog().warn("Skipping clover:check as 'maven.clover.targetPercentage' is not defined " +
                     "and 'maven.clover.historyDir' (" + this.historyDir.getPath() +
                     ") does not exist or is not a directory.");
             return;

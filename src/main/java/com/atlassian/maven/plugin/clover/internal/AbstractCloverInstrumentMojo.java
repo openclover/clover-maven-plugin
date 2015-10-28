@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Common settings for clover2:instr / clover2:setup MOJOs.
+ * Common settings for clover:instr / clover:setup MOJOs.
  */
 public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements CompilerConfiguration {
 
@@ -95,7 +95,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <p> b) choose location different than ${java.io.tmpdir}.</p>
      * <p>However, you must ensure that:</p>
      * <p> a) grover.jar will not be deleted till end of the build (for example don't put into ./target directory
-     * and next run <code>mvn clover2:setup clean</code>)</p>
+     * and next run <code>mvn clover:setup clean</code>)</p>
      * <p> b) grover.jar will not be shared among builds with different Maven Clover Plugin versions used (for
      * example if ProjectA uses Clover v 3.1.8 and ProjectB uses Clover v 3.1.9 then they shall have different
      * <code>groverJar</code> locations defined)</p>
