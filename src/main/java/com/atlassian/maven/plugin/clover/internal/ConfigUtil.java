@@ -7,7 +7,7 @@ import java.io.File;
 import com.atlassian.clover.CloverNames;
 
 /**
- * A helper class to manage configuration of the maven-clover2-plugin
+ * A helper class to manage configuration of the clover-maven-plugin
  */
 public class ConfigUtil {
 

@@ -31,7 +31,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected long cloveredArtifactExpiryInMillis;
 
     /**
-     * If set, then the maven-clover2-plugin will not copy files that were excluded, across to the target/clover directory.
+     * If set, then the clover-maven-plugin will not copy files that were excluded, across to the target/clover directory.
      * This is useful if the build is also using plugins such as the maven-gwt-plugin, that scans for resources, and
      * skips a step if none are found. Otherwise, setting this to false could well cause build failures.
      *

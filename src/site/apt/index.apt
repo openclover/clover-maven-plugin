@@ -74,7 +74,7 @@ Maven Clover Plugin
 
 * Goals Overview
 
-  The <<<maven-clover2-plugin>>> has seven goals, but only six are called directly by the user. The full description
+  The <<<clover-maven-plugin>>> has seven goals, but only six are called directly by the user. The full description
   of goals, generated automatically from the source code, is available {{{plugin-info.html}here}}.
 
   * {{{aggregate-mojo.html}clover2:aggregate}} - Aggregate children module Clover databases if there are any. This mojo
