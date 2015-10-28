@@ -20,7 +20,6 @@ package com.atlassian.maven.plugin.clover;
  */
 
 import com.atlassian.clover.ant.tasks.CloverLogTask;
-import com.atlassian.clover.ant.tasks.CloverPassTask;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
@@ -109,7 +108,7 @@ public class CloverLogMojo extends AbstractCloverMojo {
         setTestSourceRootsForProject(cloverLogTask, getProject());
 
         // do the same but for sub-modules
-        for (MavenProject mavenProject : getDescendentModuleProjects(getProject())) {
+        for (MavenProject mavenProject : getDescendantModuleProjects(getProject())) {
             setTestSourceRootsForProject(cloverLogTask, mavenProject);
         }
     }

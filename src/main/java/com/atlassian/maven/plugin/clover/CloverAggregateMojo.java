@@ -95,7 +95,7 @@ public class CloverAggregateMojo extends AbstractCloverMojo {
         final String relativeCloverDatabasePath = resolveCloverDatabase().substring(
                 getProject().getBasedir().getPath().length());
         final List<String> dbFiles = new ArrayList<String>();
-        final List<MavenProject> projects = getDescendentModuleProjects(getProject());
+        final List<MavenProject> projects = getDescendantModuleProjects(getProject());
 
         for (MavenProject childProject : projects) {
             getLog().debug("Looking for Clover database for module " + childProject.getId() + " (" + childProject.getBasedir() + ")");
