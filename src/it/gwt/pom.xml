@@ -140,7 +140,7 @@
                     </plugin>
                     <plugin>
                         <groupId>com.atlassian.maven.plugins</groupId>
-                        <artifactId>maven-clover2-plugin</artifactId>
+                        <artifactId>clover-maven-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>clover-initialization</id>
@@ -221,7 +221,7 @@
                     </plugin>
                     <plugin>
                         <groupId>com.atlassian.maven.plugins</groupId>
-                        <artifactId>maven-clover2-plugin</artifactId>
+                        <artifactId>clover-maven-plugin</artifactId>
                         <executions>
                             <execution>
                                 <id>clover-initialization</id>

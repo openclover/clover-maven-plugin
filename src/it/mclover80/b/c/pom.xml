@@ -2,10 +2,10 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.atlassian.maven.plugins</groupId>
-    <artifactId>maven-clover2-plugin-it-mclover80-b</artifactId>
+    <artifactId>clover-maven-plugin-it-mclover80-b</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>maven-clover2-plugin-it-mclover80-c</artifactId>
+  <artifactId>clover-maven-plugin-it-mclover80-c</artifactId>
   <packaging>pom</packaging>
   <name>c</name>
   <description>c</description>

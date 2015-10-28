@@ -40,7 +40,7 @@
 			</plugin>
 			<plugin>
 				<groupId>com.atlassian.maven.plugins</groupId>
-				<artifactId>maven-clover2-plugin</artifactId>
+				<artifactId>clover-maven-plugin</artifactId>
 				<configuration>
                     <contextFilters>static,property,constructor,Log,IfLog,IfThisLog,ThisLog,SomeMethod</contextFilters>
 					<statementContexts>

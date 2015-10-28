@@ -20,7 +20,7 @@ under the License.
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.atlassian.maven.plugins</groupId>
-    <artifactId>maven-clover2-plugin-sample-forked-lifecycle</artifactId>
+    <artifactId>clover-maven-plugin-sample-forked-lifecycle</artifactId>
     <packaging>jar</packaging>
     <name>Maven Clover Plugin Forked Lifecycle Sample</name>
     <description>
@@ -63,7 +63,7 @@ under the License.
             </plugin>
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-clover2-plugin</artifactId>
+                <artifactId>clover-maven-plugin</artifactId>
                 <version>4.1.0-SNAPSHOT</version>
                 <executions>
                     <execution>
