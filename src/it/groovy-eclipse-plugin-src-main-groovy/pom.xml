@@ -4,7 +4,7 @@
     <artifactId>clover-sample-groovy-eclipse-plugin-with-java</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Sample for maven-clover2-plugin with groovy-eclipse-plugin</name>
+    <name>Sample for clover-maven-plugin with groovy-eclipse-plugin</name>
     <description>
         Example how to use Clover-for-Maven with groovy-eclipse-plugin. It uses an approach where Groovy
         source files are placed in 'src/main/groovy' and 'src/test/groovy' folders, there are no Java sources,
@@ -73,7 +73,7 @@
                 </plugin>
                 <plugin>
                     <groupId>com.atlassian.maven.plugins</groupId>
-                    <artifactId>maven-clover2-plugin</artifactId>
+                    <artifactId>clover-maven-plugin</artifactId>
                     <version>${clover.version}</version>
                     <configuration>
                         <includesAllSourceRoots>false</includesAllSourceRoots>
@@ -90,7 +90,7 @@
                 <plugins>
                     <plugin>
                         <groupId>com.atlassian.maven.plugins</groupId>
-                        <artifactId>maven-clover2-plugin</artifactId>
+                        <artifactId>clover-maven-plugin</artifactId>
                         <version>${clover.version}</version>
                         <configuration>
                             <excludesList>**/*ExcludedFile.*</excludesList>

@@ -92,7 +92,7 @@
                 <plugins>
                     <plugin>
                         <groupId>com.atlassian.maven.plugins</groupId>
-                        <artifactId>maven-clover2-plugin</artifactId>
+                        <artifactId>clover-maven-plugin</artifactId>
                         <version>${clover.version}</version>
                         <executions>
                             <execution>
@@ -120,7 +120,7 @@
                 <plugins>
                     <plugin>
                         <groupId>com.atlassian.maven.plugins</groupId>
-                        <artifactId>maven-clover2-plugin</artifactId>
+                        <artifactId>clover-maven-plugin</artifactId>
                         <version>${clover.version}</version>
                         <executions>
                             <execution>

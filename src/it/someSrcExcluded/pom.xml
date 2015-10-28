@@ -1,7 +1,7 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.atlassian.maven.plugins</groupId>
-    <artifactId>maven-clover2-plugin-it-somesrcexcluded</artifactId>
+    <artifactId>clover-maven-plugin-it-somesrcexcluded</artifactId>
     <packaging>jar</packaging>
     <name>Maven Clover Plugin Some Src Excluded Sample</name>
     <description>Maven Clover Plugin Some Src Excluded Sample -- test for MCLOVER-79</description>
@@ -19,7 +19,7 @@
         <plugins>
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-clover2-plugin</artifactId>
+                <artifactId>clover-maven-plugin</artifactId>
                 <configuration>
                     <jdk>1.6</jdk>
                 </configuration>
@@ -30,7 +30,7 @@
         <plugins>
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-clover2-plugin</artifactId>
+                <artifactId>clover-maven-plugin</artifactId>
                 <configuration>
                     <excludes>
                         <exclude>**/exclude/*.java</exclude>

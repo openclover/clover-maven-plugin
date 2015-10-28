@@ -16,7 +16,7 @@
         <plugins>
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-clover2-plugin</artifactId>
+                <artifactId>clover-maven-plugin</artifactId>
                 <configuration>
                     <singleCloverDatabase>true</singleCloverDatabase>
                     <snapshot>${project.build.directory}/clover.snapshot</snapshot>
