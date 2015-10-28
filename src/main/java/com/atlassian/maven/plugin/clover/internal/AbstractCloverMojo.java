@@ -394,11 +394,14 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
                     final String rhs = moduleBaseDir.getCanonicalPath();
 
                     if (lhs.equals(rhs)) {
+                        getLog().debug("isModuleOfProject: lhs=" + lhs + " rhs=" + rhs + " MATCH FOUND");
                         result = true;
                         break;
+                    } else {
+                        getLog().debug("isModuleOfProject: lhs=" + lhs + " rhs=" + rhs);
                     }
                 } catch (IOException e) {
-                    // surpress the exception (?)
+                    // suppress the exception (?)
                     getLog().error("error encountered trying to resolve canonical module paths");
                 }
             }
@@ -429,9 +432,15 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
         final List<MavenProject> projects = new ArrayList<MavenProject>();
         final boolean infinite = (levels == -1);
 
+        getLog().debug("getModuleProjects: project=" + project.getId()
+                + " getReactorProjects is " + (getReactorProjects() == null ? "null" : "not null")
+                + " infinite=" + infinite + " levels=" + levels);
+
         if ((getReactorProjects() != null) && (infinite || levels > 0)) {
             for (final MavenProject reactorProject : getReactorProjects()) {
+                getLog().debug("getModuleProjects: checking " + reactorProject.getId() + " against " + project.getId());
                 if (isModuleOfProject(project, reactorProject)) {
+                    getLog().debug("getModuleProjects: reactor project " + reactorProject.getId() + " is a module of " + project.getId());
                     projects.add(reactorProject);
                     if (project == reactorProject) {
                         projects.add(project); //CLMVN-78 don't recurse if project is the same as reactorProject.
@@ -439,6 +448,8 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
                         projects.addAll(getModuleProjects(reactorProject,
                                 infinite ? levels : levels - 1));
                     }
+                } else {
+                    getLog().debug("getModuleProjects: reactor project " + reactorProject.getId() + " is not a module of " + project.getId());
                 }
             }
         }
@@ -451,10 +462,11 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * direct or indirect modules of the specified project.
      *
      * @param project the project to search beneath
-     * @return the list of modules that are direct or indirect module descendents (List&lt;MavenProject&gt;)
+     * @return the list of modules that are direct or indirect module descendants (List&lt;MavenProject&gt;)
      *         of the specified project
      */
-    protected List<MavenProject> getDescendentModuleProjects(final MavenProject project) {
+    protected List<MavenProject> getDescendantModuleProjects(final MavenProject project) {
+        getLog().debug("Getting descendant module projects for " + project);
         return getModuleProjects(project, -1);
     }
 }
