@@ -69,7 +69,7 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
         mojo.setLog(log);
         mojo.execute();
         assertFalse(ran[0]);
-        assertTrue(log.contains("Skipping clover2:check as 'maven.clover.targetPercentage' is not defined " +
+        assertTrue(log.contains("Skipping clover:check as 'maven.clover.targetPercentage' is not defined " +
                     "and 'maven.clover.historyDir' (" + historyDir.getPath() +
                     ") does not exist or is not a directory.", TestUtil.Level.WARN));
     }

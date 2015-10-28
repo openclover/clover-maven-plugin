@@ -9,7 +9,7 @@ import org.apache.tools.ant.taskdefs.Delete;
 import java.io.File;
 
 /**
- * The clover2:clean goal should be run directly from the command line,
+ * The clover:clean goal should be run directly from the command line,
  * when you are developing using the clover test runner optimizer.
  *
  * This mojo deletes the {@link #cloverOutputDirectory} contents and the {@link #snapshot} file used for test optimization.
@@ -21,7 +21,7 @@ public class CloverCleanMojo extends AbstractCloverMojo {
 
     /**
      *
-     * A flag to indicate not to run clover2:clean for this execution.
+     * A flag to indicate not to run clover:clean for this execution.
      *
      * If set to true, clean will be skipped will not be run.
      *
@@ -32,7 +32,7 @@ public class CloverCleanMojo extends AbstractCloverMojo {
 
     /**
      *
-     * A flag to indicate to keep the clover.db but purge all coverage data and other files when clover2:clean is run.
+     * A flag to indicate to keep the clover.db but purge all coverage data and other files when clover:clean is run.
      *
      * If set to true, the clover.db file will not be removed.
      *
@@ -69,7 +69,7 @@ public class CloverCleanMojo extends AbstractCloverMojo {
         }
         delete.execute();
         if (dir.exists()) {
-            getLog().warn("clover2:clean could not delete directory: " + dir);
+            getLog().warn("clover:clean could not delete directory: " + dir);
         }
     }
 
@@ -92,7 +92,7 @@ public class CloverCleanMojo extends AbstractCloverMojo {
         delete.setFile(file);
         delete.execute();
         if (file.exists()) {
-            getLog().warn("clover2:clean could not delete file: " + file);
+            getLog().warn("clover:clean could not delete file: " + file);
         }
     }
 }
