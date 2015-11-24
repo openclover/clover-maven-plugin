@@ -8,12 +8,11 @@ import org.apache.maven.lifecycle.LifecycleExecutor;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Common settings for clover2:instr / clover2:setup MOJOs.
@@ -76,6 +75,13 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * @parameter expression="${maven.clover.excludesList}"
      */
     protected String excludesList = null;
+
+    /**
+     * The file containing a list of files to exclude from the instrumentation. Patterns are resolved against source roots.
+     *
+     * @parameter expression="${maven.clover.excludesFile}"
+     */
+    protected String excludesFile = null;
 
     /**
      * The <a href="http://confluence.atlassian.com/x/O4BOB">Clover flush policy</a> to use.
@@ -283,6 +289,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     /**
      * Used to learn about lifecycles and phases
+     *
      * @component role="org.apache.maven.lifecycle.LifecycleExecutor"
      * @required
      * @readonly
@@ -291,6 +298,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     /**
      * Used to learn about current build session.
+     *
      * @component role="org.apache.maven.execution.MavenSession"
      * @required
      * @readonly
@@ -339,7 +347,28 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     @Override
     public Set<String> getExcludes() {
-        if (excludesList == null) {
+        if (excludesList == null && excludesFile == null) {
+            return excludes;
+        } else if (excludesFile != null) {
+            Set<String> excludes = new HashSet<String>();
+            BufferedReader br = null;
+            try {
+                String line;
+                br = new BufferedReader(new FileReader(excludesFile));
+                while ((line = br.readLine()) != null) {
+                    excludes.add(line);
+                }
+            } catch (IOException e) {
+                getLog().warn("Failed to read excludesFile: " + excludesFile);
+            } finally {
+                try {
+                    if (br != null) {
+                        br.close();
+                    }
+                } catch (IOException ex) {
+                    getLog().warn("Failed to close excludesFile: " + excludesFile);
+                }
+            }
             return excludes;
         } else {
             excludes.addAll(Arrays.asList(excludesList.split(",")));
