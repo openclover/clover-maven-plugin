@@ -348,11 +348,9 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     @Override
     public Set<String> getExcludes() {
-        getLog().info("RAZ");
         if (excludesList == null && excludesFile == null) {
             return excludes;
         } else if (excludesFile != null) {
-            getLog().info("DWA");
             Set<String> excludesInFile = new HashSet<String>();
             BufferedReader br = null;
             try {
@@ -366,7 +364,6 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
             } finally {
                 IOStreamUtils.close(br);
             }
-            getLog().info("TRZY" + excludesInFile.toString());
             return excludesInFile;
         } else {
             excludes.addAll(Arrays.asList(excludesList.split(",")));
