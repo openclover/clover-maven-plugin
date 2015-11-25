@@ -1,5 +1,6 @@
 package com.atlassian.maven.plugin.clover.internal;
 
+import com.atlassian.clover.util.IOStreamUtils;
 import com.atlassian.maven.plugin.clover.DistributedCoverage;
 import com.atlassian.maven.plugin.clover.internal.lifecycle.BuildLifecycleAnalyzer;
 import org.apache.commons.lang.StringUtils;
@@ -8,12 +9,11 @@ import org.apache.maven.lifecycle.LifecycleExecutor;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Common settings for clover:instr / clover:setup MOJOs.
@@ -76,6 +76,13 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * @parameter expression="${maven.clover.excludesList}"
      */
     protected String excludesList = null;
+
+    /**
+     * The file containing a list of files, separated by new line, to exclude from the instrumentation. Patterns are resolved against source roots.
+     *
+     * @parameter expression="${maven.clover.excludesFile}"
+     */
+    protected String excludesFile = null;
 
     /**
      * The <a href="http://confluence.atlassian.com/x/O4BOB">Clover flush policy</a> to use.
@@ -283,6 +290,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     /**
      * Used to learn about lifecycles and phases
+     *
      * @component role="org.apache.maven.lifecycle.LifecycleExecutor"
      * @required
      * @readonly
@@ -291,6 +299,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     /**
      * Used to learn about current build session.
+     *
      * @component role="org.apache.maven.execution.MavenSession"
      * @required
      * @readonly
@@ -339,8 +348,23 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     @Override
     public Set<String> getExcludes() {
-        if (excludesList == null) {
+        if (excludesList == null && excludesFile == null) {
             return excludes;
+        } else if (excludesFile != null) {
+            Set<String> excludesInFile = new HashSet<String>();
+            BufferedReader br = null;
+            try {
+                String line;
+                br = new BufferedReader(new FileReader(excludesFile));
+                while ((line = br.readLine()) != null) {
+                    excludesInFile.add(line);
+                }
+            } catch (IOException e) {
+                getLog().error("Could not read excludesFile: " + excludesFile, e);
+            } finally {
+                IOStreamUtils.close(br);
+            }
+            return excludesInFile;
         } else {
             excludes.addAll(Arrays.asList(excludesList.split(",")));
             return excludes;

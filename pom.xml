@@ -421,6 +421,7 @@ under the License.
                                 <pomInclude>**/setTestFailureIgnore/pom.xml</pomInclude>
                                 <pomInclude>**/simple/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcExcluded/pom.xml</pomInclude>
+                                <pomInclude>**/someSrcExcludedFromFile/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcIncluded/pom.xml</pomInclude>
                                 <!--<pomInclude>**/surefire-and-failsafe-plugins/pom.xml</pomInclude>-->
                                 <!--<pomInclude>**/testng/pom.xml</pomInclude>-->
