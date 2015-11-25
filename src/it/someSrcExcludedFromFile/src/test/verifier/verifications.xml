@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<verifications>
+    <files>
+        <file>
+            <location>target/site/clover/pkg-summary.html</location>
+            <contains>50%</contains>
+        </file>
+        <file>
+            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/somesrcexcluded/exclude/pkg-summary.html</location>
+            <exists>false</exists>
+        </file>
+    </files>
+</verifications>
