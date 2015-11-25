@@ -1,5 +1,6 @@
 package com.atlassian.maven.plugin.clover.internal;
 
+import com.atlassian.clover.util.IOStreamUtils;
 import com.atlassian.maven.plugin.clover.DistributedCoverage;
 import com.atlassian.maven.plugin.clover.internal.lifecycle.BuildLifecycleAnalyzer;
 import org.apache.commons.lang.StringUtils;
@@ -77,7 +78,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected String excludesList = null;
 
     /**
-     * The file containing a list of files to exclude from the instrumentation. Patterns are resolved against source roots.
+     * The file containing a list of files, separated by new line, to exclude from the instrumentation. Patterns are resolved against source roots.
      *
      * @parameter expression="${maven.clover.excludesFile}"
      */
@@ -347,29 +348,26 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     @Override
     public Set<String> getExcludes() {
+        getLog().info("RAZ");
         if (excludesList == null && excludesFile == null) {
             return excludes;
         } else if (excludesFile != null) {
-            Set<String> excludes = new HashSet<String>();
+            getLog().info("DWA");
+            Set<String> excludesInFile = new HashSet<String>();
             BufferedReader br = null;
             try {
                 String line;
                 br = new BufferedReader(new FileReader(excludesFile));
                 while ((line = br.readLine()) != null) {
-                    excludes.add(line);
+                    excludesInFile.add(line);
                 }
             } catch (IOException e) {
-                getLog().warn("Failed to read excludesFile: " + excludesFile);
+                getLog().error("Could not read excludesFile: " + excludesFile, e);
             } finally {
-                try {
-                    if (br != null) {
-                        br.close();
-                    }
-                } catch (IOException ex) {
-                    getLog().warn("Failed to close excludesFile: " + excludesFile);
-                }
+                IOStreamUtils.close(br);
             }
-            return excludes;
+            getLog().info("TRZY" + excludesInFile.toString());
+            return excludesInFile;
         } else {
             excludes.addAll(Arrays.asList(excludesList.split(",")));
             return excludes;
