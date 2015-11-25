@@ -1,10 +1,12 @@
 package com.atlassian.maven.plugin.clover.internal;
 
+import com.atlassian.maven.plugin.clover.CloverInstrumentMojo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -13,29 +15,10 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 
 /**
- * TODO: Document this class / interface here
- *
- * @since v7.0
+ * Unit tests for {@link AbstractCloverInstrumentMojo#getExcludes()}
  */
 @RunWith(Parameterized.class)
 public class AbstractCloverInstrumentExcludesMojoTest {
-
-    class TestableCloverInstrumentExcludesMojo extends AbstractCloverInstrumentMojo {
-
-        public TestableCloverInstrumentExcludesMojo(final String excludesFile) {
-            this.excludesFile = excludesFile;
-        }
-
-        @Override
-        protected boolean shouldRedirectArtifacts() {
-            throw new UnsupportedOperationException("Not implemented");
-        }
-
-        @Override
-        protected boolean shouldRedirectOutputDirectories() {
-            throw new UnsupportedOperationException("Not implemented");
-        }
-    }
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
@@ -72,8 +55,11 @@ public class AbstractCloverInstrumentExcludesMojoTest {
     }
 
     @Test
-    public void testReturnsExcludesFromSpecifiedExcludesFile() {
-        TestableCloverInstrumentExcludesMojo mojo = new TestableCloverInstrumentExcludesMojo(excludesFile);
+    public void testReturnsExcludesFromSpecifiedExcludesFile() throws NoSuchFieldException, IllegalAccessException {
+        CloverInstrumentMojo mojo = new CloverInstrumentMojo();
+        Field excludesFileField = AbstractCloverInstrumentMojo.class.getDeclaredField("excludesFile");
+        excludesFileField.setAccessible(true);
+        excludesFileField.set(mojo, excludesFile);
         Set<String> excludes = mojo.getExcludes();
         assertEquals(expectedExcludes, excludes);
     }
