@@ -22,7 +22,7 @@ under the License.
     <artifactId>maven-clover2-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Maven Clover Plugin</name>
-    <version>4.1.0-SNAPSHOT</version>
+    <version>4.0.7</version>
     <description>Maven plugin for Clover.
         MIGRATION NOTICE: Since next major Clover release this plugin will be renamed to
         com.atlassian.maven.plugins:clover-maven-plugin. Thus, goals will also be renamed, e.g.
@@ -82,7 +82,7 @@ under the License.
     </prerequisites>
     <properties>
         <!-- Clover Core version -->
-        <cloverVersion>4.1.0-SNAPSHOT</cloverVersion>
+        <cloverVersion>4.0.6</cloverVersion>
         <!-- Don't perform automatic releasing of a staging repository in the Atlassian Central repository -->
         <staging.automatic.release>false</staging.automatic.release>
 
