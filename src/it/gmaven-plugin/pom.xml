@@ -22,7 +22,7 @@
     <properties>
         <groovy.version>1.8.8</groovy.version>
         <gmaven.version>1.5</gmaven.version>
-        <clover.version>4.1.0-SNAPSHOT</clover.version>
+        <clover.version>4.1.1-SNAPSHOT</clover.version>
     </properties>
     <dependencies>
         <dependency>

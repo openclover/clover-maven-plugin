@@ -22,7 +22,7 @@ under the License.
     <artifactId>clover-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Maven Clover Plugin</name>
-    <version>4.1.0-SNAPSHOT</version>
+    <version>4.1.1-SNAPSHOT</version>
     <description>Maven plugin for Clover.
         MIGRATION NOTICE: Since Clover 4.1.0 this plugin is named com.atlassian.maven.plugins:clover-maven-plugin.
         In previous versions it was named com.atlassian.maven.plugins:maven-clover2-plugin.</description>
@@ -81,7 +81,7 @@ under the License.
     </prerequisites>
     <properties>
         <!-- Clover Core version -->
-        <cloverVersion>4.1.0-SNAPSHOT</cloverVersion>
+        <cloverVersion>4.1.1-SNAPSHOT</cloverVersion>
         <!-- Don't perform automatic releasing of a staging repository in the Atlassian Central repository -->
         <staging.automatic.release>false</staging.automatic.release>
 
