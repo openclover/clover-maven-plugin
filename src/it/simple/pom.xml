@@ -78,6 +78,7 @@ under the License.
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>4.2.0-SNAPSHOT</version>
                 <configuration>
                     <!--includesTestSourceRoots>false</includesTestSourceRoots-->
                     <targetPercentage>1%</targetPercentage>
