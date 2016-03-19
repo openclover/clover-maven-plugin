@@ -91,9 +91,12 @@ public class CloverAggregateMojo extends AbstractCloverMojo {
         // Find out the location of the clover DB relative to the root module.
         // Note: This is a pretty buggy algorithm and we really need a proper
         // solution (see MNG-2180)
-
-        final String relativeCloverDatabasePath = resolveCloverDatabase().substring(
-                getProject().getBasedir().getPath().length());
+        final String resolvedCloverDb = resolveCloverDatabase();
+        final String projectBaseDir = getProject().getBasedir().getPath();
+        getLog().debug("Calculating relative database path of '" + resolvedCloverDb
+                + "' against the project base directory '" + projectBaseDir + "'");
+        final String relativeCloverDatabasePath = resolvedCloverDb.substring(projectBaseDir.length());
+        getLog().debug("Relative path is '" + relativeCloverDatabasePath + "'");
         final List<String> dbFiles = new ArrayList<String>();
         final List<MavenProject> projects = getDescendantModuleProjects(getProject());
 
