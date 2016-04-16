@@ -1,6 +1,6 @@
 <project name="Clover Report" default="current">
 
-    <clover-format id="clover.format" type="${type}" orderBy="${orderBy}" filter="${filter}" reportStyle="${reportStyle}"/>
+    <clover-format id="clover.format" type="${type}" orderBy="${orderBy}" filter="${filter}"/>
 
     <clover-setup initString="${cloverdb}"/>
 
