@@ -227,6 +227,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     /**
      * Style of the HTML report: ADG (default) or CLASSIC (deprecated).
      *
+     * @deprecated this parameter will be removed in next major release
      * @parameter expression="${maven.clover.reportStyle}" default-value="ADG"
      */
     private String reportStyle;
