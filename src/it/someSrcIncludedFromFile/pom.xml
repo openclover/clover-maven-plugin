@@ -1,10 +1,10 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.atlassian.maven.plugins</groupId>
-    <artifactId>clover-maven-plugin-it-somesrcexcludedfromfile</artifactId>
+    <artifactId>maven-clover2-plugin-it-somesrcincludedfromfile</artifactId>
     <packaging>jar</packaging>
-    <name>Maven Clover Plugin Some Src Excluded From File Sample</name>
-    <description>Maven Clover Plugin Some Src Excluded From File Sample</description>
+    <name>Maven Clover Plugin Some Src Included Sample</name>
+    <description>Maven Clover Plugin Some Src Included From File Sample</description>
     <version>1.0-SNAPSHOT</version>
     <properties>
         <maven.clover.version>4.2.0-SNAPSHOT</maven.clover.version>
@@ -23,6 +23,7 @@
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>${maven.clover.version}</version>
                 <configuration>
                     <jdk>1.6</jdk>
                 </configuration>
@@ -36,7 +37,7 @@
                 <artifactId>clover-maven-plugin</artifactId>
                 <version>${maven.clover.version}</version>
                 <configuration>
-                    <excludesFile>${project.basedir}/src/main/resources/excludes.txt</excludesFile>
+                    <includesFile>${project.basedir}/src/main/resources/includes.txt</includesFile>
                     <jdk>1.6</jdk>
                 </configuration>
                 <executions>

@@ -18,24 +18,26 @@ import static org.junit.Assert.assertEquals;
  * Unit tests for {@link AbstractCloverInstrumentMojo#getExcludes()}
  */
 @RunWith(Parameterized.class)
-public class AbstractCloverInstrumentExcludesMojoTest {
+public class AbstractCloverInstrumentIncludesExcludesMojoTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {new String[]{"file1", "file2"}, new String[]{"file1", "file2"}},
-                {new String[]{"file1", "file1"}, new String[]{"file1"}},
-                {new String[]{""}, new String[]{""}},
-                {null, new String[]{}},
+                {new String[]{"file1", "file2"}, new String[]{"file1", "file2"}, new String[]{"file1", "file2"}},
+                {new String[]{"file1", "file1"}, new String[]{"file1"}, new String[]{"file1"}},
+                {new String[]{""}, new String[]{""}, new String[]{""}},
+                {null, new String[]{}, new String[]{"**/*.java", "**/*.groovy"}},
         });
     }
 
-    private String excludesFile;
+    private String file;
     private Set<String> expectedExcludes;
+    private Set<String> expectedIncludes;
 
-    public AbstractCloverInstrumentExcludesMojoTest(String[] linesInExcludesFile, String[] expectedExcludes) throws IOException {
-        this.excludesFile = createTempFileWithLines(linesInExcludesFile);
+    public AbstractCloverInstrumentIncludesExcludesMojoTest(String[] linesInExcludesFile, String[] expectedExcludes, String[] expectedIncludes) throws IOException {
+        this.file = createTempFileWithLines(linesInExcludesFile);
         this.expectedExcludes = new HashSet<String>(Arrays.asList(expectedExcludes));
+        this.expectedIncludes = new HashSet<String>(Arrays.asList(expectedIncludes));
     }
 
     private String createTempFileWithLines(String[] lines) throws IOException {
@@ -59,8 +61,18 @@ public class AbstractCloverInstrumentExcludesMojoTest {
         CloverInstrumentMojo mojo = new CloverInstrumentMojo();
         Field excludesFileField = AbstractCloverInstrumentMojo.class.getDeclaredField("excludesFile");
         excludesFileField.setAccessible(true);
-        excludesFileField.set(mojo, excludesFile);
+        excludesFileField.set(mojo, file);
         Set<String> excludes = mojo.getExcludes();
         assertEquals(expectedExcludes, excludes);
+    }
+
+    @Test
+    public void testReturnsIncludesFromSpecifiedIncludesFile() throws NoSuchFieldException, IllegalAccessException {
+        CloverInstrumentMojo mojo = new CloverInstrumentMojo();
+        Field includesFileField = AbstractCloverInstrumentMojo.class.getDeclaredField("includesFile");
+        includesFileField.setAccessible(true);
+        includesFileField.set(mojo, file);
+        Set<String> includes = mojo.getIncludes();
+        assertEquals(expectedIncludes, includes);
     }
 }
