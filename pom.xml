@@ -423,6 +423,7 @@ under the License.
                                 <pomInclude>**/someSrcExcluded/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcExcludedFromFile/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcIncluded/pom.xml</pomInclude>
+                                <pomInclude>**/someSrcIncludedFromFile/pom.xml</pomInclude>
                                 <!--<pomInclude>**/surefire-and-failsafe-plugins/pom.xml</pomInclude>-->
                                 <!--<pomInclude>**/testng/pom.xml</pomInclude>-->
                                 <!--<pomInclude>**/tutorial/pom.xml</pomInclude>-->
