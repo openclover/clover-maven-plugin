@@ -1,3 +1,4 @@
 syntax: glob
-clover-maven-plugin.iml
+*.iml
 .idea
+mvnvm.properties

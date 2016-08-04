@@ -1,11 +1,16 @@
-package com.atlassian.maven.plugin.clover.internal;
+package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.CloverInstrumentMojo;
+import com.atlassian.maven.plugin.clover.internal.AbstractCloverInstrumentMojo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,11 +20,18 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Unit tests for {@link AbstractCloverInstrumentMojo#getExcludes()}
+ * Unit tests for {@link AbstractCloverInstrumentMojo#getExcludes()} and {@link AbstractCloverInstrumentMojo#getIncludes()} ()}
  */
 @RunWith(Parameterized.class)
-public class AbstractCloverInstrumentIncludesExcludesMojoTest {
+public class CloverGetIncludedExcludedInstrumentedFilePathsFromFile {
 
+    /**
+     * Test data for parametrized test run
+     * @return Collection of arrays where,
+     * - first element - list of file paths
+     * - second element - expected file paths excluded from instrumentation
+     * - third element - expected file paths included included in instrumentation
+     */
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
@@ -34,7 +46,7 @@ public class AbstractCloverInstrumentIncludesExcludesMojoTest {
     private Set<String> expectedExcludes;
     private Set<String> expectedIncludes;
 
-    public AbstractCloverInstrumentIncludesExcludesMojoTest(String[] linesInExcludesFile, String[] expectedExcludes, String[] expectedIncludes) throws IOException {
+    public CloverGetIncludedExcludedInstrumentedFilePathsFromFile(String[] linesInExcludesFile, String[] expectedExcludes, String[] expectedIncludes) throws IOException {
         this.file = createTempFileWithLines(linesInExcludesFile);
         this.expectedExcludes = new HashSet<String>(Arrays.asList(expectedExcludes));
         this.expectedIncludes = new HashSet<String>(Arrays.asList(expectedIncludes));
@@ -42,7 +54,7 @@ public class AbstractCloverInstrumentIncludesExcludesMojoTest {
 
     private String createTempFileWithLines(String[] lines) throws IOException {
         if (null != lines) {
-            File temp = File.createTempFile("temp-file-name", ".tmp");
+            File temp = File.createTempFile("includesExcludes", ".tmp");
             FileOutputStream fos = new FileOutputStream(temp);
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
             for (String line : lines) {
