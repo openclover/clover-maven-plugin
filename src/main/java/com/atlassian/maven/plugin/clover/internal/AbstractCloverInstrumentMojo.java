@@ -78,7 +78,8 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected String excludesList = null;
 
     /**
-     * The file containing a list of files, separated by new line, to exclude from the instrumentation. Patterns are resolved against source roots.
+     * The file containing a list of file paths, separated by new line, to exclude from the instrumentation. Patterns are resolved against source roots.
+     * See also {@link #excludes} and {@link #excludesList}
      *
      * @parameter expression="${maven.clover.excludesFile}"
      */
@@ -129,7 +130,8 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected String includesList = null;
 
     /**
-     * The file containing a list of files, separated by new line, to include in the instrumentation. Patterns are resolved against source roots.
+     * The file containing a list of file paths, separated by new line, to include in the instrumentation. Patterns are resolved against source roots.
+     * See also {@link #includes} and {@link #includesList}
      *
      * @parameter expression="${maven.clover.includesFile}"
      */
@@ -359,7 +361,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
             return excludes;
         } else if (excludesFile != null) {
             try {
-                return readFilesFromFile(excludesFile);
+                return readPathPatternsFromFile(excludesFile);
             } catch (IOException e) {
                 getLog().error("Could not read excludesFile: " + excludesFile, e);
                 return Collections.emptySet();
@@ -381,7 +383,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
             return this.includes;
         } else if (includesFile != null) {
             try {
-                return readFilesFromFile(includesFile);
+                return readPathPatternsFromFile(includesFile);
             } catch (IOException e) {
                 getLog().error("Could not read includesFile: " + includesFile, e);
                 return Collections.emptySet();
@@ -438,13 +440,13 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
             "You can also disable repository pollution protection (-Dmaven.clover.repositoryPollutionProtection=false) if this is intentional.";
 
     /**
-     * Read list of files to exclude/include from external file
+     * Read list of file paths to exclude/include from file
      *
      * @param file path to external file with list of files to exclude/include separated by new line
      * @return set of files to include/exclude
      * @throws IOException if can't read external file
      */
-    private Set<String> readFilesFromFile(final String file) throws IOException {
+    private Set<String> readPathPatternsFromFile(final String file) throws IOException {
         Set<String> files = new HashSet<String>();
         BufferedReader br = null;
         try {
