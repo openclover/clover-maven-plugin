@@ -13,31 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.atlassian.maven.plugin.clover.samples.somesrcexcluded;
+package com.atlassian.maven.plugin.clover.samples.somesrcincluded;
 
-public class Simple
+import com.atlassian.maven.plugin.clover.samples.somesrcincluded.include.Simple2;
+import com.atlassian.maven.plugin.clover.samples.somesrcincluded.include.Simple3;
+import junit.framework.TestCase;
+
+public class SimpleTest extends TestCase
 {
-    public void someMethod1()
+    public void testSomeMethod()
     {        
-    }
-
-    public void someMethodToReduceStatementCoverage()
-    {
-        try
-        {
-            System.getProperties();
-        }
-        finally
-        {
-            // We use a try/finally so that we can use a block context of 
-        }
-    }
-    
-    public void someMethod2(int i)
-    {                
-        if (i == 2)
-        {
-            //  Do nothing
-        }
+        Simple simple = new Simple();
+        Simple2 simple2 = new Simple2();
+        Simple3 simple3 = new Simple3();
+        simple.someMethod1();
+        simple.someMethod2(1);
+        simple2.someMethod2(2);
+        simple3.someMethod3(3);
     }
 } 

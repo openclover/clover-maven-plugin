@@ -1,4 +1,4 @@
-package com.atlassian.maven.plugin.clover.samples.somesrcexcluded.exclude;
+package com.atlassian.maven.plugin.clover.samples.somesrcincluded.include;
 
 /*
  * Copyright 2016 Atlassian.
@@ -15,12 +15,12 @@ package com.atlassian.maven.plugin.clover.samples.somesrcexcluded.exclude;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class Simple3 {
-    public void someMethod3(int i)
+public class Simple2 {
+    public void someMethod2(int i)
     {
-        if (i == 3)
+        if (i == 2)
         {
             //  Do nothing
         }
-    }
+    }    
 }

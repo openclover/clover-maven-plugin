@@ -1,4 +1,4 @@
-package com.atlassian.maven.plugin.clover.samples.somesrcexcluded.exclude;
+package com.atlassian.maven.plugin.clover.samples.somesrcincluded.include;
 
 /*
  * Copyright 2016 Atlassian.
