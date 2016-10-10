@@ -78,7 +78,8 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected String excludesList = null;
 
     /**
-     * The file containing a list of files, separated by new line, to exclude from the instrumentation. Patterns are resolved against source roots.
+     * The file containing a list of file paths, separated by new line, to exclude from the instrumentation. Patterns are resolved against source roots.
+     * See also {@link #excludes} and {@link #excludesList}
      *
      * @parameter expression="${maven.clover.excludesFile}"
      */
@@ -127,6 +128,14 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * @parameter expression="${maven.clover.includesList}"
      */
     protected String includesList = null;
+
+    /**
+     * The file containing a list of file paths, separated by new line, to include in the instrumentation. Patterns are resolved against source roots.
+     * See also {@link #includes} and {@link #includesList}
+     *
+     * @parameter expression="${maven.clover.includesFile}"
+     */
+    protected String includesFile = null;
 
     /**
      * <p><b>Till 3.1.11:</b> whether the Clover plugin should instrument all source roots (for example
@@ -351,20 +360,12 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
         if (excludesList == null && excludesFile == null) {
             return excludes;
         } else if (excludesFile != null) {
-            Set<String> excludesInFile = new HashSet<String>();
-            BufferedReader br = null;
             try {
-                String line;
-                br = new BufferedReader(new FileReader(excludesFile));
-                while ((line = br.readLine()) != null) {
-                    excludesInFile.add(line);
-                }
+                return readPathPatternsFromFile(excludesFile);
             } catch (IOException e) {
                 getLog().error("Could not read excludesFile: " + excludesFile, e);
-            } finally {
-                IOStreamUtils.close(br);
+                return Collections.emptySet();
             }
-            return excludesInFile;
         } else {
             excludes.addAll(Arrays.asList(excludesList.split(",")));
             return excludes;
@@ -378,8 +379,15 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     @Override
     public Set<String> getIncludes() {
-        if (includesList == null) {
+        if (includesList == null && includesFile == null) {
             return this.includes;
+        } else if (includesFile != null) {
+            try {
+                return readPathPatternsFromFile(includesFile);
+            } catch (IOException e) {
+                getLog().error("Could not read includesFile: " + includesFile, e);
+                return Collections.emptySet();
+            }
         } else {
             return new HashSet<String>(Arrays.asList(includesList.split(",")));
         }
@@ -430,6 +438,28 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     private static final String DISABLING_PROTECTION_MSG =
             "You can also disable repository pollution protection (-Dmaven.clover.repositoryPollutionProtection=false) if this is intentional.";
+
+    /**
+     * Read list of file paths to exclude/include from file
+     *
+     * @param file path to external file with list of files to exclude/include separated by new line
+     * @return set of files to include/exclude
+     * @throws IOException if can't read external file
+     */
+    private Set<String> readPathPatternsFromFile(final String file) throws IOException {
+        Set<String> files = new HashSet<String>();
+        BufferedReader br = null;
+        try {
+            String line;
+            br = new BufferedReader(new FileReader(file));
+            while ((line = br.readLine()) != null) {
+                files.add(line);
+            }
+        } finally {
+            IOStreamUtils.close(br);
+        }
+        return files;
+    }
 
     /**
      * Check if the build life cycle contains the 'install' phase.

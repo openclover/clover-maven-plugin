@@ -1,5 +1,3 @@
-package com.atlassian.maven.plugin.clover.samples.somesrcexcluded.exclude;
-
 /*
  * Copyright 2016 Atlassian.
  *
@@ -15,12 +13,31 @@ package com.atlassian.maven.plugin.clover.samples.somesrcexcluded.exclude;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class Simple3 {
-    public void someMethod3(int i)
+package com.atlassian.maven.plugin.clover.samples.somesrcincluded;
+
+public class Simple
+{
+    public void someMethod1()
+    {        
+    }
+
+    public void someMethodToReduceStatementCoverage()
     {
-        if (i == 3)
+        try
+        {
+            System.getProperties();
+        }
+        finally
+        {
+            // We use a try/finally so that we can use a block context of 
+        }
+    }
+    
+    public void someMethod2(int i)
+    {                
+        if (i == 2)
         {
             //  Do nothing
         }
     }
-}
+} 
