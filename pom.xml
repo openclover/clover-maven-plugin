@@ -22,7 +22,7 @@ under the License.
     <artifactId>clover-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Maven Clover Plugin</name>
-    <version>4.1.2-SNAPSHOT</version>
+    <version>4.1.2</version>
     <description>Maven plugin for Clover.
         MIGRATION NOTICE: Since Clover 4.1.0 this plugin is named com.atlassian.maven.plugins:clover-maven-plugin.
         In previous versions it was named com.atlassian.maven.plugins:maven-clover2-plugin.</description>
@@ -57,7 +57,7 @@ under the License.
         <connection>scm:hg:ssh://hg@bitbucket.org/atlassian/maven-clover2-plugin</connection>
         <developerConnection>scm:hg:ssh://hg@bitbucket.org/atlassian/maven-clover2-plugin</developerConnection>
         <url>https://bitbucket.org/atlassian/maven-clover2-plugin/src</url>
-        <tag>clover-maven-plugin-4.1.0</tag>
+        <tag>maven-clover2-plugin-4.1.2</tag>
     </scm>
     <developers>
         <developer>
