@@ -29,7 +29,7 @@ under the License.
     <parent>
         <groupId>com.atlassian.pom</groupId>
         <artifactId>central-pom</artifactId>
-        <version>3.0.98</version>
+        <version>3.0.105</version>
     </parent>
     <url>http://confluence.atlassian.com/x/dIDBBQ</url>
     <organization>
