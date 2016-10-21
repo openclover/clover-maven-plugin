@@ -505,7 +505,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     protected Set<Artifact> swizzleCloverDependencies(final Set<Artifact> artifacts) {
         Set<Artifact> resolvedArtifacts = new LinkedHashSet<Artifact>();
         for (Artifact artifact : artifacts) {
-            // Do not try to find Clovered versions for artifacts with classifiers. This is because Maven2 only
+            // Do not try to find Clovered versions for artifacts with classifiers. This is because Maven only
             // supports a single classifier per artifact and thus if we replace the original classifier with
             // a Clover classifier the artifact will fail to perform properly as intended originally. This is a
             // limitation.

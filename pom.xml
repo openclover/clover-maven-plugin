@@ -21,7 +21,7 @@ under the License.
     <groupId>com.atlassian.maven.plugins</groupId>
     <artifactId>clover-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <name>Maven Clover Plugin</name>
+    <name>Clover Maven Plugin</name>
     <version>4.2.0-SNAPSHOT</version>
     <description>Maven plugin for Clover.
         MIGRATION NOTICE: Since Clover 4.1.0 this plugin is named com.atlassian.maven.plugins:clover-maven-plugin.
@@ -46,7 +46,7 @@ under the License.
             <url>http://www.apache.org/licenses/LICENSE-2.0</url>
             <distribution>repo</distribution>
             <comments>
-                The Clover-for-Maven Plugin is licensed under the Apache 2.0 license. However, the Clover binary
+                The Clover Maven Plugin is licensed under the Apache 2.0 license. However, the Clover binary
                 dependency (com.atlassian.clover:clover) is commercial software. Clover is free for use for Open Source
                 projects and non-profit organisations. For more information on Clover's licensing and pricing, see:
                 http://www.atlassian.com/software/clover/licensing.jsp
@@ -65,23 +65,13 @@ under the License.
             <name>Marek Parfianowicz</name>
             <email>mparfianowicz@atlassian.com</email>
         </developer>
-        <developer>
-            <id>jjaroczynski</id>
-            <name>Jacek Jaroczynski</name>
-            <email>jjaroczynski@atlassian.com</email>
-        </developer>
-        <developer>
-            <id>mstudman</id>
-            <name>Michael Studman</name>
-            <email>mstudman@atlassian.com</email>
-        </developer>
     </developers>
     <prerequisites>
         <maven>2.1.0</maven>
     </prerequisites>
     <properties>
         <!-- Clover Core version -->
-        <cloverVersion>4.1.2</cloverVersion>
+        <cloverVersion>4.2.0-SNAPSHOT</cloverVersion>
         <!-- Don't perform automatic releasing of a staging repository in the Atlassian Central repository -->
         <staging.automatic.release>false</staging.automatic.release>
 

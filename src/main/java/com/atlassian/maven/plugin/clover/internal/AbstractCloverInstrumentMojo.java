@@ -94,7 +94,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected String flushPolicy;
 
     /**
-     * <p>By default, Maven Clover Plugin generates the <code>${java.io.tmpdir}/grover*.jar</code> file during setup,
+     * <p>By default, Clover Maven Plugin generates the <code>${java.io.tmpdir}/grover*.jar</code> file during setup,
      * which is next being added as the dependent artifact to the build. As the file has generated, unique
      * name and the jar is not being removed at the end of the build, these files can litter the temporary
      * directory.</p>
@@ -104,7 +104,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <p>However, you must ensure that:</p>
      * <p> a) grover.jar will not be deleted till end of the build (for example don't put into ./target directory
      * and next run <code>mvn clover:setup clean</code>)</p>
-     * <p> b) grover.jar will not be shared among builds with different Maven Clover Plugin versions used (for
+     * <p> b) grover.jar will not be shared among builds with different Clover Maven Plugin versions used (for
      * example if ProjectA uses Clover v 3.1.8 and ProjectB uses Clover v 3.1.9 then they shall have different
      * <code>groverJar</code> locations defined)</p>
      *
@@ -254,7 +254,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected boolean setTestFailureIgnore;
 
     /**
-     * <p>By default, Maven Clover Plugin generates the <code>${java.io.tmpdir}/grover*.jar</code> file during setup,
+     * <p>By default, Clover Maven Plugin generates the <code>${java.io.tmpdir}/grover*.jar</code> file during setup,
      * which is next being added as the dependent artifact to the build. As the file has generated, unique
      * name and the jar is not being removed at the end of the build, these files can litter the temporary
      * directory.</p>
