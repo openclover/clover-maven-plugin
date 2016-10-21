@@ -22,8 +22,8 @@ under the License.
     <groupId>com.atlassian.maven.plugins.sample</groupId>
     <artifactId>clover-sample-contexts</artifactId>
     <packaging>jar</packaging>
-    <name>Maven Clover Plugin Contexts Sample</name>
-    <description>Maven Clover Plugin Contexts Sample</description>
+    <name>Clover Maven Plugin Contexts Sample</name>
+    <description>Clover Maven Plugin Contexts Sample</description>
     <version>1.0-SNAPSHOT</version>
     <dependencies>
         <dependency>

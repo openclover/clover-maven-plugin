@@ -21,8 +21,8 @@ under the License.
     <groupId>com.atlassian.maven.plugins.sample</groupId>
     <artifactId>clover-sample-multiproject</artifactId>
     <packaging>pom</packaging>
-    <name>Maven Clover Plugin Multiproject Sample</name>
-    <description>Maven Clover Plugin Multiproject Sample</description>
+    <name>Clover Maven Plugin Multiproject Sample</name>
+    <description>Clover Maven Plugin Multiproject Sample</description>
     <version>1.0-SNAPSHOT</version>
     <dependencies>
         <dependency>

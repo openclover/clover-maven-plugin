@@ -22,8 +22,8 @@ under the License.
     <groupId>com.atlassian.maven.plugins</groupId>
     <artifactId>clover-maven-plugin-sample-simple</artifactId>
     <packaging>jar</packaging>
-    <name>Maven Clover Plugin Simple Sample</name>
-    <description>Maven Clover Plugin Simple Sample</description>
+    <name>Clover Maven Plugin Simple Sample</name>
+    <description>Clover Maven Plugin Simple Sample</description>
     <version>1.0-SNAPSHOT</version>
     <dependencies>
         <dependency>

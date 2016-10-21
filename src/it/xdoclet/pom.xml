@@ -22,7 +22,7 @@ under the License.
     <groupId>com.atlassian.maven.plugins</groupId>
     <artifactId>clover-maven-plugin-sample-forked-lifecycle</artifactId>
     <packaging>jar</packaging>
-    <name>Maven Clover Plugin Forked Lifecycle Sample</name>
+    <name>Clover Maven Plugin Forked Lifecycle Sample</name>
     <description>
         This is a test case which checks if 'clover:instrument' goal will create a forked lifecycle (so that compiled
         artefacts are written to 'target/clover' instead of default 'target' directory).
