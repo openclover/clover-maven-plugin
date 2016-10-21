@@ -22,8 +22,8 @@ under the License.
     <groupId>com.atlassian.maven.plugins</groupId>
     <artifactId>clover-maven-plugin-sample-setTestFailureIgnore</artifactId>
     <packaging>jar</packaging>
-    <name>Maven Clover Plugin Sample SetTestFailureIgnore</name>
-    <description>Maven Clover Plugin sample which shows how setTestFailureIgnore configuration property works</description>
+    <name>Clover Maven Plugin Sample SetTestFailureIgnore</name>
+    <description>Clover Maven Plugin sample which shows how setTestFailureIgnore configuration property works</description>
     <version>1.0-SNAPSHOT</version>
     <properties>
         <checkstyleVersion>2.8</checkstyleVersion> <!-- Checkstyle 2.8 requires Maven 2.0.6+, while 2.9.x requires 2.2.1+ -->
