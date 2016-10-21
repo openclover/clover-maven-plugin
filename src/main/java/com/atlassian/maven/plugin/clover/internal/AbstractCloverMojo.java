@@ -193,9 +193,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     /**
      * Registers the license file for Clover runtime by setting the <code>clover.license.path</code> system property.
      * If the user has configured the <code>licenseLocation</code> parameter the plugin tries to resolve it first as a
-     * resource, then as a URL, and then as a file location on the filesystem. If the <code>licenseLocation</code>
-     * parameter has not been defined by the user we look up a default Clover license in the classpath in
-     * <code>/clover.license</code>.
+     * resource, then as a URL, and then as a file location on the filesystem.
      *
      * Note: We're defining this method as static because it is also required in the report mojo and reporting mojos
      * and main mojos cannot share anything right now. See http://jira.codehaus.org/browse/MNG-1886.
@@ -210,7 +208,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      */
     public static void registerLicenseFile(final MavenProject project,
                                            final ResourceManager resourceManager,
-                                           String licenseLocation,
+                                           final String licenseLocation,
                                            final Log logger,
                                            final ClassLoader classloader,
                                            final String licenseCert) throws MojoExecutionException {
@@ -221,16 +219,15 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
             System.setProperty(CloverNames.PROP_LICENSE_CERT, licenseCert);
             return;
         }
-        logger.debug("Using licenseLocation '" + licenseLocation + "'");
 
-        if (licenseLocation == null) {
+        if (licenseLocation != null) {
+            logger.debug("Using licenseLocation '" + licenseLocation + "'");
+            final File licenseFile = getResourceAsFile(project, resourceManager, licenseLocation, logger, classloader);
+            logger.debug("Using license file [" + licenseFile.getPath() + "]");
+            System.setProperty(CloverNames.PROP_LICENSE_PATH, licenseFile.getPath());
+        } else {
             logger.info("No 'maven.clover.licenseLocation' configured. Using default license.");
-            licenseLocation = "/clover.license";
         }
-        final File licenseFile = getResourceAsFile(project, resourceManager, licenseLocation, logger, classloader);
-
-        logger.debug("Using license file [" + licenseFile.getPath() + "]");
-        System.setProperty(CloverNames.PROP_LICENSE_PATH, licenseFile.getPath());
     }
 
     public static File getResourceAsFile(final MavenProject project,
