@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
     <name>Sample for clover-maven-plugin with groovy-eclipse-plugin</name>
     <description>
-        Example how to use Clover-for-Maven with groovy-eclipse-plugin. It uses an approach where Groovy
+        Example how to use Clover Maven Plugin with groovy-eclipse-plugin. It uses an approach where Groovy
         source files are placed in 'src/main/java' and 'src/test/java' folders (these folders can contain Java sources
         as well), so that there is no need to define extra source folders via build-helper-maven-plugin.
 
