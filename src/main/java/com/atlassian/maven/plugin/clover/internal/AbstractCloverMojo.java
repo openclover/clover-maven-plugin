@@ -85,8 +85,8 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
     /**
      * A Clover license file to be used by the plugin. The plugin tries to resolve this parameter first as a resource,
-     * then as a URL, and then as a file location on the filesystem. A trial Clover license can be generated
-     * <a href="http://www.atlassian.com/ex/GenerateLicense.jspa?product=Clover&version=2">here</a>.
+     * then as a URL, and then as a file location on the filesystem. If not provided, Clover will use a bundled
+     * license key.
      *
      * @parameter expression="${maven.clover.licenseLocation}"
      * @see #license
@@ -95,8 +95,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
     /**
      * The full Clover license String to use. If supplied, this certificate will be used over {@link #licenseLocation}.
-     * NB. newline chars must be preserved.
-     * A trial Clover license can be generated <a href="http://www.atlassian.com/ex/GenerateLicense.jspa?product=Clover&version=2">here</a>.
+     * NB. newline chars must be preserved. If not provided, Clover will use a bundled license key.
      *
      * @parameter expression="${maven.clover.license}"
      * @see #licenseLocation
@@ -225,7 +224,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
         logger.debug("Using licenseLocation '" + licenseLocation + "'");
 
         if (licenseLocation == null) {
-            logger.info("No 'maven.clover.licenseLocation' configured. Using default evaluation license.");
+            logger.info("No 'maven.clover.licenseLocation' configured. Using default license.");
             licenseLocation = "/clover.license";
         }
         final File licenseFile = getResourceAsFile(project, resourceManager, licenseLocation, logger, classloader);
