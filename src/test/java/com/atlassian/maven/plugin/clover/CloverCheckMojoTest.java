@@ -26,7 +26,6 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
 
     final MavenProject project = new MavenProject();
     final Project antProject = new Project();
-    private String license;
     private File cloverDb;
     private File cloverMergedDb;
 
@@ -39,7 +38,6 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
         project.getBuild().setOutputDirectory("target/classes");
         project.getBuild().setDirectory("target");
         project.setFile(new File("pom.xml").getAbsoluteFile());
-        license = FileUtils.fileRead(new File(getClass().getResource("/clover.license").toURI()));
     }
 
     public void testWhenDatabaseMissing() throws Exception, FileResourceCreationException, ResourceNotFoundException {
@@ -117,7 +115,6 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
             }
         };
         mojo.setProject(project);
-        mojo.setLicense(license);
         mojo.setLog(log);
 
 

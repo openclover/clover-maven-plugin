@@ -23,7 +23,7 @@ under the License.
     <artifactId>clover-sample-mclover80</artifactId>
     <packaging>pom</packaging>
     <name>mclover</name>
-    <description>Maven Clover Plugin Multiproject Sample</description>
+    <description>Clover Maven Plugin Multiproject Sample</description>
     <version>1.0-SNAPSHOT</version>
     <dependencies>
         <dependency>

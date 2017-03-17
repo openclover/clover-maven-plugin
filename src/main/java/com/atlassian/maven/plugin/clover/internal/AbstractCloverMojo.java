@@ -85,8 +85,8 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
     /**
      * A Clover license file to be used by the plugin. The plugin tries to resolve this parameter first as a resource,
-     * then as a URL, and then as a file location on the filesystem. A trial Clover license can be generated
-     * <a href="http://www.atlassian.com/ex/GenerateLicense.jspa?product=Clover&version=2">here</a>.
+     * then as a URL, and then as a file location on the filesystem. If not provided, Clover will use a bundled
+     * license key.
      *
      * @parameter expression="${maven.clover.licenseLocation}"
      * @see #license
@@ -95,8 +95,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
     /**
      * The full Clover license String to use. If supplied, this certificate will be used over {@link #licenseLocation}.
-     * NB. newline chars must be preserved.
-     * A trial Clover license can be generated <a href="http://www.atlassian.com/ex/GenerateLicense.jspa?product=Clover&version=2">here</a>.
+     * NB. newline chars must be preserved. If not provided, Clover will use a bundled license key.
      *
      * @parameter expression="${maven.clover.license}"
      * @see #licenseLocation
@@ -194,9 +193,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     /**
      * Registers the license file for Clover runtime by setting the <code>clover.license.path</code> system property.
      * If the user has configured the <code>licenseLocation</code> parameter the plugin tries to resolve it first as a
-     * resource, then as a URL, and then as a file location on the filesystem. If the <code>licenseLocation</code>
-     * parameter has not been defined by the user we look up a default Clover license in the classpath in
-     * <code>/clover.license</code>.
+     * resource, then as a URL, and then as a file location on the filesystem.
      *
      * Note: We're defining this method as static because it is also required in the report mojo and reporting mojos
      * and main mojos cannot share anything right now. See http://jira.codehaus.org/browse/MNG-1886.
@@ -211,7 +208,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      */
     public static void registerLicenseFile(final MavenProject project,
                                            final ResourceManager resourceManager,
-                                           String licenseLocation,
+                                           final String licenseLocation,
                                            final Log logger,
                                            final ClassLoader classloader,
                                            final String licenseCert) throws MojoExecutionException {
@@ -222,16 +219,15 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
             System.setProperty(CloverNames.PROP_LICENSE_CERT, licenseCert);
             return;
         }
-        logger.debug("Using licenseLocation '" + licenseLocation + "'");
 
-        if (licenseLocation == null) {
-            logger.info("No 'maven.clover.licenseLocation' configured. Using default evaluation license.");
-            licenseLocation = "/clover.license";
+        if (licenseLocation != null) {
+            logger.debug("Using licenseLocation '" + licenseLocation + "'");
+            final File licenseFile = getResourceAsFile(project, resourceManager, licenseLocation, logger, classloader);
+            logger.debug("Using license file [" + licenseFile.getPath() + "]");
+            System.setProperty(CloverNames.PROP_LICENSE_PATH, licenseFile.getPath());
+        } else {
+            logger.info("No 'maven.clover.licenseLocation' configured. Using default license.");
         }
-        final File licenseFile = getResourceAsFile(project, resourceManager, licenseLocation, logger, classloader);
-
-        logger.debug("Using license file [" + licenseFile.getPath() + "]");
-        System.setProperty(CloverNames.PROP_LICENSE_PATH, licenseFile.getPath());
     }
 
     public static File getResourceAsFile(final MavenProject project,

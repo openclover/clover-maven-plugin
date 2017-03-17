@@ -26,7 +26,7 @@
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/guides/mini/guide-apt-format.html
 
-Maven Clover Plugin
+Clover Maven Plugin
 
   The Clover plugin is the place where build actions related to
   {{{http://confluence.atlassian.com/x/O4BOB}Clover}} are found in Maven.
@@ -64,7 +64,7 @@ Maven Clover Plugin
 
 * Usage
 
-  Instructions on how to use Maven Clover Plugin can be found {{{usage.html}here}}.
+  Instructions on how to use Clover Maven Plugin can be found {{{usage.html}here}}.
 
 * Migration notice
 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<verifications>
+    <files>
+        <file>
+            <location>target/site/clover/pkg-summary.html</location>
+            <contains>75%</contains>
+        </file>
+        <file>
+            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/somesrcincluded/include/Simple2.html</location>
+            <exists>true</exists>
+        </file>
+        <file>
+            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/somesrcincluded/include/Simple3.html</location>
+            <exists>true</exists>
+        </file>
+        <file>
+            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/somesrcincluded/Simple.html</location>
+            <exists>false</exists>
+        </file>
+        <file>
+            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/somesrcincluded/SimpleTest.html</location>
+            <exists>true</exists>
+        </file>
+    </files>
+</verifications>

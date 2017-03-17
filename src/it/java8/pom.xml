@@ -22,8 +22,8 @@ under the License.
     <groupId>com.atlassian.maven.plugins.sample</groupId>
     <artifactId>clover-sample-java8</artifactId>
     <packaging>jar</packaging>
-    <name>Maven Clover Plugin Java8 Sample</name>
-    <description>Maven Clover Plugin Java8 Sample</description>
+    <name>Clover Maven Plugin Java8 Sample</name>
+    <description>Clover Maven Plugin Java8 Sample</description>
     <version>1.0-SNAPSHOT</version>
     <build>
         <plugins>

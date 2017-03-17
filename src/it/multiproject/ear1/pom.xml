@@ -26,8 +26,8 @@ under the License.
   </parent>
   <artifactId>clover-sample-multiproject-ear1</artifactId>
   <packaging>ear</packaging>
-  <name>Maven Clover Plugin Multiproject Sample - EAR 1</name>
-  <description>Maven Clover Plugin Multiproject Sample - EAR 1</description>
+  <name>Clover Maven Plugin Multiproject Sample - EAR 1</name>
+  <description>Clover Maven Plugin Multiproject Sample - EAR 1</description>
   <version>1.0-SNAPSHOT</version>
   <dependencies>
     <dependency>
