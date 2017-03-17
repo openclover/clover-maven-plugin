@@ -16,104 +16,80 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.atlassian.maven.plugins</groupId>
+    <groupId>org.openclover</groupId>
     <artifactId>clover-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <name>Maven Clover Plugin</name>
+    <name>Clover Maven Plugin</name>
     <version>4.2.0-SNAPSHOT</version>
-    <description>Maven plugin for Clover.
-        MIGRATION NOTICE: Since Clover 4.1.0 this plugin is named com.atlassian.maven.plugins:clover-maven-plugin.
-        In previous versions it was named com.atlassian.maven.plugins:maven-clover2-plugin.</description>
-    <parent>
-        <groupId>com.atlassian.pom</groupId>
-        <artifactId>central-pom</artifactId>
-        <version>3.0.98</version>
-    </parent>
-    <url>http://confluence.atlassian.com/x/dIDBBQ</url>
+    <description>Clover Maven Plugin</description>
+    <url>http://openclover.org</url>
     <organization>
-        <name>Atlassian Pty Ltd</name>
-        <url>http://www.atlassian.com/</url>
+        <name>OpenClover</name>
+        <url>http://openclover.org</url>
     </organization>
     <issueManagement>
-        <system>jira</system>
-        <url>https://jira.atlassian.com/browse/CLOV</url>
+        <url>https://bitbucket.org/openclover/clover-maven-plugin/issues</url>
     </issueManagement>
     <licenses>
         <license>
             <name>Apache License 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0</url>
             <distribution>repo</distribution>
-            <comments>
-                The Clover-for-Maven Plugin is licensed under the Apache 2.0 license. However, the Clover binary
-                dependency (com.atlassian.clover:clover) is commercial software. Clover is free for use for Open Source
-                projects and non-profit organisations. For more information on Clover's licensing and pricing, see:
-                http://www.atlassian.com/software/clover/licensing.jsp
-            </comments>
         </license>
     </licenses>
     <scm>
-        <connection>scm:hg:ssh://hg@bitbucket.org/atlassian/maven-clover2-plugin</connection>
-        <developerConnection>scm:hg:ssh://hg@bitbucket.org/atlassian/maven-clover2-plugin</developerConnection>
-        <url>https://bitbucket.org/atlassian/maven-clover2-plugin/src</url>
-        <tag>clover-maven-plugin-4.1.0</tag>
+        <connection>scm:hg:ssh://hg@bitbucket.org/openclover/clover-maven-plugin</connection>
+        <developerConnection>scm:hg:ssh://hg@bitbucket.org/openclover/clover-maven-plugin</developerConnection>
+        <url>https://bitbucket.org/openclover/clover-maven-plugin/src</url>
+        <tag>HEAD</tag>
     </scm>
     <developers>
         <developer>
             <id>mparfianowicz</id>
             <name>Marek Parfianowicz</name>
-            <email>mparfianowicz@atlassian.com</email>
-        </developer>
-        <developer>
-            <id>jjaroczynski</id>
-            <name>Jacek Jaroczynski</name>
-            <email>jjaroczynski@atlassian.com</email>
-        </developer>
-        <developer>
-            <id>mstudman</id>
-            <name>Michael Studman</name>
-            <email>mstudman@atlassian.com</email>
+            <email>marek.parfianowicz@gmail.com</email>
         </developer>
     </developers>
     <prerequisites>
-        <maven>2.1.0</maven>
+        <maven>3.0.1</maven>
     </prerequisites>
     <properties>
         <!-- Clover Core version -->
-        <cloverVersion>4.2.0-SNAPSHOT</cloverVersion>
-        <!-- Don't perform automatic releasing of a staging repository in the Atlassian Central repository -->
-        <staging.automatic.release>false</staging.automatic.release>
-
-        <maven.invoker.plugin.version>1.10</maven.invoker.plugin.version>
-        <maven.site.plugin.version>3.4</maven.site.plugin.version>
-        <maven.release.plugin.version>2.5.1</maven.release.plugin.version>
+        <cloverVersion>4.2.0</cloverVersion>
     </properties>
     <dependencies>
         <dependency>
+            <groupId>org.openclover</groupId>
+            <artifactId>clover</artifactId>
+            <version>${cloverVersion}</version>
+        </dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>18.0</version>
+            <version>21.0</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-compiler-api</artifactId>
-            <version>2.2</version>
+            <version>2.8.1</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-resources</artifactId>
-            <version>1.0-alpha-7</version>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>
-            <version>2.1</version>
+            <version>3.0.24</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
-            <version>2.2.1</version>
+            <version>3.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -123,17 +99,17 @@ under the License.
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>2.2.1</version>
+            <version>3.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.ant</groupId>
             <artifactId>ant</artifactId>
-            <version>1.8.4</version>
+            <version>1.9.4</version>
         </dependency>
         <dependency>
             <groupId>org.apache.ant</groupId>
             <artifactId>ant-launcher</artifactId>
-            <version>1.8.4</version>
+            <version>1.9.4</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.reporting</groupId>
@@ -143,12 +119,7 @@ under the License.
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
-            <version>2.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.atlassian.clover</groupId>
-            <artifactId>clover</artifactId>
-            <version>${cloverVersion}</version>
+            <version>3.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.intellij</groupId>
@@ -158,19 +129,19 @@ under the License.
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-junit3</artifactId>
-            <version>2.5.1</version>
+            <version>2.8.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-legacy</artifactId>
-            <version>2.5.1</version>
+            <version>2.8.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -181,23 +152,11 @@ under the License.
         </dependency>
     </dependencies>
     <build>
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-webdav</artifactId>
-                <version>1.0-beta-2</version>
-            </extension>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ssh-external</artifactId>
-                <version>2.2</version> <!-- 2.3+ don't work with Maven 2 -->
-            </extension>
-        </extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>3.6.1</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
@@ -207,7 +166,7 @@ under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>3.2</version>
+                <version>3.5</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                 </configuration>
@@ -215,7 +174,7 @@ under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-install-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>2.5.2</version>
                 <configuration>
                     <createChecksum>true</createChecksum>
                 </configuration>
@@ -223,7 +182,7 @@ under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.8.1</version>
+                <version>2.10.4</version>
                 <configuration>
                     <quiet>true</quiet>
                     <tags>
@@ -272,17 +231,17 @@ under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>${maven.release.plugin.version}</version>
+                <version>2.5.3</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>${maven.site.plugin.version}</version>
+                <version>3.6</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
                         <goals>
@@ -293,8 +252,22 @@ under the License.
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.16</version>
+                <version>2.19.1</version>
                 <configuration>
                     <includes>
                         <include>**/*Test.java</include>
@@ -305,49 +278,12 @@ under the License.
     </build>
     <profiles>
         <profile>
-            <!-- This profile is used to build and run integration tests against the lowest Maven version supported -->
-            <id>integration-tests-maven-20</id>
-            <properties>
-                <!-- downgrade some plugins -->
-                <maven.invoker.plugin.version>1.7</maven.invoker.plugin.version>
-                <maven.site.plugin.version>2.1</maven.site.plugin.version>
-                <maven.release.plugin.version>2.0</maven.release.plugin.version>
-                <enforcer.skip>true</enforcer.skip>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-invoker-plugin</artifactId>
-                        <version>${maven.invoker.plugin.version}</version>
-                        <configuration>
-                            <debug>true</debug>
-                            <projectsDirectory>src/it</projectsDirectory>
-                            <pomIncludes>
-                                <pomInclude>**/pollutionProtectionRoot/pom.xml</pomInclude>
-                            </pomIncludes>
-                            <properties>
-                                <maven.clover.licenseLocation>${maven.clover.licenseLocation}</maven.clover.licenseLocation>
-                            </properties>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>install</goal>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
             <id>integration-tests</id>
             <reporting>
                 <excludeDefaults>true</excludeDefaults>
                 <plugins>
                     <plugin>
-                        <groupId>com.atlassian.maven.plugins</groupId>
+                        <groupId>org.openclover</groupId>
                         <artifactId>clover-maven-plugin</artifactId>
                         <version>${project.version}</version>
                         <configuration>
@@ -363,7 +299,7 @@ under the License.
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-clean-plugin</artifactId>
-                        <version>2.5</version>
+                        <version>3.0.0</version>
                         <configuration>
                             <filesets>
                                 <fileset>
@@ -381,7 +317,7 @@ under the License.
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-enforcer-plugin</artifactId>
-                        <version>1.2</version>
+                        <version>1.4.1</version>
                         <configuration>
                             <rules>
                                 <requireMavenVersion>
@@ -394,8 +330,9 @@ under the License.
                         </configuration>
                     </plugin>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-invoker-plugin</artifactId>
-                        <version>${maven.invoker.plugin.version}</version>
+                        <version>2.0.0</version>
                         <configuration>
                             <debug>true</debug>
                             <projectsDirectory>src/it</projectsDirectory>
@@ -429,9 +366,6 @@ under the License.
                                 <!--<pomInclude>**/webapp/pom.xml</pomInclude>-->
                                 <pomInclude>**/xdoclet/pom.xml</pomInclude>
                             </pomIncludes>
-                            <properties>
-                                <maven.clover.licenseLocation>${maven.clover.licenseLocation}</maven.clover.licenseLocation>
-                            </properties>
                         </configuration>
                         <executions>
                             <execution>
@@ -451,19 +385,23 @@ under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>3.2</version>
+                <version>3.5</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>${maven.site.plugin.version}</version>
+                <version>3.6</version>
             </plugin>
         </plugins>
     </reporting>
     <distributionManagement>
-        <site>
-            <id>atlassian-documentation</id>
-            <url>scpexe://docs-app.internal.atlassian.com/var/www/domains/docs.atlassian.com/${project.artifactId}/${project.version}</url>
-        </site>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
     </distributionManagement>
 </project>
