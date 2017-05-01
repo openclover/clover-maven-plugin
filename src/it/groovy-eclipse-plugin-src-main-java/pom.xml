@@ -69,7 +69,7 @@
                     <version>2.12.4</version>
                 </plugin>
                 <plugin>
-                    <groupId>com.atlassian.maven.plugins</groupId>
+                    <groupId>org.openclover</groupId>
                     <artifactId>clover-maven-plugin</artifactId>
                     <version>${clover.version}</version>
                     <configuration>
@@ -86,7 +86,7 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.atlassian.maven.plugins</groupId>
+                        <groupId>org.openclover</groupId>
                         <artifactId>clover-maven-plugin</artifactId>
                         <version>${clover.version}</version>
                         <configuration>
