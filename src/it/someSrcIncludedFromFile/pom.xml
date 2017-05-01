@@ -21,7 +21,7 @@
         <excludeDefaults>true</excludeDefaults>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
                 <version>${maven.clover.version}</version>
                 <configuration>
@@ -33,7 +33,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
                 <version>${maven.clover.version}</version>
                 <configuration>

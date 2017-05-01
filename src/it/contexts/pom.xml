@@ -37,7 +37,7 @@ under the License.
         <excludeDefaults>true</excludeDefaults>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
                 <configuration>
                     <!-- Verify that context filters work -->
@@ -49,7 +49,7 @@ under the License.
     <build>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
                 <configuration>
                     <!-- Without the block filter the TPC is 50% and with it it's 57,1%. Thus we check for a TPC above of

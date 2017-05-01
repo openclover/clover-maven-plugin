@@ -27,11 +27,11 @@ under the License.
     <description>Clover Maven Plugin</description>
     <url>http://openclover.org</url>
     <organization>
-        <name>OpenClover</name>
+        <name>OpenClover.org</name>
         <url>http://openclover.org</url>
     </organization>
     <issueManagement>
-        <url>https://bitbucket.org/openclover/clover-maven-plugin/issues</url>
+        <url>https://bitbucket.org/openclover/clover/issues</url>
     </issueManagement>
     <licenses>
         <license>
@@ -48,7 +48,7 @@ under the License.
     </scm>
     <developers>
         <developer>
-            <id>mparfianowicz</id>
+            <id>marek-parfianowicz</id>
             <name>Marek Parfianowicz</name>
             <email>marek.parfianowicz@gmail.com</email>
         </developer>

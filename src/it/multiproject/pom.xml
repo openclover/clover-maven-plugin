@@ -36,7 +36,7 @@ under the License.
         <excludeDefaults>true</excludeDefaults>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
                 <configuration>
                     <generateHistorical>true</generateHistorical>
@@ -48,7 +48,7 @@ under the License.
     <build>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
                 <configuration>
                     <flushPolicy>threaded</flushPolicy>

@@ -19,7 +19,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
                 <configuration>
                     <reportDescriptor>${clover.reportConfig}</reportDescriptor>
@@ -46,7 +46,7 @@
     <reporting>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
                 <configuration>
                     <reportDescriptor>${clover.reportConfig}</reportDescriptor>

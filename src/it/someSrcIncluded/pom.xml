@@ -18,7 +18,7 @@
         <excludeDefaults>true</excludeDefaults>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
                 <configuration>
                     <jdk>1.6</jdk>
@@ -29,7 +29,7 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
                 <configuration>
                     <includes>

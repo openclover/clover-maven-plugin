@@ -97,7 +97,7 @@ under the License.
                 </executions>
             </plugin>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
                 <configuration>
                     <setTestFailureIgnore>true</setTestFailureIgnore>
@@ -147,7 +147,7 @@ under the License.
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
             </plugin>
         </plugins>
