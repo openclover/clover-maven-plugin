@@ -39,6 +39,7 @@ import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -194,55 +195,40 @@ import java.util.Set;
  * <p><b>Note 1: Do not call this MOJO directly. It is meant to be called in a custom forked lifecycle by the other
  * Clover plugin MOJOs.</b></p>
  * <p><b>Note 2: We bind this mojo to the "validate" phase so that it executes prior to any other mojos</b></p>
- *
- * @goal instrumentInternal
- * @phase validate
- * @requiresDependencyResolution test
  */
+@Mojo(name = "instrumentInternal", defaultPhase = LifecyclePhase.VALIDATE, requiresDependencyResolution = ResolutionScope.TEST)
 public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
 
-    public static final String CLOVER_CORE_GROUP_ID = "com.atlassian.clover";
+    public static final String CLOVER_CORE_GROUP_ID = "org.openclover";
     public static final String CLOVER_CORE_ARTIFACT_ID = "clover";
 
     /**
      * <p>List of all artifacts for this Clover plugin provided by Maven. This is used internally to get a handle on
      * the Clover JAR artifact.</p>
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
-     *
-     * @parameter expression="${plugin.artifacts}"
-     * @required
      */
+    @Parameter(defaultValue = "${plugin.artifacts}", required = true)
     private List<Artifact> pluginArtifacts;
 
-    /**
-     * @parameter expression="${component.org.apache.maven.artifact.factory.ArtifactFactory}"
-     * @required
-     * @readonly
-     */
+    @Component(role = ArtifactFactory.class)
     private ArtifactFactory artifactFactory;
 
     /**
      * Artifact resolver used to find clovered artifacts (artifacts with a clover classifier).
-     *
-     * @component role="org.apache.maven.artifact.resolver.ArtifactResolver"
-     * @required
-     * @readonly
      */
+    @Component(role = ArtifactResolver.class)
     private ArtifactResolver artifactResolver;
 
     /**
      * Local maven repository.
-     *
-     * @parameter expression="${localRepository}"
-     * @required
      */
+    @Parameter(defaultValue = "${settings.localRepository}", required = true)
     private ArtifactRepository localRepository;
 
     /**
      * Remote repositories used for the project.
-     *
-     * @parameter expression="${project.remoteArtifactRepositories}"
      */
+    @Parameter(defaultValue = "${project.remoteArtifactRepositories}")
     protected List<ArtifactRepository> repositories;
 
     // HACK: this allows us to reset the source directories to the originals

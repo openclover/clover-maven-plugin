@@ -20,6 +20,7 @@ package com.atlassian.maven.plugin.clover;
  */
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.BuildException;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
@@ -45,29 +46,23 @@ public class CloverMergeMojo extends AbstractCloverMojo
 
     /**
      * Root directory with clover databases to merge
-     *
-     * @parameter expression="${maven.clover.merge.basedir}"
-     * @required
      */
+    @Parameter(property = "maven.clover.merge.basedir", required = true)
     private File baseDir;
 
     /**
      * Java pattern of clover database file name endings to merge.
-     *
      * Patterns may be separated by a comma or a space.
-     *
-     * @parameter expression="${maven.clover.merge.includes}" default-value="*.db"
      */
+    @Parameter(property = "maven.clover.merge.includes", defaultValue = "*.db")
     private String includes;
 
     /**
      * How far back to load coverage recordings from when merging
-     *
-     * @parameter expression="${maven.clover.merge.span}"
      */
+    @Parameter(property = "maven.clover.merge.span")
     private String span;
 
- 
 
     /**
      * {@inheritDoc}
