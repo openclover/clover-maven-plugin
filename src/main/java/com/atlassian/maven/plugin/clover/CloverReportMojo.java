@@ -20,18 +20,15 @@ package com.atlassian.maven.plugin.clover;
  */
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
-import org.apache.maven.artifact.resolver.ArtifactResolver;
+import org.apache.maven.artifact.resolver.ArtifactResolutionRequest;
+import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
@@ -39,6 +36,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
+import org.apache.maven.repository.RepositorySystem;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 import org.apache.tools.ant.PropertyHelper;
@@ -65,6 +63,9 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     // TODO: Need some way to share config elements and code between report mojos and main build mojos.
     // See http://jira.codehaus.org/browse/MNG-1886
 
+    @Component(role = RepositorySystem.class)
+    private RepositorySystem repositorySystem;
+
     /**
      * Use a custom report descriptor for generating your Clover Reports.
      * The format for the configuration file is identical to an Ant build file which uses the &lt;clover-report/&gt;
@@ -83,28 +84,10 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     private boolean resolveReportDescriptor;
 
     /**
-     * The component that is used to resolve additional artifacts required.
-     */
-    @Component(role = ArtifactResolver.class)
-    protected ArtifactResolver artifactResolver;
-
-    /**
      * Remote repositories used for the project.
      */
     @Parameter(defaultValue = "${project.remoteArtifactRepositories}")
     protected List<ArtifactRepository> repositories;
-
-    /**
-     * The component used for creating artifact instances.
-     */
-    @Component(role = ArtifactFactory.class)
-    protected ArtifactFactory artifactFactory;
-
-    /**
-     * The local repository.
-     */
-    @Parameter(defaultValue = "${settings.localRepository}")
-    protected ArtifactRepository localRepository;
 
     /**
      * The location of the <a href="http://confluence.atlassian.com/x/EIBOB">Clover database</a>.
@@ -560,21 +543,25 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
 
         if (resolveReportDescriptor) {
             getLog().info("Attempting to resolve the clover-report configuration as an xml artifact.");
-            Artifact artifact = artifactFactory.createArtifactWithClassifier(
+            final Artifact artifact = repositorySystem.createArtifactWithClassifier(
                     project.getGroupId(),
                     project.getArtifactId(),
                     project.getVersion(),
                     "xml", "clover-report");
 
-            try {
-                artifactResolver.resolve(artifact, repositories, localRepository);
-                return artifact.getFile();
-            } catch (ArtifactResolutionException e) {
-                getLog().warn(e.getMessage(), e);
-            } catch (ArtifactNotFoundException e) {
-                getLog().warn(e.getMessage(), e);
+            final ArtifactResolutionRequest resolutionRequest = new ArtifactResolutionRequest();
+            resolutionRequest.setArtifact(artifact);
+            resolutionRequest.setRemoteRepositories(repositories);
+            resolutionRequest.setLocalRepository(null /* TODO localRepository */);
+
+            final ArtifactResolutionResult resolutionResult = repositorySystem.resolve(resolutionRequest);
+            if (resolutionResult.isSuccess()) {
+                return artifact.getFile(); // TODO or from resolutionResult?
+            } else {
+                getLog().warn("Failed to resolve artifact " + artifact);
             }
         }
+
         try {
             getLog().info("Using /default-clover-report descriptor.");
             final File file = AbstractCloverMojo.getResourceAsFile(project,
