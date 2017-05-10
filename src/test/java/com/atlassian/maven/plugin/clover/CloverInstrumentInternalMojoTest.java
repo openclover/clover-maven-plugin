@@ -20,11 +20,8 @@ package com.atlassian.maven.plugin.clover;
  */
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
-import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.plugin.logging.Log;
 import org.jmock.integration.junit3.MockObjectTestCase;
 import org.jmock.Expectations;
@@ -146,26 +143,26 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase {
 
 
     private void setUpCommonMocksForSwizzleCloverDependenciesTests(final Artifact artifact) throws ArtifactNotFoundException, ArtifactResolutionException {
-        final ArtifactFactory mockArtifactFactory = mock(ArtifactFactory.class);
-        checking(new Expectations() {{
-            oneOf(mockArtifactFactory).createArtifactWithClassifier(
-                    "some.groupId", "someArtifactId", "1.0", "jar", "clover");
-            will(returnValue(artifact));
-        }});
+//        final ArtifactFactory mockArtifactFactory = mock(ArtifactFactory.class);
+//        checking(new Expectations() {{
+//            oneOf(mockArtifactFactory).createArtifactWithClassifier(
+//                    "some.groupId", "someArtifactId", "1.0", "jar", "clover");
+//            will(returnValue(artifact));
+//        }});
 
 
-        final ArtifactResolver mockArtifactResolver = mock(ArtifactResolver.class);
-        checking(new Expectations() {{
-            oneOf(mockArtifactResolver).resolve(with(any(Artifact.class)), with(any(List.class)), with(any(ArtifactRepository.class)));
-        }});
+//        final ArtifactResolver mockArtifactResolver = mock(ArtifactResolver.class);
+//        checking(new Expectations() {{
+//            oneOf(mockArtifactResolver).resolve(with(any(Artifact.class)), with(any(List.class)), with(any(ArtifactRepository.class)));
+//        }});
 
         final Log mockLog = mock(Log.class);
         checking(new Expectations() {{
             atLeast(0).of(mockLog).warn(with(any(String.class)));
         }});
 
-        this.mojo.setArtifactFactory(mockArtifactFactory);
-        this.mojo.setArtifactResolver(mockArtifactResolver);
+//        this.mojo.setArtifactFactory(mockArtifactFactory);
+//        this.mojo.setArtifactResolver(mockArtifactResolver);
         this.mojo.setLog(mockLog);
     }
 
