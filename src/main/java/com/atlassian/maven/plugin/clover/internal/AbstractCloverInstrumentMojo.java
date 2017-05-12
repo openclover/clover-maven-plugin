@@ -7,8 +7,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.LifecycleExecutor;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 import java.io.BufferedReader;
@@ -27,16 +25,18 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <p>If the -clover classified artifact is more than cloveredArtifactExpiryInMillis older than the non-clover classified
      * artifact, then the non-classified artifact will be used.</p>
      * <p>This setting defaults to 2000.</p>
+     *
+     * @parameter expression="${maven.clover.cloveredArtifactExpiryInMillis}" default-value=2000
      */
-    @Parameter(property = "maven.clover.cloveredArtifactExpiryInMillis", defaultValue = "2000")
     protected long cloveredArtifactExpiryInMillis;
 
     /**
      * If set, then the clover-maven-plugin will not copy files that were excluded, across to the target/clover directory.
      * This is useful if the build is also using plugins such as the maven-gwt-plugin, that scans for resources, and
      * skips a step if none are found. Otherwise, setting this to false could well cause build failures.
+     *
+     * @parameter expression="${maven.clover.copyExcludedFiles}" default-value="true"
      */
-    @Parameter(property = "maven.clover.copyExcludedFiles", defaultValue = "true")
     protected boolean copyExcludedFiles = true;
 
     /**
@@ -51,40 +51,46 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <li><tt>timeout</tt> - the amount of time to wait for a response from a remote JVM before shunning it. default: <b>5000</b></li>
      * <li><tt>retryPeriod</tt> - the amount of time a client should wait between reconnect attempts. default: <b>1000</b></li>
      * </ul>
+     *
+     * @parameter
      */
-    @Parameter
     protected DistributedCoverage distributedCoverage;
 
     /**
      * The character encoding to use when parsing source files.
+     *
+     * @parameter expression="${maven.clover.encoding}"
      */
-    @Parameter(property = "maven.clover.encoding")
     protected String encoding;
 
     /**
      * The list of file to exclude from the instrumentation. Patterns are resolved against source roots.
+     *
+     * @parameter
      */
-    @Parameter
     protected Set<String> excludes = new HashSet<String>();
 
     /**
      * The comma seperated list of file to exclude from the instrumentation. Patterns are resolved against source roots.
+     *
+     * @parameter expression="${maven.clover.excludesList}"
      */
-    @Parameter(property = "maven.clover.excludesList")
     protected String excludesList = null;
 
     /**
      * The file containing a list of file paths, separated by new line, to exclude from the instrumentation. Patterns are resolved against source roots.
      * See also {@link #excludes} and {@link #excludesList}
+     *
+     * @parameter expression="${maven.clover.excludesFile}"
      */
-    @Parameter(property = "maven.clover.excludesFile")
     protected String excludesFile = null;
 
     /**
      * The <a href="http://confluence.atlassian.com/x/O4BOB">Clover flush policy</a> to use.
      * Valid values are <code>directed</code>, <code>interval</code> and <code>threaded</code>.
+     *
+     * @parameter expression="${maven.clover.flushPolicy}" default-value="threaded"
      */
-    @Parameter(property = "maven.clover.flushPolicy", defaultValue = "threaded")
     protected String flushPolicy;
 
     /**
@@ -102,30 +108,33 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * example if ProjectA uses Clover v 3.1.8 and ProjectB uses Clover v 3.1.9 then they shall have different
      * <code>groverJar</code> locations defined)</p>
      *
+     * @parameter expression="${maven.clover.groverJar}"
      * @since 3.1.8
      */
-    @Parameter(property = "maven.clover.groverJar")
     protected File groverJar;
 
     /**
      * The list of file to include in the instrumentation. Patterns are resolved against source roots.
      * Defaults are '**&#47;*.java, **&#47;*.groovy' which are overwritten if &lt;includes&gt; is set by the user
+     *
+     * @parameter
      */
-    @Parameter
     protected Set<String> includes = new HashSet<String>(Arrays.asList(new String[]{"**/*.java", "**/*.groovy"}));
 
     /**
      * The comma seperated list of files to include in the instrumentation. Patterns are resolved against source roots.
      * Defaults are **.java which are overwritten if &lt;includes&gt; is set by the user
+     *
+     * @parameter expression="${maven.clover.includesList}"
      */
-    @Parameter(property = "maven.clover.includesList")
     protected String includesList = null;
 
     /**
      * The file containing a list of file paths, separated by new line, to include in the instrumentation. Patterns are resolved against source roots.
      * See also {@link #includes} and {@link #includesList}
+     *
+     * @parameter expression="${maven.clover.includesFile}"
      */
-    @Parameter(property = "maven.clover.includesFile")
     protected String includesFile = null;
 
     /**
@@ -135,22 +144,25 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <p><b>Since 3.1.12:</b> whether the Clover plugin should instrument all source roots (for example
      * <code>src/main/java, src/main/groovy, target/generated-sources</code>, so including the generated sources)
      * or whether it should instrument non-generated source roots (i.e. all roots except <code>target/generated-sources/*</code>)</p>
+     *
+     * @parameter expression="${maven.clover.includesAllSourceRoots}" default-value="false"
      */
-    @Parameter(property = "maven.clover.includesAllSourceRoots", defaultValue = "false")
     protected boolean includesAllSourceRoots;
 
     /**
      * Whether the Clover plugin should instrument test source roots.
+     *
+     * @parameter expression="${maven.clover.includesTestSourceRoots}" default-value="true"
      */
-    @Parameter(property = "maven.clover.includesTestSourceRoots", defaultValue = "true")
     protected boolean includesTestSourceRoots;
 
     /**
      * <p>The level to instrument to. Valid values are 'method' or 'statement'. Default is 'statement'.</p>
      * <p>Setting this to 'method' greatly reduces the overhead of enabling Clover, however limited or no reporting is
      * available. The current use of setting this to method is for Test Optimization only.</p>
+     *
+     * @parameter expression="${maven.clover.instrumentation}"
      */
-    @Parameter(property = "maven.clover.instrumentation", defaultValue = "statement")
     protected String instrumentation;
 
     /**
@@ -170,9 +182,9 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * Java 8 code instrumented by Clover fails to compile</a> Knowledge Base article for more details.
      * </p>
      *
+     * @parameter expression="${maven.clover.instrumentLambda}" default-value="none"
      * @since 3.2.2
      */
-    @Parameter(property = "maven.clover.instrumentLambda", defaultValue = "none")
     private String instrumentLambda;
 
     /**
@@ -186,16 +198,18 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <li>1.8 (lambda expressions, default methods in interfaces)</li>
      * </ul>
      * <p>By default Clover instruments using the highest language level supported.</p>
+     *
+     * @parameter expression="${maven.clover.jdk}"
      */
-    @Parameter(property = "maven.clover.jdk")
     protected String jdk;
 
     /**
      * <p>Specifies the custom method contexts to use for filtering specific methods from Clover reports.</p>
      * e.g. <pre>&lt;main&gt;public static void main\(String args\[\]\).*&lt;/main&gt;</pre>
      * <p>will define the context called 'main' which will match all public static void main methods.</p>
+     *
+     * @parameter
      */
-    @Parameter
     protected Map<String, String> methodContexts = new HashMap<String, String>();
 
     /**
@@ -206,16 +220,17 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * Maven, is about to be installed under original name (e.g. "-tests.jar").</p>
      * <p>Please note that this flag may not protect from all possible cases.</p>
      *
+     * @parameter expression="${maven.clover.repositoryPollutionProtection}" default-value="false"
      * @since 4.0.4
      */
-    @Parameter(property = "maven.clover.repositoryPollutionProtection", defaultValue = "false")
     protected boolean repositoryPollutionProtection;
 
     /**
      * When creating the clover.jar dependency, what scope to use.
      * This may be one of: compile, test, provided etc. If not specified - provided will be used.
+     *
+     * @parameter expression="${maven.clover.scope}"
      */
-    @Parameter(property = "maven.clover.scope")
     protected String scope;
 
     /**
@@ -233,9 +248,9 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * the forked Clover lifecycle ('instrument' goal) for 'test' and 'integration-test' phases. Since
      * 3.1.9 it is no longer set.</p>
      *
+     * @parameter expression="${maven.clover.setTestFailureIgnore}" default-value="false"
      * @since 3.1.9
      */
-    @Parameter(property = "maven.clover.setTestFailureIgnore", defaultValue = "false")
     protected boolean setTestFailureIgnore;
 
     /**
@@ -246,54 +261,65 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <p>In case when there is no Groovy code in the project, this parameter can be set to <code>true</code> in order
      * to disable generation of grover.jar artifact.</p>
      *
+     * @parameter expression="${maven.clover.skipGroverJar}" default-value="false"
      * @since 3.1.8
      */
-    @Parameter(property = "maven.clover.skipGroverJar", defaultValue = "false")
     protected boolean skipGroverJar = false;
 
     /**
      * Specifies the custom statement contexts to use for filtering specific statements from Clover reports.
      * e.g.<pre>&lt;log&gt;^LOG\..*&lt;/log&gt;</pre>
      * defines a statement context called "log" which matches all LOG statements.
+     *
+     * @parameter
      */
-    @Parameter
     protected Map<String, String> statementContexts = new HashMap<String, String>();
 
     /**
      * Sets the granularity in milliseconds of the last modification date for testing whether a source needs reinstrumentation.
+     *
+     * @parameter expression="${maven.clover.staleMillis}" default-value="0"
      */
-    @Parameter(property = "maven.clover.staleMillis", defaultValue = "0")
     protected int staleMillis;
 
     /**
      * Whether or not to include the -clover classifier on artifacts.
+     *
+     * @parameter expression="${maven.clover.useCloverClassifier}" default-value="true"
      */
-    @Parameter(property = "maven.clover.useCloverClassifier", defaultValue = "true")
     protected boolean useCloverClassifier;
-
     /**
      * Use the fully qualified package name for java.lang.* classes.
+     *
+     * @parameter expression="${maven.clover.useFullyQualifiedJavaLang}" default-value="true"
      */
-    @Parameter(property = "maven.clover.useFullyQualifiedJavaLang", defaultValue = "true")
     protected boolean useFullyQualifiedJavaLang;
 
     ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Used to learn about lifecycles and phases
+     *
+     * @component role="org.apache.maven.lifecycle.LifecycleExecutor"
+     * @required
+     * @readonly
      */
-    @Component(role = LifecycleExecutor.class)
     private LifecycleExecutor lifecycleExecutor;
 
     /**
      * Used to learn about current build session.
+     *
+     * @component role="org.apache.maven.execution.MavenSession"
+     * @required
+     * @readonly
      */
-    @Parameter(defaultValue = "${session}", readonly = true)
     private MavenSession mavenSession;
 
     /**
+     * @component role="org.apache.maven.project.MavenProject"
+     * @required
+     * @readonly
      */
-    @Parameter(defaultValue = "${project}", readonly = true)
     private MavenProject mavenProject;
 
     ///////////////////////////////////////////////////////////////////////////

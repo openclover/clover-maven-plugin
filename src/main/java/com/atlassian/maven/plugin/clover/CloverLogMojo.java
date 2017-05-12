@@ -22,7 +22,6 @@ package com.atlassian.maven.plugin.clover;
 import com.atlassian.clover.ant.tasks.CloverLogTask;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
@@ -41,8 +40,9 @@ public class CloverLogMojo extends AbstractCloverMojo {
     /**
      * Comma or space separated list of Clover contexts (block, statement or method filers) to exclude before
      * performing the check.
+     *
+     * @parameter expression="${maven.clover.contextFilters}"
      */
-    @Parameter(property = "maven.clover.contextFilters")
     String contextFilters;
 
     public void execute()

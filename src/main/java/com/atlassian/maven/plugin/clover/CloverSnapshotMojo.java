@@ -8,7 +8,6 @@ import com.atlassian.clover.optimization.SnapshotPrinter;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.Project;
 
 import java.io.File;
@@ -32,14 +31,19 @@ import java.util.Date;
  */
 public class CloverSnapshotMojo extends AbstractCloverMojo {
 
-    @Parameter(property = "maven.clover.span")
+    /**
+     *
+     * @parameter expression="${maven.clover.span}" 
+     */
     private String span;
+
 
     /**
      * If set to true, the snapshot will always be created. Otherwise, if a singleCloverDatabase is used
      * the snapshot will only be created during the execution of the last module in the reactor.
+     *
+     * @parameter expression="${maven.clover.forceSnapshot}" default-value="false"
      */
-    @Parameter(property = "maven.clover.forceSnapshot", defaultValue = "false")
     private boolean forceSnapshot;
 
     public void execute() throws MojoExecutionException {

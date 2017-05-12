@@ -23,13 +23,13 @@ import com.atlassian.clover.cfg.Percentage;
 import com.atlassian.clover.ant.tasks.CloverPassTask;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
 
 import java.io.File;
 import java.util.List;
+import java.util.Iterator;
 
 /**
  * Verify Test Percentage Coverage (TPC) from an existing Clover database and fail the build if it is below the defined
@@ -47,8 +47,9 @@ public class CloverCheckMojo extends AbstractCloverMojo
      * number of fractional digits set for a targetPercentage.</p>
      * <p>For example, if actual coverage value is <b>99.9%</b> then for the targetPercentage=<b>"100%"</b> it will PASS,
      * whereas for the targetPercentage=<b>"100.000000%"</b> it will FAIL.</p>
+     *
+     * @parameter expression="${maven.clover.targetPercentage}" 
      */
-    @Parameter(property = "maven.clover.targetPercentage")
     String targetPercentage;
 
     /**
@@ -57,8 +58,9 @@ public class CloverCheckMojo extends AbstractCloverMojo
      * <p/>
      * IMPORTANT: comparison of actual value with an expected percentage is performed with such numerical precision as
      * number of fractional digits set for a methodPercentage.
+     *
+     * @parameter expression="${maven.clover.methodPercentage}"
      */
-    @Parameter(property = "maven.clover.methodPercentage")
     String methodPercentage;
 
     /**
@@ -66,8 +68,9 @@ public class CloverCheckMojo extends AbstractCloverMojo
      * If maven.clover.targetPercentage is not specified, then this value is ignored.</p>
      * <p>IMPORTANT: comparison of actual value with an expected percentage is performed with such numerical precision as
      * number of fractional digits set for a statementPercentage.</p>
+     *
+     * @parameter expression="${maven.clover.statementPercentage}"
      */
-    @Parameter(property = "maven.clover.statementPercentage")
     String statementPercentage;
 
 
@@ -76,49 +79,57 @@ public class CloverCheckMojo extends AbstractCloverMojo
      * If maven.clover.targetPercentage is not specified, then this value is ignored.</p>
      * <p>IMPORTANT: comparison of actual value with an expected percentage is performed with such numerical precision as
      * number of fractional digits set for a conditionalPercentage.</p>
+     *
+     * @parameter expression="${maven.clover.conditionalPercentage}"
      */
-    @Parameter(property = "maven.clover.conditionalPercentage")
     String conditionalPercentage;
 
 
     /**
      * Comma or space separated list of Clover contexts (block, statement or method filers) to exclude before
      * performing the check.
+     * @parameter expression="${maven.clover.contextFilters}"
      */
-    @Parameter(property = "maven.clover.contextFilters")
     String contextFilters;
 
 
     /**
      * The type of code to log - APPLICATION, TEST or ALL code. Default is set to APPLICATION.
+     * @parameter expression="${maven.clover.codeType}"
      */
-    @Parameter(property = "maven.clover.codeType")
     String codeType;
 
     /**
      * Do we fail the build on a violation? The default is true but there are some edge cases where you want to be
      * able to check what would fail but without actually failing the build. For example you may want to let the build
      * continue so that you can verify others checks that are executed after the Clover checks. 
+     *
+     * @parameter expression="${maven.clover.failOnViolation}" default-value="true"
      */
-    @Parameter(property = "maven.clover.failOnViolation", defaultValue = "true")
     boolean failOnViolation;
 
 
     /**
      * The location where historical Clover data is located.
+     * <p/>
+     * <p>
      * Allows you to specify a location for historical build data, along with a configurable threshold expressed as a percentage ?
      * used to cause the build to fail if coverage has dropped.
      * This attribute is passed down to specified packages, then the same test is done for these at the package level.
      * This will only be used if there is no targetPercentage parameter set.
+     *
+     * @parameter expression="${maven.clover.historyDir}" default-value="${project.build.directory}/clover/history"
      */
-    @Parameter(property = "maven.clover.historyDir", defaultValue = "${project.build.directory}/clover/history")
     File historyDir;
 
     /**
      * The percentage threshold to use if clover-check is checking coverage against historical clover data.
+     *
      * This is the amount of leeway to use when comparing the current build's coverage with that of the last build.
+     * 
+     * @parameter expression="${maven.clover.historyThreshold}" default-value="0%"
+     *
      */
-    @Parameter(property = "maven.clover.historyThreshold", defaultValue = "0%")
     String historyThreshold;
 
     /**

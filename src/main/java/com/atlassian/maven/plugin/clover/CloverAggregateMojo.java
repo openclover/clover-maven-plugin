@@ -24,7 +24,6 @@ import com.atlassian.clover.CloverMerge;
 import com.atlassian.clover.cfg.Interval;
 import com.google.common.collect.Iterables;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 import java.io.File;
@@ -43,8 +42,9 @@ public class CloverAggregateMojo extends AbstractCloverMojo {
      * Time span that will be used when generating aggregated database. Check
      * http://confluence.atlassian.com/display/CLOVER/Using+Spans and
      * http://confluence.atlassian.com/display/CLOVER/clover-merge.
+     *
+     * @parameter expression="${maven.clover.span}"
      */
-    @Parameter(property = "maven.clover.span")
     private String span = Interval.DEFAULT_SPAN.toString();
 
     /**
