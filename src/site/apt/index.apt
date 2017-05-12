@@ -68,7 +68,9 @@ Clover Maven Plugin
 
 * Migration notice
 
-  Since Clover 4.1.0 release this plugin is named {{com.atlassian.maven.plugins:clover-maven-plugin}} - previously
+  Since version 4.2.0 this plugin is named {{org.openclover:clover-maven-plugin}}.
+
+  Since version 4.1.0 this plugin is named {{com.atlassian.maven.plugins:clover-maven-plugin}} - previously
   it was {{com.atlassian.maven.plugins:maven-clover2-plugin}}. Thus, goals are also named 'clover:xyz', e.g.
   {{clover:setup}} instead of old {{clover2:setup}}.
 
@@ -111,5 +113,5 @@ Clover Maven Plugin
 
 * Examples
 
-  Check the {{{https://bitbucket.org/atlassian/maven-clover2-plugin}plugin test suite (src/it directory)}}
+  Check the {{{https://bitbucket.org/openclover/clover-maven-plugin}plugin test suite (src/it directory)}}
   for example of how to use this plugin.
