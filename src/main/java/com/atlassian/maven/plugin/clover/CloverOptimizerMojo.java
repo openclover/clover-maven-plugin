@@ -9,7 +9,6 @@ import com.atlassian.clover.util.FileUtils;
 import com.google.common.collect.Iterables;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
@@ -35,16 +34,18 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * <p>The number of builds to run, before the snapshot file gets deleted.</p>
      * <p>The snapshot stores the mapping between your test cases and source code. Over time, this becomes stale,
      * so it is recommended to regenerate this file, by running all tests, on a regular basis.</p>
+     *
+     * @parameter expression="${maven.clover.fullRunEvery}" default-value="10"
      */
-    @Parameter(property = "maven.clover.fullRunEvery", defaultValue = "10")
     private int fullRunEvery;
 
     /**
      * A list of Tests to include for build optimization.
      * If neither <i>optimizeIncludes</i> nor <i>optimizeExcludes</i> are supplied, then the
      * <i>includes</i> specified in the maven-surefire-plugin's configuration will be used.
+     *
+     * @parameter
      */
-    @Parameter
     private List<String> optimizeIncludes;
 
 
@@ -52,14 +53,16 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * A list of Tests to exclude from build optimization.
      * If neither <i>optimizeIncludes</i> nor <i>optimizeExcludes</i> are supplied, then the
      * <i>excludes</i> specified in the maven-surefire-plugin's configuration will be used.
+     *
+     * @parameter
      */
-    @Parameter
     private List<String> optimizeExcludes;
 
     /**
      * A list of Tests which should always be run. ie they will never be optimized away.
+     * 
+     * @parameter
      */
-    @Parameter
     private List<String> alwaysRunTests;
 
     /**
@@ -72,14 +75,16 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * "failfast" - (default) ensures your build FAILs fast ie: tests relevant to code changes are run first
      *
      * "random" - tests will be shuffled before run. Can be used to determine inter-test-dependencies.
+     *
+     * @parameter expression="${maven.clover.ordering}"
      */
-    @Parameter(property = "maven.clover.ordering")
     private String ordering;
 
     /**
      * Toggles whether or not build optimization is to be done or not.
+     *
+     * @parameter expression="${maven.clover.optimize.enabled}" default-value="true"
      */
-    @Parameter(property = "maven.clover.optimize.enabled", defaultValue = "true")
     private boolean enabled;
 
 
@@ -89,14 +94,16 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * If false, (and ordering is not random or original), Clover will not exclude any of the tests. Instead, they
      * will be run in an optimal order to ensure the build fails as fast as possible. ie - tests that cover modify code
      * first, then ascending by test time.
+     * 
+     * @parameter expression="${maven.clover.optimize.minimize}" default-value="true"
+     *
      */
-    @Parameter(property = "maven.clover.optimize.minimize", defaultValue = "true")
     private boolean minimize;
 
     /**
      * The default test patterns to include.
      */
-    private static final List<String> DEFAULT_INCLUDES = Arrays.asList("**/Test*.java", "**/*Test.java", "**/*TestCase.java");
+    private static final List<String> DEFAULT_INCLUDES = Arrays.asList(new String[]{"**/Test*.java", "**/*Test.java", "**/*TestCase.java"});
 
     private static final String REGEX_START = "%regex[";
     private static final String REGEX_END = "]";

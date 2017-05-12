@@ -3,7 +3,6 @@ package com.atlassian.maven.plugin.clover;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Delete;
 
@@ -21,18 +20,24 @@ import java.io.File;
 public class CloverCleanMojo extends AbstractCloverMojo {
 
     /**
+     *
      * A flag to indicate not to run clover:clean for this execution.
+     *
      * If set to true, clean will be skipped will not be run.
+     *
+     * @parameter expression="${maven.clover.clean.skip}" default-value="false"
      */
-    @Parameter(property = "maven.clover.clean.skip", defaultValue = "false")
     protected boolean skip;
 
 
     /**
+     *
      * A flag to indicate to keep the clover.db but purge all coverage data and other files when clover:clean is run.
+     *
      * If set to true, the clover.db file will not be removed.
+     *
+     * @parameter expression="${maven.clover.clean.keepDb}" default-value="false"
      */
-    @Parameter(property = "maven.clover.clean.keepDb", defaultValue = "false")
     protected boolean keepDb;
 
 
