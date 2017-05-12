@@ -8,6 +8,6 @@
 
 * {Sources}
 
-  Sources are available {{{https://bitbucket.org/atlassian/maven-clover2-plugin}on Bitbucket in src/it/gwt directory}}.
+  Sources are available {{{https://bitbucket.org/openclover/clover-maven-plugin}on Bitbucket in src/it/gwt directory}}.
 
   To execute the project run either <<<mvn install>>> to verify the TPC or <<<mvn site>>> to generate the Clover report.
