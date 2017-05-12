@@ -201,7 +201,7 @@ import java.util.Set;
  */
 public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
 
-    public static final String CLOVER_CORE_GROUP_ID = "com.atlassian.clover";
+    public static final String CLOVER_CORE_GROUP_ID = "org.openclover";
     public static final String CLOVER_CORE_ARTIFACT_ID = "clover";
 
     /**
