@@ -57,7 +57,7 @@
         </dependency>
         <!-- A following is needed to run Cargo in-container tests with instrumented code -->
         <dependency>
-            <groupId>com.atlassian.clover</groupId>
+            <groupId>org.openclover</groupId>
             <artifactId>clover</artifactId>
             <version>4.2.1-SNAPSHOT</version>
         </dependency>
@@ -165,7 +165,7 @@
                         <dependencies>
                             <!-- We need clover.jar to be present in container classpath -->
                             <dependency>
-                                <groupId>com.atlassian.clover</groupId>
+                                <groupId>org.openclover</groupId>
                                 <artifactId>clover</artifactId>
                             </dependency>
                         </dependencies>

@@ -33,7 +33,7 @@ under the License.
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.atlassian.clover</groupId>
+            <groupId>org.openclover</groupId>
             <artifactId>clover</artifactId>
             <version>4.2.1-SNAPSHOT</version>
             <scope>compile</scope>
