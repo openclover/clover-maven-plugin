@@ -27,7 +27,7 @@ import org.apache.tools.ant.Project;
 import java.io.File;
 
 /**
- * Save a <a href="http://confluence.atlassian.com/x/rYhEB">Clover history point</a>.
+ * Save a <a href="http://openclover.org/doc/manual/4.2.0/ant--tutorial-part-2-historical-reporting.html">Clover history point</a>.
  *
  * @goal save-history
  *

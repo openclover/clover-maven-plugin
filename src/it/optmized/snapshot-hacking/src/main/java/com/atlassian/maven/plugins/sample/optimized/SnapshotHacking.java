@@ -12,7 +12,8 @@ import java.util.Set;
 /**
  * This class shows how it is possible to modify content of the Clover optimization snapshot.
  * This might be useful in case your project uses non-standard test approach, for instance:
- * <li>manual tests as described on https://confluence.atlassian.com/display/CLOVER/Measuring+per-test+coverage+for+manual+tests</li>
+ * <li>manual tests as described on
+ * http://openclover.org/doc/manual/4.2.0/hacking--measuring-per-test-coverage-for-manual-tests.html</li>
  * <li>integration tests when tests are executed in integration-test phase but results are checked in verify phase
  * (please note that clover cannot optimize failsafe plugin tests directly)</li>
  * How it works:

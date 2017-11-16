@@ -28,7 +28,8 @@
 
 {Contexts Example}
 
-  This example demonstrates how to configure {{{http://confluence.atlassian.com/display/CLOVER/Using+Coverage+Contexts}Clover filter contexts}}
+  This example demonstrates how to configure
+  {{{http://openclover.org/doc/manual/4.2.0/ant--using-coverage-contexts.html}Clover filter contexts}}
   using the Clover plugin.
 
 * {Sources}
