@@ -34,11 +34,9 @@ import com.atlassian.clover.ant.tasks.CloverMergeTask;
  * Merge arbitrary number of clover databases into one.
  *
  * All databases must share a common root directory.
- * Thankyou to Alex B.(dasmonsieur@gmail.com) for providing the basis of this
- * mojo via: http://developer.atlassian.com/jira/browse/CLMVN-36
+ * Thank you to Alex B.(dasmonsieur@gmail.com) for providing the basis of this mojo.
  *
  * @goal merge
- *
  */
 public class CloverMergeMojo extends AbstractCloverMojo
 {

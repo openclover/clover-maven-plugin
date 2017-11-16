@@ -7,7 +7,7 @@
     <version>1.0-SNAPSHOT</version>
     <description>
         Example how to use Clover with the GMaven Plugin. See:
-         * https://confluence.atlassian.com/display/CLOVER/Compiling+Groovy+with+GMaven+plugin
+         * http://openclover.org/doc/manual/4.2.0/maven--compiling-with-gmaven-plugin.html
          * http://docs.codehaus.org/display/GMAVEN/Home
 
         This project contains no java sources, so there is no need to call generateStubs / generateTestStubs

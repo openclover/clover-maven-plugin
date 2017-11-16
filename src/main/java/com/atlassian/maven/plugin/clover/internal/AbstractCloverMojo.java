@@ -38,9 +38,6 @@ import com.atlassian.maven.plugin.clover.MvnLogBuildListener;
 
 /**
  * Common code for all Clover plugin build Mojos.
- *
- * @author <a href="mailto:vmassol@apache.org">Vincent Massol</a>
- * @author <a href="mailto:npellow@atlassian.com">Nick Pellow</a>
  */
 public abstract class AbstractCloverMojo extends AbstractMojo implements CloverConfiguration {
     /**
@@ -53,7 +50,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     protected String cloverOutputDirectory;
 
     /**
-     * The location of the <a href="http://confluence.atlassian.com/x/EIBOB">Clover database</a>.
+     * The location of the <a href="http://openclover.org/doc/manual/4.2.0/ant--managing-the-coverage-database.html">Clover database</a>.
      *
      * @parameter expression="${maven.clover.cloverDatabase}"
      */

@@ -61,7 +61,7 @@
 
 * {Getting Started}
 
-  The first thing to do is to create a {{{http://confluence.atlassian.com/x/EIBOB}Clover database}}. To do
+  The first thing to do is to create a {{{http://openclover.org/doc/manual/4.2.0/ant--managing-the-coverage-database.html}Clover database}}. To do
   this, you must either do:
 
 +------+
@@ -93,8 +93,7 @@
   </build>
 +------+
 
-  This instruments all sources using Clover so that a
-  {{{http://confluence.atlassian.com/x/EIBOB}Clover database}} is created (or if it already exists, the plugin
+  This instruments all sources using Clover so that a Clover database is created (or if it already exists, the plugin
   will simply use it and add data on top of the existing one). When you execute your tests
   the instrumented code will start generating logs into the Clover database. These logs can then be used for
   Test Coverage Percentage checks, for report generation or for logging.
@@ -174,7 +173,7 @@
   <<<70%>>> will be used.
 
   However, as previously mentioned, Clover needs an existing
-  {{{http://confluence.atlassian.com/x/EIBOB}Clover database}}. Thus, a call
+  Clover database. Thus, a call
   to <<<clover:instrument>>> may be neccessary:
 
 +------+
@@ -223,7 +222,7 @@
 
 ** {Using block contexts}
 
-  Clover allows specifying {{{http://confluence.atlassian.com/x/AwBTB}block contexts}}
+  Clover allows specifying {{{http://openclover.org/doc/manual/4.2.0/ant--using-coverage-contexts.html}block contexts}}
   (i.e. elements to be excluded from the Test Percentage Coverage). To configure a block context use
   the <<<contextFilters>>> element in the <<<reporting>>> section. For example to exclude <<<try>>> and <<<static>>>
   block contexts, you would write:
@@ -267,7 +266,7 @@
 ** {Specifying a Clover flush policy}
 
   If you want to specify the Clover
-  {{{http://confluence.atlassian.com/x/O4BOB}flush policy}} that the
+  {{{http://openclover.org/doc/manual/4.2.0/ant--flush-policy.html}flush policy}} that the
   plugin should use, then specify it in the plugin's configuration. Valid
   policies are <<<threaded>>>, <<<directed>>> and <<<interval>>>.
 
@@ -318,8 +317,7 @@ mvn clover:clover
 +---------
 
   But just like the <<<clover:check>>> goal, the <<<clover:clover>>> goal
-  also needs an existing
-  {{{http://confluence.atlassian.com/x/EIBOB}Clover database}}. Thus, if
+  also needs an existing Clover database. Thus, if
   if it still does not exist, a call to <<<clover:instrument>>> must first be
   made:
 
@@ -368,8 +366,7 @@ mvn clover:instrument clover:clover
 +---------
 
   Note that in the above example that <<<clover:instrument>>> was bound to the
-  <<<pre-site>>> phase. This is done to ensure that a
-  {{{http://confluence.atlassian.com/x/EIBOB}Clover database}} is
+  <<<pre-site>>> phase. This is done to ensure that a Clover database is
   generated before the report executes.
 
   <Back to {{{usage.html}top}}.>
@@ -473,7 +470,7 @@ mvn clover:instrument clover:clover
 +---------
 
   Now this will generate a
-  {{{http://confluence.atlassian.com/x/rYhEB}Clover historical report}}
+  {{{http://openclover.org/doc/manual/4.2.0/ant--tutorial-part-2-historical-reporting.html}Clover historical report}}
   only if you have saved Clover historical savepoints. In order to save a Clover
   savepoint, run the <<<clover:save-history>>> goal. It's up to you to decide
   when you want to call this goal.
@@ -583,8 +580,7 @@ myproject
 +---------
 
   When you run <<<mvn site>>> in <<<myproject/>>>, the plugin will instrument
-  your sources, run your tests, aggregate the different
-  {{{http://confluence.atlassian.com/x/EIBOB}Clover database}} generated
+  your sources, run your tests, aggregate the different Clover database generated
   for each build module (i.e. <<<project1>>> and <<<project2>>>) and generate an
   aggregated Clover report in the site for the <<<myproject>>> project.
 
@@ -594,15 +590,13 @@ myproject
 mvn clover:aggregate clover:clover
 +------+
 
-  or if there is no existing
-  {{{http://confluence.atlassian.com/x/EIBOB}Clover database}}:
+  or if there is no existing Clover database:
 
 +------+
 mvn clover:instrument clover:aggregate clover:clover
 +------+
 
-  Note that you can control the location of the merged
-  {{{http://confluence.atlassian.com/x/EIBOB}Clover database}} by using
+  Note that you can control the location of the merged Clover database by using
   the <<<cloverMergeDatabase>>> configuration property.
 
   <Back to {{{usage.html}top}}.>
