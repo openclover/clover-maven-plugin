@@ -57,7 +57,7 @@ under the License.
     </prerequisites>
     <properties>
         <!-- Clover Core version -->
-        <cloverVersion>4.2.1-SNAPSHOT</cloverVersion>
+        <cloverVersion>4.2.1</cloverVersion>
     </properties>
     <dependencies>
         <dependency>
