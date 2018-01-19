@@ -457,7 +457,9 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
         AbstractCloverMojo.registerCloverAntTasks(antProject, getLog());
         ProjectHelper.configureProject(antProject, reportDescriptor);
         antProject.setBaseDir(project.getBasedir());
-        String target = isHistoricalDirectoryValid(output) && (historyOut != null) ? "historical" : "current";
+        String target = (generateHistorical && isHistoricalDirectoryValid(output) && historyOut != null)
+                ? "historical"
+                : "current";
         antProject.executeTarget(target);
     }
 
