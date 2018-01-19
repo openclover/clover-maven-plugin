@@ -476,11 +476,11 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
         if (dir.exists()) {
             if (dir.listFiles().length > 0) {
                 isValid = true;
-            } else {
+            } else if (generateHistorical){
                 getLog().warn("No Clover historical data found in [" + this.historyDir + "], skipping Clover "
                         + "historical report generation ([" + outFile + "])");
             }
-        } else {
+        } else if (generateHistorical){
             getLog().warn("Clover historical directory [" + this.historyDir + "] does not exist, skipping Clover "
                     + "historical report generation ([" + outFile + "])");
         }
