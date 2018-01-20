@@ -39,6 +39,7 @@ under the License.
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>@project.version@</version>
             </plugin>
         </plugins>
     </reporting>
@@ -47,6 +48,7 @@ under the License.
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>@project.version@</version>
                 <configuration>
                     <!-- Without the block filter the TPC is 50% and with it it's 57,1%. Thus we check for a TPC above of
                          55% to verify the filter has been applied correctly -->

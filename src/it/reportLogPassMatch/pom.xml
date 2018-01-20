@@ -41,6 +41,7 @@
 			<plugin>
 				<groupId>org.openclover</groupId>
 				<artifactId>clover-maven-plugin</artifactId>
+				<version>@project.version@</version>
 				<configuration>
                     <contextFilters>static,property,constructor,Log,IfLog,IfThisLog,ThisLog,SomeMethod</contextFilters>
 					<statementContexts>

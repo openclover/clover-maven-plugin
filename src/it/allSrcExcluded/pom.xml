@@ -20,6 +20,7 @@
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>@project.version@</version>
             </plugin>
         </plugins>
     </reporting>
@@ -28,6 +29,7 @@
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>@project.version@</version>
                 <configuration>
                     <excludes>
                         <exclude>**/*.java</exclude>
