@@ -99,6 +99,7 @@ under the License.
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+				        <version>@project.version@</version>
                 <configuration>
                     <setTestFailureIgnore>true</setTestFailureIgnore>
                 </configuration>
@@ -149,6 +150,7 @@ under the License.
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+				        <version>@project.version@</version>
             </plugin>
         </plugins>
     </reporting>

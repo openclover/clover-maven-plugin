@@ -39,6 +39,7 @@ under the License.
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>@project.version@</version>
                 <configuration>
                     <generateHistorical>true</generateHistorical>
                 </configuration>
@@ -50,6 +51,7 @@ under the License.
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>@project.version@</version>
                 <configuration>
                     <flushPolicy>threaded</flushPolicy>
                     <flushInterval>100</flushInterval>

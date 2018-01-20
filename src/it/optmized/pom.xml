@@ -48,7 +48,7 @@ under the License.
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
-                <version>4.2.1-SNAPSHOT</version>
+                <version>@project.version@</version>
                 <configuration>
                     <singleCloverDatabase>true</singleCloverDatabase>
                     <alwaysRunTests>
