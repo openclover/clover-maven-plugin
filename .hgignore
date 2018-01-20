@@ -2,3 +2,4 @@ syntax: glob
 *.iml
 .idea
 mvnvm.properties
+target
