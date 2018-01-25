@@ -20,6 +20,7 @@
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+				        <version>@project.version@</version>
                 <configuration>
                     <jdk>1.6</jdk>
                 </configuration>
@@ -31,6 +32,7 @@
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+				        <version>@project.version@</version>
                 <configuration>
                     <includes>
                         <include>**/include/*.java</include>
