@@ -21,6 +21,7 @@
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+				        <version>@project.version@</version>
                 <configuration>
                     <reportDescriptor>${clover.reportConfig}</reportDescriptor>
                     <resolveReportDescriptor>false</resolveReportDescriptor>
@@ -48,6 +49,7 @@
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+				        <version>@project.version@</version>
                 <configuration>
                     <reportDescriptor>${clover.reportConfig}</reportDescriptor>
                     <resolveReportDescriptor>false</resolveReportDescriptor>

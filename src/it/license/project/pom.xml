@@ -37,17 +37,24 @@ under the License.
             <version>4.10</version>
             <scope>test</scope>
         </dependency>
+        <!-- Making this dependency will make sure the order of the reactor is correct -->
+        <dependency>
+            <groupId>com.atlassian.maven.plugins.sample</groupId>
+            <artifactId>clover-sample-license-build-tools</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>@project.version@</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.atlassian.maven.plugins.sample</groupId>
                         <artifactId>clover-sample-license-build-tools</artifactId>
-                        <version>${version}</version>
+                        <version>${project.version}</version>
                     </dependency>
                 </dependencies>
                 <configuration>

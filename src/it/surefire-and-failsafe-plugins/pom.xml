@@ -28,6 +28,7 @@
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+				        <version>@project.version@</version>
                 <configuration>
                     <!-- Use custom report descriptor -->
                     <reportDescriptor>clover-report.xml</reportDescriptor>

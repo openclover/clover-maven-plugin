@@ -17,6 +17,7 @@
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>@project.version@</version>
                 <configuration>
                     <singleCloverDatabase>true</singleCloverDatabase>
                     <snapshot>${project.build.directory}/clover.snapshot</snapshot>

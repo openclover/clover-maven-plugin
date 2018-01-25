@@ -19,7 +19,6 @@
         <gwtTestUtils.version>0.38</gwtTestUtils.version>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.clover.version>4.2.1-SNAPSHOT</maven.clover.version>
     </properties>
 
     <dependencies>
@@ -161,7 +160,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                        <version>${maven.clover.version}</version>
+                        <version>@project.version@</version>
                         <configuration>
                             <!-- List all server-side packages which has to be instrumented -->
                             <includes>
@@ -241,7 +240,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                        <version>${maven.clover.version}</version>
+                        <version>@project.version@</version>
                         <configuration>
                             <!-- We don't need <includes> section as everything will be instrumented List all server-side packages which has to be instrumented -->
                         </configuration>
