@@ -463,7 +463,8 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     /**
      * Check if the build life cycle contains the 'install' phase.
-     *
+     * 
+     * @param lifecycleAnalyzer analyser
      * @throws org.apache.maven.plugin.MojoExecutionException if 'install' phase is present
      */
     protected void failIfInstallPhaseIsPresent(final BuildLifecycleAnalyzer lifecycleAnalyzer) throws MojoExecutionException {
@@ -480,6 +481,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     /**
      * Check if the build life cycle contains the 'deploy' phase.
      *
+     * @param lifecycleAnalyzer analyser
      * @throws org.apache.maven.plugin.MojoExecutionException if 'deploy' phase is present
      */
     protected void failIfDeployPhaseIsPresent(final BuildLifecycleAnalyzer lifecycleAnalyzer) throws MojoExecutionException {
