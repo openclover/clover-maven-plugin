@@ -14,12 +14,13 @@
         enable the 'with-clover-instr' profile. See invoker.properties file how goals can be called.
     </description>
     <properties>
-        <maven.compiler>2.5.1</maven.compiler>
-        <groovy.all>RELEASE</groovy.all>
-        <groovy.eclipse.batch>RELEASE</groovy.eclipse.batch>
-        <groovy.eclipse.compiler>RELEASE</groovy.eclipse.compiler>
+        <maven.compiler>3.7.0</maven.compiler>
+        <groovy.all>2.4.15</groovy.all>
+        <groovy.eclipse.batch>2.4.3-01</groovy.eclipse.batch>
+        <groovy.eclipse.compiler>2.9.0-01</groovy.eclipse.compiler>
         <clover.version>4.3.0-SNAPSHOT</clover.version>
-        <junit.version>4.11</junit.version>
+        <junit.version>4.12</junit.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
         <dependency>
@@ -39,6 +40,7 @@
         <testSourceDirectory>src/test/groovy</testSourceDirectory>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler}</version>
                 <configuration>

@@ -335,6 +335,7 @@ under the License.
                         <version>2.0.0</version>
                         <configuration>
                             <debug>true</debug>
+                            <encoding>UTF-8</encoding>
                             <projectsDirectory>src/it</projectsDirectory>
                             <pomIncludes>
                                 <pomInclude>**/allSrcExcluded/pom.xml</pomInclude>
