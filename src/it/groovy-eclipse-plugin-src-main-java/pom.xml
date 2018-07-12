@@ -23,6 +23,7 @@
         <groovy.eclipse.compiler>RELEASE</groovy.eclipse.compiler>
         <clover.version>4.3.0-SNAPSHOT</clover.version>
         <junit.version>4.11</junit.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
         <dependency>
@@ -40,6 +41,7 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler}</version>
                 <configuration>

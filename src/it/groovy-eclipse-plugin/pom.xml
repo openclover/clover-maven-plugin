@@ -21,17 +21,17 @@
         This sample is also an integration test checking binary compatibility with ASM v3, ASM v4, Groovy v1, Groovy v2.
     </description>
     <properties>
-        <maven.compiler>2.5.1</maven.compiler>
-        <groovy.all>RELEASE</groovy.all>
-        <groovy.eclipse.batch>RELEASE</groovy.eclipse.batch>
-        <groovy.eclipse.compiler>RELEASE</groovy.eclipse.compiler>
+        <groovy.all>2.4.15</groovy.all>
+        <groovy.eclipse.batch>2.4.3-01</groovy.eclipse.batch>
+        <groovy.eclipse.compiler>2.9.0-01</groovy.eclipse.compiler>
         <clover.version>4.3.0-SNAPSHOT</clover.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -43,8 +43,9 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler}</version>
+                <version>3.7.0</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
