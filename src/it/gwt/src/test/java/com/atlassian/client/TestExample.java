@@ -45,15 +45,6 @@ public class TestExample extends GwtTest {
         }
     }
 
-    /**
-     * Return the fully qualified name of your GWT module
-     */
-    @Override
-    public String getModuleName() {
-
-        return "com.atlassian.GwtExample";
-    }
-
     @Before
     public void init() throws Exception {
         // Create a handler which will intercept a GWT.create() call like:
@@ -72,29 +63,6 @@ public class TestExample extends GwtTest {
         // create an instance of our application under test
         app = new GwtExample();
         app.onModuleLoad();
-
-        // create fake servlet config
-        setServletConfig(new ServletConfig() {
-            @Override
-            public String getServletName() {
-                return "greetServlet";
-            }
-
-            @Override
-            public ServletContext getServletContext() {
-                return null;
-            }
-
-            @Override
-            public String getInitParameter(String s) {
-                return null;
-            }
-
-            @Override
-            public Enumeration getInitParameterNames() {
-                return null;
-            }
-        });
     }
 
     /**

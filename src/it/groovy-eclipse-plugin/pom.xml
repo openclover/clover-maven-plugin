@@ -23,7 +23,7 @@
     <properties>
         <groovy.all>2.4.15</groovy.all>
         <groovy.eclipse.batch>2.4.3-01</groovy.eclipse.batch>
-        <groovy.eclipse.compiler>2.9.0-01</groovy.eclipse.compiler>
+        <groovy.eclipse.compiler>2.9.2-01</groovy.eclipse.compiler>
         <clover.version>4.3.0-SNAPSHOT</clover.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -102,7 +102,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.12.4</version>
+                    <version>2.22.0</version>
                     <configuration>
                         <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     </configuration>
@@ -144,16 +144,47 @@
             </build>
         </profile>
         <profile>
-            <id>with-clover-setup-and-jaxb</id>
-            <dependencies>
-                <dependency>
-                    <groupId>javax.xml.bind</groupId>
-                    <artifactId>jaxb-api</artifactId>
-                    <version>2.1</version>
-                </dependency>
-            </dependencies>
+            <id>with-clover-setup-and-generated-sources</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <configuration>
+                                    <target name="generate">
+                                        <mkdir dir="target/generated-sources"/>
+                                        <echo message="public class HelloWorld { void sayHello() { System.out.println(&quot;Hello world!&quot;); } }"
+                                              file="target/generated-sources/HelloWorld.java"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>target/generated-sources</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>org.openclover</groupId>
                         <artifactId>clover-maven-plugin</artifactId>
@@ -164,7 +195,7 @@
                         </configuration>
                         <executions>
                             <execution>
-                                <!-- Call the clover:setup after JAXB sources are generated but before compilation -->
+                                <!-- Call the clover:setup after sources are generated but before compilation -->
                                 <id>main1</id>
                                 <phase>process-sources</phase>
                                 <goals>
@@ -181,48 +212,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                <plugin>
-                    <groupId>org.jvnet.jaxb2.maven2</groupId>
-                    <artifactId>maven-jaxb2-plugin</artifactId>
-                    <version>0.8.1</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>generate</goal>
-                            </goals>
-                            <configuration>
-                                <extension>true</extension>
-                                <schemaLanguage>DTD</schemaLanguage>
-                                <schemaIncludes>
-                                    <schemaInclude>*.dtd</schemaInclude>
-                                </schemaIncludes>
-                                <bindingIncludes>
-                                    <bindingInclude>*.jaxb</bindingInclude>
-                                </bindingIncludes>
-                                <!--<args>
-                                    <arg>-Xinject-listener-code</arg>
-                                </args>-->
-                            </configuration>
-                        </execution>
-                    </executions>
-                    <dependencies>
-                        <dependency>
-                            <groupId>com.sun.xml.bind</groupId>
-                            <artifactId>jaxb-xjc</artifactId>
-                            <version>2.1</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>com.sun.xml.bind</groupId>
-                            <artifactId>jaxb-impl</artifactId>
-                            <version>2.1</version>
-                        </dependency>
-                        <!--<dependency>
-                            <groupId>org.jvnet.jaxb2-commons</groupId>
-                            <artifactId>property-listener-injector</artifactId>
-                            <version>1.0</version>
-                        </dependency>-->
-                    </dependencies>
-                </plugin>
                 </plugins>
             </build>
         </profile>
