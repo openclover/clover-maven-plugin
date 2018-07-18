@@ -5,12 +5,12 @@
     <groupId>com.atlassian.maven.plugins.sample</groupId>
     <artifactId>clover-sample-jaxb</artifactId>
     <version>1.0</version>
-    <name>Generate customizations from DTDs</name>
+    <name>Generate customizations from XSD</name>
 
     <properties>
         <java.version>1.6</java.version>
-        <jaxb.version>2.1</jaxb.version>
-        <junit.version>4.7</junit.version>
+        <jaxb.version>2.3.0</jaxb.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
     <dependencies>
@@ -59,9 +59,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.0</version>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -70,7 +73,7 @@
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.8.1</version>
+                <version>0.14.0</version>
                 <executions>
                     <execution>
                         <goals>
@@ -78,16 +81,10 @@
                         </goals>
                         <configuration>
                             <extension>true</extension>
-                            <schemaLanguage>DTD</schemaLanguage>
                             <schemaIncludes>
-                                <schemaInclude>*.dtd</schemaInclude>
+                                <schemaInclude>*.xsd</schemaInclude>
                             </schemaIncludes>
-                            <bindingIncludes>
-                                <bindingInclude>*.jaxb</bindingInclude>
-                            </bindingIncludes>
-                            <args>
-                                <arg>-Xinject-listener-code</arg>
-                            </args>
+                            <generatePackage>org.openclover.xml.schema</generatePackage>
                         </configuration>
                     </execution>
                 </executions>
@@ -101,11 +98,6 @@
                         <groupId>com.sun.xml.bind</groupId>
                         <artifactId>jaxb-impl</artifactId>
                         <version>${jaxb.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.jvnet.jaxb2-commons</groupId>
-                        <artifactId>property-listener-injector</artifactId>
-                        <version>1.0</version>
                     </dependency>
                 </dependencies>
             </plugin>

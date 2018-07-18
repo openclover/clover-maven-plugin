@@ -10,7 +10,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -20,7 +20,7 @@
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
-				        <version>@project.version@</version>
+                <version>@project.version@</version>
                 <configuration>
                     <jdk>1.6</jdk>
                 </configuration>
@@ -32,7 +32,7 @@
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
-				        <version>@project.version@</version>
+                <version>@project.version@</version>
                 <configuration>
                     <includesFile>${project.basedir}/src/main/resources/includes.txt</includesFile>
                     <jdk>1.6</jdk>

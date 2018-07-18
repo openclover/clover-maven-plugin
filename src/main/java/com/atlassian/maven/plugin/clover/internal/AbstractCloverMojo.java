@@ -223,7 +223,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
             logger.debug("Using license file [" + licenseFile.getPath() + "]");
             System.setProperty(CloverNames.PROP_LICENSE_PATH, licenseFile.getPath());
         } else {
-            logger.info("No 'maven.clover.licenseLocation' configured. Using default license.");
+            logger.debug("No 'maven.clover.licenseLocation' configured. Using default license.");
         }
     }
 

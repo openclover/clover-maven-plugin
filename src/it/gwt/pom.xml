@@ -12,51 +12,47 @@
     <name>GWT with Clover Example</name>
 
     <properties>
-        <!-- At least Java 1.5 must be used for GWT, but it's better to use higher version -->
-        <java.version>1.6</java.version>
-        <gwt.version>2.4.0</gwt.version>
-        <!-- GwtTestUtils 0.38 works with GWT 2.4.0 -->
-        <gwtTestUtils.version>0.38</gwtTestUtils.version>
+        <!-- GWT 2.8 requires 1.8 -->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <gwt.version>2.8.2</gwt.version>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt</artifactId>
+                <version>${gwt.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-servlet</artifactId>
-            <version>${gwt.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
-            <version>${gwt.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-dev</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.7</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>1.0.0.GA</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>1.0.0.GA</version>
-            <classifier>sources</classifier>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.gwt-test-utils</groupId>
-            <artifactId>gwt-test-utils</artifactId>
-            <version>${gwtTestUtils.version}</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -77,7 +73,7 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>gwt-maven-plugin</artifactId>
-                        <version>2.4.0</version>
+                        <version>2.8.2</version>
                         <executions>
                             <execution>
                                 <goals>
@@ -93,9 +89,9 @@
                             <runTarget>GwtExample.html</runTarget>
                             <hostedWebapp>${webappDirectory}</hostedWebapp>
                             <i18nMessagesBundle>com.atlassian.client.Messages</i18nMessagesBundle>
-                            <!-- Use htmlunit framework simulating Internet Explorer 7 -->
+                            <!-- Use htmlunit framework simulating Internet Explorer 11 -->
                             <mode>htmlunit</mode>
-                            <htmlunit>IE7</htmlunit>
+                            <htmlunit>IE11</htmlunit>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -115,7 +111,7 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>gwt-maven-plugin</artifactId>
-                        <version>2.4.0</version>
+                        <version>2.8.2</version>
                         <executions>
                             <execution>
                                 <goals>
@@ -131,9 +127,9 @@
                             <runTarget>GwtExample.html</runTarget>
                             <hostedWebapp>${webappDirectory}</hostedWebapp>
                             <i18nMessagesBundle>com.atlassian.client.Messages</i18nMessagesBundle>
-                            <!-- Use htmlunit framework simulating Internet Explorer 7 -->
+                            <!-- Use htmlunit framework simulating Internet Explorer 11 -->
                             <mode>htmlunit</mode>
-                            <htmlunit>IE7</htmlunit>
+                            <htmlunit>IE11</htmlunit>
                             <validateOnly>true</validateOnly>
                         </configuration>
                     </plugin>
@@ -171,83 +167,6 @@
                 </plugins>
             </build>
         </profile>
-
-        <!-- ============================================================================================ -->
-        <!-- Use this profile to enable Clover instrumentation for server, client and common code         -->
-        <!-- Because of fact that everything will be instrumented, client-side and common code cannot     -->
-        <!-- be translated by GWT to JavaScript. Therefore you cannot run tests in a web browser but      -->
-        <!-- you have to use dedicated framework which runs fully in JVM. In this example, the            -->
-        <!-- gwt-test-utils is used for this purpose.                                                     -->
-        <!-- ============================================================================================ -->
-        <profile>
-            <id>with.clover.everything</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>gwt-maven-plugin</artifactId>
-                        <version>2.4.0</version>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <!-- Do not run gwt:compile and gwt:test goals. The reason is that it will start
-                                    conversion of Java client and shared code to JavaScript, searching for sources
-                                    of all referenced classes, including Clover instrumentation, which causes a failure. -->
-                                    <!--<goal>compile</goal>-->
-                                    <!--<goal>test</goal>-->
-                                    <goal>i18n</goal>
-                                    <goal>generateAsync</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <!-- Plugin configuration. There are many available options, see gwt-maven-plugin documentation at codehaus.org -->
-                        <configuration>
-                            <runTarget>GwtExample.html</runTarget>
-                            <hostedWebapp>${webappDirectory}</hostedWebapp>
-                            <i18nMessagesBundle>com.atlassian.client.Messages</i18nMessagesBundle>
-                            <!-- Use htmlunit framework simulating Internet Explorer 7 -->
-                            <mode>htmlunit</mode>
-                            <htmlunit>IE7</htmlunit>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <!-- Increase available memory as gwt-test-utils can consume a lot -->
-                            <argLine>-Xmx512M -XX:MaxPermSize=128M</argLine>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.openclover</groupId>
-                        <artifactId>clover-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>clover-initialization</id>
-                                <phase>initialize</phase>
-                                <goals>
-                                    <!-- Enable Clover instrumentation -->
-                                    <goal>setup</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>clover-reporting</id>
-                                <phase>install</phase>
-                                <goals>
-                                    <!-- Aggregate results from sub-modules and generate report-->
-                                    <goal>aggregate</goal>
-                                    <goal>clover</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <version>@project.version@</version>
-                        <configuration>
-                            <!-- We don't need <includes> section as everything will be instrumented List all server-side packages which has to be instrumented -->
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
     </profiles>
 
     <build>
@@ -276,11 +195,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
+                <version>3.7.0</version>
             </plugin>
         </plugins>
     </build>
