@@ -128,9 +128,9 @@
                             <runTarget>GwtExample.html</runTarget>
                             <hostedWebapp>${webappDirectory}</hostedWebapp>
                             <i18nMessagesBundle>com.atlassian.client.Messages</i18nMessagesBundle>
-                            <!-- Use htmlunit framework simulating Internet Explorer 7 -->
+                            <!-- Use htmlunit framework simulating Internet Explorer 11 -->
                             <mode>htmlunit</mode>
-                            <htmlunit>IE7</htmlunit>
+                            <htmlunit>IE11</htmlunit>
                             <validateOnly>true</validateOnly>
                         </configuration>
                     </plugin>
