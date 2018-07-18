@@ -7,20 +7,9 @@
             <location>target/clover/src-instrumented/com/atlassian/maven/plugins/JavaExample.java</location>
             <contains>This file has been instrumented by Clover</contains>
         </file>
-        <file>
-            <location>target/clover/src-instrumented/com/atlassian/maven/plugins/JavaHelper.java</location>
-            <contains>This file has been instrumented by Clover</contains>
-        </file>
-        <file>
-            <location>target/clover/src-test-instrumented/com/atlassian/maven/plugins/JavaHelperTest.java</location>
-            <contains>This file has been instrumented by Clover</contains>
-        </file>
         <!-- Check that we have instrumented generated sources -->
         <file>
-            <location>target/generated-sources/xjc/com/atlassian/maven/plugins/jaxb/MyElement.java</location>
-        </file>
-        <file>
-            <location>target/clover/src-instrumented/com/atlassian/maven/plugins/jaxb/MyElement.java</location>
+            <location>target/clover/src-instrumented/HelloWorld.java</location>
             <contains>This file has been instrumented by Clover</contains>
         </file>
         <!-- =================== COMPILATION =================== -->
@@ -33,7 +22,7 @@
         </file>
         <!-- Check that generated sources were compiled -->
         <file>
-            <location>target/classes/com/atlassian/maven/plugins/jaxb/MyElement.class</location>
+            <location>target/classes/HelloWorld.class</location>
         </file>
         <!-- =================== TESTING =================== -->
         <!-- Check that out of scope instrumentation classes were executed -->
@@ -86,8 +75,8 @@
         </file>
         <!-- check that we have reports for generated classes -->
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugins/jaxb/MyElement.html</location>
-            <contains>File MyElement.java</contains>
+            <location>target/site/clover/default-pkg/HelloWorld.html</location>
+            <contains>File HelloWorld.java</contains>
         </file>
         <!-- Check that we have code coverage -->
         <file>
