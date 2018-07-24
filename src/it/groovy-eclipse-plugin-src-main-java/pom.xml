@@ -17,11 +17,11 @@
         enable the 'with-clover-instr' profile. See invoker.properties file how goals can be called.
     </description>
     <properties>
-        <maven.compiler>2.5.1</maven.compiler>
+        <maven.compiler>3.7.0</maven.compiler>
         <groovy.all>RELEASE</groovy.all>
         <groovy.eclipse.batch>RELEASE</groovy.eclipse.batch>
         <groovy.eclipse.compiler>RELEASE</groovy.eclipse.compiler>
-        <junit.version>4.11</junit.version>
+        <junit.version>4.12</junit.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
@@ -67,7 +67,7 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.12.4</version>
+                    <version>2.22.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.openclover</groupId>
