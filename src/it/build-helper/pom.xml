@@ -8,6 +8,8 @@
     <description>Sample for clover-maven-plugin with build-helper-maven-plugin</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <groovy.eclipse.batch>2.5.1-02</groovy.eclipse.batch>
+        <groovy.eclipse.compiler>2.9.3-01</groovy.eclipse.compiler>
     </properties>
     <dependencies>
         <dependency>
@@ -38,12 +40,12 @@
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-batch</artifactId>
-                        <version>2.4.3-01</version>
+                        <version>${groovy.eclipse.batch}</version>
                     </dependency>
                     <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-compiler</artifactId>
-                        <version>2.9.2-01</version>
+                        <version>${groovy.eclipse.compiler}</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -104,4 +106,11 @@
             </plugin>
         </plugins>
     </build>
+    <pluginRepositories>
+        <pluginRepository>
+            <!-- the latest versions of groovy-maven-* artifacts are not available in Maven Central -->
+            <id>bintray-groovy-maven</id>
+            <url>https://dl.bintray.com/groovy/maven/</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
