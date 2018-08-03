@@ -1,8 +1,8 @@
 
-import com.sun.enterprise.config.serverbeans.AccessLog;
+import org.openclover.xml.schema.Project;
 
 public class Main {
     public static void main(String args[]) {
-        AccessLog accessLog = new AccessLog();
+        Project project = new Project();
     }
 }

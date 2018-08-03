@@ -1,13 +1,12 @@
-import junit.framework.TestCase;
-import com.sun.enterprise.config.serverbeans.AccessLog;
+import org.junit.Test;
+import org.openclover.xml.schema.Project;
 
-/**
- */
-public class JaxbTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class JaxbTest {
+    @Test
     public void testJaxb() {
-        AccessLog accessLog = new AccessLog();
-        assertEquals("", accessLog.getFormat());
+        Project project = new Project();
+        assertEquals(null, project.getName());
     }
-
 }
