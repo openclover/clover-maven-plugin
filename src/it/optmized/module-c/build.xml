@@ -14,13 +14,11 @@
 
     <property name="clover.jar" location="${user.home}/clover.jar"/>
     <taskdef resource="cloverlib.xml" classpath="${clover.jar}"/>
-    <taskdef resource="cloverjunitlib.xml" classpath="${clover.jar}"/>
     <property name="clover.ordering" value="failfast"/>   <!-- @ordering: optional; values "failfast", "orginal" or "random"; default: "failfast"; -->
     <property name="clover.optimize" value="true"/>      <!-- Enable/Disable optimization -->
     <property name="clover.minimize" value="true"/>      <!-- Exclude tests, or run all?  -->
     <property name="clover.fullrunevery" value="10"/>    <!-- Determine how many builds between full builds. -->
     <property name="clover.snapshot.file" value=".clover/ant/clover.snapshot"/>    <!-- Determine how many builds between full builds. -->
-    <clover-env/>
 
     <path id="build.classpath">
         <pathelement path="${junit.jar}"/>
@@ -80,11 +78,22 @@
         </junit>
     </target>
 
-
     <target name="clover.all" depends="with.clover, test.run, clover.snapshot, clover.report" description="Generates a Clover report">
     </target>
 
     <target name="clean">
         <delete dir="build"/>
+    </target>
+
+    <target name="with.clover">
+        <clover-setup/>
+    </target>
+
+    <target name="clover.snapshot">
+        <clover-snapshot/>
+    </target>
+
+    <target name="clover.report">
+        <clover-html-report outdir="build/clover_html" title="Tutorial"/>
     </target>
 </project>
