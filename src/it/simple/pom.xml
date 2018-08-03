@@ -35,7 +35,7 @@ under the License.
         <dependency>
             <groupId>org.openclover</groupId>
             <artifactId>clover</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
+            <version>4.3.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -78,13 +78,13 @@ under the License.
             <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
-                <version>4.3.0-SNAPSHOT</version>
+                <version>4.3.0</version>
                 <configuration>
                     <!--includesTestSourceRoots>false</includesTestSourceRoots-->
                     <targetPercentage>1%</targetPercentage>
 
                     <!-- Verify that we can specify the JDK version for Clover's instrumentation -->
-                    <jdk>1.4</jdk>
+                    <jdk>1.6</jdk>
 
                     <!-- Verify that we can exclude some files from the instrumentation. Make sure the file we are excluding
                          is referenced by other classes to ensure excluding is only done at the Clover level -->
