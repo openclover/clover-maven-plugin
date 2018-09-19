@@ -196,6 +196,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <li>1.6 (no language changes)</li>
      * <li>1.7 (String in switch, try with resources, binary literals, underscores in literals)</li>
      * <li>1.8 (lambda expressions, default methods in interfaces)</li>
+     * <li>9 / 1.9 (module-info.java)</li>
      * </ul>
      * <p>By default Clover instruments using the highest language level supported.</p>
      *

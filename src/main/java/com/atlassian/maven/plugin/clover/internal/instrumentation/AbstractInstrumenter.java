@@ -229,12 +229,13 @@ public abstract class AbstractInstrumenter {
 
         final String javaLevel = getConfiguration().getJdk();
         if (javaLevel != null) {
-            if (javaLevel.matches("1\\.[345678]")) {
+            // 1.X or X (since Java 9)
+            if (javaLevel.matches("(1\\.[3456789]|9)")) {
                 parameters.add("--source");
                 parameters.add(javaLevel);
             } else {
-                throw new MojoExecutionException("Unsupported java language level version [" + javaLevel
-                        + "]. Valid values are [1.3], [1.4], [1.5], [1.6], [1.7] and [1.8]");
+                throw new MojoExecutionException("Unsupported Java language level version [" + javaLevel
+                        + "]. Valid values are [1.3], [1.4], [1.5], [1.6], [1.7], [1.8] and [1.9]/[9]");
             }
         }
 
