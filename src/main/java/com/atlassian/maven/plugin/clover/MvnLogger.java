@@ -3,8 +3,6 @@ package com.atlassian.maven.plugin.clover;
 import com.atlassian.clover.Logger;
 import org.apache.maven.plugin.logging.Log;
 
-/**
- */
 public class MvnLogger extends Logger {
 
     private final Log log;

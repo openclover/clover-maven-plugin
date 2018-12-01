@@ -22,14 +22,11 @@ package com.atlassian.maven.plugin.clover.internal;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
-import java.util.Set;
-import java.util.Map;
 import java.util.List;
 
 /**
  * Represents a Clover configuration. Used by internal classes to wrap Mojos and get access to
  * Clover configuration values.
- *  
  */
 public interface CloverConfiguration
 {

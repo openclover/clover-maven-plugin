@@ -1,11 +1,12 @@
 package com.atlassian.maven.plugin.clover;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Mojo;
 
 /**
- * 
- * @goal reset
+ * Reset source directories to original ones.
  */
+@Mojo(name = "reset")
 public class CloverResetMojo extends CloverInstrumentInternalMojo {
    
     public void execute() throws MojoExecutionException {

@@ -24,6 +24,7 @@ import com.atlassian.clover.CloverMerge;
 import com.atlassian.clover.cfg.Interval;
 import com.google.common.collect.Iterables;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
@@ -34,10 +35,8 @@ import java.util.List;
 /**
  * Aggregate children module Clover databases if there are any. This mojo should not exist. It's only there because
  * the site plugin doesn't handle @aggregators properly at the moment...
- *
- * @goal aggregate
- * @aggregator
  */
+@Mojo(name = "aggregate", aggregator = true)
 public class CloverAggregateMojo extends AbstractCloverMojo {
     /**
      * Time span that will be used when generating aggregated database. Check

@@ -20,6 +20,7 @@ package com.atlassian.maven.plugin.clover;
  */
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.BuildException;
@@ -33,12 +34,9 @@ import com.atlassian.clover.ant.tasks.CloverMergeTask;
 
 /**
  * Merge arbitrary number of clover databases into one.
- *
  * All databases must share a common root directory.
- * Thank you to Alex B.(dasmonsieur@gmail.com) for providing the basis of this mojo.
- *
- * @goal merge
  */
+@Mojo(name = "merge")
 public class CloverMergeMojo extends AbstractCloverMojo
 {
 

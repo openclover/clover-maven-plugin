@@ -8,6 +8,8 @@ import com.atlassian.clover.optimization.SnapshotPrinter;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.Project;
 
@@ -25,11 +27,8 @@ import java.util.Date;
  * 2) leave the snapshot file in the default location 'target/clover/clover.db.snapshot' and do a clean build with the
  * clover:clean goal. clover:clean will delete everything the clean plugin does, however will ensure that the snapshot
  * file does not get deleted.
- *
- * @goal snapshot
- * @phase test
- *
  */
+@Mojo(name = "snapshot", defaultPhase = LifecyclePhase.TEST)
 public class CloverSnapshotMojo extends AbstractCloverMojo {
 
     @Parameter(property = "maven.clover.span")
