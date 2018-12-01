@@ -6,9 +6,6 @@
     <name>Clover Maven Plugin Some Src Excluded From File Sample</name>
     <description>Clover Maven Plugin Some Src Excluded From File Sample</description>
     <version>1.0-SNAPSHOT</version>
-    <properties>
-        <maven.clover.version>4.2.0-SNAPSHOT</maven.clover.version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -17,12 +14,17 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <properties>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.6</maven.compiler.target>
+    </properties>
     <reporting>
         <excludeDefaults>true</excludeDefaults>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>@project.version@</version>
                 <configuration>
                     <jdk>1.6</jdk>
                 </configuration>
@@ -32,9 +34,9 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
-                <version>${maven.clover.version}</version>
+                <version>@project.version@</version>
                 <configuration>
                     <excludesFile>${project.basedir}/src/main/resources/excludes.txt</excludesFile>
                     <jdk>1.6</jdk>

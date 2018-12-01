@@ -41,8 +41,8 @@ import java.util.List;
 public class CloverAggregateMojo extends AbstractCloverMojo {
     /**
      * Time span that will be used when generating aggregated database. Check
-     * http://confluence.atlassian.com/display/CLOVER/Using+Spans and
-     * http://confluence.atlassian.com/display/CLOVER/clover-merge.
+     * http://openclover.org/doc/manual/4.2.0/ant--using-spans.html and
+     * http://openclover.org/doc/manual/4.2.0/ant--clover-merge.html
      */
     @Parameter(property = "maven.clover.span")
     private String span = Interval.DEFAULT_SPAN.toString();

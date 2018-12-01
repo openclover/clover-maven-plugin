@@ -98,7 +98,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
     /**
      * Do we fail the build on a violation? The default is true but there are some edge cases where you want to be
      * able to check what would fail but without actually failing the build. For example you may want to let the build
-     * continue so that you can verify others checks that are executed after the Clover checks. 
+     * continue so that you can verify others checks that are executed after the Clover checks.
      */
     @Parameter(property = "maven.clover.failOnViolation", defaultValue = "true")
     boolean failOnViolation;
@@ -120,6 +120,15 @@ public class CloverCheckMojo extends AbstractCloverMojo
      */
     @Parameter(property = "maven.clover.historyThreshold", defaultValue = "0%")
     String historyThreshold;
+
+    /**
+     * Specifies whether to include failed test coverage when calculating the total coverage percentage.
+     *
+     * @since 4.4.0
+     */
+    @Parameter(property = "maven.clover.includeFailedTestCoverage", defaultValue = "false")
+    private boolean includeFailedTestCoverage;
+
 
     /**
      * {@inheritDoc}
@@ -185,6 +194,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
         cloverPassTask.setInitString(database);
         cloverPassTask.setHaltOnFailure(true);
         cloverPassTask.setFailureProperty("clovercheckproperty");
+        cloverPassTask.setIncludeFailedTestCoverage(includeFailedTestCoverage);
 
         if (this.codeType != null) {
             cloverPassTask.setCodeType(codeType);

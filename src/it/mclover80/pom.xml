@@ -29,7 +29,7 @@ under the License.
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -37,8 +37,9 @@ under the License.
         <excludeDefaults>true</excludeDefaults>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>@project.version@</version>
                 <configuration>
                     <generateHistorical>true</generateHistorical>
                 </configuration>
@@ -48,8 +49,9 @@ under the License.
     <build>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>@project.version@</version>
                 <configuration>
                     <flushPolicy>threaded</flushPolicy>
                     <flushInterval>100</flushInterval>

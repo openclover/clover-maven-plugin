@@ -80,7 +80,7 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase {
             oneOf(mockArtifact).getArtifactId();
             will(returnValue("clover"));
             oneOf(mockArtifact).getGroupId();
-            will(returnValue("com.atlassian.clover"));
+            will(returnValue("org.openclover"));
         }});
 
         Artifact clover = this.mojo.findCloverArtifact(Collections.singletonList(mockArtifact));
