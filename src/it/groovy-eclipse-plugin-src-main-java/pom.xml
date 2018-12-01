@@ -17,12 +17,12 @@
         enable the 'with-clover-instr' profile. See invoker.properties file how goals can be called.
     </description>
     <properties>
-        <maven.compiler>2.5.1</maven.compiler>
-        <groovy.all>RELEASE</groovy.all>
-        <groovy.eclipse.batch>RELEASE</groovy.eclipse.batch>
-        <groovy.eclipse.compiler>RELEASE</groovy.eclipse.compiler>
-        <clover.version>4.2.0-SNAPSHOT</clover.version>
-        <junit.version>4.11</junit.version>
+        <maven.compiler>3.7.0</maven.compiler>
+        <groovy.all>2.4.15</groovy.all>
+        <groovy.eclipse.batch>2.5.1-02</groovy.eclipse.batch>
+        <groovy.eclipse.compiler>2.9.3-01</groovy.eclipse.compiler>
+        <junit.version>4.12</junit.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
         <dependency>
@@ -40,6 +40,7 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler}</version>
                 <configuration>
@@ -66,12 +67,12 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.12.4</version>
+                    <version>2.22.0</version>
                 </plugin>
                 <plugin>
-                    <groupId>com.atlassian.maven.plugins</groupId>
+                    <groupId>org.openclover</groupId>
                     <artifactId>clover-maven-plugin</artifactId>
-                    <version>${clover.version}</version>
+                    <version>@project.version@</version>
                     <configuration>
                         <includesAllSourceRoots>false</includesAllSourceRoots>
                         <excludesList>**/ExcludedFile.groovy</excludesList>
@@ -86,9 +87,9 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.atlassian.maven.plugins</groupId>
+                        <groupId>org.openclover</groupId>
                         <artifactId>clover-maven-plugin</artifactId>
-                        <version>${clover.version}</version>
+                        <version>@project.version@</version>
                         <configuration>
                             <excludesList>**/*ExcludedFile.*</excludesList>
                         </configuration>
@@ -106,4 +107,11 @@
             </build>
         </profile>
     </profiles>
+    <pluginRepositories>
+        <pluginRepository>
+            <!-- the latest versions of groovy-maven-* artifacts are not available in Maven Central -->
+            <id>bintray-groovy-maven</id>
+            <url>https://dl.bintray.com/groovy/maven/</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>

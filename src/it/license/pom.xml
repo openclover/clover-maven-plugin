@@ -25,6 +25,9 @@ under the License.
   <name>Clover Maven Plugin License Sample</name>
   <description>Clover Maven Plugin License Sample</description>
   <version>1.0-SNAPSHOT</version>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <modules>
     <module>build-tools</module>
     <module>project</module>

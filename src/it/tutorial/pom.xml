@@ -9,7 +9,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.2</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -19,8 +19,9 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>@project.version@</version>
                 <configuration>
                     <reportDescriptor>${clover.reportConfig}</reportDescriptor>
                     <resolveReportDescriptor>false</resolveReportDescriptor>
@@ -46,8 +47,9 @@
     <reporting>
         <plugins>
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>@project.version@</version>
                 <configuration>
                     <reportDescriptor>${clover.reportConfig}</reportDescriptor>
                     <resolveReportDescriptor>false</resolveReportDescriptor>

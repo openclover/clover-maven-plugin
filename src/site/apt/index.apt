@@ -28,19 +28,14 @@
 
 Clover Maven Plugin
 
-  The Clover plugin is the place where build actions related to
-  {{{http://confluence.atlassian.com/x/O4BOB}Clover}} are found in Maven.
-
-  Clover is a tool that generates Test Coverage reports. It is free for non-commercial use.
-  If your project is a commercial project you will need to get a license for the Clover jar
-  before using this plugin. Please note that an evaluation license is included in this plugin.
+  OpenClover is a tool that generates Test Coverage reports. It is free for personal and commercial use.
 
 * Features
 
   The Clover plugin currently supports the following features:
 
    * Instrumenting Java sources with Clover so that they generate coverage logs
-     to a {{{http://confluence.atlassian.com/x/EIBOB}Clover database}} when they are exercised.
+     to a Clover database when they are exercised.
 
    * Aggregating Clover databases found in children modules into a single database so that reporting and checking
      for test coverage can be done at the level of the full project.
@@ -48,15 +43,15 @@ Clover Maven Plugin
    * Generation of Clovered artifacts into your local repository, including Clovered EAR, WAR, RAR, etc containing a
      bundled Clover JAR. This allows including automated functional tests coverage into the Clover reports.
 
-   * Generating a report from a {{{http://confluence.atlassian.com/x/EIBOB}Clover database}}.
+   * Generating a report from a Clover database.
 
    * Verifying that your source code has a defined test coverage percentage and fail the build if it's
      below that level. This is the equivalent of the
-     {{{http://confluence.atlassian.com/x/aIhEB}Clover Check Ant task}}.
+     {{{http://openclover.org/doc/manual/4.2.0/ant--clover-check.html}Clover Check Ant task}}.
 
-   * Dumping information about your {{{http://confluence.atlassian.com/x/EIBOB}Clover database}}.
+   * Dumping information about your Clover database.
 
-   * NEW: Optimizing your tests by only running tests for code that has been modified
+   * Optimizing your tests by only running tests for code that has been modified
 
   Note that the Clover plugin will <<not>> overwrite your main compiled classes nor your main
   test compiled tests classes. It creates a parallel directory in <<<target/clover>>> in order not
@@ -68,7 +63,9 @@ Clover Maven Plugin
 
 * Migration notice
 
-  Since Clover 4.1.0 release this plugin is named {{com.atlassian.maven.plugins:clover-maven-plugin}} - previously
+  Since version 4.2.0 this plugin is named {{org.openclover:clover-maven-plugin}}.
+
+  Since version 4.1.0 this plugin is named {{com.atlassian.maven.plugins:clover-maven-plugin}} - previously
   it was {{com.atlassian.maven.plugins:maven-clover2-plugin}}. Thus, goals are also named 'clover:xyz', e.g.
   {{clover:setup}} instead of old {{clover2:setup}}.
 
@@ -107,9 +104,9 @@ Clover Maven Plugin
     of the site plugin which doesn't support @aggregator reports...
 
   * {{{save-history-mojo.html}clover:save-history}} - Save a
-    {{{http://confluence.atlassian.com/x/rYhEB}Clover history point}}.
+    {{{http://openclover.org/doc/manual/4.2.0/ant--tutorial-part-2-historical-reporting.html}Clover history point}}.
 
 * Examples
 
-  Check the {{{https://bitbucket.org/atlassian/maven-clover2-plugin}plugin test suite (src/it directory)}}
+  Check the {{{https://bitbucket.org/openclover/clover-maven-plugin}plugin test suite (src/it directory)}}
   for example of how to use this plugin.

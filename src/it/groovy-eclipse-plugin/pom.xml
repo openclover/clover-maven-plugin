@@ -21,17 +21,16 @@
         This sample is also an integration test checking binary compatibility with ASM v3, ASM v4, Groovy v1, Groovy v2.
     </description>
     <properties>
-        <maven.compiler>2.5.1</maven.compiler>
-        <groovy.all>RELEASE</groovy.all>
-        <groovy.eclipse.batch>RELEASE</groovy.eclipse.batch>
-        <groovy.eclipse.compiler>RELEASE</groovy.eclipse.compiler>
-        <clover.version>4.2.0-SNAPSHOT</clover.version>
+        <groovy.all>2.4.15</groovy.all>
+        <groovy.eclipse.batch>2.5.1-02</groovy.eclipse.batch>
+        <groovy.eclipse.compiler>2.9.3-01</groovy.eclipse.compiler>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -43,8 +42,9 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler}</version>
+                <version>3.7.0</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
@@ -67,7 +67,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.7</version>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>add-source</id>
@@ -101,15 +101,15 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.12.4</version>
+                    <version>2.22.0</version>
                     <configuration>
                         <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     </configuration>
                 </plugin>
                 <plugin>
-                    <groupId>com.atlassian.maven.plugins</groupId>
+                    <groupId>org.openclover</groupId>
                     <artifactId>clover-maven-plugin</artifactId>
-                    <version>${clover.version}</version>
+                    <version>@project.version@</version>
                     <configuration>
                         <excludesList>**/*ExcludedFile.*</excludesList>
                     </configuration>
@@ -123,9 +123,9 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.atlassian.maven.plugins</groupId>
+                        <groupId>org.openclover</groupId>
                         <artifactId>clover-maven-plugin</artifactId>
-                        <version>${clover.version}</version>
+                        <version>@project.version@</version>
                         <configuration>
                             <excludesList>**/*ExcludedFile.*</excludesList>
                         </configuration>
@@ -143,18 +143,49 @@
             </build>
         </profile>
         <profile>
-            <id>with-clover-setup-and-jaxb</id>
-            <dependencies>
-                <dependency>
-                    <groupId>javax.xml.bind</groupId>
-                    <artifactId>jaxb-api</artifactId>
-                    <version>2.1</version>
-                </dependency>
-            </dependencies>
+            <id>with-clover-setup-and-generated-sources</id>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.atlassian.maven.plugins</groupId>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <configuration>
+                                    <target name="generate">
+                                        <mkdir dir="target/generated-sources"/>
+                                        <echo message="public class HelloWorld { void sayHello() { System.out.println(&quot;Hello world!&quot;); } }"
+                                              file="target/generated-sources/HelloWorld.java"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>target/generated-sources</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.openclover</groupId>
                         <artifactId>clover-maven-plugin</artifactId>
                         <configuration>
                             <!-- Instrument all source files, also generated by JAXB. Set to false if
@@ -163,7 +194,7 @@
                         </configuration>
                         <executions>
                             <execution>
-                                <!-- Call the clover:setup after JAXB sources are generated but before compilation -->
+                                <!-- Call the clover:setup after sources are generated but before compilation -->
                                 <id>main1</id>
                                 <phase>process-sources</phase>
                                 <goals>
@@ -180,50 +211,15 @@
                             </execution>
                         </executions>
                     </plugin>
-                <plugin>
-                    <groupId>org.jvnet.jaxb2.maven2</groupId>
-                    <artifactId>maven-jaxb2-plugin</artifactId>
-                    <version>0.8.1</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>generate</goal>
-                            </goals>
-                            <configuration>
-                                <extension>true</extension>
-                                <schemaLanguage>DTD</schemaLanguage>
-                                <schemaIncludes>
-                                    <schemaInclude>*.dtd</schemaInclude>
-                                </schemaIncludes>
-                                <bindingIncludes>
-                                    <bindingInclude>*.jaxb</bindingInclude>
-                                </bindingIncludes>
-                                <!--<args>
-                                    <arg>-Xinject-listener-code</arg>
-                                </args>-->
-                            </configuration>
-                        </execution>
-                    </executions>
-                    <dependencies>
-                        <dependency>
-                            <groupId>com.sun.xml.bind</groupId>
-                            <artifactId>jaxb-xjc</artifactId>
-                            <version>2.1</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>com.sun.xml.bind</groupId>
-                            <artifactId>jaxb-impl</artifactId>
-                            <version>2.1</version>
-                        </dependency>
-                        <!--<dependency>
-                            <groupId>org.jvnet.jaxb2-commons</groupId>
-                            <artifactId>property-listener-injector</artifactId>
-                            <version>1.0</version>
-                        </dependency>-->
-                    </dependencies>
-                </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
+    <pluginRepositories>
+        <pluginRepository>
+            <!-- the latest versions of groovy-maven-* artifacts are not available in Maven Central -->
+            <id>bintray-groovy-maven</id>
+            <url>https://dl.bintray.com/groovy/maven/</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>

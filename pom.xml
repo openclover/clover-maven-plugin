@@ -16,22 +16,21 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.openclover</groupId>
     <artifactId>clover-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Clover Maven Plugin</name>
-    <version>4.2.0-SNAPSHOT</version>
+    <version>4.3.2-SNAPSHOT</version>
     <description>Clover Maven Plugin</description>
     <url>http://openclover.org</url>
     <organization>
-        <name>OpenClover</name>
+        <name>OpenClover.org</name>
         <url>http://openclover.org</url>
     </organization>
     <issueManagement>
-        <url>https://bitbucket.org/openclover/clover-maven-plugin/issues</url>
+        <url>https://bitbucket.org/openclover/clover/issues</url>
     </issueManagement>
     <licenses>
         <license>
@@ -48,17 +47,18 @@ under the License.
     </scm>
     <developers>
         <developer>
-            <id>mparfianowicz</id>
+            <id>marek-parfianowicz</id>
             <name>Marek Parfianowicz</name>
             <email>marek.parfianowicz@gmail.com</email>
         </developer>
     </developers>
     <prerequisites>
-        <maven>3.0.1</maven>
+        <maven>3.0.4</maven>
     </prerequisites>
     <properties>
         <!-- Clover Core version -->
-        <cloverVersion>4.2.0</cloverVersion>
+        <cloverVersion>4.3.1</cloverVersion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
         <dependency>
@@ -166,16 +166,12 @@ under the License.
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
-                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>3.5</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                </configuration>
+                <version>3.2</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -199,11 +195,6 @@ under the License.
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.19.1</version>
-                <configuration>
-                    <includes>
-                        <include>**/*Test.java</include>
-                    </includes>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -313,19 +304,6 @@ under the License.
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-clean-plugin</artifactId>
                         <version>3.0.0</version>
-                        <configuration>
-                            <filesets>
-                                <fileset>
-                                    <directory>src/it</directory>
-                                    <includes>
-                                        <include>**/target</include>
-                                        <include>**/target/**</include>
-                                        <include>**/build.log</include>
-                                        <include>xdoclet/build.properties</include>
-                                    </includes>
-                                </fileset>
-                            </filesets>
-                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -349,6 +327,7 @@ under the License.
                         <configuration>
                             <debug>true</debug>
                             <projectsDirectory>src/it</projectsDirectory>
+                            <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
                             <pomIncludes>
                                 <pomInclude>**/allSrcExcluded/pom.xml</pomInclude>
                                 <pomInclude>**/build-helper/pom.xml</pomInclude>

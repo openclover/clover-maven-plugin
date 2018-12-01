@@ -313,7 +313,8 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
             final Properties properties = getProject().getProperties();
             properties.put("maven.test.failure.ignore", "true");  // surefire and failsafe
             properties.put("checkstyle.failOnViolation", "false");
-            properties.put("pmd.failOnViolation", "false");
+            properties.put("pmd.failOnViolation", "false"); // pmd:check
+            properties.put("cpd.failOnViolation", "false"); // pmd:cpd-check
         }
     }
 

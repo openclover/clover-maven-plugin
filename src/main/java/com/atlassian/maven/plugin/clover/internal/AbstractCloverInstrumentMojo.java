@@ -81,7 +81,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected String excludesFile = null;
 
     /**
-     * The <a href="http://confluence.atlassian.com/x/O4BOB">Clover flush policy</a> to use.
+     * The <a href="http://openclover.org/doc/manual/4.2.0/ant--flush-policy.html">Clover flush policy</a> to use.
      * Valid values are <code>directed</code>, <code>interval</code> and <code>threaded</code>.
      */
     @Parameter(property = "maven.clover.flushPolicy", defaultValue = "threaded")
@@ -166,7 +166,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <p>IMPORTANT: Due to Clover's restrictions related with code instrumentation and javac compiler's type inference
      * capabilities, you may get compilation errors when expression-like lambda functions are passed to generic methods
      * or types. In such case disable instrumentation of expression-like form (i.e. use the 'none' or 'block' setting).
-     * See the <a href="https://confluence.atlassian.com/display/CLOVERKB/Java+8+code+instrumented+by+Clover+fails+to+compile">
+     * See the <a href="http://openclover.org/doc/manual/4.2.0/kb--java-8-code-instrumented-by-clover-fails-to-compile.html">
      * Java 8 code instrumented by Clover fails to compile</a> Knowledge Base article for more details.
      * </p>
      *
@@ -184,6 +184,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <li>1.6 (no language changes)</li>
      * <li>1.7 (String in switch, try with resources, binary literals, underscores in literals)</li>
      * <li>1.8 (lambda expressions, default methods in interfaces)</li>
+     * <li>9 / 1.9 (module-info.java)</li>
      * </ul>
      * <p>By default Clover instruments using the highest language level supported.</p>
      */
@@ -437,7 +438,8 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     /**
      * Check if the build life cycle contains the 'install' phase.
-     *
+     * 
+     * @param lifecycleAnalyzer analyser
      * @throws org.apache.maven.plugin.MojoExecutionException if 'install' phase is present
      */
     protected void failIfInstallPhaseIsPresent(final BuildLifecycleAnalyzer lifecycleAnalyzer) throws MojoExecutionException {
@@ -454,6 +456,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     /**
      * Check if the build life cycle contains the 'deploy' phase.
      *
+     * @param lifecycleAnalyzer analyser
      * @throws org.apache.maven.plugin.MojoExecutionException if 'deploy' phase is present
      */
     protected void failIfDeployPhaseIsPresent(final BuildLifecycleAnalyzer lifecycleAnalyzer) throws MojoExecutionException {
