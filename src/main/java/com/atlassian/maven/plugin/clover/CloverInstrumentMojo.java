@@ -21,6 +21,9 @@ package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverInstrumentMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Execute;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 
 /**
  * <p>Fork a custom build lifecycle in which all sources will be instrumented by Clover and next execute this
@@ -48,10 +51,9 @@ import org.apache.maven.plugin.MojoExecutionException;
  *
  * <p>In order to avoid this, you can use the <code>instrument-test</code> goal, which runs a forked lifecycle till
  * the <code>test</code> phase.</p>
- *
- * @goal instrument
- * @execute phase="install" lifecycle="clover"
  */
+@Execute(phase = LifecyclePhase.INSTALL, goal = "instrument", lifecycle = "clover")
+@Mojo(name = "instrument")
 public class CloverInstrumentMojo extends AbstractCloverInstrumentMojo {
 
     /**

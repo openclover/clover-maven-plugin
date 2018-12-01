@@ -3,6 +3,8 @@ package com.atlassian.maven.plugin.clover;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Delete;
@@ -14,10 +16,8 @@ import java.io.File;
  * when you are developing using the clover test runner optimizer.
  *
  * This mojo deletes the {@link #cloverOutputDirectory} contents and the {@link #snapshot} file used for test optimization.
- *
- * @goal clean
- * @phase initialize
  */
+@Mojo(name = "clean", defaultPhase = LifecyclePhase.INITIALIZE)
 public class CloverCleanMojo extends AbstractCloverMojo {
 
     /**

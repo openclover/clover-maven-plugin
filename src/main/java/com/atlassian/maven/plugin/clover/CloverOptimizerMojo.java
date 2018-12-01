@@ -9,6 +9,8 @@ import com.atlassian.clover.util.FileUtils;
 import com.google.common.collect.Iterables;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
@@ -25,10 +27,8 @@ import java.util.regex.Pattern;
 /**
  * Sets the 'test' property on the project which is used by the maven-surefire-plugin to determine which tests are run.
  * If a snapshot file from a previous build, is found, that will be used to determine what tests should be run.
- *
- * @goal optimize
- * @phase process-test-classes
  */
+@Mojo(name = "optimize", defaultPhase = LifecyclePhase.PROCESS_TEST_CLASSES)
 public class CloverOptimizerMojo extends AbstractCloverMojo {
 
     /**

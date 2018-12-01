@@ -23,6 +23,8 @@ import com.atlassian.clover.cfg.Percentage;
 import com.atlassian.clover.ant.tasks.CloverPassTask;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -34,11 +36,8 @@ import java.util.List;
 /**
  * Verify Test Percentage Coverage (TPC) from an existing Clover database and fail the build if it is below the defined
  * threshold. The check is done on main Clover databases and also on merged Clover databases when they exist.
- *
- * @goal check
- * @phase verify
- *
  */
+@Mojo(name = "check", defaultPhase = LifecyclePhase.VERIFY)
 public class CloverCheckMojo extends AbstractCloverMojo
 {
     /**

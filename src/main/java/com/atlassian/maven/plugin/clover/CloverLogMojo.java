@@ -22,6 +22,8 @@ package com.atlassian.maven.plugin.clover;
 import com.atlassian.clover.ant.tasks.CloverLogTask;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
@@ -33,10 +35,8 @@ import java.util.List;
 
 /**
  * Provides information on the current Clover database.
- *
- * @goal log
- * @phase post-integration-test
  */
+@Mojo(name = "log", defaultPhase = LifecyclePhase.POST_INTEGRATION_TEST)
 public class CloverLogMojo extends AbstractCloverMojo {
     /**
      * Comma or space separated list of Clover contexts (block, statement or method filers) to exclude before

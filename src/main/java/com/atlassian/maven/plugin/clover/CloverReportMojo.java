@@ -32,6 +32,7 @@ import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.reporting.AbstractMavenReport;
@@ -58,9 +59,8 @@ import static com.google.common.base.Strings.nullToEmpty;
  *
  * <p>Note: This report mojo should be an @aggregator and the <code>clover:aggregate</code> mojo shouldn't exist. This
  * is a limitation of the site plugin which doesn't support @aggregator reports...</p>
- *
- * @goal clover
  */
+@Mojo(name = "clover")
 public class CloverReportMojo extends AbstractMavenReport implements CloverConfiguration {
     // TODO: Need some way to share config elements and code between report mojos and main build mojos.
     // See http://jira.codehaus.org/browse/MNG-1886

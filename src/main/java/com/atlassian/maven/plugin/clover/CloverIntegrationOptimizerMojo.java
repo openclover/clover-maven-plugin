@@ -2,6 +2,8 @@ package com.atlassian.maven.plugin.clover;
 
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.PluginExecution;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 
 import java.util.List;
@@ -9,10 +11,8 @@ import java.util.List;
 /**
  * Sets the 'test' property on the project which is used by the maven-surefire-plugin to determine which tests are run.
  * If a snapshot file from a previous build, is found, that will be used to determine what tests should be run.
- *
- * @goal optimizeIntegration
- * @phase pre-integration-test
  */
+@Mojo(name = "optimizeIntegration", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST)
 public class CloverIntegrationOptimizerMojo extends CloverOptimizerMojo {
 
     protected List<String> extractNestedStrings(final String elementName, final Plugin surefirePlugin) {
