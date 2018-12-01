@@ -20,7 +20,6 @@ package com.atlassian.maven.plugin.clover;
  */
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -47,6 +46,8 @@ import com.atlassian.maven.plugin.clover.internal.AntPropertyHelper;
 import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
 import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
 import com.atlassian.clover.cfg.Interval;
+
+import static com.google.common.base.Strings.nullToEmpty;
 
 
 /**
@@ -233,6 +234,14 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     private String reportStyle;
 
     /**
+     * Specifies whether to include failed test coverage when calculating the total coverage percentage.
+     *
+     * @parameter expression="${maven.clover.includeFailedTestCoverage}" default-value="false"
+     * @since 4.4.0
+     */
+    private boolean includeFailedTestCoverage;
+
+    /**
      * Whether to show inner functions, i.e. functions declared inside methods in the report. This applies to Java8
      * lambda functions for instance. If set to <code>false</code> then they are hidden on the list of methods, but
      * code metrics still include them.
@@ -257,6 +266,14 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
      * @since 3.2.1
      */
     private boolean showLambdaFunctions;
+
+    /**
+     * Calculate and show unique per-test coverage (for large projects, this can take a significant amount of time).
+     *
+     * @parameter expression="${maven.clover.showUniqueCoverage}" default-value="false"
+     * @since 4.4.0
+     */
+    private boolean showUniqueCoverage;
 
     /**
      * Title of the report
@@ -435,21 +452,23 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
         antProject.setProperty("cloverdb", database);
         antProject.setProperty("output", output);
         antProject.setProperty("history", historyDir);
-        antProject.setProperty("title", title == null ? "" : title); // empty string will have it be ignore by clover
-        antProject.setProperty("titleAnchor", titleAnchor == null ? "" : titleAnchor);
+        antProject.setProperty("title", nullToEmpty(title)); // empty string will have it be ignore by clover
+        antProject.setProperty("titleAnchor", nullToEmpty(titleAnchor));
         final String projectDir = project.getBasedir().getPath();
         antProject.setProperty("projectDir", projectDir);
         antProject.setProperty("testPattern", "**/src/test/**");
-        antProject.setProperty("filter", contextFilters != null ? contextFilters : "");
+        antProject.setProperty("filter", nullToEmpty(contextFilters));
         antProject.setProperty("orderBy", orderBy);
         antProject.setProperty("charset", charset);
         antProject.setProperty("reportStyle", reportStyle);
         antProject.setProperty("type", format);
         antProject.setProperty("span", span);
-        antProject.setProperty("alwaysReport", "" + alwaysReport);
-        antProject.setProperty("summary", String.valueOf(summary));
-        antProject.setProperty("showInnerFunctions", String.valueOf(showInnerFunctions));
-        antProject.setProperty("showLambdaFunctions", String.valueOf(showLambdaFunctions));
+        antProject.setProperty("alwaysReport", Boolean.toString(alwaysReport));
+        antProject.setProperty("summary", Boolean.toString(summary));
+        antProject.setProperty("showInnerFunctions", Boolean.toString(showInnerFunctions));
+        antProject.setProperty("showLambdaFunctions", Boolean.toString(showLambdaFunctions));
+        antProject.setProperty("showUniqueCoverage", Boolean.toString(showUniqueCoverage));
+        antProject.setProperty("includeFailedTestCoverage", Boolean.toString(includeFailedTestCoverage));
         if (historyOut != null) {
             antProject.setProperty("historyout", historyOut);
         }
