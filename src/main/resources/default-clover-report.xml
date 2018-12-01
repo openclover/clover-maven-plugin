@@ -18,10 +18,17 @@
 
     <target name="historical">
         <clover-report>
-            <current outfile="${output}" summary="${summary}"
-                     charset="${charset}" title="${title}" titleAnchor="${titleAnchor}"
-                     span="${span}" alwaysReport="${alwaysReport}"
-                     showInnerFunctions="${showInnerFunctions}" showLambdaFunctions="${showLambdaFunctions}">
+            <current outfile="${output}"
+                     summary="${summary}"
+                     charset="${charset}"
+                     title="${title}"
+                     titleAnchor="${titleAnchor}"
+                     span="${span}"
+                     alwaysReport="${alwaysReport}"
+                     showInnerFunctions="${showInnerFunctions}"
+                     showLambdaFunctions="${showLambdaFunctions}"
+                     showUniqueCoverage="${showUniqueCoverage}"
+                     includeFailedTestCoverage="${includeFailedTestCoverage}">
                 <format refid="clover.format"/>
                 <testsources refid="test.sources"/>
                 <columns refid="clover.columns"/>
@@ -36,10 +43,17 @@
 
     <target name="current">
         <clover-report>
-            <current outfile="${output}" summary="${summary}"
-                     charset="${charset}" title="${title}" titleAnchor="${titleAnchor}"
-                     span="${span}" alwaysReport="${alwaysReport}"
-                     showInnerFunctions="${showInnerFunctions}" showLambdaFunctions="${showLambdaFunctions}">
+            <current outfile="${output}"
+                     summary="${summary}"
+                     charset="${charset}"
+                     title="${title}"
+                     titleAnchor="${titleAnchor}"
+                     span="${span}"
+                     alwaysReport="${alwaysReport}"
+                     showInnerFunctions="${showInnerFunctions}"
+                     showLambdaFunctions="${showLambdaFunctions}"
+                     showUniqueCoverage="${showUniqueCoverage}"
+                     includeFailedTestCoverage="${includeFailedTestCoverage}">
                 <format refid="clover.format"/>
                 <testsources refid="test.sources"/>
                 <columns refid="clover.columns"/>
