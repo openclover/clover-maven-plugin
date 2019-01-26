@@ -221,12 +221,12 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <pre>
      * &lt;methodWithMetricsContexts&gt;
      *     &lt;methodWithMetricsContext&gt;
-     *         &lt;name&gt;simpleGetter&lt;/name&gt; &lt;!-- (mandatory) -->
-     *         &lt;regexp&gt;public .* get.*\(\)&lt;/regexp&gt; &lt;!-- (mandatory) -->
-     *         &lt;maxComplexity&gt;1&lt;/maxComplexity&gt; &lt;!-- at most 1 cycle (optional) -->
-     *         &lt;maxStatements&gt;1&lt;/maxStatements&gt; &lt;!-- at most 1 statement (optional) -->
-     *         &lt;maxAggregatedComplexity&gt;2&lt;/maxAggregatedComplexity&gt; &lt;!-- no more than 2 cycles including inline classes (optional) -->
-     *         &lt;maxAggregatedStatements&gt;10&lt;/maxAggregatedStatements&gt; &lt;!-- no more than 10 statements including inline classes (optional) -->
+     *         &lt;name&gt;simpleGetter&lt;/name&gt; &lt;!-- (mandatory) --&gt;
+     *         &lt;regexp&gt;public .* get.*\(\)&lt;/regexp&gt; &lt;!-- (mandatory) --&gt;
+     *         &lt;maxComplexity&gt;1&lt;/maxComplexity&gt; &lt;!-- at most 1 cycle (optional) --&gt;
+     *         &lt;maxStatements&gt;1&lt;/maxStatements&gt; &lt;!-- at most 1 statement (optional) --&gt;
+     *         &lt;maxAggregatedComplexity&gt;2&lt;/maxAggregatedComplexity&gt; &lt;!-- no more than 2 cycles including inline classes (optional) --&gt;
+     *         &lt;maxAggregatedStatements&gt;10&lt;/maxAggregatedStatements&gt; &lt;!-- no more than 10 statements including inline classes (optional) --&gt;
      *     &lt;/methodWithMetricsContext&gt;
      *     &lt;!-- can add more methodWithMetricsContext --&gt;
      * &lt;/methodWithMetricsContexts&gt;
