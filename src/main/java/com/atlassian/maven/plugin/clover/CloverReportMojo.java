@@ -371,15 +371,6 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
             return;
         }
 
-        // Register the Clover license
-        try {
-            AbstractCloverMojo.registerLicenseFile(this.project, this.resourceManager, this.licenseLocation, getLog(),
-                    this.getClass().getClassLoader(), this.license);
-        }
-        catch (MojoExecutionException e) {
-            throw new MavenReportException("Failed to locate Clover license", e);
-        }
-
         // Ensure the output directory exists
         this.outputDirectory.mkdirs();
 

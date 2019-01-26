@@ -166,7 +166,6 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * @see org.apache.maven.plugin.AbstractMojo#execute()
      */
     public void execute() throws MojoExecutionException {
-        registerLicenseFile();
     }
 
     public void setResourceManager(final ResourceManager resourceManager) {
@@ -175,56 +174,6 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
     public ResourceManager getResourceManager() {
         return this.resourceManager;
-    }
-
-    protected void registerLicenseFile() throws MojoExecutionException {
-        registerLicenseFile(
-                this.project,
-                getResourceManager(),
-                this.licenseLocation,
-                getLog(),
-                this.getClass().getClassLoader(),
-                this.license);
-    }
-
-    /**
-     * Registers the license file for Clover runtime by setting the <code>clover.license.path</code> system property.
-     * If the user has configured the <code>licenseLocation</code> parameter the plugin tries to resolve it first as a
-     * resource, then as a URL, and then as a file location on the filesystem.
-     *
-     * Note: We're defining this method as static because it is also required in the report mojo and reporting mojos
-     * and main mojos cannot share anything right now. See http://jira.codehaus.org/browse/MNG-1886.
-     *
-     * @param project maven project
-     * @param resourceManager resource manager
-     * @param licenseLocation path to license file
-     * @param logger logger
-     * @param classloader class loader
-     * @param licenseCert license key
-     * @throws MojoExecutionException when the license file cannot be found
-     */
-    public static void registerLicenseFile(final MavenProject project,
-                                           final ResourceManager resourceManager,
-                                           final String licenseLocation,
-                                           final Log logger,
-                                           final ClassLoader classloader,
-                                           final String licenseCert) throws MojoExecutionException {
-
-        if (licenseCert != null) {
-            logger.debug("Full license supplied. Length: '" + licenseCert.length() +
-                    "'. License location: '" + licenseLocation + "' will be ignored.");
-            System.setProperty(CloverNames.PROP_LICENSE_CERT, licenseCert);
-            return;
-        }
-
-        if (licenseLocation != null) {
-            logger.debug("Using licenseLocation '" + licenseLocation + "'");
-            final File licenseFile = getResourceAsFile(project, resourceManager, licenseLocation, logger, classloader);
-            logger.debug("Using license file [" + licenseFile.getPath() + "]");
-            System.setProperty(CloverNames.PROP_LICENSE_PATH, licenseFile.getPath());
-        } else {
-            logger.debug("No 'maven.clover.licenseLocation' configured. Using default license.");
-        }
     }
 
     public static File getResourceAsFile(final MavenProject project,
