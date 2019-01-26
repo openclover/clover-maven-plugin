@@ -2,6 +2,7 @@ package com.atlassian.maven.plugin.clover.internal;
 
 import com.atlassian.clover.util.IOStreamUtils;
 import com.atlassian.maven.plugin.clover.DistributedCoverage;
+import com.atlassian.maven.plugin.clover.MethodWithMetricsContext;
 import com.atlassian.maven.plugin.clover.internal.lifecycle.BuildLifecycleAnalyzer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.execution.MavenSession;
@@ -214,6 +215,31 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected Map<String, String> methodContexts = new HashMap<String, String>();
 
     /**
+     * <p>Specifies the custom method contexts to use for filtering specific methods from Clover reports.
+     * This is more detailed format compared to methodContexts, which allows to set also code metrics to be
+     * matched. Example:</p>
+     * <pre>
+     * &lt;methodWithMetricsContexts&gt;
+     *     &lt;methodWithMetricsContext&gt;
+     *         &lt;name&gt;simpleGetter&lt;/name&gt; &lt;!-- (mandatory) -->
+     *         &lt;regexp&gt;public .* get.*\(\)&lt;/regexp&gt; &lt;!-- (mandatory) -->
+     *         &lt;maxComplexity&gt;1&lt;/maxComplexity&gt; &lt;!-- at most 1 cycle (optional) -->
+     *         &lt;maxStatements&gt;1&lt;/maxStatements&gt; &lt;!-- at most 1 statement (optional) -->
+     *         &lt;maxAggregatedComplexity&gt;2&lt;/maxAggregatedComplexity&gt; &lt;!-- no more than 2 cycles including inline classes (optional) -->
+     *         &lt;maxAggregatedStatements&gt;10&lt;/maxAggregatedStatements&gt; &lt;!-- no more than 10 statements including inline classes (optional) -->
+     *     &lt;/methodWithMetricsContext&gt;
+     *     &lt;!-- can add more methodWithMetricsContext --&gt;
+     * &lt;/methodWithMetricsContexts&gt;
+     * </pre>
+     * <p>will define a context called 'simpleGetter' which matches all public getXyz() methods containing at most one
+     * statement; this statement may contain more complex logic (an anonymous inline class) but not bigger than 9
+     * statements.</p>
+     *
+     * @parameter
+     */
+    protected Set<MethodWithMetricsContext> methodWithMetricsContexts = new HashSet<MethodWithMetricsContext>();
+
+    /**
      * <p>Try to protect your build from installing instrumented artifacts into local ~/.m2 cache
      * or deploying them to a binaries repository. If this option is enabled, Clover will fail a build whenever
      * it detects that 'install' or 'deploy' phase is about to be called. It will also fail a build if
@@ -412,6 +438,11 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     @Override
     public Map<String, String> getMethodContexts() {
         return methodContexts;
+    }
+
+    @Override
+    public Set<MethodWithMetricsContext> getMethodWithMetricsContexts() {
+        return methodWithMetricsContexts;
     }
 
     @Override

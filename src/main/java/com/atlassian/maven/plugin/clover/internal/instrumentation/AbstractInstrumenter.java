@@ -22,10 +22,12 @@ package com.atlassian.maven.plugin.clover.internal.instrumentation;
 import com.atlassian.clover.CloverInstr;
 import com.atlassian.clover.Logger;
 import com.atlassian.clover.spi.lang.Language;
+import com.atlassian.maven.plugin.clover.MethodWithMetricsContext;
 import com.atlassian.maven.plugin.clover.MvnLogger;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.LanguageFileExtensionFilter;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Iterables;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.FileUtils;
@@ -272,6 +274,7 @@ public abstract class AbstractInstrumenter {
         // custom contexts
         addCustomContexts(parameters, getConfiguration().getMethodContexts().entrySet(), "-mc");
         addCustomContexts(parameters, getConfiguration().getStatementContexts().entrySet(), "-sc");
+        addMethodWithMetricsContexts(parameters, getConfiguration().getMethodWithMetricsContexts());
 
         // Log parameters
         if (getConfiguration().getLog().isDebugEnabled()) {
@@ -288,6 +291,26 @@ public abstract class AbstractInstrumenter {
         for (final Map.Entry<String, String> entry : contexts) {
             parameters.add(flag);
             parameters.add(entry.getKey() + "=" + entry.getValue());
+        }
+    }
+
+    /**
+     * See com.atlassian.clover.cmdline.CloverInstrArgProcessors#MethodWithMetricsContext in clover-core
+     *
+     * @param parameters commandline parameters to be modified
+     * @param contexts set of method contexts
+     */
+    @VisibleForTesting
+    static void addMethodWithMetricsContexts(final List<String> parameters, final Set<MethodWithMetricsContext> contexts) {
+        for (final MethodWithMetricsContext context : contexts) {
+            parameters.add("-mmc");
+            parameters.add(String.format("%s;%s;%d;%d;%d;%d",
+                    context.getName(),
+                    context.getRegexp(),
+                    context.getMaxStatements(),
+                    context.getMaxComplexity(),
+                    context.getMaxAggregatedStatements(),
+                    context.getMaxAggregatedComplexity()));
         }
     }
 

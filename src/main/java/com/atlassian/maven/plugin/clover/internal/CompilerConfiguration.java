@@ -1,12 +1,11 @@
 package com.atlassian.maven.plugin.clover.internal;
 
 import com.atlassian.maven.plugin.clover.DistributedCoverage;
+import com.atlassian.maven.plugin.clover.MethodWithMetricsContext;
 
 import java.util.Map;
 import java.util.Set;
 
-/**
- */
 public interface CompilerConfiguration extends CloverConfiguration {
 
     Set<String> getIncludes();
@@ -26,6 +25,8 @@ public interface CompilerConfiguration extends CloverConfiguration {
     String getEncoding();
 
     Map<String,String> getMethodContexts();
+
+    Set<MethodWithMetricsContext> getMethodWithMetricsContexts();
 
     Map<String,String> getStatementContexts();
 
