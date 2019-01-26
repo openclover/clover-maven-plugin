@@ -48,7 +48,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
      * <p>For example, if actual coverage value is <b>99.9%</b> then for the targetPercentage=<b>"100%"</b> it will PASS,
      * whereas for the targetPercentage=<b>"100.000000%"</b> it will FAIL.</p>
      *
-     * @parameter expression="${maven.clover.targetPercentage}" 
+     * @parameter expression="${maven.clover.targetPercentage}"
      */
     String targetPercentage;
 
@@ -102,7 +102,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
     /**
      * Do we fail the build on a violation? The default is true but there are some edge cases where you want to be
      * able to check what would fail but without actually failing the build. For example you may want to let the build
-     * continue so that you can verify others checks that are executed after the Clover checks. 
+     * continue so that you can verify others checks that are executed after the Clover checks.
      *
      * @parameter expression="${maven.clover.failOnViolation}" default-value="true"
      */
@@ -126,11 +126,20 @@ public class CloverCheckMojo extends AbstractCloverMojo
      * The percentage threshold to use if clover-check is checking coverage against historical clover data.
      *
      * This is the amount of leeway to use when comparing the current build's coverage with that of the last build.
-     * 
+     *
      * @parameter expression="${maven.clover.historyThreshold}" default-value="0%"
      *
      */
     String historyThreshold;
+
+    /**
+     * Specifies whether to include failed test coverage when calculating the total coverage percentage.
+     *
+     * @parameter expression="${maven.clover.includeFailedTestCoverage}" default-value="false"
+     * @since 4.4.0
+     */
+    private boolean includeFailedTestCoverage;
+
 
     /**
      * {@inheritDoc}
@@ -196,6 +205,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
         cloverPassTask.setInitString(database);
         cloverPassTask.setHaltOnFailure(true);
         cloverPassTask.setFailureProperty("clovercheckproperty");
+        cloverPassTask.setIncludeFailedTestCoverage(includeFailedTestCoverage);
 
         if (this.codeType != null) {
             cloverPassTask.setCodeType(codeType);
