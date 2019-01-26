@@ -45,7 +45,7 @@ under the License.
                 <version>@project.version@</version>
                 <configuration>
                     <!-- Verify that context filters work -->
-                    <contextFilters>try,main,log</contextFilters>
+                    <contextFilters>try,main,log,anygetter,simplegetter</contextFilters>
                 </configuration>
             </plugin>
         </plugins>
@@ -72,6 +72,20 @@ under the License.
                     <methodContexts>
                         <main>(.* )?public static void main\(String\[\] argv\).*</main>
                     </methodContexts>
+                    <methodWithMetricsContexts>
+                        <methodWithMetricContext>
+                            <name>anygetter</name>
+                            <regexp>public .* get.*\(\)</regexp>
+                        </methodWithMetricContext>
+                        <methodWithMetricContext>
+                            <name>simplegetter</name>
+                            <regexp>public .* get.*\(\)</regexp>
+                            <maxComplexity>2</maxComplexity>
+                            <maxStatements>1</maxStatements>
+                            <maxAggregatedComplexity>22</maxAggregatedComplexity>
+                            <maxAggregatedStatements>11</maxAggregatedStatements>
+                        </methodWithMetricContext>
+                    </methodWithMetricsContexts>
                     <statementContexts>
                         <log>System.out.println\(.*\);</log>
                     </statementContexts>
