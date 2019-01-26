@@ -50,10 +50,6 @@ public class CloverSaveHistoryMojoTest extends MockObjectTestCase {
             }
 
             @Override
-            protected void registerLicenseFile() throws MojoExecutionException {
-            }
-
-            @Override
             protected void executeTask(HistoryPointTask cloverHistoryTask) {
             }
 
