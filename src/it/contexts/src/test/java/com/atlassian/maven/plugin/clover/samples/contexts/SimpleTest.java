@@ -15,14 +15,63 @@
  */
 package com.atlassian.maven.plugin.clover.samples.contexts;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class SimpleTest extends TestCase
-{
-    public void testSomeMethod()
-    {        
+import java.util.concurrent.Callable;
+
+public class SimpleTest {
+
+    @Test
+    public void testSomeMethod() {
         Simple simple = new Simple();
         simple.someMethod1();
         simple.someMethod2(1);
     }
-} 
+
+    public int simpleMatch() {
+        // 'simple' matches this as we have only 1 statement
+        return 1;
+    }
+
+    public int simpleDoNotMatch() {
+        // 'simple' does not match as we have more than 1 statement
+        int i = 1;
+        return i;
+    }
+
+    public int aggregatedMatch() {
+        // 'aggregated' matches this as we have only 1 statement
+        return 1;
+    }
+
+    public int aggregatedDoNotMatch() throws Exception {
+        // 'aggregated' does not match this, although we have only 1 statement, there is a nested object having extra code
+        return new Callable<Integer>() {
+            @Override
+            public Integer call() throws Exception {
+                // this is a second statement
+                return 1;
+            }
+        }.call();
+    }
+
+    public int anyMatch() {
+        // 'any' matches this
+        return 0;
+    }
+
+    public int anyMatchToo() {
+        // 'any' matches this too as there's no limit on complexity
+        int i = 0;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        i++;
+        return 0;
+    }
+
+}

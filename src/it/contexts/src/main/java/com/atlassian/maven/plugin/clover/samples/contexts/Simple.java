@@ -15,29 +15,21 @@
  */
 package com.atlassian.maven.plugin.clover.samples.contexts;
 
-public class Simple
-{
-    public void someMethod1()
-    {        
+public class Simple {
+    public void someMethod1() {
     }
 
-    public void someMethodToReduceStatementCoverage()
-    {
-        try
-        {
+    public void someMethodToReduceStatementCoverage() {
+        try {
             System.getProperties();
-        }
-        finally
-        {
+        } finally {
             // We use a try/finally so that we can use a block context of 
         }
     }
-    
-    public void someMethod2(int i)
-    {                
+
+    public void someMethod2(int i) {
         System.out.println("Testing statement context filter.");
-        if (i == 2)
-        {
+        if (i == 2) {
             //  Do nothing
         }
     }
