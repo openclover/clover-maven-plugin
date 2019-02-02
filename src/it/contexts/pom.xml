@@ -45,7 +45,7 @@ under the License.
                 <version>@project.version@</version>
                 <configuration>
                     <!-- Verify that context filters work -->
-                    <contextFilters>try,main,log,anygetter,simplegetter</contextFilters>
+                    <contextFilters>try,main,log,simple,aggregated,any</contextFilters>
                 </configuration>
             </plugin>
         </plugins>
@@ -74,16 +74,22 @@ under the License.
                     </methodContexts>
                     <methodWithMetricsContexts>
                         <methodWithMetricContext>
-                            <name>anygetter</name>
-                            <regexp>public .* get.*\(\)</regexp>
+                            <name>simple</name>
+                            <regexp>public .* simple.*\(\)</regexp>
+                            <maxComplexity>1</maxComplexity>
+                            <maxStatements>1</maxStatements>
                         </methodWithMetricContext>
                         <methodWithMetricContext>
-                            <name>simplegetter</name>
-                            <regexp>public .* get.*\(\)</regexp>
-                            <maxComplexity>2</maxComplexity>
-                            <maxStatements>1</maxStatements>
-                            <maxAggregatedComplexity>22</maxAggregatedComplexity>
-                            <maxAggregatedStatements>11</maxAggregatedStatements>
+                            <name>aggregated</name>
+                            <regexp>public .* aggregated.*\(\)</regexp>
+                            <maxComplexity>10</maxComplexity>
+                            <maxStatements>20</maxStatements>
+                            <maxAggregatedComplexity>1</maxAggregatedComplexity>
+                            <maxAggregatedStatements>1</maxAggregatedStatements>
+                        </methodWithMetricContext>
+                        <methodWithMetricContext>
+                            <name>any</name>
+                            <regexp>public .* any.*\(\)</regexp>
                         </methodWithMetricContext>
                     </methodWithMetricsContexts>
                     <statementContexts>
@@ -93,7 +99,7 @@ under the License.
                     <generateXml>true</generateXml>
                     <reportDescriptor>clover-report.xml</reportDescriptor>
                     <!-- Verify that context filters work -->
-                    <contextFilters>try,main,log</contextFilters>
+                    <contextFilters>try,main,log,simple,aggregated,any</contextFilters>
                     <jdk>1.6</jdk>
                 </configuration>
                 <executions>

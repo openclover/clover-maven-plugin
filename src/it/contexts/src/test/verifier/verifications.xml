@@ -19,10 +19,22 @@ under the License.
 -->
 
 <verifications>
-  <files>
-    <file>
-      <location>target/site/clover/pkg-summary.html</location>
-      <contains>57.1%</contains>
-    </file>
-  </files>
+    <files>
+        <file>
+            <location>target/site/clover/pkg-summary.html</location>
+            <contains>57.1%</contains>
+        </file>
+        <file>
+            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/contexts/SimpleTest.html</location>
+            <contains>Filtered by: simple</contains>
+        </file>
+        <file>
+            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/contexts/SimpleTest.html</location>
+            <contains>Filtered by: aggregated</contains>
+        </file>
+        <file>
+            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/contexts/SimpleTest.html</location>
+            <contains>Filtered by: any</contains>
+        </file>
+    </files>
 </verifications>
