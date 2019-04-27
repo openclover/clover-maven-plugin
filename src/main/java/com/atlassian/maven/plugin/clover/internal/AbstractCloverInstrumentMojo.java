@@ -339,6 +339,9 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * </pre>
      *
      * Note: every tag is optional.
+     *
+     * @parameter
+     * @since 4.4.0
      */
     protected TestSources testSources;
 
