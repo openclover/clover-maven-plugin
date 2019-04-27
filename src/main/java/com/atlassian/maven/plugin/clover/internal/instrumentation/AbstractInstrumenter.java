@@ -276,6 +276,8 @@ public abstract class AbstractInstrumenter {
         addCustomContexts(parameters, getConfiguration().getStatementContexts().entrySet(), "-sc");
         addMethodWithMetricsContexts(parameters, getConfiguration().getMethodWithMetricsContexts());
 
+        // TODO add testSources
+
         // Log parameters
         if (getConfiguration().getLog().isDebugEnabled()) {
             getConfiguration().getLog().debug("Parameter list being passed to Clover CLI:");
