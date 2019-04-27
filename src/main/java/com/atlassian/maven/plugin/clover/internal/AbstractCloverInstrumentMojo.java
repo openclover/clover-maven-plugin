@@ -3,6 +3,7 @@ package com.atlassian.maven.plugin.clover.internal;
 import com.atlassian.clover.util.IOStreamUtils;
 import com.atlassian.maven.plugin.clover.DistributedCoverage;
 import com.atlassian.maven.plugin.clover.MethodWithMetricsContext;
+import com.atlassian.maven.plugin.clover.TestSources;
 import com.atlassian.maven.plugin.clover.internal.lifecycle.BuildLifecycleAnalyzer;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.execution.MavenSession;
@@ -308,6 +309,38 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * @parameter expression="${maven.clover.staleMillis}" default-value="0"
      */
     protected int staleMillis;
+
+    /**
+     * Specifies a custom test detector configuration. Useful in case your tests are not following JUnit/TestNG
+     * naming convention. Example:
+     *
+     * <pre>
+     * &lt;testsources&gt;
+     *    &lt;includes&gt;**&#47;*WebTest.java,**&#47;*IT.java&lt;includes&gt;
+     *    &lt;excludes&gt;deprecated/**&lt;/excludes&gt;
+     *    &lt;testclasses&gt;
+     *        &lt;testclass&gt; &lt;!-- 0..N occurrences --&gt;
+     *            &lt;name&gt;.*Test&lt;/name&gt;
+     *            &lt;super&gt;WebTest&lt;/super&gt;
+     *            &lt;annotation&gt;@Repeat&lt;/annotation&gt;
+     *            &lt;package&gt;org\.openclover\..*&lt;/package&gt;
+     *            &lt;tag&gt;@chrome&lt;/tag&gt;
+     *            &lt;testMethods&gt; &lt;!-- 0..N occurrences --&gt;
+     *               &lt;testMethod&gt;
+     *                   &lt;name&gt;check.*&lt;/name&gt;
+     *                   &lt;annotation&gt;@Test&lt;/annotation&gt;
+     *                   &lt;tag&gt;@web&lt;/tag&gt;
+     *                   &lt;returntype&gt;void&lt;/returntype&gt;
+     *               &lt;/testMethod&gt;
+     *            &lt;/testMethods&gt;
+     *        &lt;/testClass&gt;
+     *    &lt;/testclasses&gt;
+     * &lt;/testsources&gt;
+     * </pre>
+     *
+     * Note: every tag is optional.
+     */
+    protected TestSources testSources;
 
     /**
      * Whether or not to include the -clover classifier on artifacts.
