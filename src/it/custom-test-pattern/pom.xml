@@ -52,23 +52,43 @@ under the License.
                 <artifactId>clover-maven-plugin</artifactId>
                 <version>@project.version@</version>
                 <configuration>
+                    <useCloverClassifier>true</useCloverClassifier>
+                    <staleMillis>1000</staleMillis>
                     <testsources>
-                        <includes>**/*WebTest.java,**/*IT.java</includes>
-                        <excludes>deprecated/**</excludes>
+                        <!-- Ant-style patterns for includes and excludes -->
+                        <includes>**/*One.java,**/*IT.java,**/*Three.java</includes>
+                        <excludes>**/excluded/**</excludes>
                         <testclasses>
-                            <testclass> <!-- 0..N occurrences -->
-                                <name>.*Test</name>
-                                <super>WebTest</super>
-                                <annotation>@Repeat</annotation>
-                                <package>org\.openclover\..*</package>
-                                <tag>@chrome</tag>
-                                <testmethods> <!-- 0..N occurrences -->
+                            <!-- Example #1: @TestSuite *One classes with methods having @Test annotations -->
+                            <testclass>
+                                <name>.*One</name>
+                                <annotation>TestSuite</annotation>
+                                <testmethods>
                                     <testmethod>
-                                        <name>check.*</name>
                                         <annotation>@Test</annotation>
-                                        <tag>@web</tag>
-                                        <returntype>void</returntype>
                                     </testmethod>
+                                </testmethods>
+                            </testclass>
+                            <!-- Example #2: *IT classes with WebTest superclass and get/post methods-->
+                            <testclass>
+                                <super>WebTest</super>
+                                <testmethods>
+                                    <testmethod>
+                                        <name>get.*</name>
+                                    </testmethod>
+                                    <testmethod>
+                                        <name>post.*</name>
+                                    </testmethod>
+                                </testmethods>
+                            </testclass>
+                            <!-- Example #3: classes with @test javadoc tag and void methods-->
+                            <testclass>
+                                <tag>@test</tag>
+                                <package>.*testsources\.classic.*</package>
+                                <testmethods>
+                                    <testMethod>
+                                        <returntype>void</returntype>
+                                    </testMethod>
                                 </testmethods>
                             </testclass>
                         </testclasses>
@@ -90,6 +110,16 @@ under the License.
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*One.java</include>
+                        <include>**/*IT.java</include>
+                        <include>**/*Three</include>
+                    </includes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
