@@ -2,6 +2,7 @@ package com.atlassian.maven.plugin.clover.internal;
 
 import com.atlassian.maven.plugin.clover.DistributedCoverage;
 import com.atlassian.maven.plugin.clover.MethodWithMetricsContext;
+import com.atlassian.maven.plugin.clover.TestSources;
 
 import java.util.Map;
 import java.util.Set;
@@ -39,4 +40,6 @@ public interface CompilerConfiguration extends CloverConfiguration {
     String getInstrumentLambda();
 
     boolean isCopyExcludedFiles();
+
+    TestSources getTestSources();
 }

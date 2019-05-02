@@ -1,7 +1,5 @@
 package com.atlassian.maven.plugin.clover;
 
-import org.apache.tools.ant.types.FileSet;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,15 +8,25 @@ import java.util.List;
  * Example:
  * <pre>
  * &lt;testsources&gt;
- *     &lt;includes&gt;**&#47;*Test.java,**&#47;*IT.java&lt;includes&gt;
- *     &lt;excludes&gt;deprecated/**&lt;/excludes&gt;
+ *     &lt;includes&gt;
+ *         &lt;include&gt;**&#47;*Test.java&lt;/include&gt;
+ *         &lt;include&gt;**&#47;*IT.java&lt;/include&gt;
+ *     &lt;includes&gt;
+ *     &lt;excludes&gt;
+ *         &lt;exclude&gt;deprecated/**&lt;/exclude&gt;
+ *     &lt;/excludes&gt;
  *     &lt;testclasses&gt;
  *         &lt;testclass&gt;&lt;!-- see TestClass --&gt;&lt;/testClass&gt; &lt;!-- 0..N occurrences --&gt;
  *     &lt;/testclasses&gt;
  * &lt;/testsources&gt;
  * </pre>
  */
-public class TestSources extends FileSet {
+public class TestSources {
+
+    private List<String> includes = new ArrayList<String>();
+
+    private List<String> excludes = new ArrayList<String>();
+
     private List<TestClass> testClasses = new ArrayList<TestClass>();
 
     @SuppressWarnings("unused") // called by Maven when parsing MOJO configuration
@@ -27,5 +35,13 @@ public class TestSources extends FileSet {
 
     public List<TestClass> getTestClasses() {
         return testClasses;
+    }
+
+    public List<String> getIncludes() {
+        return includes;
+    }
+
+    public List<String> getExcludes() {
+        return excludes;
     }
 }

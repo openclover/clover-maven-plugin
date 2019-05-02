@@ -4,6 +4,9 @@ import com.atlassian.clover.cfg.instr.MethodContextDef;
 import com.atlassian.clover.cfg.instr.java.JavaInstrumentationConfig;
 import com.atlassian.clover.cmdline.CloverInstrArgProcessors;
 import com.atlassian.maven.plugin.clover.MethodWithMetricsContext;
+import com.atlassian.maven.plugin.clover.TestClass;
+import com.atlassian.maven.plugin.clover.TestMethod;
+import com.atlassian.maven.plugin.clover.TestSources;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.junit.Test;
@@ -11,8 +14,10 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItems;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class AbstractInstrumenterTest {
 
@@ -44,6 +49,82 @@ public class AbstractInstrumenterTest {
         ));
     }
 
-    // TODO add testSources
+    @Test
+    public void testAddTestSources() {
+        // test that MOJO's configuration is converted to proper arg line for CloverInstr
+        final List<String> parameters = Lists.newArrayList("abc");
+
+        final TestSources testSources = new TestSources();
+        testSources.getIncludes().add("**/include/*One.java");
+        testSources.getIncludes().add("**/include/two/**.java");
+        testSources.getExcludes().add("**/include/exclude/**.java");
+        testSources.getExcludes().add("**/deprecated/**.java");
+
+        final TestMethod method11 = new TestMethod();
+        method11.setName("test.*");
+        method11.setReturnType("void");
+
+        final TestMethod method12 = new TestMethod();
+        method12.setAnnotation("Test");
+
+        final TestClass testClass1 = new TestClass();
+        testClass1.setPackage("com.acme.*");
+        testClass1.setSuper("SuperClass");
+        testClass1.setAnnotation("TestSuite");
+        testClass1.setTestMethods(Lists.newArrayList(method11, method12));
+        testSources.getTestClasses().add(testClass1);
+
+        final TestMethod method21 = new TestMethod();
+        method21.setTag("test");
+
+        final TestClass testClass2 = new TestClass();
+        testClass2.setName(".*IT");
+        testClass2.setTag("test");
+        testClass2.setTestMethods(Lists.newArrayList(method21));
+        testSources.getTestClasses().add(testClass2);
+
+        // convert Maven's mojo argument to list of command line options
+        AbstractInstrumenter.addTestSources(parameters, testSources);
+
+        // check that we have args as expected
+        assertThat(parameters, hasItems(
+                "abc",
+                "-tsi",
+                "**/include/*One.java,**/include/two/**.java",
+                "-tse",
+                "**/include/exclude/**.java,**/deprecated/**.java",
+                "-tsc",
+                ";com.acme.*;TestSuite;SuperClass;",
+                "-tsm",
+                "test.*;;void;",
+                "-tsm",
+                ";Test;;",
+                "-tsc",
+                ".*IT;;;;test",
+                "-tsm",
+                ";;;test"
+        ));
+
+        // double-check that it can be parsed by CloverInstr's argument parser
+        // - argument prefix is recognized
+        final String[] parametersArray = parameters.toArray(new String[0]);
+        assertTrue(CloverInstrArgProcessors.TestSourceIncludes.matches(parametersArray, 1));
+        assertTrue(CloverInstrArgProcessors.TestSourceExcludes.matches(parametersArray, 3));
+        assertTrue(CloverInstrArgProcessors.TestSourceClass.matches(parametersArray, 5));
+        assertTrue(CloverInstrArgProcessors.TestSourceMethod.matches(parametersArray, 7));
+        assertTrue(CloverInstrArgProcessors.TestSourceMethod.matches(parametersArray, 9));
+        assertTrue(CloverInstrArgProcessors.TestSourceClass.matches(parametersArray, 11));
+        assertTrue(CloverInstrArgProcessors.TestSourceMethod.matches(parametersArray, 13));
+
+        // - value for argument is parsed
+        final JavaInstrumentationConfig config = new JavaInstrumentationConfig();
+        CloverInstrArgProcessors.TestSourceIncludes.process(parametersArray, 1, config);
+        CloverInstrArgProcessors.TestSourceExcludes.process(parametersArray, 3, config);
+        CloverInstrArgProcessors.TestSourceClass.process(parametersArray, 5, config);
+        CloverInstrArgProcessors.TestSourceMethod.process(parametersArray, 7, config);
+        CloverInstrArgProcessors.TestSourceMethod.process(parametersArray, 9, config);
+        CloverInstrArgProcessors.TestSourceClass.process(parametersArray, 11, config);
+        CloverInstrArgProcessors.TestSourceMethod.process(parametersArray, 13, config);
+    }
 
 }
