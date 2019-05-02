@@ -24,11 +24,15 @@ import com.atlassian.clover.Logger;
 import com.atlassian.clover.spi.lang.Language;
 import com.atlassian.maven.plugin.clover.MethodWithMetricsContext;
 import com.atlassian.maven.plugin.clover.MvnLogger;
+import com.atlassian.maven.plugin.clover.TestClass;
+import com.atlassian.maven.plugin.clover.TestMethod;
+import com.atlassian.maven.plugin.clover.TestSources;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.LanguageFileExtensionFilter;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Iterables;
+import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -38,6 +42,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static org.apache.commons.lang.StringUtils.defaultString;
 
 /**
  * Code common for instrumentation of various source roots (main sources, test sources).
@@ -276,7 +282,8 @@ public abstract class AbstractInstrumenter {
         addCustomContexts(parameters, getConfiguration().getStatementContexts().entrySet(), "-sc");
         addMethodWithMetricsContexts(parameters, getConfiguration().getMethodWithMetricsContexts());
 
-        // TODO add testSources
+        // custom test detector
+        addTestSources(parameters, getConfiguration().getTestSources());
 
         // Log parameters
         if (getConfiguration().getLog().isDebugEnabled()) {
@@ -313,6 +320,62 @@ public abstract class AbstractInstrumenter {
                     context.getMaxComplexity(),
                     context.getMaxAggregatedStatements(),
                     context.getMaxAggregatedComplexity()));
+        }
+    }
+
+    /**
+     * See in clover-core:
+     * <ul>
+     *     <li>com.atlassian.clover.cmdline.CloverInstrArgProcessors#TestSourceIncludes</li>
+     *     <li>com.atlassian.clover.cmdline.CloverInstrArgProcessors#TestSourceExcludes</li>
+     *     <li>com.atlassian.clover.cmdline.CloverInstrArgProcessors#TestSourceClass</li>
+     *     <li>com.atlassian.clover.cmdline.CloverInstrArgProcessors#TestSourceMethod</li>
+     * </ul>
+     *
+     * @param parameters commandline parameters to be modified
+     * @param testSources set of test sources/classes/methods for the test detector
+     */
+    @VisibleForTesting
+    static void addTestSources(List<String> parameters, TestSources testSources) {
+        if (testSources != null) {
+            // includes
+            if (!testSources.getIncludes().isEmpty()) {
+                String allIncludes = StringUtils.join(testSources.getIncludes().iterator(), ",");
+                parameters.add("-tsi");
+                parameters.add(allIncludes);
+            }
+
+            // excludes
+            if (!testSources.getExcludes().isEmpty()) {
+                String allExcludes = StringUtils.join(testSources.getExcludes().iterator(), ",");
+                parameters.add("-tse");
+                parameters.add(allExcludes);
+            }
+
+            // classes
+            if (!testSources.getTestClasses().isEmpty()) {
+                for (TestClass testClass : testSources.getTestClasses()) {
+                    parameters.add("-tsc");
+                    // <name>;<package>;<annotation>;<superclass>;<javadoc tag>
+                    parameters.add(String.format("%s;%s;%s;%s;%s",
+                            defaultString(testClass.getName()),
+                            defaultString(testClass.getPackage()),
+                            defaultString(testClass.getAnnotation()),
+                            defaultString(testClass.getSuper()),
+                            defaultString(testClass.getTag())));
+
+                    // methods
+                    for (TestMethod testMethod : testClass.getTestMethods()) {
+                        parameters.add("-tsm");
+                        // <name>;<annotation>;<return type>;<javadoc tag>
+                        parameters.add(String.format("%s;%s;%s;%s",
+                                defaultString(testMethod.getName()),
+                                defaultString(testMethod.getAnnotation()),
+                                defaultString(testMethod.getReturnType()),
+                                defaultString(testMethod.getTag())));
+                    }
+                }
+            }
         }
     }
 

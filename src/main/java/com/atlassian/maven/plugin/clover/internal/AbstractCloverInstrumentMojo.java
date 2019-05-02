@@ -501,6 +501,10 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
         return useFullyQualifiedJavaLang;
     }
 
+    @Override
+    public TestSources getTestSources() {
+        return testSources;
+    }
 
     private static final String PROTECTION_ENABLED_MSG = "Clover's repository pollution protection is enabled. ";
 
