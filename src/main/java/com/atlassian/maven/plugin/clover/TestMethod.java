@@ -10,7 +10,7 @@ import com.atlassian.maven.plugin.clover.internal.configuration.AbstractJavaEnti
  *     &lt;name&gt;check.*&lt;/name&gt;
  *     &lt;annotation&gt;@Test&lt;/annotation&gt;
  *     &lt;tag&gt;@web&lt;/tag&gt;
- *     &lt;returntype&gt;void&lt;/returntype&gt;
+ *     &lt;returnType&gt;void&lt;/returnType&gt;
  * &lt;/testMethod&gt;
  * </pre>
  */
