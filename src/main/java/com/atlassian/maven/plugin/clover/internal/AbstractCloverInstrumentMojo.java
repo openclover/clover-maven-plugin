@@ -315,11 +315,17 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * naming convention. Example:
      *
      * <pre>
-     * &lt;testsources&gt;
-     *    &lt;includes&gt;**&#47;*WebTest.java,**&#47;*IT.java&lt;includes&gt;
-     *    &lt;excludes&gt;deprecated/**&lt;/excludes&gt;
-     *    &lt;testclasses&gt;
-     *        &lt;testclass&gt; &lt;!-- 0..N occurrences --&gt;
+     * &lt;testSources&gt;
+     *    &lt;includes&gt;
+     *        &lt;include&gt;**&#47;*&lt;/include&gt;
+     *        &lt;include&gt;*WebTest.java&lt;/include&gt;
+     *        &lt;include&gt;**&#47;*IT.java&lt;/include&gt;
+     *    &lt;/includes&gt;
+     *    &lt;excludes&gt;
+     *        &lt;exclude&gt;deprecated/**&lt;/exclude&gt;
+     *    &lt;/excludes&gt;
+     *    &lt;testClasses&gt;
+     *        &lt;testClass&gt; &lt;!-- 0..N occurrences --&gt;
      *            &lt;name&gt;.*Test&lt;/name&gt;
      *            &lt;super&gt;WebTest&lt;/super&gt;
      *            &lt;annotation&gt;@Repeat&lt;/annotation&gt;
@@ -330,12 +336,12 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      *                   &lt;name&gt;check.*&lt;/name&gt;
      *                   &lt;annotation&gt;@Test&lt;/annotation&gt;
      *                   &lt;tag&gt;@web&lt;/tag&gt;
-     *                   &lt;returntype&gt;void&lt;/returntype&gt;
+     *                   &lt;returnType&gt;void&lt;/returnType&gt;
      *               &lt;/testMethod&gt;
      *            &lt;/testMethods&gt;
      *        &lt;/testClass&gt;
-     *    &lt;/testclasses&gt;
-     * &lt;/testsources&gt;
+     *    &lt;/testClasses&gt;
+     * &lt;/testSources&gt;
      * </pre>
      *
      * Note: every tag is optional.

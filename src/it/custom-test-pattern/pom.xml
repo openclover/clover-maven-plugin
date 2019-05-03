@@ -54,45 +54,51 @@ under the License.
                 <configuration>
                     <useCloverClassifier>true</useCloverClassifier>
                     <staleMillis>1000</staleMillis>
-                    <testsources>
+                    <testSources>
                         <!-- Ant-style patterns for includes and excludes -->
-                        <includes>**/*One.java,**/*IT.java,**/*Three.java</includes>
-                        <excludes>**/excluded/**</excludes>
-                        <testclasses>
+                        <includes>
+                            <include>**/*One.java</include>
+                            <include>**/*IT.java</include>
+                            <include>**/*Three.java</include>
+                        </includes>
+                        <excludes>
+                            <exclude>**/excluded/**</exclude>
+                        </excludes>
+                        <testClasses>
                             <!-- Example #1: @TestSuite *One classes with methods having @Test annotations -->
-                            <testclass>
+                            <testClass>
                                 <name>.*One</name>
                                 <annotation>TestSuite</annotation>
-                                <testmethods>
-                                    <testmethod>
-                                        <annotation>@Test</annotation>
-                                    </testmethod>
-                                </testmethods>
-                            </testclass>
-                            <!-- Example #2: *IT classes with WebTest superclass and get/post methods-->
-                            <testclass>
-                                <super>WebTest</super>
-                                <testmethods>
-                                    <testmethod>
-                                        <name>get.*</name>
-                                    </testmethod>
-                                    <testmethod>
-                                        <name>post.*</name>
-                                    </testmethod>
-                                </testmethods>
-                            </testclass>
-                            <!-- Example #3: classes with @test javadoc tag and void methods-->
-                            <testclass>
-                                <tag>@test</tag>
-                                <package>.*testsources\.classic.*</package>
-                                <testmethods>
+                                <testMethods>
                                     <testMethod>
-                                        <returntype>void</returntype>
+                                        <annotation>Test</annotation>
                                     </testMethod>
-                                </testmethods>
-                            </testclass>
-                        </testclasses>
-                    </testsources>
+                                </testMethods>
+                            </testClass>
+                            <!-- Example #2: *IT classes with WebTest superclass and get/post methods-->
+                            <testClass>
+                                <super>WebTest</super>
+                                <testMethods>
+                                    <testMethod>
+                                        <name>get.*</name>
+                                    </testMethod>
+                                    <testMethod>
+                                        <name>post.*</name>
+                                    </testMethod>
+                                </testMethods>
+                            </testClass>
+                            <!-- Example #3: classes with @test javadoc tag and void methods-->
+                            <testClass>
+                                <tag>test</tag>
+                                <package>.*testsources\.classic.*</package>
+                                <testMethods>
+                                    <testMethod>
+                                        <returnType>void</returnType>
+                                    </testMethod>
+                                </testMethods>
+                            </testClass>
+                        </testClasses>
+                    </testSources>
                 </configuration>
                 <executions>
                     <execution>

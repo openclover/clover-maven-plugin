@@ -7,7 +7,7 @@ import java.util.List;
  * A container for test files, works like Ant's file set.
  * Example:
  * <pre>
- * &lt;testsources&gt;
+ * &lt;testSources&gt;
  *     &lt;includes&gt;
  *         &lt;include&gt;**&#47;*Test.java&lt;/include&gt;
  *         &lt;include&gt;**&#47;*IT.java&lt;/include&gt;
@@ -15,10 +15,10 @@ import java.util.List;
  *     &lt;excludes&gt;
  *         &lt;exclude&gt;deprecated/**&lt;/exclude&gt;
  *     &lt;/excludes&gt;
- *     &lt;testclasses&gt;
- *         &lt;testclass&gt;&lt;!-- see TestClass --&gt;&lt;/testClass&gt; &lt;!-- 0..N occurrences --&gt;
- *     &lt;/testclasses&gt;
- * &lt;/testsources&gt;
+ *     &lt;testClasses&gt;
+ *         &lt;testClass&gt;&lt;!-- see TestClass --&gt;&lt;/testClass&gt; &lt;!-- 0..N occurrences --&gt;
+ *     &lt;/testClasses&gt;
+ * &lt;/testSources&gt;
  * </pre>
  */
 public class TestSources {
