@@ -283,7 +283,7 @@ public abstract class AbstractInstrumenter {
         addMethodWithMetricsContexts(parameters, getConfiguration().getMethodWithMetricsContexts());
 
         // custom test detector
-        addTestSources(parameters, getConfiguration().getTestSources());
+        addTestSources(parameters, getConfiguration().getTestSources(), getSourceDirectory());
 
         // Log parameters
         if (getConfiguration().getLog().isDebugEnabled()) {
@@ -326,6 +326,7 @@ public abstract class AbstractInstrumenter {
     /**
      * See in clover-core:
      * <ul>
+     *     <li>com.atlassian.clover.cmdline.CloverInstrArgProcessors#TestSourceRoot</li>
      *     <li>com.atlassian.clover.cmdline.CloverInstrArgProcessors#TestSourceIncludes</li>
      *     <li>com.atlassian.clover.cmdline.CloverInstrArgProcessors#TestSourceExcludes</li>
      *     <li>com.atlassian.clover.cmdline.CloverInstrArgProcessors#TestSourceClass</li>
@@ -336,8 +337,12 @@ public abstract class AbstractInstrumenter {
      * @param testSources set of test sources/classes/methods for the test detector
      */
     @VisibleForTesting
-    static void addTestSources(List<String> parameters, TestSources testSources) {
+    static void addTestSources(List<String> parameters, TestSources testSources, String sourceDirectory) {
         if (testSources != null) {
+            // root
+            parameters.add("-tsr");
+            parameters.add(sourceDirectory);
+
             // includes
             if (!testSources.getIncludes().isEmpty()) {
                 String allIncludes = StringUtils.join(testSources.getIncludes().iterator(), ",");
