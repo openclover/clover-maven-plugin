@@ -1,0 +1,12 @@
+image: maven:3.6.1
+
+pipelines:
+  default:
+    - step:
+        caches:
+          - maven
+        script:
+          - # build, run quick unit tests and install a jar locally
+          - mvn install -Dgpg.skip=true
+          - # run integration tests
+          - mvn verify -Pintegration-tests
