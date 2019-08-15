@@ -22,16 +22,16 @@ package com.atlassian.maven.plugin.clover;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.atlassian.clover.ant.tasks.HistoryPointTask;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.Project;
 
 import java.io.File;
 
 /**
  * Save a <a href="http://openclover.org/doc/manual/4.2.0/ant--tutorial-part-2-historical-reporting.html">Clover history point</a>.
- *
- * @goal save-history
- *
  */
+@Mojo(name = "save-history")
 public class CloverSaveHistoryMojo extends AbstractCloverMojo
 {
     /**
@@ -39,10 +39,8 @@ public class CloverSaveHistoryMojo extends AbstractCloverMojo
      *
      * <p>Note: It's recommended to modify the location of this directory so that it points to a more permanent
      * location as the <code>${project.build.directory}</code> directory is erased when the project is cleaned.</p>
-     *
-     * @parameter expression="${maven.clover.historyDir}" default-value="${project.build.directory}/clover/history"
-     * @required
      */
+    @Parameter(property = "maven.clover.historyDir", defaultValue = "${project.build.directory}/clover/history", required = true)
     private String historyDir;
 
     /**

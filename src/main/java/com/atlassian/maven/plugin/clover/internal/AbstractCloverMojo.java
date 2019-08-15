@@ -22,6 +22,8 @@ package com.atlassian.maven.plugin.clover.internal;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Taskdef;
@@ -43,41 +45,34 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     /**
      * The directory where the Clover plugin will put all the files it generates during the build process. For
      * example the Clover plugin will put instrumented sources somewhere inside this directory.
-     *
-     * @parameter default-value="${project.build.directory}/clover"
-     * @required
      */
+    @Parameter(defaultValue = "${project.build.directory}/clover", required = true)
     protected String cloverOutputDirectory;
 
     /**
-     * The location of the <a href="http://openclover.org/doc/manual/4.2.0/ant--managing-the-coverage-database.html">Clover database</a>.
-     *
-     * @parameter expression="${maven.clover.cloverDatabase}"
+     * The location of the <a href="http://openclover.org/doc/manual/latest/ant--managing-the-coverage-database.html">Clover database</a>.
      */
+    @Parameter(property = "maven.clover.cloverDatabase")
     private String cloverDatabase;
 
     /**
      * The location to store the clover snapshot file. This file needs to persist between builds to enable Clover's
      * build optimization feature. If not specified, the snapshot will be stored next to the cloverDatabase.
-     *
-     * @parameter expression="${maven.clover.snapshot}"
      */
+    @Parameter(property = "maven.clover.snapshot")
     protected File snapshot;
 
     /**
      * If true, then a single cloverDatabase will be used for the entire project.
      * This flag will be ignored if a custom cloverDatabase location is specified.
-     *
-     * @parameter expression="${maven.clover.singleCloverDatabase}" default-value="false"
      */
+    @Parameter(property = "maven.clover.singleCloverDatabase", defaultValue = "false")
     private boolean singleCloverDatabase;
 
     /**
      * The location of the merged clover database to create when running a report in a multimodule build.
-     *
-     * @parameter expression="${maven.clover.cloverMergeDatabase}" default-value="${project.build.directory}/clover/cloverMerge.db"
-     * @required
      */
+    @Parameter(property = "maven.clover.cloverMergeDatabase", defaultValue = "${project.build.directory}/clover/cloverMerge.db", required = true)
     private String cloverMergeDatabase;
 
     /**
@@ -85,26 +80,25 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * then as a URL, and then as a file location on the filesystem. If not provided, Clover will use a bundled
      * license key.
      *
-     * @parameter expression="${maven.clover.licenseLocation}"
      * @see #license
      */
+    @Parameter(property = "maven.clover.licenseLocation")
     protected String licenseLocation;
 
     /**
      * The full Clover license String to use. If supplied, this certificate will be used over {@link #licenseLocation}.
      * NB. newline chars must be preserved. If not provided, Clover will use a bundled license key.
      *
-     * @parameter expression="${maven.clover.license}"
      * @see #licenseLocation
      */
+    @Parameter(property = "maven.clover.license")
     protected String license;
 
     /**
      * When the Clover Flush Policy is set to "interval" or threaded this value is the minimum period between flush
      * operations (in milliseconds).
-     *
-     * @parameter expression="${maven.clover.flushInterval}" default-value="500"
      */
+    @Parameter(property = "maven.clover.flushInterval", defaultValue = "500")
     private int flushInterval;
 
     /**
@@ -114,49 +108,41 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * JVM. In that case the coverage data will be flushed by default upon the JVM shutdown and there would be no need
      * to wait for the data to be flushed. As we can't control whether users want to fork their tests or not, we're
      * offering this parameter to them.</p>
-     *
-     * @parameter expression="${maven.clover.waitForFlush}" default-value="true"
      */
+    @Parameter(property = "maven.clover.waitForFlush", defaultValue = "true")
     private boolean waitForFlush;
 
     /**
      * <p>The Maven project instance for the executing project.</p>
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
-     *
-     * @parameter expression="${project}"
-     * @required
      */
+    @Parameter(defaultValue = "${project}", required = true)
     private MavenProject project;
 
     /**
      * Resource manager used to locate any Clover license file provided by the user.
-     *
-     * @component
      */
+    @Component(role = ResourceManager.class)
     private ResourceManager resourceManager;
 
     /**
      * A flag to indicate not to run clover for this execution. If set to true, Clover will not be run.
-     *
-     * @parameter expression="${maven.clover.skip}" default-value="false"
      */
+    @Parameter(property = "maven.clover.skip", defaultValue = "false")
     protected boolean skip;
 
     /**
      * If you wish to enable debug level logging in just the Clover plugin, set this to true. This is useful for
      * integrating Clover into the build.
-     *
-     * @parameter expression="${maven.clover.debug}" default-value="false"
      */
+    @Parameter(property = "maven.clover.debug", defaultValue = "false")
     protected boolean debug;
 
     /**
      * <p>The projects in the reactor for aggregation report.</p>
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
-     *
-     * @parameter expression="${reactorProjects}"
-     * @readonly
      */
+    @Parameter(defaultValue = "${reactorProjects}", readonly = true)
     private List<MavenProject> reactorProjects;
 
 

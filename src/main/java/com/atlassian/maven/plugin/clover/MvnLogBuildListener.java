@@ -7,7 +7,6 @@ import org.apache.maven.plugin.logging.Log;
 
 /**
  * A simple build listener which logs to maven's Log, instead of Ant's.
- *
  */
 public class MvnLogBuildListener extends DefaultLogger {
 

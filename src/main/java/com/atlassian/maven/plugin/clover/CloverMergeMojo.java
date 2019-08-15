@@ -20,6 +20,8 @@ package com.atlassian.maven.plugin.clover;
  */
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.BuildException;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
@@ -32,40 +34,31 @@ import com.atlassian.clover.ant.tasks.CloverMergeTask;
 
 /**
  * Merge arbitrary number of clover databases into one.
- *
  * All databases must share a common root directory.
- * Thank you to Alex B.(dasmonsieur@gmail.com) for providing the basis of this mojo.
- *
- * @goal merge
  */
+@Mojo(name = "merge")
 public class CloverMergeMojo extends AbstractCloverMojo
 {
 
     /**
      * Root directory with clover databases to merge
-     *
-     * @parameter expression="${maven.clover.merge.basedir}"
-     * @required
      */
+    @Parameter(property = "maven.clover.merge.basedir", required = true)
     private File baseDir;
 
     /**
      * Java pattern of clover database file name endings to merge.
-     *
      * Patterns may be separated by a comma or a space.
-     *
-     * @parameter expression="${maven.clover.merge.includes}" default-value="*.db"
      */
+    @Parameter(property = "maven.clover.merge.includes", defaultValue = "*.db")
     private String includes;
 
     /**
      * How far back to load coverage recordings from when merging
-     *
-     * @parameter expression="${maven.clover.merge.span}"
      */
+    @Parameter(property = "maven.clover.merge.span")
     private String span;
 
- 
 
     /**
      * {@inheritDoc}
