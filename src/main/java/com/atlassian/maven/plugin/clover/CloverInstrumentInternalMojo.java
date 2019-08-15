@@ -30,15 +30,18 @@ import com.atlassian.maven.plugin.clover.internal.scanner.LanguageFileExtensionF
 import com.atlassian.maven.plugin.clover.internal.scanner.MainSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.TestSourceScanner;
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.AbstractArtifactResolutionException;
-import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
-import org.apache.maven.artifact.resolver.ArtifactResolver;
+import org.apache.maven.artifact.resolver.ArtifactResolutionRequest;
+import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.repository.RepositorySystem;
 
 import java.io.File;
 import java.io.IOException;
@@ -194,11 +197,8 @@ import java.util.Set;
  * <p><b>Note 1: Do not call this MOJO directly. It is meant to be called in a custom forked lifecycle by the other
  * Clover plugin MOJOs.</b></p>
  * <p><b>Note 2: We bind this mojo to the "validate" phase so that it executes prior to any other mojos</b></p>
- *
- * @goal instrumentInternal
- * @phase validate
- * @requiresDependencyResolution test
  */
+@Mojo(name = "instrumentInternal", defaultPhase = LifecyclePhase.VALIDATE, requiresDependencyResolution = ResolutionScope.TEST)
 public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
 
     public static final String CLOVER_CORE_GROUP_ID = "org.openclover";
@@ -208,41 +208,17 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
      * <p>List of all artifacts for this Clover plugin provided by Maven. This is used internally to get a handle on
      * the Clover JAR artifact.</p>
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
-     *
-     * @parameter expression="${plugin.artifacts}"
-     * @required
      */
+    @Parameter(defaultValue = "${plugin.artifacts}", required = true)
     private List<Artifact> pluginArtifacts;
 
-    /**
-     * @parameter expression="${component.org.apache.maven.artifact.factory.ArtifactFactory}"
-     * @required
-     * @readonly
-     */
-    private ArtifactFactory artifactFactory;
-
-    /**
-     * Artifact resolver used to find clovered artifacts (artifacts with a clover classifier).
-     *
-     * @component role="org.apache.maven.artifact.resolver.ArtifactResolver"
-     * @required
-     * @readonly
-     */
-    private ArtifactResolver artifactResolver;
-
-    /**
-     * Local maven repository.
-     *
-     * @parameter expression="${localRepository}"
-     * @required
-     */
-    private ArtifactRepository localRepository;
+    @Component(role = RepositorySystem.class)
+    private RepositorySystem repositorySystem;
 
     /**
      * Remote repositories used for the project.
-     *
-     * @parameter expression="${project.remoteArtifactRepositories}"
      */
+    @Parameter(defaultValue = "${project.remoteArtifactRepositories}")
     protected List<ArtifactRepository> repositories;
 
     // HACK: this allows us to reset the source directories to the originals
@@ -377,7 +353,9 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
             // get the clover artifact, and use the same version number for grover...
             Artifact cloverArtifact = findCloverArtifact(this.pluginArtifacts);
             // add grover to the compilation classpath
-            final Artifact groverArtifact = artifactFactory.createBuildArtifact(cloverArtifact.getGroupId(), "grover", cloverArtifact.getVersion(), "jar");
+            final Artifact groverArtifact = repositorySystem.createArtifact(
+                    cloverArtifact.getGroupId(), "grover",
+                    cloverArtifact.getVersion(), null, "jar");
             groverArtifact.setFile(groverJar);
             groverArtifact.setScope(Artifact.SCOPE_SYSTEM);
             addArtifactDependency(groverArtifact);
@@ -470,8 +448,9 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
             // Only redirect main artifact for non-pom projects
             if (!getProject().getPackaging().equals("pom")) {
                 Artifact oldArtifact = getProject().getArtifact();
-                Artifact newArtifact = this.artifactFactory.createArtifactWithClassifier(oldArtifact.getGroupId(),
-                        oldArtifact.getArtifactId(), oldArtifact.getVersion(), oldArtifact.getType(), "clover");
+                Artifact newArtifact = repositorySystem.createArtifactWithClassifier(
+                        oldArtifact.getGroupId(),oldArtifact.getArtifactId(), oldArtifact.getVersion(),
+                        oldArtifact.getType(), "clover");
                 getProject().setArtifact(newArtifact);
 
                 final String finalName =
@@ -511,14 +490,22 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
             // a Clover classifier the artifact will fail to perform properly as intended originally. This is a
             // limitation.
             if (artifact.getClassifier() == null) {
-                Artifact cloveredArtifact = this.artifactFactory.createArtifactWithClassifier(artifact.getGroupId(),
-                        artifact.getArtifactId(), artifact.getVersion(), artifact.getType(), "clover");
+                final Artifact cloveredArtifact = repositorySystem.createArtifactWithClassifier(
+                        artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
+                        artifact.getType(), "clover");
 
                 // Try to resolve the artifact with a clover classifier. If it doesn't exist, simply add the original
                 // artifact. If found, use the clovered artifact.
-                try {
-                    this.artifactResolver.resolve(cloveredArtifact, new ArrayList(), localRepository);
+                final ArtifactResolutionRequest resolutionRequest = new ArtifactResolutionRequest();
+                resolutionRequest.setArtifact(cloveredArtifact);
+                resolutionRequest.setLocalRepository(null /* TODO localRepository */);
 
+                final ArtifactResolutionResult result = repositorySystem.resolve(resolutionRequest);
+                if (!result.isSuccess()) {
+                    getLog().warn("Skipped dependency [" + artifact.getId() + "] due to resolution error: ");
+                    // TODO log exceptions from result
+                    resolvedArtifacts.add(artifact);
+                } else {
                     // Set the same scope as the main artifact as this is not set by createArtifactWithClassifier.
                     cloveredArtifact.setScope(artifact.getScope());
 
@@ -542,12 +529,6 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
                     } else {
                         resolvedArtifacts.add(cloveredArtifact);
                     }
-                } catch (ArtifactResolutionException e) {
-                    getLog().warn("Skipped dependency [" + artifact.getId() + "] due to resolution error: " + e.getMessage());
-                    resolvedArtifacts.add(artifact);
-                } catch (ArtifactNotFoundException e) {
-                    getLog().debug("Skipped dependency [" + artifact.getId() + "] as the clovered artifact could not be found");
-                    resolvedArtifacts.add(artifact);
                 }
             } else {
                 getLog().debug("Skipped dependency [" + artifact.getId() + "] as it has a classifier");
@@ -582,14 +563,18 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
         }
 
         final String jarScope = scope == null ? Artifact.SCOPE_PROVIDED : scope;
-        cloverArtifact = artifactFactory.createArtifact(cloverArtifact.getGroupId(), cloverArtifact.getArtifactId(),
+        cloverArtifact = repositorySystem.createArtifact(cloverArtifact.getGroupId(), cloverArtifact.getArtifactId(),
                 cloverArtifact.getVersion(), jarScope, cloverArtifact.getType());
-        try {
-            this.artifactResolver.resolve(cloverArtifact, repositories, localRepository);
-        } catch (AbstractArtifactResolutionException e) {
+
+        final ArtifactResolutionRequest resolutionRequest = new ArtifactResolutionRequest();
+        resolutionRequest.setArtifact(cloverArtifact);
+        resolutionRequest.setRemoteRepositories(repositories);
+        resolutionRequest.setLocalRepository(null /* TODO localRepository */);
+
+        final ArtifactResolutionResult resolutionResult = repositorySystem.resolve(resolutionRequest);
+        if (!resolutionResult.isSuccess()) {
             throw new MojoExecutionException("Could not resolve the clover artifact ( " +
-                    cloverArtifact.getId() +
-                    " ) in the localRepository: " + localRepository.getUrl(), e);
+                    cloverArtifact.getId());
         }
 
         addArtifactDependency(cloverArtifact);
@@ -616,14 +601,6 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
         for (Artifact artifact : artifacts) {
             getLog().debug("[Clover]   Artifact [" + artifact.getId() + "], scope = [" + artifact.getScope() + "]");
         }
-    }
-
-    protected void setArtifactFactory(final ArtifactFactory artifactFactory) {
-        this.artifactFactory = artifactFactory;
-    }
-
-    protected void setArtifactResolver(final ArtifactResolver artifactResolver) {
-        this.artifactResolver = artifactResolver;
     }
 
 }
