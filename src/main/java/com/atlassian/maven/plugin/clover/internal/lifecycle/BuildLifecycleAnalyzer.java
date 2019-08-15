@@ -50,12 +50,8 @@ public class BuildLifecycleAnalyzer {
                         + "incompatible with Clover. Maven's build lifecycle could not be analyzed. Repository "
                         + "pollution protection will not run. ";
         try {
-            Maven2LifecycleAnalyzer maven2Analyzer = new Maven2LifecycleAnalyzer(lifecycleExecutor, mavenProject, mavenSession);
-            Maven3LifecycleAnalyzer maven3Analyzer = new Maven3LifecycleAnalyzer(lifecycleExecutor, mavenProject, mavenSession);
-
-            if (maven2Analyzer.isCompatibleVersion()) {
-                return maven2Analyzer.getPhasesToBeExecuted();
-            } else if (maven3Analyzer.isCompatibleVersion()) {
+            final Maven3LifecycleAnalyzer maven3Analyzer = new Maven3LifecycleAnalyzer(lifecycleExecutor, mavenProject, mavenSession);
+            if (maven3Analyzer.isCompatibleVersion()) {
                 return maven3Analyzer.getPhasesToBeExecuted();
             } else {
                 log.warn(FAILED_POLLUTION_PROTECTION);
