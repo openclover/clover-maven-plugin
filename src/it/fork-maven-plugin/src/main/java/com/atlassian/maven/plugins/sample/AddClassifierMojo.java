@@ -2,7 +2,7 @@ package com.atlassian.maven.plugins.sample;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugins.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -17,7 +17,7 @@ public class AddClassifierMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", required = true)
     private MavenProject project;
 
-    @Component(role = RepositorySystem.class)
+    @Requirement
     private RepositorySystem repositorySystem;
 
     public void execute() {

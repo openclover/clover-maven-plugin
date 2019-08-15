@@ -22,7 +22,6 @@ package com.atlassian.maven.plugin.clover.internal;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
@@ -120,12 +119,6 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     private MavenProject project;
 
     /**
-     * Resource manager used to locate any Clover license file provided by the user.
-     */
-    @Component(role = ResourceManager.class)
-    private ResourceManager resourceManager;
-
-    /**
      * A flag to indicate not to run clover for this execution. If set to true, Clover will not be run.
      */
     @Parameter(property = "maven.clover.skip", defaultValue = "false")
@@ -154,13 +147,6 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     public void execute() throws MojoExecutionException {
     }
 
-    public void setResourceManager(final ResourceManager resourceManager) {
-        this.resourceManager = resourceManager;
-    }
-
-    public ResourceManager getResourceManager() {
-        return this.resourceManager;
-    }
 
     public static File getResourceAsFile(final MavenProject project,
                                          final ResourceManager resourceManager,
