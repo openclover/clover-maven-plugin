@@ -19,8 +19,6 @@ import java.io.File;
 import java.io.IOException;
 
 
-/**
- */
 public class CloverCheckMojoTest extends MockObjectTestCase {
 
 
@@ -116,17 +114,6 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
         };
         mojo.setProject(project);
         mojo.setLog(log);
-
-
-        final ResourceManager resourceManager = mock(ResourceManager.class);
-        checking(new Expectations(){{
-            ignoring(resourceManager).addSearchPath("url", "");
-            ignoring(resourceManager).addSearchPath(FileResourceLoader.ID, project.getFile().getParentFile().getAbsolutePath());
-            ignoring(resourceManager).getResourceAsFile(with(any(String.class)), with(any(String.class)));
-            will(returnValue(new File("/clover.license")));
-        }});
-        mojo.setResourceManager(resourceManager);
-                
 
         TestUtil.setPrivateField(AbstractCloverMojo.class, mojo, "cloverDatabase", cloverDb.getPath());
         TestUtil.setPrivateField(AbstractCloverMojo.class, mojo, "cloverMergeDatabase", cloverMergedDb.getPath());

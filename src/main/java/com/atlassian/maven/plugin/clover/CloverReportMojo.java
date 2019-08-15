@@ -41,6 +41,7 @@ import org.apache.maven.repository.RepositorySystem;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 import org.apache.tools.ant.PropertyHelper;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.resource.ResourceManager;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
@@ -65,7 +66,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     // TODO: Need some way to share config elements and code between report mojos and main build mojos.
     // See http://jira.codehaus.org/browse/MNG-1886
 
-    @Component(role = RepositorySystem.class)
+    @Requirement
     private RepositorySystem repositorySystem;
 
     /**
@@ -258,7 +259,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     /**
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
      */
-    @Component(role = Renderer.class)
+    @Requirement
     private Renderer siteRenderer;
 
     /**
@@ -290,7 +291,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     /**
      * Resource manager used to locate any Clover license file provided by the user.
      */
-    @Component(role = ResourceManager.class)
+    @Requirement
     private ResourceManager resourceManager;
 
     /**

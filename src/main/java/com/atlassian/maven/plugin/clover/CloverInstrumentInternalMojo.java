@@ -36,12 +36,12 @@ import org.apache.maven.artifact.resolver.ArtifactResolutionRequest;
 import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.repository.RepositorySystem;
+import org.codehaus.plexus.component.annotations.Requirement;
 
 import java.io.File;
 import java.io.IOException;
@@ -212,7 +212,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     @Parameter(defaultValue = "${plugin.artifacts}", required = true)
     private List<Artifact> pluginArtifacts;
 
-    @Component(role = RepositorySystem.class)
+    @Requirement
     private RepositorySystem repositorySystem;
 
     /**
@@ -355,9 +355,8 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
             // add grover to the compilation classpath
             final Artifact groverArtifact = repositorySystem.createArtifact(
                     cloverArtifact.getGroupId(), "grover",
-                    cloverArtifact.getVersion(), null, "jar");
+                    cloverArtifact.getVersion(), Artifact.SCOPE_SYSTEM, "jar");
             groverArtifact.setFile(groverJar);
-            groverArtifact.setScope(Artifact.SCOPE_SYSTEM);
             addArtifactDependency(groverArtifact);
         } catch (IOException e) {
             getLog().error("Could not create Clover Groovy configuration file. No Groovy instrumentation will occur. " + e.getMessage(), e);

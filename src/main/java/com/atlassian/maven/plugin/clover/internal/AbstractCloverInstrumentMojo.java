@@ -9,9 +9,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.LifecycleExecutor;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.annotations.Requirement;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -350,7 +350,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     /**
      * Used to learn about lifecycles and phases
      */
-    @Component(role = LifecycleExecutor.class)
+    @Requirement
     private LifecycleExecutor lifecycleExecutor;
 
     /**
