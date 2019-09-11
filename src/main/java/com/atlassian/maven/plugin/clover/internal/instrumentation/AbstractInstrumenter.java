@@ -19,6 +19,7 @@ package com.atlassian.maven.plugin.clover.internal.instrumentation;
  * under the License.
  */
 
+import clover.org.apache.commons.lang3.StringUtils;
 import com.atlassian.clover.CloverInstr;
 import com.atlassian.clover.Logger;
 import com.atlassian.clover.spi.lang.Language;
@@ -32,7 +33,6 @@ import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.LanguageFileExtensionFilter;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Iterables;
-import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.FileUtils;
 
@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.apache.commons.lang.StringUtils.defaultString;
+import static clover.org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
  * Code common for instrumentation of various source roots (main sources, test sources).
