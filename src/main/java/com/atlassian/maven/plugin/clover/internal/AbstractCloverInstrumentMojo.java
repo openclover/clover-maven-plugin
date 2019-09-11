@@ -1,11 +1,11 @@
 package com.atlassian.maven.plugin.clover.internal;
 
+import clover.org.apache.commons.lang3.StringUtils;
 import com.atlassian.clover.util.IOStreamUtils;
 import com.atlassian.maven.plugin.clover.DistributedCoverage;
 import com.atlassian.maven.plugin.clover.MethodWithMetricsContext;
 import com.atlassian.maven.plugin.clover.TestSources;
 import com.atlassian.maven.plugin.clover.internal.lifecycle.BuildLifecycleAnalyzer;
-import org.apache.commons.lang.StringUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.LifecycleExecutor;
 import org.apache.maven.plugin.MojoExecutionException;
