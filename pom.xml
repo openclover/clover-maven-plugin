@@ -108,8 +108,8 @@ under the License.
         </dependency>
         <dependency>
             <groupId>org.apache.maven.reporting</groupId>
-            <artifactId>maven-reporting-impl</artifactId>
-            <version>2.0.5</version>
+            <artifactId>maven-reporting-api</artifactId>
+            <version>3.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -117,9 +117,9 @@ under the License.
             <version>3.0.4</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-compat</artifactId>
-            <version>3.0.4</version>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>maven-artifact-transfer</artifactId>
+            <version>0.11.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
@@ -278,10 +278,10 @@ under the License.
                         <configuration>
                             <rules>
                                 <requireMavenVersion>
-                                    <version>[3.0.0,4.0.0)</version>
+                                    <version>[3.0.4,4.0.0)</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
-                                    <version>[1.6,1.9)</version>
+                                    <version>[1.6,1.10)</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>
