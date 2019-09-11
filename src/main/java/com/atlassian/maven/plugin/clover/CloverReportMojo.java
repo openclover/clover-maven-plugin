@@ -19,36 +19,36 @@ package com.atlassian.maven.plugin.clover;
  * under the License.
  */
 
-import java.io.File;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-
+import com.atlassian.clover.cfg.Interval;
+import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
+import com.atlassian.maven.plugin.clover.internal.AntPropertyHelper;
+import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
+import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ArtifactResolutionRequest;
-import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
-import org.apache.maven.doxia.siterenderer.Renderer;
+import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.reporting.AbstractMavenReport;
+import org.apache.maven.reporting.MavenReport;
 import org.apache.maven.reporting.MavenReportException;
 import org.apache.maven.repository.RepositorySystem;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResult;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 import org.apache.tools.ant.PropertyHelper;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.resource.ResourceManager;
 
-import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
-import com.atlassian.maven.plugin.clover.internal.AntPropertyHelper;
-import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
-import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
-import com.atlassian.clover.cfg.Interval;
+import java.io.File;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 import static com.google.common.base.Strings.nullToEmpty;
 
@@ -62,12 +62,15 @@ import static com.google.common.base.Strings.nullToEmpty;
  * is a limitation of the site plugin which doesn't support @aggregator reports...</p>
  */
 @Mojo(name = "clover")
-public class CloverReportMojo extends AbstractMavenReport implements CloverConfiguration {
+public class CloverReportMojo extends AbstractMojo implements MavenReport, CloverConfiguration {
     // TODO: Need some way to share config elements and code between report mojos and main build mojos.
     // See http://jira.codehaus.org/browse/MNG-1886
 
     @Requirement
     private RepositorySystem repositorySystem;
+
+    @Component
+    private ArtifactResolver artifactResolver;
 
     /**
      * Use a custom report descriptor for generating your Clover Reports.
@@ -90,7 +93,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
      * Remote repositories used for the project.
      */
     @Parameter(defaultValue = "${project.remoteArtifactRepositories}")
-    protected List<ArtifactRepository> repositories;
+    private List<ArtifactRepository> repositories;
 
     /**
      * The location of the <a href="http://openclover.org/doc/manual/latest/ant--managing-the-coverage-database.html">Clover database</a>.
@@ -104,7 +107,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
      * If a custom location for the cloverDatabase is specified, this flag is ignored.
      */
     @Parameter(property = "maven.clover.singleCloverDatabase", defaultValue = "false")
-    protected boolean singleCloverDatabase;
+    private boolean singleCloverDatabase;
     
     /**
      * The location of the merged clover database to create when running a report in a multimodule build.
@@ -189,14 +192,6 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     private String contextFilters;
 
     /**
-     * Style of the HTML report: ADG (default) or CLASSIC (deprecated).
-     *
-     * @deprecated this parameter will be removed in next major release
-     */
-    @Parameter(property = "maven.clover.reportStyle", defaultValue = "ADG")
-    private String reportStyle;
-
-    /**
      * Specifies whether to include failed test coverage when calculating the total coverage percentage.
      *
      * @since 4.4.0
@@ -257,12 +252,6 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     private String charset;
 
     /**
-     * <p>Note: This is passed by Maven and must not be configured by the user.</p>
-     */
-    @Requirement
-    private Renderer siteRenderer;
-
-    /**
      * <p>The Maven project instance for the executing project.</p>
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
      */
@@ -306,9 +295,22 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     @Parameter(property = "maven.clover.alwaysReport", defaultValue = "true")
     private boolean alwaysReport = true;
 
-    /**
-     * @see org.apache.maven.reporting.AbstractMavenReport#executeReport(java.util.Locale)
-     */
+
+    @Override
+    public void execute() throws MojoExecutionException {
+        try {
+            executeReport(Locale.ENGLISH);
+        } catch (MavenReportException ex) {
+            throw new MojoExecutionException("Failed to generate report", ex);
+        }
+    }
+
+    @Override
+    public void generate(org.codehaus.doxia.sink.Sink sink, Locale locale) throws MavenReportException {
+        executeReport(locale);
+    }
+
+
     public void executeReport(final Locale locale) throws MavenReportException {
         if (!canGenerateReport()) {
             getLog().info("No report being generated for this module.");
@@ -356,7 +358,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     /**
      * Example of title prefixes: "Maven Clover", "Maven Aggregated Clover"
      */
-    private void createAllReportTypes(final String database, final String titlePrefix) throws MavenReportException {
+    private void createAllReportTypes(final String database, final String titlePrefix) {
 
         final String outpath = outputDirectory.getAbsolutePath();
         if (this.generateHtml) {
@@ -402,7 +404,6 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
         antProject.setProperty("filter", nullToEmpty(contextFilters));
         antProject.setProperty("orderBy", orderBy);
         antProject.setProperty("charset", charset);
-        antProject.setProperty("reportStyle", reportStyle);
         antProject.setProperty("type", format);
         antProject.setProperty("span", span);
         antProject.setProperty("alwaysReport", Boolean.toString(alwaysReport));
@@ -435,9 +436,10 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
     private boolean isHistoricalDirectoryValid(final String outFile) {
         boolean isValid = false;
 
-        File dir = new File(this.historyDir);
+        final File dir = new File(this.historyDir);
         if (dir.exists()) {
-            if (dir.listFiles().length > 0) {
+            final File[] files = dir.listFiles();
+            if (files != null && files.length > 0) {
                 isValid = true;
             } else if (generateHistorical){
                 getLog().warn("No Clover historical data found in [" + this.historyDir + "], skipping Clover "
@@ -450,19 +452,23 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
 
         return isValid;
     }
-    
-    /**
-     * @see org.apache.maven.reporting.MavenReport#getOutputName()
-     */
+
+    @Override
     public String getOutputName() {
         return "clover/index";
     }
 
+    @Override
+    public String getCategoryName() {
+        return CATEGORY_PROJECT_REPORTS;
+    }
 
+    @Override
+    public File getReportOutputDirectory() {
+        return this.outputDirectory.getAbsoluteFile();
+    }
 
-    /**
-     * @see org.apache.maven.reporting.MavenReport#getDescription(java.util.Locale)
-     */
+    @Override
     public String getDescription(final Locale locale) {
         return getBundle(locale).getString("report.clover.description");
     }
@@ -471,30 +477,12 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
         return ResourceBundle.getBundle("clover-report", locale, CloverReportMojo.class.getClassLoader());
     }
 
-    /**
-     * @see org.apache.maven.reporting.AbstractMavenReport#getOutputDirectory()
-     */
-    protected String getOutputDirectory() {
-        return this.outputDirectory.getAbsoluteFile().toString();
-    }
-
-    /**
-     * @see org.apache.maven.reporting.AbstractMavenReport#getSiteRenderer()
-     */
-    protected Renderer getSiteRenderer() {
-        return this.siteRenderer;
-    }
-
-    /**
-     * @see org.apache.maven.reporting.AbstractMavenReport#getProject()
-     */
+    @Override
     public MavenProject getProject() {
         return this.project;
     }
 
-    /**
-     * @see org.apache.maven.reporting.MavenReport#getName(java.util.Locale)
-     */
+    @Override
     public String getName(final Locale locale) {
         return getBundle(locale).getString("report.clover.name");
     }
@@ -504,6 +492,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
      *
      * @return true
      */
+    @Override
     public boolean isExternalReport() {
         return true;
     }
@@ -512,11 +501,10 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
      * Generate reports if a Clover module database or a Clover merged database exist.
      *
      * @return true if a project should be generated
-     * @see org.apache.maven.reporting.AbstractMavenReport#canGenerateReport()
      */
+    @Override
     public boolean canGenerateReport() {
         boolean canGenerate = false;
-
 
         AbstractCloverMojo.waitForFlush(this.waitForFlush, this.flushInterval);
 
@@ -534,9 +522,7 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
         return canGenerate;
     }
 
-    /**
-     * @see org.apache.maven.reporting.AbstractMavenReport#setReportOutputDirectory(java.io.File)
-     */
+    @Override
     public void setReportOutputDirectory(final File reportOutputDirectory) {
         if ((reportOutputDirectory != null) && (!reportOutputDirectory.getAbsolutePath().endsWith("clover"))) {
             this.outputDirectory = new File(reportOutputDirectory, "clover");
@@ -563,15 +549,10 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
                     project.getVersion(),
                     "xml", "clover-report");
 
-            final ArtifactResolutionRequest resolutionRequest = new ArtifactResolutionRequest();
-            resolutionRequest.setArtifact(artifact);
-            resolutionRequest.setRemoteRepositories(repositories);
-            resolutionRequest.setLocalRepository(null /* TODO localRepository */);
-
-            final ArtifactResolutionResult resolutionResult = repositorySystem.resolve(resolutionRequest);
-            if (resolutionResult.isSuccess()) {
-                return artifact.getFile(); // TODO or from resolutionResult?
-            } else {
+            try {
+                final ArtifactResult result = artifactResolver.resolveArtifact(project.getProjectBuildingRequest(), artifact);
+                return result.getArtifact().getFile();
+            } catch (ArtifactResolverException e) {
                 getLog().warn("Failed to resolve artifact " + artifact);
             }
         }
@@ -592,22 +573,26 @@ public class CloverReportMojo extends AbstractMavenReport implements CloverConfi
         }
     }
 
+    @Override
     public String getCloverDatabase()
     {
         return cloverDatabase;
     }
 
+    @Override
     public String resolveCloverDatabase()
     {
         return new ConfigUtil(this).resolveCloverDatabase();
     }
 
+    @Override
     public List<MavenProject> getReactorProjects() {
         return reactorProjects;
     }
 
+    @Override
     public boolean isSingleCloverDatabase() {
         return this.singleCloverDatabase;
     }
+
 }
- 
