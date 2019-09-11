@@ -36,12 +36,14 @@ import org.apache.maven.artifact.resolver.ArtifactResolutionRequest;
 import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.repository.RepositorySystem;
-import org.codehaus.plexus.component.annotations.Requirement;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
 
 import java.io.File;
 import java.io.IOException;
@@ -212,8 +214,11 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     @Parameter(defaultValue = "${plugin.artifacts}", required = true)
     private List<Artifact> pluginArtifacts;
 
-    @Requirement
-    private RepositorySystem repositorySystem;
+    @Component
+    protected ArtifactResolver artifactResolver;
+
+    @Component
+    protected RepositorySystem repositorySystem;
 
     /**
      * Remote repositories used for the project.
@@ -495,16 +500,9 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
 
                 // Try to resolve the artifact with a clover classifier. If it doesn't exist, simply add the original
                 // artifact. If found, use the clovered artifact.
-                final ArtifactResolutionRequest resolutionRequest = new ArtifactResolutionRequest();
-                resolutionRequest.setArtifact(cloveredArtifact);
-                resolutionRequest.setLocalRepository(null /* TODO localRepository */);
+                try {
+                    artifactResolver.resolveArtifact(getProject().getProjectBuildingRequest(), cloveredArtifact);
 
-                final ArtifactResolutionResult result = repositorySystem.resolve(resolutionRequest);
-                if (!result.isSuccess()) {
-                    getLog().warn("Skipped dependency [" + artifact.getId() + "] due to resolution error: ");
-                    // TODO log exceptions from result
-                    resolvedArtifacts.add(artifact);
-                } else {
                     // Set the same scope as the main artifact as this is not set by createArtifactWithClassifier.
                     cloveredArtifact.setScope(artifact.getScope());
 
@@ -528,7 +526,12 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
                     } else {
                         resolvedArtifacts.add(cloveredArtifact);
                     }
+
+                } catch (ArtifactResolverException e) {
+                    getLog().warn("Skipped dependency [" + artifact.getId() + "] due to resolution error: ", e);
+                    resolvedArtifacts.add(artifact);
                 }
+
             } else {
                 getLog().debug("Skipped dependency [" + artifact.getId() + "] as it has a classifier");
                 resolvedArtifacts.add(artifact);
