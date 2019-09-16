@@ -185,8 +185,8 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     /**
      * Wait 2*'flush interval' milliseconds to ensure that the coverage data have been flushed to the Clover database.
      *
-     * TODO: This method should not be static but we need it static here because we cannot share code
-     * between non report mojos and main build mojos. See http://jira.codehaus.org/browse/MNG-1886
+     * This method should not be static but we need it static here because we cannot share code
+     * between non report mojos and main build mojos.
      *
      * @param waitForFlush whether to pause until flush occurs
      * @param flushInterval current interval

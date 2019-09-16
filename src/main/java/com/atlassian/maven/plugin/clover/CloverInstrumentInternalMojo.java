@@ -66,20 +66,20 @@ import java.util.Set;
  *      -> java + groovy
  *      -> groovy only
  *  #2 source folders:
- *      -> src/xxx/java
- *      -> src/xxx/groovy
- *      -> generated-sources/xxx
+ *      -> src/(main|test)/java
+ *      -> src/(main|test)/groovy
+ *      -> generated-sources/xyz
  *  #3 location of java source files:
- *      -> in src/xxx/java
- *      -> in src/xxx/groovy - NOT SUPPORTED BY CLOVER (see reasons below)
+ *      -> in src/(main|test)/java
+ *      -> in src/(main|test)/groovy - NOT SUPPORTED BY CLOVER (see reasons below)
  *  #4 location of groovy source files:
- *      -> src/xxx/java
- *      -> src/xxx/groovy
+ *      -> src/(main|test)/java
+ *      -> src/(main|test)/groovy
  *  #5 definition of groovy source folders
  *      -> by <sourceDirectory>, <testSourceDirectory> parameters in POM
  *      -> by add-source, add-test-source goals in build-helper-maven-plugin
  *      -> by extensions=true option in groovy-eclipse-compiler
- *      -> not defined at all (but src/xxx/groovy location is then internally added by gmaven or groovy-eclipse-plugin)
+ *      -> not defined at all (but src/(main|test)/groovy location is then internally added by gmaven or groovy-eclipse-plugin)
  *  #6 groovy plugins
  *      -> gmaven
  *      -> groovy-eclipse-plugin
@@ -181,13 +181,13 @@ import java.util.Set;
  *   -> as for case 4) but 'generated-(test-)sources' are passed to groovyc
  *
  * =====================================================================================================================
- * 5) includeAllSourceRoots = false, java in src/xxx/java, no groovy code, no groovy plugin
+ * 5) includeAllSourceRoots = false, java in src/(main|test)/java, no groovy code, no groovy plugin
  *
  *   -> standard behaviour, 'src/(main|test)/java' is instrumented into 'target/clover/src-(test-)instrumented'
  *   and compiled
  *
  * =====================================================================================================================
- * 5b) includeAllSourceRoots = true, java in src/xxx/java, no groovy code, no groovy plugin
+ * 5b) includeAllSourceRoots = true, java in src/(main|test)/java, no groovy code, no groovy plugin
  *
  *   -> standard behaviour, 'src/(main|test)/java' as well as 'target/generated-(test-)sources' are instrumented
  *   into 'target/clover/src-(test-)instrumented' and compiled
@@ -583,8 +583,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     }
 
     private void addArtifactDependency(final Artifact cloverArtifact) {
-        // TODO: use addArtifacts when it's implemented, see http://jira.codehaus.org/browse/MNG-2197
-        Set<Artifact> set = new LinkedHashSet<Artifact>(getProject().getDependencyArtifacts());
+        final Set<Artifact> set = new LinkedHashSet<Artifact>(getProject().getDependencyArtifacts());
         set.add(cloverArtifact);
         getProject().setDependencyArtifacts(set);
     }
