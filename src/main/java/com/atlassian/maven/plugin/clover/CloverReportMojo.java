@@ -41,8 +41,6 @@ import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResult;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 import org.apache.tools.ant.PropertyHelper;
-import org.codehaus.plexus.component.annotations.Requirement;
-import org.codehaus.plexus.resource.ResourceManager;
 
 import java.io.File;
 import java.util.List;
@@ -66,7 +64,7 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
     // TODO: Need some way to share config elements and code between report mojos and main build mojos.
     // See http://jira.codehaus.org/browse/MNG-1886
 
-    @Requirement
+    @Component
     private RepositorySystem repositorySystem;
 
     @Component
@@ -278,12 +276,6 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
     private String license;
 
     /**
-     * Resource manager used to locate any Clover license file provided by the user.
-     */
-    @Requirement
-    private ResourceManager resourceManager;
-
-    /**
      * A span specifies the age of the coverage data that should be used when creating a report.
      */
     @Parameter(property = "maven.clover.span")
@@ -331,8 +323,7 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
             reportDescriptor = resolveCloverDescriptor();
         } else if (!reportDescriptor.exists()){ // try finding this as a resource
             try {
-                reportDescriptor = AbstractCloverMojo.getResourceAsFile(
-                        project, resourceManager, reportDescriptor.getPath(), getLog(), this.getClass().getClassLoader());
+                reportDescriptor = AbstractCloverMojo.getResourceAsFile(reportDescriptor.getPath(), getLog(), this.getClass().getClassLoader());
             } catch (MojoExecutionException e) {
                 throw new MavenReportException("Could not resolve report descriptor: " + reportDescriptor.getPath(), e);
             }
@@ -558,10 +549,9 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
         }
 
         try {
-            getLog().info("Using /default-clover-report descriptor.");
-            final File file = AbstractCloverMojo.getResourceAsFile(project,
-                    resourceManager,
-                    "/default-clover-report.xml",
+            getLog().info("Using default-clover-report descriptor.");
+            final File file = AbstractCloverMojo.getResourceAsFile(
+                    "default-clover-report.xml",
                     getLog(),
                     this.getClass().getClassLoader());
             file.deleteOnExit();

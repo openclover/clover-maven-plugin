@@ -19,6 +19,7 @@ package com.atlassian.maven.plugin.clover.internal;
  * under the License.
  */
 
+import com.atlassian.clover.util.FileUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
@@ -26,15 +27,12 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Taskdef;
-import org.codehaus.plexus.resource.ResourceManager;
-import org.codehaus.plexus.resource.loader.FileResourceLoader;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.atlassian.clover.CloverNames;
 import com.atlassian.maven.plugin.clover.MvnLogBuildListener;
 
 /**
@@ -148,32 +146,21 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     }
 
 
-    public static File getResourceAsFile(final MavenProject project,
-                                         final ResourceManager resourceManager,
-                                         final String resourceLocation,
+    public static File getResourceAsFile(final String resourceLocation,
                                          final Log logger,
                                          final ClassLoader classloader) throws MojoExecutionException {
 
         logger.debug("Getting resource: '" + resourceLocation + "'");
 
-        resourceManager.addSearchPath("url", "");
-        resourceManager.addSearchPath(FileResourceLoader.ID, project.getFile().getParentFile().getAbsolutePath());
-
-        final ClassLoader origLoader = Thread.currentThread().getContextClassLoader();
         try {
-            Thread.currentThread().setContextClassLoader(classloader);
-            try {
-                logger.debug("Attempting to load resource from [" + resourceLocation + "] ...");
-                final File outputFile = File.createTempFile("mvn", "resource");
-                outputFile.deleteOnExit();
-                return resourceManager.getResourceAsFile(resourceLocation, outputFile.getPath());
-            } catch (Exception e) {
-                throw new MojoExecutionException("Failed to load resource as file [" + resourceLocation + "]", e);
-            }
-        } finally {
-            Thread.currentThread().setContextClassLoader(origLoader);
+            logger.debug("Attempting to load resource from [" + resourceLocation + "] ...");
+            final File outputFile = File.createTempFile("mvn", "resource");
+            outputFile.deleteOnExit();
+            FileUtils.resourceToFile(classloader, resourceLocation, outputFile);
+            return outputFile;
+        } catch (Exception e) {
+            throw new MojoExecutionException("Failed to load resource as file [" + resourceLocation + "]", e);
         }
-
     }
 
     /**
