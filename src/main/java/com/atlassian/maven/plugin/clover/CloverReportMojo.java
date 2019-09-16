@@ -61,8 +61,6 @@ import static com.google.common.base.Strings.nullToEmpty;
  */
 @Mojo(name = "clover")
 public class CloverReportMojo extends AbstractMojo implements MavenReport, CloverConfiguration {
-    // TODO: Need some way to share config elements and code between report mojos and main build mojos.
-    // See http://jira.codehaus.org/browse/MNG-1886
 
     @Component
     private RepositorySystem repositorySystem;

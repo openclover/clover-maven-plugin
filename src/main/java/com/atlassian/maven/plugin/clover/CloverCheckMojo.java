@@ -293,7 +293,6 @@ public class CloverCheckMojo extends AbstractCloverMojo
     private boolean isInCloverForkedLifecycle()
     {
         // We know we're in the forked lifecycle if the output directory is set to target/clover...
-        // TODO: Not perfect, need to find a better way. This is a hack!
         return getProject().getBuild().getDirectory().endsWith( "clover" );
     }
 }
