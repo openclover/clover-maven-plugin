@@ -20,24 +20,23 @@ package com.atlassian.maven.plugin.clover;
  */
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ArtifactResolver;
-import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
-import org.apache.maven.artifact.factory.ArtifactFactory;
+import org.apache.maven.execution.MavenExecutionRequest;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.logging.Log;
-import org.jmock.integration.junit3.MockObjectTestCase;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
+import org.apache.maven.project.ProjectBuildingRequest;
+import org.apache.maven.repository.RepositorySystem;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
 import org.jmock.Expectations;
+import org.jmock.integration.junit3.MockObjectTestCase;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Set;
-import java.util.List;
-import java.io.File;
 
 /**
  * Unit tests for {@link com.atlassian.maven.plugin.clover.CloverInstrumentInternalMojo}.
- *
- * @author <a href="mailto:vmassol@apache.org">Vincent Massol</a>
  */
 public class CloverInstrumentInternalMojoTest extends MockObjectTestCase {
     private CloverInstrumentInternalMojo mojo;
@@ -100,7 +99,7 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase {
         assertTrue("Resulting artifact should have been the original one", resultSet.contains(artifact));
     }
 
-    public void testSwizzleCloverDependenciesWhenCloveredVersionOfDependencyIsNewerThanOriginal() throws ArtifactNotFoundException, ArtifactResolutionException {
+    public void testSwizzleCloverDependenciesWhenCloveredVersionOfDependencyIsNewerThanOriginal() throws ArtifactResolverException {
         // Ensure that the original artifact is older than the clovered artifact so that the clovered artifact
         // is picked. Note that that we use -5000/-10000 to ensure not to set the time in the future as maybe
         // this could cause some problems on some OS.
@@ -122,7 +121,7 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase {
         assertTrue("Resulting artifact should have been the clovered one", resultSet.contains(cloveredArtifact));
     }
 
-    public void testSwizzleCloverDependenciesWhenOriginalVersionOfDependencyIsNewerThanCloveredOne() throws ArtifactNotFoundException, ArtifactResolutionException {
+    public void testSwizzleCloverDependenciesWhenOriginalVersionOfDependencyIsNewerThanCloveredOne() throws ArtifactResolverException {
         // Ensure that the clovered artifact is older than the original artifact so that the original artifact
         // is picked. Note that that we use -5000/-10000 to ensure not to set the time in the future as maybe
         // this could cause some problems on some OS.
@@ -145,10 +144,10 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase {
     }
 
 
-    private void setUpCommonMocksForSwizzleCloverDependenciesTests(final Artifact artifact) throws ArtifactNotFoundException, ArtifactResolutionException {
-        final ArtifactFactory mockArtifactFactory = mock(ArtifactFactory.class);
+    private void setUpCommonMocksForSwizzleCloverDependenciesTests(final Artifact artifact) throws ArtifactResolverException {
+        final RepositorySystem mockRepositorySystem = mock(RepositorySystem.class);
         checking(new Expectations() {{
-            oneOf(mockArtifactFactory).createArtifactWithClassifier(
+            oneOf(mockRepositorySystem).createArtifactWithClassifier(
                     "some.groupId", "someArtifactId", "1.0", "jar", "clover");
             will(returnValue(artifact));
         }});
@@ -156,16 +155,29 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase {
 
         final ArtifactResolver mockArtifactResolver = mock(ArtifactResolver.class);
         checking(new Expectations() {{
-            oneOf(mockArtifactResolver).resolve(with(any(Artifact.class)), with(any(List.class)), with(any(ArtifactRepository.class)));
+            oneOf(mockArtifactResolver).resolveArtifact(with(any(ProjectBuildingRequest.class)), with(any(Artifact.class)));
         }});
+
+        final MavenExecutionRequest mockExecutionRequest = mock(MavenExecutionRequest.class);
+        checking(new Expectations() {{
+            oneOf(mockExecutionRequest).getUserSettingsFile();
+        }});
+
+        final MavenSession mockMavenSession = new MavenSession(null, null, mockExecutionRequest, null) {
+            @Override
+            public ProjectBuildingRequest getProjectBuildingRequest() {
+                return new DefaultProjectBuildingRequest();
+            }
+        };
 
         final Log mockLog = mock(Log.class);
         checking(new Expectations() {{
             atLeast(0).of(mockLog).warn(with(any(String.class)));
         }});
 
-        this.mojo.setArtifactFactory(mockArtifactFactory);
-        this.mojo.setArtifactResolver(mockArtifactResolver);
+        this.mojo.repositorySystem = mockRepositorySystem;
+        this.mojo.artifactResolver = mockArtifactResolver;
+        this.mojo.mavenSession = mockMavenSession;
         this.mojo.setLog(mockLog);
     }
 

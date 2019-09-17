@@ -29,16 +29,21 @@ import com.atlassian.maven.plugin.clover.internal.instrumentation.TestInstrument
 import com.atlassian.maven.plugin.clover.internal.scanner.LanguageFileExtensionFilter;
 import com.atlassian.maven.plugin.clover.internal.scanner.MainSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.TestSourceScanner;
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.AbstractArtifactResolutionException;
-import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
-import org.apache.maven.artifact.resolver.ArtifactResolver;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.repository.RepositorySystem;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,20 +66,20 @@ import java.util.Set;
  *      -> java + groovy
  *      -> groovy only
  *  #2 source folders:
- *      -> src/xxx/java
- *      -> src/xxx/groovy
- *      -> generated-sources/xxx
+ *      -> src/(main|test)/java
+ *      -> src/(main|test)/groovy
+ *      -> generated-sources/xyz
  *  #3 location of java source files:
- *      -> in src/xxx/java
- *      -> in src/xxx/groovy - NOT SUPPORTED BY CLOVER (see reasons below)
+ *      -> in src/(main|test)/java
+ *      -> in src/(main|test)/groovy - NOT SUPPORTED BY CLOVER (see reasons below)
  *  #4 location of groovy source files:
- *      -> src/xxx/java
- *      -> src/xxx/groovy
+ *      -> src/(main|test)/java
+ *      -> src/(main|test)/groovy
  *  #5 definition of groovy source folders
  *      -> by <sourceDirectory>, <testSourceDirectory> parameters in POM
  *      -> by add-source, add-test-source goals in build-helper-maven-plugin
  *      -> by extensions=true option in groovy-eclipse-compiler
- *      -> not defined at all (but src/xxx/groovy location is then internally added by gmaven or groovy-eclipse-plugin)
+ *      -> not defined at all (but src/(main|test)/groovy location is then internally added by gmaven or groovy-eclipse-plugin)
  *  #6 groovy plugins
  *      -> gmaven
  *      -> groovy-eclipse-plugin
@@ -176,13 +181,13 @@ import java.util.Set;
  *   -> as for case 4) but 'generated-(test-)sources' are passed to groovyc
  *
  * =====================================================================================================================
- * 5) includeAllSourceRoots = false, java in src/xxx/java, no groovy code, no groovy plugin
+ * 5) includeAllSourceRoots = false, java in src/(main|test)/java, no groovy code, no groovy plugin
  *
  *   -> standard behaviour, 'src/(main|test)/java' is instrumented into 'target/clover/src-(test-)instrumented'
  *   and compiled
  *
  * =====================================================================================================================
- * 5b) includeAllSourceRoots = true, java in src/xxx/java, no groovy code, no groovy plugin
+ * 5b) includeAllSourceRoots = true, java in src/(main|test)/java, no groovy code, no groovy plugin
  *
  *   -> standard behaviour, 'src/(main|test)/java' as well as 'target/generated-(test-)sources' are instrumented
  *   into 'target/clover/src-(test-)instrumented' and compiled
@@ -194,11 +199,8 @@ import java.util.Set;
  * <p><b>Note 1: Do not call this MOJO directly. It is meant to be called in a custom forked lifecycle by the other
  * Clover plugin MOJOs.</b></p>
  * <p><b>Note 2: We bind this mojo to the "validate" phase so that it executes prior to any other mojos</b></p>
- *
- * @goal instrumentInternal
- * @phase validate
- * @requiresDependencyResolution test
  */
+@Mojo(name = "instrumentInternal", defaultPhase = LifecyclePhase.VALIDATE, requiresDependencyResolution = ResolutionScope.TEST)
 public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
 
     public static final String CLOVER_CORE_GROUP_ID = "org.openclover";
@@ -208,41 +210,26 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
      * <p>List of all artifacts for this Clover plugin provided by Maven. This is used internally to get a handle on
      * the Clover JAR artifact.</p>
      * <p>Note: This is passed by Maven and must not be configured by the user.</p>
-     *
-     * @parameter expression="${plugin.artifacts}"
-     * @required
      */
+    @Parameter(defaultValue = "${plugin.artifacts}", required = true)
     private List<Artifact> pluginArtifacts;
 
-    /**
-     * @parameter expression="${component.org.apache.maven.artifact.factory.ArtifactFactory}"
-     * @required
-     * @readonly
-     */
-    private ArtifactFactory artifactFactory;
+    @Parameter(defaultValue = "${session}", readonly = true)
+    @VisibleForTesting
+    MavenSession mavenSession;
 
-    /**
-     * Artifact resolver used to find clovered artifacts (artifacts with a clover classifier).
-     *
-     * @component role="org.apache.maven.artifact.resolver.ArtifactResolver"
-     * @required
-     * @readonly
-     */
-    private ArtifactResolver artifactResolver;
+    @Component
+    @VisibleForTesting
+    ArtifactResolver artifactResolver;
 
-    /**
-     * Local maven repository.
-     *
-     * @parameter expression="${localRepository}"
-     * @required
-     */
-    private ArtifactRepository localRepository;
+    @Component
+    @VisibleForTesting
+    RepositorySystem repositorySystem;
 
     /**
      * Remote repositories used for the project.
-     *
-     * @parameter expression="${project.remoteArtifactRepositories}"
      */
+    @Parameter(defaultValue = "${project.remoteArtifactRepositories}")
     protected List<ArtifactRepository> repositories;
 
     // HACK: this allows us to reset the source directories to the originals
@@ -377,9 +364,10 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
             // get the clover artifact, and use the same version number for grover...
             Artifact cloverArtifact = findCloverArtifact(this.pluginArtifacts);
             // add grover to the compilation classpath
-            final Artifact groverArtifact = artifactFactory.createBuildArtifact(cloverArtifact.getGroupId(), "grover", cloverArtifact.getVersion(), "jar");
+            final Artifact groverArtifact = repositorySystem.createArtifact(
+                    cloverArtifact.getGroupId(), "grover",
+                    cloverArtifact.getVersion(), Artifact.SCOPE_SYSTEM, "jar");
             groverArtifact.setFile(groverJar);
-            groverArtifact.setScope(Artifact.SCOPE_SYSTEM);
             addArtifactDependency(groverArtifact);
         } catch (IOException e) {
             getLog().error("Could not create Clover Groovy configuration file. No Groovy instrumentation will occur. " + e.getMessage(), e);
@@ -470,8 +458,9 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
             // Only redirect main artifact for non-pom projects
             if (!getProject().getPackaging().equals("pom")) {
                 Artifact oldArtifact = getProject().getArtifact();
-                Artifact newArtifact = this.artifactFactory.createArtifactWithClassifier(oldArtifact.getGroupId(),
-                        oldArtifact.getArtifactId(), oldArtifact.getVersion(), oldArtifact.getType(), "clover");
+                Artifact newArtifact = repositorySystem.createArtifactWithClassifier(
+                        oldArtifact.getGroupId(), oldArtifact.getArtifactId(), oldArtifact.getVersion(),
+                        oldArtifact.getType(), "clover");
                 getProject().setArtifact(newArtifact);
 
                 final String finalName =
@@ -511,13 +500,14 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
             // a Clover classifier the artifact will fail to perform properly as intended originally. This is a
             // limitation.
             if (artifact.getClassifier() == null) {
-                Artifact cloveredArtifact = this.artifactFactory.createArtifactWithClassifier(artifact.getGroupId(),
-                        artifact.getArtifactId(), artifact.getVersion(), artifact.getType(), "clover");
+                final Artifact cloveredArtifact = repositorySystem.createArtifactWithClassifier(
+                        artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
+                        artifact.getType(), "clover");
 
                 // Try to resolve the artifact with a clover classifier. If it doesn't exist, simply add the original
                 // artifact. If found, use the clovered artifact.
                 try {
-                    this.artifactResolver.resolve(cloveredArtifact, new ArrayList(), localRepository);
+                    artifactResolver.resolveArtifact(mavenSession.getProjectBuildingRequest(), cloveredArtifact);
 
                     // Set the same scope as the main artifact as this is not set by createArtifactWithClassifier.
                     cloveredArtifact.setScope(artifact.getScope());
@@ -542,13 +532,12 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
                     } else {
                         resolvedArtifacts.add(cloveredArtifact);
                     }
-                } catch (ArtifactResolutionException e) {
-                    getLog().warn("Skipped dependency [" + artifact.getId() + "] due to resolution error: " + e.getMessage());
-                    resolvedArtifacts.add(artifact);
-                } catch (ArtifactNotFoundException e) {
-                    getLog().debug("Skipped dependency [" + artifact.getId() + "] as the clovered artifact could not be found");
+
+                } catch (ArtifactResolverException e) {
+                    getLog().warn("Skipped dependency [" + artifact.getId() + "] due to resolution error: ", e);
                     resolvedArtifacts.add(artifact);
                 }
+
             } else {
                 getLog().debug("Skipped dependency [" + artifact.getId() + "] as it has a classifier");
                 resolvedArtifacts.add(artifact);
@@ -582,22 +571,20 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
         }
 
         final String jarScope = scope == null ? Artifact.SCOPE_PROVIDED : scope;
-        cloverArtifact = artifactFactory.createArtifact(cloverArtifact.getGroupId(), cloverArtifact.getArtifactId(),
+        cloverArtifact = repositorySystem.createArtifact(cloverArtifact.getGroupId(), cloverArtifact.getArtifactId(),
                 cloverArtifact.getVersion(), jarScope, cloverArtifact.getType());
-        try {
-            this.artifactResolver.resolve(cloverArtifact, repositories, localRepository);
-        } catch (AbstractArtifactResolutionException e) {
-            throw new MojoExecutionException("Could not resolve the clover artifact ( " +
-                    cloverArtifact.getId() +
-                    " ) in the localRepository: " + localRepository.getUrl(), e);
-        }
 
-        addArtifactDependency(cloverArtifact);
+        try {
+            artifactResolver.resolveArtifact(mavenSession.getProjectBuildingRequest(), cloverArtifact);
+            addArtifactDependency(cloverArtifact);
+        } catch (ArtifactResolverException ex) {
+            throw new MojoExecutionException("Could not resolve the clover artifact ( " +
+                    cloverArtifact.getId(), ex);
+        }
     }
 
     private void addArtifactDependency(final Artifact cloverArtifact) {
-        // TODO: use addArtifacts when it's implemented, see http://jira.codehaus.org/browse/MNG-2197
-        Set<Artifact> set = new LinkedHashSet<Artifact>(getProject().getDependencyArtifacts());
+        final Set<Artifact> set = new LinkedHashSet<Artifact>(getProject().getDependencyArtifacts());
         set.add(cloverArtifact);
         getProject().setDependencyArtifacts(set);
     }
@@ -616,14 +603,6 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
         for (Artifact artifact : artifacts) {
             getLog().debug("[Clover]   Artifact [" + artifact.getId() + "], scope = [" + artifact.getScope() + "]");
         }
-    }
-
-    protected void setArtifactFactory(final ArtifactFactory artifactFactory) {
-        this.artifactFactory = artifactFactory;
-    }
-
-    protected void setArtifactResolver(final ArtifactResolver artifactResolver) {
-        this.artifactResolver = artifactResolver;
     }
 
 }
