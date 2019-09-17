@@ -26,6 +26,7 @@ import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
 import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
@@ -67,6 +68,9 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
 
     @Component
     private ArtifactResolver artifactResolver;
+
+    @Parameter(defaultValue = "${session}", readonly = true)
+    private MavenSession mavenSession;
 
     /**
      * Use a custom report descriptor for generating your Clover Reports.
@@ -539,7 +543,7 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
                     "xml", "clover-report");
 
             try {
-                final ArtifactResult result = artifactResolver.resolveArtifact(project.getProjectBuildingRequest(), artifact);
+                final ArtifactResult result = artifactResolver.resolveArtifact(mavenSession.getProjectBuildingRequest(), artifact);
                 return result.getArtifact().getFile();
             } catch (ArtifactResolverException e) {
                 getLog().warn("Failed to resolve artifact " + artifact);
