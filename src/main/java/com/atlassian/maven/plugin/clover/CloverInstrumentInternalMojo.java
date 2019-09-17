@@ -29,11 +29,11 @@ import com.atlassian.maven.plugin.clover.internal.instrumentation.TestInstrument
 import com.atlassian.maven.plugin.clover.internal.scanner.LanguageFileExtensionFilter;
 import com.atlassian.maven.plugin.clover.internal.scanner.MainSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.TestSourceScanner;
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ArtifactResolutionRequest;
-import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
@@ -214,11 +214,17 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     @Parameter(defaultValue = "${plugin.artifacts}", required = true)
     private List<Artifact> pluginArtifacts;
 
-    @Component
-    protected ArtifactResolver artifactResolver;
+    @Parameter(defaultValue = "${session}", readonly = true)
+    @VisibleForTesting
+    MavenSession mavenSession;
 
     @Component
-    protected RepositorySystem repositorySystem;
+    @VisibleForTesting
+    ArtifactResolver artifactResolver;
+
+    @Component
+    @VisibleForTesting
+    RepositorySystem repositorySystem;
 
     /**
      * Remote repositories used for the project.
@@ -453,7 +459,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
             if (!getProject().getPackaging().equals("pom")) {
                 Artifact oldArtifact = getProject().getArtifact();
                 Artifact newArtifact = repositorySystem.createArtifactWithClassifier(
-                        oldArtifact.getGroupId(),oldArtifact.getArtifactId(), oldArtifact.getVersion(),
+                        oldArtifact.getGroupId(), oldArtifact.getArtifactId(), oldArtifact.getVersion(),
                         oldArtifact.getType(), "clover");
                 getProject().setArtifact(newArtifact);
 
@@ -501,7 +507,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
                 // Try to resolve the artifact with a clover classifier. If it doesn't exist, simply add the original
                 // artifact. If found, use the clovered artifact.
                 try {
-                    artifactResolver.resolveArtifact(getProject().getProjectBuildingRequest(), cloveredArtifact);
+                    artifactResolver.resolveArtifact(mavenSession.getProjectBuildingRequest(), cloveredArtifact);
 
                     // Set the same scope as the main artifact as this is not set by createArtifactWithClassifier.
                     cloveredArtifact.setScope(artifact.getScope());
@@ -568,18 +574,13 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
         cloverArtifact = repositorySystem.createArtifact(cloverArtifact.getGroupId(), cloverArtifact.getArtifactId(),
                 cloverArtifact.getVersion(), jarScope, cloverArtifact.getType());
 
-        final ArtifactResolutionRequest resolutionRequest = new ArtifactResolutionRequest();
-        resolutionRequest.setArtifact(cloverArtifact);
-        resolutionRequest.setRemoteRepositories(repositories);
-        resolutionRequest.setLocalRepository(null /* TODO localRepository */);
-
-        final ArtifactResolutionResult resolutionResult = repositorySystem.resolve(resolutionRequest);
-        if (!resolutionResult.isSuccess()) {
+        try {
+            artifactResolver.resolveArtifact(mavenSession.getProjectBuildingRequest(), cloverArtifact);
+            addArtifactDependency(cloverArtifact);
+        } catch (ArtifactResolverException ex) {
             throw new MojoExecutionException("Could not resolve the clover artifact ( " +
-                    cloverArtifact.getId());
+                    cloverArtifact.getId(), ex);
         }
-
-        addArtifactDependency(cloverArtifact);
     }
 
     private void addArtifactDependency(final Artifact cloverArtifact) {

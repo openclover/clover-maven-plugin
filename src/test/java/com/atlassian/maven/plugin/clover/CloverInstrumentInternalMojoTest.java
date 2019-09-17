@@ -20,20 +20,20 @@ package com.atlassian.maven.plugin.clover;
  */
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.execution.MavenExecutionRequest;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
-import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.repository.RepositorySystem;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
-import org.jmock.integration.junit3.MockObjectTestCase;
 import org.jmock.Expectations;
+import org.jmock.integration.junit3.MockObjectTestCase;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Set;
-import java.io.File;
 
 /**
  * Unit tests for {@link com.atlassian.maven.plugin.clover.CloverInstrumentInternalMojo}.
@@ -158,7 +158,12 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase {
             oneOf(mockArtifactResolver).resolveArtifact(with(any(ProjectBuildingRequest.class)), with(any(Artifact.class)));
         }});
 
-        final MavenProject mockMavenProject = new MavenProjectStub() {
+        final MavenExecutionRequest mockExecutionRequest = mock(MavenExecutionRequest.class);
+        checking(new Expectations() {{
+            oneOf(mockExecutionRequest).getUserSettingsFile();
+        }});
+
+        final MavenSession mockMavenSession = new MavenSession(null, null, mockExecutionRequest, null) {
             @Override
             public ProjectBuildingRequest getProjectBuildingRequest() {
                 return new DefaultProjectBuildingRequest();
@@ -172,7 +177,7 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase {
 
         this.mojo.repositorySystem = mockRepositorySystem;
         this.mojo.artifactResolver = mockArtifactResolver;
-        this.mojo.setProject(mockMavenProject);
+        this.mojo.mavenSession = mockMavenSession;
         this.mojo.setLog(mockLog);
     }
 
