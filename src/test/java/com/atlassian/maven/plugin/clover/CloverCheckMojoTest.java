@@ -1,31 +1,21 @@
 package com.atlassian.maven.plugin.clover;
 
-import org.jmock.integration.junit3.MockObjectTestCase;
-import org.jmock.Expectations;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.project.MavenProject;
-import org.apache.tools.ant.Project;
-import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.resource.ResourceManager;
-import org.codehaus.plexus.resource.loader.FileResourceLoader;
-import org.codehaus.plexus.resource.loader.FileResourceCreationException;
-import org.codehaus.plexus.resource.loader.ResourceNotFoundException;
-
 import com.atlassian.clover.ant.tasks.CloverPassTask;
 import com.atlassian.clover.cfg.Percentage;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
+import org.apache.maven.project.MavenProject;
+import org.apache.tools.ant.Project;
+import org.jmock.integration.junit3.MockObjectTestCase;
 
 import java.io.File;
 import java.io.IOException;
 
 
-/**
- */
 public class CloverCheckMojoTest extends MockObjectTestCase {
 
 
-    final MavenProject project = new MavenProject();
-    final Project antProject = new Project();
+    private final MavenProject project = new MavenProject();
+    private final Project antProject = new Project();
     private File cloverDb;
     private File cloverMergedDb;
 
@@ -40,7 +30,7 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
         project.setFile(new File("pom.xml").getAbsoluteFile());
     }
 
-    public void testWhenDatabaseMissing() throws Exception, FileResourceCreationException, ResourceNotFoundException {
+    public void testWhenDatabaseMissing() throws Exception {
         // ensure this mojo does not failed, if targetPercentage and historyDir are missing
         final CloverPassTask task = new CloverPassTask();
         task.setProject(antProject);
@@ -51,7 +41,7 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
     }
 
     // x-ing out due to a license expiry problem
-    public void XtestWhenHistoryDirIsMissing() throws Exception, IOException {
+    public void XtestWhenHistoryDirIsMissing() throws Exception {
         // ensure this mojo does not failed, if targetPercentage and historyDir parameters are missing
         final boolean[] ran = {false};
         final CloverPassTask task = new MockCloverPassTask(ran[0], new Runnable() {
@@ -73,7 +63,7 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
     }
 
     // x-ing out due to a license expiry problem    
-    public void XtestWithTargetPercentage() throws Exception, IOException {
+    public void XtestWithTargetPercentage() throws Exception {
         // ensure this mojo does not failed, if targetPercentage and historyDir parameters are missing
 
         final boolean[] ran = {false};
@@ -116,17 +106,6 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
         };
         mojo.setProject(project);
         mojo.setLog(log);
-
-
-        final ResourceManager resourceManager = mock(ResourceManager.class);
-        checking(new Expectations(){{
-            ignoring(resourceManager).addSearchPath("url", "");
-            ignoring(resourceManager).addSearchPath(FileResourceLoader.ID, project.getFile().getParentFile().getAbsolutePath());
-            ignoring(resourceManager).getResourceAsFile(with(any(String.class)), with(any(String.class)));
-            will(returnValue(new File("/clover.license")));
-        }});
-        mojo.setResourceManager(resourceManager);
-                
 
         TestUtil.setPrivateField(AbstractCloverMojo.class, mojo, "cloverDatabase", cloverDb.getPath());
         TestUtil.setPrivateField(AbstractCloverMojo.class, mojo, "cloverMergeDatabase", cloverMergedDb.getPath());

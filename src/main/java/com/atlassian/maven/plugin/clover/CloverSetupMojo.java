@@ -1,5 +1,7 @@
 package com.atlassian.maven.plugin.clover;
 
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.plugin.MojoExecutionException;
 
@@ -13,10 +15,8 @@ import java.util.Date;
  * <p>This mojo should certainly *not* be called during a release build. This mojo instruments your source and test files
  * to ${build.directory}/clover/src-instrumented and test-src-instrumented respectively. These directories are then set as the
  * project's source and test source directories that subsequently get compiled by the compiler MOJO.</p>
- *
- * @goal setup
- * @phase process-sources
  */
+@Mojo(name = "setup", defaultPhase = LifecyclePhase.PROCESS_SOURCES)
 public class CloverSetupMojo extends CloverInstrumentInternalMojo {
 
     static Date START_DATE; 

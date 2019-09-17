@@ -1,36 +1,33 @@
 package com.atlassian.maven.plugins.sample;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.repository.RepositorySystem;
 
 /**
  * Change artifact classifier to 'fork'.
- *
- * @goal add-classifier
  */
+@Mojo(name = "add-classifier")
 public class AddClassifierMojo extends AbstractMojo {
 
-    /**
-     * @parameter expression="${project}"
-     * @required
-     */
+    @Parameter(defaultValue = "${project}", required = true)
     private MavenProject project;
 
-    /**
-     * @parameter expression="${component.org.apache.maven.artifact.factory.ArtifactFactory}"
-     * @required
-     * @readonly
-     */
-    private ArtifactFactory artifactFactory;
+    @Component
+    private RepositorySystem repositorySystem;
 
-    public void execute() throws MojoExecutionException {
-        Artifact oldArtifact = project.getArtifact();
-        Artifact newArtifact = this.artifactFactory.createArtifactWithClassifier(oldArtifact.getGroupId(),
-                oldArtifact.getArtifactId(), oldArtifact.getVersion(), oldArtifact.getType(), "fork");
+    public void execute() {
+        final Artifact oldArtifact = project.getArtifact();
+        final Artifact newArtifact = repositorySystem.createArtifactWithClassifier(
+                oldArtifact.getGroupId(),
+                oldArtifact.getArtifactId(),
+                oldArtifact.getVersion(),
+                oldArtifact.getType(),
+                "fork");
         project.setArtifact(newArtifact);
     }
 }
