@@ -534,7 +534,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
                     }
 
                 } catch (ArtifactResolverException e) {
-                    getLog().warn("Skipped dependency [" + artifact.getId() + "] due to resolution error: ", e);
+                    getLog().debug("Skipped dependency [" + artifact.getId() + "] as it is unresolved", e);
                     resolvedArtifacts.add(artifact);
                 }
 
