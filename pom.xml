@@ -57,7 +57,7 @@ under the License.
     </prerequisites>
     <properties>
         <!-- Clover Core version -->
-        <cloverVersion>4.4.0-SNAPSHOT</cloverVersion>
+        <cloverVersion>4.4.0</cloverVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
