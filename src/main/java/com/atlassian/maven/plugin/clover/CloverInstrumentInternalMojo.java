@@ -493,59 +493,69 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     }
 
     protected Set<Artifact> swizzleCloverDependencies(final Set<Artifact> artifacts) {
-        Set<Artifact> resolvedArtifacts = new LinkedHashSet<Artifact>();
+        final Set<Artifact> resolvedArtifacts = new LinkedHashSet<Artifact>();
+
         for (Artifact artifact : artifacts) {
-            // Do not try to find Clovered versions for artifacts with classifiers. This is because Maven only
-            // supports a single classifier per artifact and thus if we replace the original classifier with
-            // a Clover classifier the artifact will fail to perform properly as intended originally. This is a
-            // limitation.
-            if (artifact.getClassifier() == null) {
-                final Artifact cloveredArtifact = repositorySystem.createArtifactWithClassifier(
-                        artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
-                        artifact.getType(), "clover");
-
-                // Try to resolve the artifact with a clover classifier. If it doesn't exist, simply add the original
-                // artifact. If found, use the clovered artifact.
-                try {
-                    artifactResolver.resolveArtifact(mavenSession.getProjectBuildingRequest(), cloveredArtifact);
-
-                    // Set the same scope as the main artifact as this is not set by createArtifactWithClassifier.
-                    cloveredArtifact.setScope(artifact.getScope());
-
-                    // Check the timestamp of the artifact. If the found clovered version is older than the
-                    // non-clovered one we need to use the non-clovered version. This is to handle use case such as:
-                    // - Say you have a module B that depends on a module A
-                    // - You run Clover on A
-                    // - You make modifications on A such that B would fail if not built with the latest version of A
-                    // - You try to run the Clover plugin on B. The build would fail if we didn't pick the latest
-                    //   version between the original A version and the clovered version.
-                    //
-                    // We provide a 'fudge-factor' of 2 seconds, as the clover artifact is created first.
-                    if (cloveredArtifact.getFile().lastModified() + cloveredArtifactExpiryInMillis < artifact.getFile().lastModified()) {
-                        getLog().warn("Using [" + artifact.getId() + "], built on " + new Date(artifact.getFile().lastModified()) +
-                                " even though a Clovered version exists "
-                                + "but it's older (lastModified: " + new Date(cloveredArtifact.getFile().lastModified())
-                                + " ) and could fail the build. Please consider running Clover again on that "
-                                + "dependency's project.");
-                        resolvedArtifacts.add(artifact);
-
-                    } else {
-                        resolvedArtifacts.add(cloveredArtifact);
-                    }
-
-                } catch (ArtifactResolverException e) {
-                    getLog().debug("Skipped dependency [" + artifact.getId() + "] as it is unresolved", e);
-                    resolvedArtifacts.add(artifact);
-                }
-
-            } else {
-                getLog().debug("Skipped dependency [" + artifact.getId() + "] as it has a classifier");
-                resolvedArtifacts.add(artifact);
-            }
+            resolvedArtifacts.add(swizzleCloverDependency(artifact));
         }
 
         return resolvedArtifacts;
     }
+
+    private Artifact swizzleCloverDependency(final Artifact artifact) {
+        // Do not try to find Clovered versions for artifacts with classifiers. This is because Maven only
+        // supports a single classifier per artifact and thus if we replace the original classifier with
+        // a Clover classifier the artifact will fail to perform properly as intended originally. This is a
+        // limitation.
+        if (artifact.hasClassifier()) {
+            getLog().debug("Skipped dependency [" + artifact.getId() + "] as it has a classifier");
+            return artifact;
+        }
+
+        // Try to resolve the artifact with a clover classifier. If it doesn't exist, simply add the original
+        // artifact. If found, use the clovered artifact.
+        final Artifact cloveredArtifact = repositorySystem.createArtifactWithClassifier(
+                artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
+                artifact.getType(), "clover");
+
+        // Set the same scope as the main artifact as this is not set by createArtifactWithClassifier.
+        cloveredArtifact.setScope(artifact.getScope());
+
+        try {
+            artifactResolver.resolveArtifact(mavenSession.getProjectBuildingRequest(), cloveredArtifact);
+        } catch (ArtifactResolverException e) {
+            getLog().debug("Skipped dependency [" + cloveredArtifact.getId() + "] as it is unresolved", e);
+            return artifact;
+        }
+
+        // despite resolving, file may be null so let's skip it
+        if (cloveredArtifact.getFile() == null) {
+            getLog().debug("Skipped dependency [" + cloveredArtifact.getId() + "] as file is null");
+            return artifact;
+        }
+
+        // Check the timestamp of the artifact. If the found clovered version is older than the
+        // non-clovered one we need to use the non-clovered version. This is to handle use case such as:
+        // - Say you have a module B that depends on a module A
+        // - You run Clover on A
+        // - You make modifications on A such that B would fail if not built with the latest version of A
+        // - You try to run the Clover plugin on B. The build would fail if we didn't pick the latest
+        //   version between the original A version and the clovered version.
+        //
+        // We provide a 'fudge-factor' of 2 seconds, as the clover artifact is created first.
+        if (cloveredArtifact.getFile().lastModified() + cloveredArtifactExpiryInMillis < artifact.getFile().lastModified()) {
+            getLog().warn("Using [" + artifact.getId() + "], built on " + new Date(artifact.getFile().lastModified()) +
+                    " even though a Clovered version exists "
+                    + "but it's older (lastModified: " + new Date(cloveredArtifact.getFile().lastModified())
+                    + " ) and could fail the build. Please consider running Clover again on that "
+                    + "dependency's project.");
+            return artifact;
+        }
+
+        // success, we've found an instrumented artifact
+        return cloveredArtifact;
+    }
+
 
     protected Artifact findCloverArtifact(final List<Artifact> pluginArtifacts) {
         Artifact cloverArtifact = null;
