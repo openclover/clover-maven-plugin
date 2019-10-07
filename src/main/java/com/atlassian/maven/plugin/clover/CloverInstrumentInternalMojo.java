@@ -41,6 +41,8 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.project.DefaultProjectBuildingRequest;
+import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.repository.RepositorySystem;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
@@ -522,7 +524,11 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
         cloveredArtifact.setScope(artifact.getScope());
 
         try {
-            artifactResolver.resolveArtifact(mavenSession.getProjectBuildingRequest(), cloveredArtifact);
+            // copy object to avoid modification of session's settings, resolve artifact but only locally
+            final ProjectBuildingRequest projectBuildingRequest =
+                    new DefaultProjectBuildingRequest(mavenSession.getProjectBuildingRequest());
+            projectBuildingRequest.setRemoteRepositories(null);
+            artifactResolver.resolveArtifact(projectBuildingRequest, cloveredArtifact);
         } catch (ArtifactResolverException e) {
             getLog().debug("Skipped dependency [" + cloveredArtifact.getId() + "] as it is unresolved", e);
             return artifact;
