@@ -189,6 +189,8 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase {
         checking(new Expectations() {{
             atLeast(0).of(mockArtifact).getClassifier();
             will(returnValue(classifier));
+            atLeast(0).of(mockArtifact).hasClassifier();
+            will(returnValue(classifier != null));
             atLeast(0).of(mockArtifact).getGroupId();
             will(returnValue(groupId));
             atLeast(0).of(mockArtifact).getArtifactId();
