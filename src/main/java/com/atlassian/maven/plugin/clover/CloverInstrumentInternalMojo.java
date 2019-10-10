@@ -46,6 +46,7 @@ import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.repository.RepositorySystem;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -514,29 +515,26 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
             return artifact;
         }
 
-        // Try to resolve the artifact with a clover classifier. If it doesn't exist, simply add the original
-        // artifact. If found, use the clovered artifact.
+        // An artifact we want to find
         final Artifact cloveredArtifact = repositorySystem.createArtifactWithClassifier(
                 artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
                 artifact.getType(), "clover");
+        cloveredArtifact.setScope(artifact.getScope()); // set the same scope as the main artifact
 
-        // Set the same scope as the main artifact as this is not set by createArtifactWithClassifier.
-        cloveredArtifact.setScope(artifact.getScope());
-
+        // Try to resolve the artifact with a clover classifier. If it doesn't exist, simply add the original
+        // artifact. If found, use the clovered artifact.
         try {
-            // copy object to avoid modification of session's settings, resolve artifact but only locally
+            // copy object to avoid modification of session's settings, resolve artifact but only locally,
+            // so let's clear remote repositories
             final ProjectBuildingRequest projectBuildingRequest =
                     new DefaultProjectBuildingRequest(mavenSession.getProjectBuildingRequest());
             projectBuildingRequest.setRemoteRepositories(null);
-            artifactResolver.resolveArtifact(projectBuildingRequest, cloveredArtifact);
+
+            final ArtifactResult resolveResult = artifactResolver.resolveArtifact(projectBuildingRequest, cloveredArtifact);
+            cloveredArtifact.setFile(resolveResult.getArtifact().getFile());
+
         } catch (ArtifactResolverException e) {
             getLog().debug("Skipped dependency [" + cloveredArtifact.getId() + "] as it is unresolved", e);
-            return artifact;
-        }
-
-        // despite resolving, file may be null so let's skip it
-        if (cloveredArtifact.getFile() == null) {
-            getLog().debug("Skipped dependency [" + cloveredArtifact.getId() + "] as file is null");
             return artifact;
         }
 
