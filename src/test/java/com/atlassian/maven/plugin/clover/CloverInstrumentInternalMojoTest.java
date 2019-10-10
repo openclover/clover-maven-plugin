@@ -28,6 +28,7 @@ import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.repository.RepositorySystem;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
+import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResult;
 import org.jmock.Expectations;
 import org.jmock.integration.junit3.MockObjectTestCase;
 
@@ -152,10 +153,16 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase {
             will(returnValue(artifact));
         }});
 
+        final ArtifactResult artifactResult = mock(ArtifactResult.class);
+        checking(new Expectations() {{
+            atLeast(1).of(artifactResult).getArtifact();
+            will(returnValue(artifact));
+        }});
 
         final ArtifactResolver mockArtifactResolver = mock(ArtifactResolver.class);
         checking(new Expectations() {{
             oneOf(mockArtifactResolver).resolveArtifact(with(any(ProjectBuildingRequest.class)), with(any(Artifact.class)));
+            will(returnValue(artifactResult));
         }});
 
         final MavenExecutionRequest mockExecutionRequest = mock(MavenExecutionRequest.class);
@@ -203,6 +210,7 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase {
             will(returnValue(scope));
             atLeast(0).of(mockArtifact).getFile();
             will(returnValue(file));
+            atLeast(0).of(mockArtifact).setFile(with(any(File.class)));
             atLeast(0).of(mockArtifact).getId();
             will(returnValue(groupId + ":" + artifactId + ":" + version + ":" + classifier));
         }});
