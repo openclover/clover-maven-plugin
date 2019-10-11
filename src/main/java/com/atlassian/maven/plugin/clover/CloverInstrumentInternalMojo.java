@@ -521,6 +521,8 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
                 artifact.getType(), "clover");
         cloveredArtifact.setScope(artifact.getScope()); // set the same scope as the main artifact
 
+        Artifact resolvedCloveredArtifact;
+
         // Try to resolve the artifact with a clover classifier. If it doesn't exist, simply add the original
         // artifact. If found, use the clovered artifact.
         try {
@@ -531,7 +533,8 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
             projectBuildingRequest.setRemoteRepositories(null);
 
             final ArtifactResult resolveResult = artifactResolver.resolveArtifact(projectBuildingRequest, cloveredArtifact);
-            cloveredArtifact.setFile(resolveResult.getArtifact().getFile());
+            resolvedCloveredArtifact = resolveResult.getArtifact();
+            resolvedCloveredArtifact.setScope(artifact.getScope()); // it's null, set the same scope as the main artifact
 
         } catch (ArtifactResolverException e) {
             getLog().debug("Skipped dependency [" + cloveredArtifact.getId() + "] as it is unresolved", e);
@@ -547,17 +550,17 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
         //   version between the original A version and the clovered version.
         //
         // We provide a 'fudge-factor' of 2 seconds, as the clover artifact is created first.
-        if (cloveredArtifact.getFile().lastModified() + cloveredArtifactExpiryInMillis < artifact.getFile().lastModified()) {
+        if (resolvedCloveredArtifact.getFile().lastModified() + cloveredArtifactExpiryInMillis < artifact.getFile().lastModified()) {
             getLog().warn("Using [" + artifact.getId() + "], built on " + new Date(artifact.getFile().lastModified()) +
                     " even though a Clovered version exists "
-                    + "but it's older (lastModified: " + new Date(cloveredArtifact.getFile().lastModified())
+                    + "but it's older (lastModified: " + new Date(resolvedCloveredArtifact.getFile().lastModified())
                     + " ) and could fail the build. Please consider running Clover again on that "
                     + "dependency's project.");
             return artifact;
         }
 
         // success, we've found an instrumented artifact
-        return cloveredArtifact;
+        return resolvedCloveredArtifact;
     }
 
 

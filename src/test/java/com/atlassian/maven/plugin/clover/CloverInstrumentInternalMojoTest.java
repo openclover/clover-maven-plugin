@@ -114,7 +114,7 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase {
 
         setUpCommonMocksForSwizzleCloverDependenciesTests(cloveredArtifact);
         checking(new Expectations() {{
-            oneOf(cloveredArtifact).setScope("compile");
+            atLeast(1).of(cloveredArtifact).setScope("compile");
         }});
 
         final Set<Artifact> resultSet = this.mojo.swizzleCloverDependencies(Collections.singleton(artifact));
@@ -134,7 +134,7 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase {
                 artifactFile);
         final Artifact cloveredArtifact = setUpMockArtifact(null, null, null, null, null, null, cloveredArtifactFile);
         checking(new Expectations() {{
-            oneOf(cloveredArtifact).setScope("compile");
+            atLeast(1).of(cloveredArtifact).setScope("compile");
         }});
 
         setUpCommonMocksForSwizzleCloverDependenciesTests(cloveredArtifact);
@@ -155,7 +155,7 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase {
 
         final ArtifactResult artifactResult = mock(ArtifactResult.class);
         checking(new Expectations() {{
-            atLeast(1).of(artifactResult).getArtifact();
+            oneOf(artifactResult).getArtifact();
             will(returnValue(artifact));
         }});
 
@@ -210,9 +210,9 @@ public class CloverInstrumentInternalMojoTest extends MockObjectTestCase {
             will(returnValue(scope));
             atLeast(0).of(mockArtifact).getFile();
             will(returnValue(file));
-            atLeast(0).of(mockArtifact).setFile(with(any(File.class)));
             atLeast(0).of(mockArtifact).getId();
             will(returnValue(groupId + ":" + artifactId + ":" + version + ":" + classifier));
+            atLeast(0).of(mockArtifact).setFile(with(any(File.class)));
         }});
         return mockArtifact;
     }
