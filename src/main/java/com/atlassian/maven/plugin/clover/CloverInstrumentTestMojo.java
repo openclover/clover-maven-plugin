@@ -4,6 +4,7 @@ package com.atlassian.maven.plugin.clover;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Execute;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
 
 /**
  * <p>This goal behaves exactly like the instrument goal, however when forking the lifecycle - it runs only to the 'test'
@@ -13,6 +14,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
  * so that a Clover database is created.</p>
  */
 @Execute(phase = LifecyclePhase.TEST, goal = "instrument-test", lifecycle = "clover")
+@Mojo(name = "instrument-test")
 public class CloverInstrumentTestMojo extends CloverInstrumentMojo {
     /**
      * {@inheritDoc}
