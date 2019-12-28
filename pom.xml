@@ -165,8 +165,8 @@ under the License.
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.6.1</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -260,7 +260,7 @@ under the License.
                         <configuration>
                             <generateHistorical>true</generateHistorical>
                             <generateHtml>true</generateHtml>
-                            <jdk>1.6</jdk>
+                            <jdk>1.7</jdk>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -282,7 +282,7 @@ under the License.
                                     <version>[3.0.4,4.0.0)</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
-                                    <version>[1.6,1.10)</version>
+                                    <version>[1.7,1.10)</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>
