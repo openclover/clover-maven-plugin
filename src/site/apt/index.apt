@@ -108,5 +108,5 @@ Clover Maven Plugin
 
 * Examples
 
-  Check the {{{https://bitbucket.org/openclover/clover-maven-plugin}plugin test suite (src/it directory)}}
+  Check the {{{https://github.com/openclover/clover-maven-plugin}plugin test suite (src/it directory)}}
   for example of how to use this plugin.

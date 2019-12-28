@@ -34,7 +34,7 @@
 
 * {Sources}
 
-  Sources are available {{{https://bitbucket.org/openclover/clover-maven-plugin}on Bitbucket in src/it/multiproject directory}}.
+  Sources are available {{{https://github.com/openclover/clover-maven-plugin} in src/it/multiproject directory}}.
 
   To execute the project run <<<mvn install>>> to generate the Clover report.
 
