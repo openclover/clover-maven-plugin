@@ -61,7 +61,7 @@
 
 * {Getting Started}
 
-  The first thing to do is to create a {{{http://openclover.org/doc/manual/4.2.0/ant--managing-the-coverage-database.html}Clover database}}. To do
+  The first thing to do is to create a {{{http://openclover.org/doc/manual/latest/ant--managing-the-coverage-database.html}Clover database}}. To do
   this, you must either do:
 
 +------+
@@ -222,7 +222,7 @@
 
 ** {Using block contexts}
 
-  Clover allows specifying {{{http://openclover.org/doc/manual/4.2.0/ant--using-coverage-contexts.html}block contexts}}
+  Clover allows specifying {{{http://openclover.org/doc/manual/latest/ant--using-coverage-contexts.html}block contexts}}
   (i.e. elements to be excluded from the Test Percentage Coverage). To configure a block context use
   the <<<contextFilters>>> element in the <<<reporting>>> section. For example to exclude <<<try>>> and <<<static>>>
   block contexts, you would write:
@@ -266,7 +266,7 @@
 ** {Specifying a Clover flush policy}
 
   If you want to specify the Clover
-  {{{http://openclover.org/doc/manual/4.2.0/ant--flush-policy.html}flush policy}} that the
+  {{{http://openclover.org/doc/manual/latest/ant--flush-policy.html}flush policy}} that the
   plugin should use, then specify it in the plugin's configuration. Valid
   policies are <<<threaded>>>, <<<directed>>> and <<<interval>>>.
 
@@ -470,7 +470,7 @@ mvn clover:instrument clover:clover
 +---------
 
   Now this will generate a
-  {{{http://openclover.org/doc/manual/4.2.0/ant--tutorial-part-2-historical-reporting.html}Clover historical report}}
+  {{{http://openclover.org/doc/manual/latest/ant--tutorial-part-2-historical-reporting.html}Clover historical report}}
   only if you have saved Clover historical savepoints. In order to save a Clover
   savepoint, run the <<<clover:save-history>>> goal. It's up to you to decide
   when you want to call this goal.

@@ -83,7 +83,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected String excludesFile = null;
 
     /**
-     * The <a href="http://openclover.org/doc/manual/4.2.0/ant--flush-policy.html">Clover flush policy</a> to use.
+     * The <a href="http://openclover.org/doc/manual/latest/ant--flush-policy.html">Clover flush policy</a> to use.
      * Valid values are <code>directed</code>, <code>interval</code> and <code>threaded</code>.
      */
     @Parameter(property = "maven.clover.flushPolicy", defaultValue = "threaded")
@@ -168,7 +168,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <p>IMPORTANT: Due to Clover's restrictions related with code instrumentation and javac compiler's type inference
      * capabilities, you may get compilation errors when expression-like lambda functions are passed to generic methods
      * or types. In such case disable instrumentation of expression-like form (i.e. use the 'none' or 'block' setting).
-     * See the <a href="http://openclover.org/doc/manual/4.2.0/kb--java-8-code-instrumented-by-clover-fails-to-compile.html">
+     * See the <a href="http://openclover.org/doc/manual/latest/kb--java-8-code-instrumented-by-clover-fails-to-compile.html">
      * Java 8 code instrumented by Clover fails to compile</a> Knowledge Base article for more details.
      * </p>
      *
