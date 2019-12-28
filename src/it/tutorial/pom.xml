@@ -29,7 +29,7 @@
                     <generateXml>true</generateXml>
                     <generatePdf>true</generatePdf>
                     <generateHtml>true</generateHtml>
-                    <jdk>1.6</jdk>
+                    <jdk>1.7</jdk>
                 </configuration>
                 <executions>
                     <execution>
@@ -53,7 +53,7 @@
                 <configuration>
                     <reportDescriptor>${clover.reportConfig}</reportDescriptor>
                     <resolveReportDescriptor>false</resolveReportDescriptor>
-                    <jdk>1.6</jdk>
+                    <jdk>1.7</jdk>
                 </configuration>
             </plugin>
         </plugins>

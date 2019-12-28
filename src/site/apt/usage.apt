@@ -245,24 +245,6 @@
 
   <Back to {{{usage.html}top}}.>
 
-** {Using Clover with different JDK versions}
-
-  If your code is using JDK 1.4 or JDK 1.5 specific keywords, you'll need to
-  configure the Clover plugin. For example for JDK 1.4:
-
-+--------
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.openclover</groupId>
-        <artifactId>clover-maven-plugin</artifactId>
-        <configuration>
-          <jdk>1.4</jdk>
-[...]
-+---------
-
-  <Back to {{{usage.html}top}}.>
-
 ** {Specifying a Clover flush policy}
 
   If you want to specify the Clover
