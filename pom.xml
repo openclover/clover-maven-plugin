@@ -30,7 +30,8 @@ under the License.
         <url>http://openclover.org</url>
     </organization>
     <issueManagement>
-        <url>https://bitbucket.org/openclover/clover/issues</url>
+        <system>GitHub</system>
+        <url>https://github.com/openclover/clover/issues</url>
     </issueManagement>
     <licenses>
         <license>
@@ -40,9 +41,9 @@ under the License.
         </license>
     </licenses>
     <scm>
-        <connection>scm:hg:ssh://hg@bitbucket.org/openclover/clover-maven-plugin</connection>
-        <developerConnection>scm:hg:ssh://hg@bitbucket.org/openclover/clover-maven-plugin</developerConnection>
-        <url>https://bitbucket.org/openclover/clover-maven-plugin/src</url>
+        <connection>scm:git:ssh://git@github.com/openclover/clover-maven-plugin.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/openclover/clover-maven-plugin.git</developerConnection>
+        <url>https://github.com/openclover/clover-maven-plugin</url>
         <tag>HEAD</tag>
     </scm>
     <developers>
