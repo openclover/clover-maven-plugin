@@ -29,11 +29,11 @@
 {Contexts Example}
 
   This example demonstrates how to configure
-  {{{http://openclover.org/doc/manual/4.2.0/ant--using-coverage-contexts.html}Clover filter contexts}}
+  {{{http://openclover.org/doc/manual/latest/ant--using-coverage-contexts.html}Clover filter contexts}}
   using the Clover plugin.
 
 * {Sources}
 
-  Sources are available {{{https://bitbucket.org/openclover/clover-maven-plugin}on Bitbucket in src/it/contexts directory}}.
+  Sources are available {{{https://github.com/openclover/clover-maven-plugin} in src/it/contexts directory}}.
 
   To execute the project run either <<<mvn install>>> to verify the TPC or <<<mvn site>>> to generate the Clover report.

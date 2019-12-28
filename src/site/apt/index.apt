@@ -47,7 +47,7 @@ Clover Maven Plugin
 
    * Verifying that your source code has a defined test coverage percentage and fail the build if it's
      below that level. This is the equivalent of the
-     {{{http://openclover.org/doc/manual/4.2.0/ant--clover-check.html}Clover Check Ant task}}.
+     {{{http://openclover.org/doc/manual/latest/ant--clover-check.html}Clover Check Ant task}}.
 
    * Dumping information about your Clover database.
 
@@ -104,9 +104,9 @@ Clover Maven Plugin
     of the site plugin which doesn't support @aggregator reports...
 
   * {{{save-history-mojo.html}clover:save-history}} - Save a
-    {{{http://openclover.org/doc/manual/4.2.0/ant--tutorial-part-2-historical-reporting.html}Clover history point}}.
+    {{{http://openclover.org/doc/manual/latest/ant--tutorial-part-2-historical-reporting.html}Clover history point}}.
 
 * Examples
 
-  Check the {{{https://bitbucket.org/openclover/clover-maven-plugin}plugin test suite (src/it directory)}}
+  Check the {{{https://github.com/openclover/clover-maven-plugin}plugin test suite (src/it directory)}}
   for example of how to use this plugin.

@@ -7,7 +7,7 @@
     <version>1.0-SNAPSHOT</version>
     <description>
         Example how to use Clover with the GMaven Plugin. See:
-         * http://openclover.org/doc/manual/4.2.0/maven--compiling-with-gmaven-plugin.html
+         * http://openclover.org/doc/manual/latest/maven--compiling-with-gmaven-plugin.html
          * http://docs.codehaus.org/display/GMAVEN/Home
 
         In order to instrument the code using clover:setup, run a build using 'with-clover-setup' profile.

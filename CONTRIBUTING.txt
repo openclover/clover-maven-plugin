@@ -5,7 +5,7 @@ that is intentionally submitted by You for inclusion in.
 
 'Submitted' means any form of communication, such as mailing lists, source code control systems or issue tracking systems.
 
-You confirm that your Contribution is your orgininal work and to the best of your knowledge does not violate any
+You confirm that your Contribution is your original work and to the best of your knowledge does not violate any
 third party's copyrights, trademarks, patents, or other intellectual property rights.
 
 You grant a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license to use,
