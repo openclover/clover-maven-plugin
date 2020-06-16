@@ -1,4 +1,4 @@
-Clover Maven Plugin is an OpenClover integration with Maven 2.x / 3.x.
+Clover Maven Plugin is an OpenClover integration with Maven 3.x.
 
 This project is open-source, based on the Apache License version 2.0.
 
