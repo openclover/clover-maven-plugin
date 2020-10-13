@@ -18,7 +18,7 @@
         <groovy.all>2.4.15</groovy.all>
         <groovy.eclipse.batch>2.5.1-02</groovy.eclipse.batch>
         <groovy.eclipse.compiler>2.9.3-01</groovy.eclipse.compiler>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
