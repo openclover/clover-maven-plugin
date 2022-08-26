@@ -1,14 +1,14 @@
 package com.leohart.cloverexample;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Hello world!
  */
 public class CodeToCover {
 
-	private static final Log LOG = LogFactory.getLog(CodeToCover.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CodeToCover.class);
 
 	private String someProperty;
 
