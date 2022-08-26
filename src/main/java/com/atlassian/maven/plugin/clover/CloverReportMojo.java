@@ -299,7 +299,6 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
         }
     }
 
-    @Override
     // @Override till maven-reporting-api 3.0
     public void generate(org.codehaus.doxia.sink.Sink sink, Locale locale) throws MavenReportException {
         executeReport(locale);
