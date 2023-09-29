@@ -107,11 +107,4 @@
             </build>
         </profile>
     </profiles>
-    <pluginRepositories>
-        <pluginRepository>
-            <!-- the latest versions of groovy-maven-* artifacts are not available in Maven Central -->
-            <id>bintray-groovy-maven</id>
-            <url>https://dl.bintray.com/groovy/maven/</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>
