@@ -22,6 +22,7 @@ package com.atlassian.maven.plugin.clover.internal.instrumentation;
 import clover.org.apache.commons.lang3.StringUtils;
 import com.atlassian.clover.CloverInstr;
 import com.atlassian.clover.Logger;
+import com.atlassian.clover.cfg.instr.java.SourceLevel;
 import com.atlassian.clover.spi.lang.Language;
 import com.atlassian.maven.plugin.clover.MethodWithMetricsContext;
 import com.atlassian.maven.plugin.clover.MvnLogger;
@@ -237,14 +238,13 @@ public abstract class AbstractInstrumenter {
 
         final String javaLevel = getConfiguration().getJdk();
         if (javaLevel != null) {
-            // 1.X or X (since Java 9)
-            if (javaLevel.matches("(1\\.[3456789]|9)")) {
-                parameters.add("--source");
-                parameters.add(javaLevel);
-            } else {
-                throw new MojoExecutionException("Unsupported Java language level version [" + javaLevel
-                        + "]. Valid values are [1.3], [1.4], [1.5], [1.6], [1.7], [1.8] and [1.9]/[9]");
+            // warn about old source levels
+            if (SourceLevel.isUnsupported(javaLevel)) {
+                getConfiguration().getLog().warn(SourceLevel.getUnsupportedMessage(javaLevel));
             }
+
+            parameters.add("--source");
+            parameters.add(javaLevel);
         }
 
         if (!getConfiguration().isUseFullyQualifiedJavaLang()) {
