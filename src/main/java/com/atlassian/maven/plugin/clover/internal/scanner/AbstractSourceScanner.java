@@ -176,7 +176,7 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
 
                 final Set<String> configurationIncludes = getConfiguration().getIncludes();
                 final String[] includes = concatArrays(
-                        Iterables.toArray(configurationIncludes, String.class),
+                        configurationIncludes.toArray(new String[0]),
                         DirectoryScanner.getDefaultExcludes());
                 scanner.setIncludes(includes);// ensure that .svn dirs etc are not considered excluded
                 scanner.scan();
@@ -194,7 +194,7 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
     }
 
     private Map<String, String[]> computeIncludedFiles(final DirectoryScanner scanner, final LanguageFileFilter languageFilter) {
-        final Map<String, String[]> files = new HashMap<String,String[]>();
+        final Map<String, String[]> files = new HashMap<>();
         visitSourceRoots(new SourceRootVisitor() {
             public void visitDir(File dir) {
                 scanner.setBasedir(dir);
