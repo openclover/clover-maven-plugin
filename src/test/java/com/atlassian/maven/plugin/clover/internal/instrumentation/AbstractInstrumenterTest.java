@@ -7,9 +7,9 @@ import com.atlassian.maven.plugin.clover.MethodWithMetricsContext;
 import com.atlassian.maven.plugin.clover.TestClass;
 import com.atlassian.maven.plugin.clover.TestMethod;
 import com.atlassian.maven.plugin.clover.TestSources;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.junit.Test;
+import org.openclover.util.Lists;
+import org.openclover.util.Sets;
 
 import java.util.List;
 import java.util.Set;

@@ -18,8 +18,6 @@ package com.atlassian.maven.plugin.clover.internal.scanner;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import com.google.common.collect.Iterables;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.types.selectors.FileSelector;
 import org.apache.tools.ant.types.selectors.DependSelector;
@@ -157,8 +155,8 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
         configuration.getLog().debug("includes patterns = " + includes);
         final DirectoryScanner dirScan = new DirectoryScanner();
 
-        dirScan.addExcludes(Iterables.toArray(excludes, String.class));
-        dirScan.setIncludes(Iterables.toArray(includes, String.class));
+        dirScan.addExcludes(excludes.toArray(new String[0]));
+        dirScan.setIncludes(includes.toArray(new String[0]));
 
         dirScan.addDefaultExcludes();
 

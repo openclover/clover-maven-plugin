@@ -32,10 +32,9 @@ import com.atlassian.maven.plugin.clover.TestSources;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.LanguageFileExtensionFilter;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Iterables;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.FileUtils;
+import org.jetbrains.annotations.TestOnly;
 
 import java.io.File;
 import java.io.IOException;
@@ -293,7 +292,7 @@ public abstract class AbstractInstrumenter {
             }
         }
 
-        return Iterables.toArray(parameters, String.class);
+        return parameters.toArray(new String[0]);
     }
 
     private void addCustomContexts(final List<String> parameters, final Set<Map.Entry<String, String>> contexts, final String flag) {
@@ -309,7 +308,7 @@ public abstract class AbstractInstrumenter {
      * @param parameters commandline parameters to be modified
      * @param contexts set of method contexts
      */
-    @VisibleForTesting
+    @TestOnly
     static void addMethodWithMetricsContexts(final List<String> parameters, final Set<MethodWithMetricsContext> contexts) {
         for (final MethodWithMetricsContext context : contexts) {
             parameters.add("-mmc");
@@ -336,7 +335,7 @@ public abstract class AbstractInstrumenter {
      * @param parameters commandline parameters to be modified
      * @param testSources set of test sources/classes/methods for the test detector
      */
-    @VisibleForTesting
+    @TestOnly
     static void addTestSources(List<String> parameters, TestSources testSources, String sourceDirectory) {
         if (testSources != null) {
             // root

@@ -1,14 +1,14 @@
 package com.atlassian.maven.plugin.clover.internal.lifecycle;
 
 import com.atlassian.clover.api.CloverException;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.LifecycleExecutor;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -42,7 +42,7 @@ public abstract class MavenLifecycleAnalyzer {
     public abstract Set<String> getPhasesToBeExecuted() throws CloverException;
 
     protected Set<String> getPhasesFromMojoExecutions(@NotNull final List<MojoExecution> mojoExecutions) {
-        final Set<String> phases = Sets.newHashSet();
+        final Set<String> phases = new HashSet<>();
         for (final MojoExecution mojoExecution : mojoExecutions) {
             phases.addAll(getPhasesFromMojoExecution(mojoExecution));
         }
@@ -50,7 +50,7 @@ public abstract class MavenLifecycleAnalyzer {
     }
 
     protected List<String> getPhasesFromMojoExecution(@NotNull final MojoExecution mojoExecution) {
-        final List<String> phases = Lists.newArrayList();
+        final List<String> phases = new ArrayList<>();
         final String defaultPhase = mojoExecution.getMojoDescriptor().getPhase();
         if (defaultPhase != null) {
             phases.add(defaultPhase);
