@@ -319,6 +319,7 @@ under the License.
                                 <pomInclude>**/optmized/pom.xml</pomInclude>
                                 <pomInclude>**/pollutionProtectionRoot/pom.xml</pomInclude>
                                 <pomInclude>**/reportLogPassMatch/pom.xml</pomInclude>
+                                <pomInclude>**/runtime/pom.xml</pomInclude>
                                 <pomInclude>**/setTestFailureIgnore/pom.xml</pomInclude>
                                 <pomInclude>**/simple/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcExcluded/pom.xml</pomInclude>
