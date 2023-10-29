@@ -22,7 +22,7 @@ under the License.
     <artifactId>clover-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
     <name>Clover Maven Plugin</name>
-    <version>4.5.1</version>
+    <version>4.5.2-SNAPSHOT</version>
     <description>Clover Maven Plugin</description>
     <url>http://openclover.org</url>
     <organization>
@@ -58,7 +58,7 @@ under the License.
     </prerequisites>
     <properties>
         <!-- Clover Core version -->
-        <cloverVersion>4.5.1</cloverVersion>
+        <cloverVersion>4.5.2-SNAPSHOT</cloverVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <gpg.skip>true</gpg.skip>
     </properties>
