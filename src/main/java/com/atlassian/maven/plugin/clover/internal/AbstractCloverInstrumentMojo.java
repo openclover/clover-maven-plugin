@@ -46,12 +46,12 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <p>If present, default values will be used and coverage will be collected across JVMs.</p>
      * <p>Optional nested elements (and their defaults) of distributedCoverage are:</p>
      * <ul>
-     * <li><tt>host</tt> - the host name of the JVM running the tests. default: <b>localhost</b></li>
-     * <li><tt>port</tt> - the port that Clover can bind to in the host JVM. default: <b>1198</b></li>
-     * <li><tt>numClients</tt> - the number of clients expected to attach to the Test JVM. The test JVM will wait until numClients
+     * <li>host - the host name of the JVM running the tests. default: <b>localhost</b></li>
+     * <li>port - the port that Clover can bind to in the host JVM. default: <b>1198</b></li>
+     * <li>numClients - the number of clients expected to attach to the Test JVM. The test JVM will wait until numClients
      * have connected before continuing. default: <b>0</b></li>
-     * <li><tt>timeout</tt> - the amount of time to wait for a response from a remote JVM before shunning it. default: <b>5000</b></li>
-     * <li><tt>retryPeriod</tt> - the amount of time a client should wait between reconnect attempts. default: <b>1000</b></li>
+     * <li>timeout - the amount of time to wait for a response from a remote JVM before shunning it. default: <b>5000</b></li>
+     * <li>retryPeriod - the amount of time a client should wait between reconnect attempts. default: <b>1000</b></li>
      * </ul>
      */
     @Parameter
