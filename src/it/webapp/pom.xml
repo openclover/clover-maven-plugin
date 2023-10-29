@@ -59,7 +59,7 @@
         <dependency>
             <groupId>org.openclover</groupId>
             <artifactId>clover</artifactId>
-            <version>@project.version@</version>
+            <version>@cloverVersion@</version>
         </dependency>
     </dependencies>
 

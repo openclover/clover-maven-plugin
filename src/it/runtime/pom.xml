@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.openclover</groupId>
             <artifactId>clover-runtime</artifactId>
-            <version>@project.version@</version>
+            <version>@cloverVersion@</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
