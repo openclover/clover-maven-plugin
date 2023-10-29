@@ -5,6 +5,12 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  workflow_dispatch:
+    inputs:
+      commitHash:
+        description: 'Commit'
+        required: false
+        type: string
 
 jobs:
   build:
@@ -12,6 +18,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      if: inputs.commitHash == ''
+
+    - uses: actions/checkout@v3
+      if: inputs.commitHash != ''
+      with:
+        ref: '${{ inputs.commitHash }}'
       
     - name: Set up JDK 17
       uses: actions/setup-java@v3
