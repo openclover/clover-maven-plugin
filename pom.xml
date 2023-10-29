@@ -176,6 +176,7 @@ under the License.
                 <version>2.10.4</version>
                 <configuration>
                     <quiet>true</quiet>
+                    <detectJavaApiLink>false</detectJavaApiLink>
                 </configuration>
                 <executions>
                     <execution>
