@@ -5,24 +5,47 @@ import com.atlassian.clover.cfg.Percentage;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
-import org.jmock.integration.junit3.MockObjectTestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-public class CloverCheckMojoTest extends MockObjectTestCase {
 
-
+public class CloverCheckMojoTest {
     private final MavenProject project = new MavenProject();
     private final Project antProject = new Project();
     private File cloverDb;
     private File cloverMergedDb;
-
-
     private TestUtil.RecordingLogger log = new TestUtil.RecordingLogger();
 
-    protected void setUp() throws Exception {
+    private static class MockCloverPassTask extends CloverPassTask {
+        private final boolean passed;
+        private final Runnable closure;
+        private final Project antProject;
+
+        public MockCloverPassTask(boolean passed, Runnable closure, Project antProject) {
+            this.passed = passed;
+            this.closure = closure;
+            this.antProject = antProject;
+        }
+
+        public void cloverExecute() {
+            getProject().setProperty("passed", Boolean.toString(passed));
+            closure.run();
+        }
+
+        public Project getProject() {
+            return antProject;
+        }
+    }
+
+    @Before
+    public void setUp() throws Exception {
         cloverDb = createFile("clover.db");
         cloverMergedDb = createFile("clovermerged.db");
         project.getBuild().setOutputDirectory("target/classes");
@@ -30,6 +53,7 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
         project.setFile(new File("pom.xml").getAbsoluteFile());
     }
 
+    @Test
     public void testWhenDatabaseMissing() throws Exception {
         // ensure this mojo does not failed, if targetPercentage and historyDir are missing
         final CloverPassTask task = new CloverPassTask();
@@ -40,8 +64,8 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
         assertTrue(log.contains("No Clover database found, skipping test coverage verification", TestUtil.Level.INFO));
     }
 
-    // x-ing out due to a license expiry problem
-    public void XtestWhenHistoryDirIsMissing() throws Exception {
+    @Test
+    public void testWhenHistoryDirIsMissing() throws Exception {
         // ensure this mojo does not failed, if targetPercentage and historyDir parameters are missing
         final boolean[] ran = {false};
         final CloverPassTask task = new MockCloverPassTask(ran[0], new Runnable() {
@@ -62,8 +86,8 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
                     ") does not exist or is not a directory.", TestUtil.Level.WARN));
     }
 
-    // x-ing out due to a license expiry problem    
-    public void XtestWithTargetPercentage() throws Exception {
+    @Test
+    public void testWithTargetPercentage() throws Exception {
         // ensure this mojo does not failed, if targetPercentage and historyDir parameters are missing
 
         final boolean[] ran = {false};
@@ -93,7 +117,6 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
                                 TestUtil.Level.INFO));
     }
 
-
     private CloverCheckMojo createCheckMojo(final CloverPassTask task, final boolean areDbsAvailable) throws Exception {
         CloverCheckMojo mojo = new CloverCheckMojo() {
             CloverPassTask createCloverPassTask(String database, final Project antProject) {
@@ -118,26 +141,4 @@ public class CloverCheckMojoTest extends MockObjectTestCase {
         return cloverDb;
     }
 
-
-    private static class MockCloverPassTask extends CloverPassTask {
-        private final boolean passed;
-        private final Runnable closure;
-        private final Project antProject;
-
-        public MockCloverPassTask(boolean passed, Runnable closure, Project antProject) {
-            this.passed = passed;
-            this.closure = closure;
-            this.antProject = antProject;
-        }
-
-        public void cloverExecute() {
-            getProject().setProperty("passed", Boolean.toString(passed));
-            closure.run();
-        }
-
-        public Project getProject() {
-            return antProject;
-        }
-
-    }
 }
