@@ -26,8 +26,8 @@ public class AbstractInstrumenterTest {
         // test that MOJO's configuration is converted to proper arg line for CloverInstr
         final List<String> parameters = Lists.newArrayList("abc");
         final Set<MethodWithMetricsContext> contexts = Sets.newHashSet(
-            new MethodWithMetricsContext("getter", "public .* get\\(\\)", 1, 2, 3, 4),
-            new MethodWithMetricsContext("setter", "public void set\\(.*\\)", 4, 5, 6, 7)
+                new MethodWithMetricsContext("getter", "public .* get\\(\\)", 1, 2, 3, 4),
+                new MethodWithMetricsContext("setter", "public void set\\(.*\\)", 4, 5, 6, 7)
         );
         AbstractInstrumenter.addMethodWithMetricsContexts(parameters, contexts);
 

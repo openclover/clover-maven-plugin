@@ -102,7 +102,7 @@ public class CloverSaveHistoryMojoTest {
 
     @Test
     public void testExecuteCloverSaveHistoryWithPathAbsolute() throws MojoExecutionException {
-        final String historyDir = new File (project.getBasedir(), ".cloverhistory").getAbsolutePath();
+        final String historyDir = new File(project.getBasedir(), ".cloverhistory").getAbsolutePath();
 
         TestUtil.setPrivateField(CloverSaveHistoryMojo.class, mojo, "historyDir", historyDir);
 

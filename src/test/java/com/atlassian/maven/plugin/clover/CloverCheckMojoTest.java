@@ -19,9 +19,9 @@ import static org.junit.Assert.assertTrue;
 public class CloverCheckMojoTest {
     private final MavenProject project = new MavenProject();
     private final Project antProject = new Project();
+    private final TestUtil.RecordingLogger log = new TestUtil.RecordingLogger();
     private File cloverDb;
     private File cloverMergedDb;
-    private TestUtil.RecordingLogger log = new TestUtil.RecordingLogger();
 
     private static class MockCloverPassTask extends CloverPassTask {
         private final boolean passed;
@@ -59,7 +59,7 @@ public class CloverCheckMojoTest {
         final CloverPassTask task = new CloverPassTask();
         task.setProject(antProject);
         final CloverCheckMojo mojo = createCheckMojo(task, false);
-       
+
         mojo.execute();
         assertTrue(log.contains("No Clover database found, skipping test coverage verification", TestUtil.Level.INFO));
     }
@@ -82,8 +82,8 @@ public class CloverCheckMojoTest {
         mojo.execute();
         assertFalse(ran[0]);
         assertTrue(log.contains("Skipping clover:check as 'maven.clover.targetPercentage' is not defined " +
-                    "and 'maven.clover.historyDir' (" + historyDir.getPath() +
-                    ") does not exist or is not a directory.", TestUtil.Level.WARN));
+                "and 'maven.clover.historyDir' (" + historyDir.getPath() +
+                ") does not exist or is not a directory.", TestUtil.Level.WARN));
     }
 
     @Test
@@ -112,9 +112,9 @@ public class CloverCheckMojoTest {
         mojo.execute();
         assertTrue(ran[0]);
         assertEquals(targetPc.toString(), pcSet[0].toString());
-        assertTrue(log.contains("Checking for coverage of [" + targetPc.toString() +
-                                "] for database [" + cloverDb.getPath() + "]",
-                                TestUtil.Level.INFO));
+        assertTrue(log.contains("Checking for coverage of [" + targetPc +
+                        "] for database [" + cloverDb.getPath() + "]",
+                TestUtil.Level.INFO));
     }
 
     private CloverCheckMojo createCheckMojo(final CloverPassTask task, final boolean areDbsAvailable) throws Exception {
