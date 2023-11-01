@@ -9,7 +9,8 @@
 
     <properties>
         <java.version>1.7</java.version>
-        <jaxb.version>2.3.0</jaxb.version>
+        <jakarta.api.version>4.0.1</jakarta.api.version>
+        <jaxb.version>4.0.4</jaxb.version>
         <junit.version>4.13.2</junit.version>
     </properties>
 
@@ -20,9 +21,9 @@
             <version>${junit.version}</version>
         </dependency>
         <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>${jaxb.version}</version>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>${jakarta.api.version}</version>
         </dependency>
     </dependencies>
 
@@ -78,20 +79,20 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.14.0</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>generate</goal>
+                            <goal>xjc</goal>
                         </goals>
                         <configuration>
                             <extension>true</extension>
-                            <schemaIncludes>
-                                <schemaInclude>*.xsd</schemaInclude>
-                            </schemaIncludes>
-                            <generatePackage>org.openclover.xml.schema</generatePackage>
+                            <sources>
+                                <source>src/main/resources/clover.xsd</source>
+                            </sources>
+                            <packageName>org.openclover.xml.schema</packageName>
                         </configuration>
                     </execution>
                 </executions>
