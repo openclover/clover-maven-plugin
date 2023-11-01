@@ -28,10 +28,10 @@ public class CloverOptimizerMojoTest {
     /**
      * Helper class to define directory structure for tests.
      */
-    protected class DirNode {
+    private static class DirNode {
         boolean isFile;
         String name;
-        DirNode children[];
+        DirNode[] children;
 
         public DirNode(final String name) {
             this.name = name;
@@ -39,28 +39,37 @@ public class CloverOptimizerMojoTest {
             isFile = true;
         }
 
-        public DirNode(final String name, final DirNode ... children) {
+        public DirNode(final String name, final DirNode... children) {
             this.name = name;
             this.children = children;
             isFile = false;
         }
     }
 
-    /** Mojo under test */
+    /**
+     * Mojo under test
+     */
     CloverOptimizerMojo mojo = new CloverOptimizerMojo();
 
-    /** Ant project stub */
+    /**
+     * Ant project stub
+     */
     protected Project project;
 
-    /** Layout of directory structure */
+    /**
+     * Layout of directory structure
+     */
     protected DirNode testLayout;
 
-    /** Helper map (file -> platfrom specific path) */
+    /**
+     * Helper map (file -> platfrom specific path)
+     */
     protected Map<String, String> path;
 
-    /** Location of root directory of test structure */
+    /**
+     * Location of root directory of test structure
+     */
     protected File testDirRoot;
-
 
 
     /**
@@ -307,8 +316,8 @@ public class CloverOptimizerMojoTest {
         }};
         final List<String> empty = Collections.emptyList();
 
-        assertListsEqual(empty, mojo.explodePaths(null, inputEmpty));
-        assertListsEqual(empty, mojo.explodePaths(null, inputWhitespace));
+        assertListsEqual(empty, CloverOptimizerMojo.explodePaths(null, inputEmpty));
+        assertListsEqual(empty, CloverOptimizerMojo.explodePaths(null, inputWhitespace));
     }
 
     @Test
@@ -317,9 +326,8 @@ public class CloverOptimizerMojoTest {
             add("path/one");
             add("path/two");
         }};
-        final List<String> expected = input;
 
-        assertListsEqual(expected, mojo.explodePaths(null, input));
+        assertListsEqual(input, CloverOptimizerMojo.explodePaths(null, input));
     }
 
     @Test
@@ -335,7 +343,7 @@ public class CloverOptimizerMojoTest {
             add("path/four");
         }};
 
-        assertListsEqual(expected, mojo.explodePaths(null, input));
+        assertListsEqual(expected, CloverOptimizerMojo.explodePaths(null, input));
     }
 
     @Test
@@ -348,11 +356,12 @@ public class CloverOptimizerMojoTest {
             add(path.get("Hoo"));
         }};
 
-        assertListsEqual(expected, mojo.explodePaths(testDirRoot, input));
+        assertListsEqual(expected, CloverOptimizerMojo.explodePaths(testDirRoot, input));
     }
 
-        /**
+    /**
      * Return definition of directory / file layout we'd like to test
+     *
      * @return DirNode tree hierarchy
      */
     protected DirNode createLayout() {
@@ -371,9 +380,10 @@ public class CloverOptimizerMojoTest {
 
     /**
      * Create map (file -> platform dependent path) for assertions
+     *
      * @see #createLayout()
      */
-    protected Map<String,String> createPathMap() {
+    protected Map<String, String> createPathMap() {
         return new HashMap<String, String>() {{
             put("MyFirstTest", FileUtils.getPlatformSpecificPath("src/test/MyFirstTest.java"));
             put("MySecondTest", FileUtils.getPlatformSpecificPath("src/test/MySecondTest.java"));
@@ -385,6 +395,7 @@ public class CloverOptimizerMojoTest {
 
     /**
      * Return location of Maven's project_dir/target or java.io.tmpdir directory.
+     *
      * @return String path
      */
     protected String getTempDirName() {
@@ -398,6 +409,7 @@ public class CloverOptimizerMojoTest {
 
     /**
      * Create empty directory in specified location
+     *
      * @param parentDir path to parent directory
      * @return File empty directory
      */
@@ -413,9 +425,9 @@ public class CloverOptimizerMojoTest {
     /**
      * Create files and directories in specified <code>dir</code> according to layout definition
      * specified in <code>node</code>.
-     * @param dir parent directory
+     *
+     * @param dir  parent directory
      * @param node layout to be created
-     * @throws IOException
      */
     protected void createDirectoryLayout(final File dir, final DirNode node) throws IOException {
         final File newNode = new File(dir, node.name);

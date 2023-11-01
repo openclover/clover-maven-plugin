@@ -28,7 +28,7 @@ under the License.
     <properties>
         <checkstyleVersion>3.0.0</checkstyleVersion> <!-- Checkstyle 2.8 requires Maven 2.0.6+, while 2.9.x requires 2.2.1+ -->
         <pmdVersion>3.10.0</pmdVersion> <!-- As above PMD 2.6 works with Maven 2.0.6+, while 2.7.x requires 2.2.1+ -->
-        <junitVersion>4.13.1</junitVersion>
+        <junitVersion>4.13.2</junitVersion>
     </properties>
     <dependencies>
         <dependency>
