@@ -42,4 +42,6 @@ public interface CompilerConfiguration extends CloverConfiguration {
     boolean isCopyExcludedFiles();
 
     TestSources getTestSources();
+
+    boolean isRecordTestResults();
 }

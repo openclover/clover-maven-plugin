@@ -276,6 +276,11 @@ public abstract class AbstractInstrumenter {
             }
         }
 
+        if (getConfiguration().isRecordTestResults()) {
+            parameters.add("--recordTestResults");
+            parameters.add(Boolean.toString(getConfiguration().isRecordTestResults()));
+        }
+
         // custom contexts
         addCustomContexts(parameters, getConfiguration().getMethodContexts().entrySet(), "-mc");
         addCustomContexts(parameters, getConfiguration().getStatementContexts().entrySet(), "-sc");
