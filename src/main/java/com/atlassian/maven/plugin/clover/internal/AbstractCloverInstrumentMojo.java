@@ -46,12 +46,12 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <p>If present, default values will be used and coverage will be collected across JVMs.</p>
      * <p>Optional nested elements (and their defaults) of distributedCoverage are:</p>
      * <ul>
-     * <li><tt>host</tt> - the host name of the JVM running the tests. default: <b>localhost</b></li>
-     * <li><tt>port</tt> - the port that Clover can bind to in the host JVM. default: <b>1198</b></li>
-     * <li><tt>numClients</tt> - the number of clients expected to attach to the Test JVM. The test JVM will wait until numClients
+     * <li>host - the host name of the JVM running the tests. default: <b>localhost</b></li>
+     * <li>port - the port that Clover can bind to in the host JVM. default: <b>1198</b></li>
+     * <li>numClients - the number of clients expected to attach to the Test JVM. The test JVM will wait until numClients
      * have connected before continuing. default: <b>0</b></li>
-     * <li><tt>timeout</tt> - the amount of time to wait for a response from a remote JVM before shunning it. default: <b>5000</b></li>
-     * <li><tt>retryPeriod</tt> - the amount of time a client should wait between reconnect attempts. default: <b>1000</b></li>
+     * <li>timeout - the amount of time to wait for a response from a remote JVM before shunning it. default: <b>5000</b></li>
+     * <li>retryPeriod - the amount of time a client should wait between reconnect attempts. default: <b>1000</b></li>
      * </ul>
      */
     @Parameter
@@ -180,10 +180,6 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     /**
      * <p>Which Java language level Clover shall use to parse sources. Valid values are:</p>
      * <ul>
-     * <li>1.3</li>
-     * <li>1.4 (introduces 'assert' keyword)</li>
-     * <li>1.5 ('enum' keyword and generics)</li>
-     * <li>1.6 (no language changes)</li>
      * <li>1.7 (String in switch, try with resources, binary literals, underscores in literals)</li>
      * <li>1.8 (lambda expressions, default methods in interfaces)</li>
      * <li>9 / 1.9 (module-info.java)</li>
@@ -224,6 +220,14 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      */
     @Parameter
     protected Set<MethodWithMetricsContext> methodWithMetricsContexts = new HashSet<MethodWithMetricsContext>();
+
+    /**
+     * If set to 'false', test results will not be recorded; instead, results can be added via the
+     * &lt;testResults&gt; fileset at report time. Useful when a test uses a custom
+     * Rule expecting an exception, which OpenClover cannot recognize.
+     */
+    @Parameter(property = "maven.clover.recordTestResults", defaultValue = "true")
+    protected boolean recordTestResults = true;
 
     /**
      * <p>Try to protect your build from installing instrumented artifacts into local ~/.m2 cache
@@ -483,6 +487,11 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     @Override
     public TestSources getTestSources() {
         return testSources;
+    }
+
+    @Override
+    public boolean isRecordTestResults() {
+        return recordTestResults;
     }
 
     private static final String PROTECTION_ENABLED_MSG = "Clover's repository pollution protection is enabled. ";

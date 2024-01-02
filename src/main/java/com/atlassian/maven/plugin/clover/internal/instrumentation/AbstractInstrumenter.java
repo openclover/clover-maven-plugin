@@ -22,6 +22,7 @@ package com.atlassian.maven.plugin.clover.internal.instrumentation;
 import clover.org.apache.commons.lang3.StringUtils;
 import com.atlassian.clover.CloverInstr;
 import com.atlassian.clover.Logger;
+import com.atlassian.clover.cfg.instr.java.SourceLevel;
 import com.atlassian.clover.spi.lang.Language;
 import com.atlassian.maven.plugin.clover.MethodWithMetricsContext;
 import com.atlassian.maven.plugin.clover.MvnLogger;
@@ -31,10 +32,9 @@ import com.atlassian.maven.plugin.clover.TestSources;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 import com.atlassian.maven.plugin.clover.internal.scanner.CloverSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.LanguageFileExtensionFilter;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Iterables;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.FileUtils;
+import org.jetbrains.annotations.TestOnly;
 
 import java.io.File;
 import java.io.IOException;
@@ -237,14 +237,13 @@ public abstract class AbstractInstrumenter {
 
         final String javaLevel = getConfiguration().getJdk();
         if (javaLevel != null) {
-            // 1.X or X (since Java 9)
-            if (javaLevel.matches("(1\\.[3456789]|9)")) {
-                parameters.add("--source");
-                parameters.add(javaLevel);
-            } else {
-                throw new MojoExecutionException("Unsupported Java language level version [" + javaLevel
-                        + "]. Valid values are [1.3], [1.4], [1.5], [1.6], [1.7], [1.8] and [1.9]/[9]");
+            // warn about old source levels
+            if (SourceLevel.isUnsupported(javaLevel)) {
+                getConfiguration().getLog().warn(SourceLevel.getUnsupportedMessage(javaLevel));
             }
+
+            parameters.add("--source");
+            parameters.add(javaLevel);
         }
 
         if (!getConfiguration().isUseFullyQualifiedJavaLang()) {
@@ -277,6 +276,11 @@ public abstract class AbstractInstrumenter {
             }
         }
 
+        if (getConfiguration().isRecordTestResults()) {
+            parameters.add("--recordTestResults");
+            parameters.add(Boolean.toString(getConfiguration().isRecordTestResults()));
+        }
+
         // custom contexts
         addCustomContexts(parameters, getConfiguration().getMethodContexts().entrySet(), "-mc");
         addCustomContexts(parameters, getConfiguration().getStatementContexts().entrySet(), "-sc");
@@ -293,7 +297,7 @@ public abstract class AbstractInstrumenter {
             }
         }
 
-        return Iterables.toArray(parameters, String.class);
+        return parameters.toArray(new String[0]);
     }
 
     private void addCustomContexts(final List<String> parameters, final Set<Map.Entry<String, String>> contexts, final String flag) {
@@ -309,7 +313,7 @@ public abstract class AbstractInstrumenter {
      * @param parameters commandline parameters to be modified
      * @param contexts set of method contexts
      */
-    @VisibleForTesting
+    @TestOnly
     static void addMethodWithMetricsContexts(final List<String> parameters, final Set<MethodWithMetricsContext> contexts) {
         for (final MethodWithMetricsContext context : contexts) {
             parameters.add("-mmc");
@@ -336,7 +340,7 @@ public abstract class AbstractInstrumenter {
      * @param parameters commandline parameters to be modified
      * @param testSources set of test sources/classes/methods for the test detector
      */
-    @VisibleForTesting
+    @TestOnly
     static void addTestSources(List<String> parameters, TestSources testSources, String sourceDirectory) {
         if (testSources != null) {
             // root

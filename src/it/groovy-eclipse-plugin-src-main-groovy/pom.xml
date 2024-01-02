@@ -16,9 +16,9 @@
     <properties>
         <maven.compiler>3.7.0</maven.compiler>
         <groovy.all>2.4.15</groovy.all>
-        <groovy.eclipse.batch>2.5.1-02</groovy.eclipse.batch>
-        <groovy.eclipse.compiler>2.9.3-01</groovy.eclipse.compiler>
-        <junit.version>4.13.1</junit.version>
+        <groovy.eclipse.batch>2.5.14-02</groovy.eclipse.batch>
+        <groovy.eclipse.compiler>2.9.2-01</groovy.eclipse.compiler>
+        <junit.version>4.13.2</junit.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
@@ -67,10 +67,17 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.22.0</version>
+                    <version>3.1.2</version>
                     <configuration>
                         <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.maven.surefire</groupId>
+                            <artifactId>surefire-junit47</artifactId>
+                            <version>3.1.2</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 <plugin>
                     <groupId>org.openclover</groupId>
@@ -110,11 +117,4 @@
             </build>
         </profile>
     </profiles>
-    <pluginRepositories>
-        <pluginRepository>
-            <!-- the latest versions of groovy-maven-* artifacts are not available in Maven Central -->
-            <id>bintray-groovy-maven</id>
-            <url>https://dl.bintray.com/groovy/maven/</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>

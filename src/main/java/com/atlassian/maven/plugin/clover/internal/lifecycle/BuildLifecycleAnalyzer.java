@@ -1,7 +1,6 @@
 package com.atlassian.maven.plugin.clover.internal.lifecycle;
 
 import com.atlassian.clover.api.CloverException;
-import com.google.common.collect.Sets;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.LifecycleExecutor;
 import org.apache.maven.plugin.logging.Log;
@@ -10,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class BuildLifecycleAnalyzer {
 
@@ -30,7 +30,8 @@ public class BuildLifecycleAnalyzer {
         this.phases = getPhasesToBeExecuted();
 
         log.debug("CLOVER: " + getClass().getSimpleName() + " found following build phases:");
-        for (String phase : Sets.newTreeSet(phases)) {
+        final Set<String> phasesSet = new TreeSet<>(phases);
+        for (String phase : phasesSet) {
             log.debug("CLOVER: " + phase);
         }
     }

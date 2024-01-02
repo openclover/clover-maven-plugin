@@ -1,0 +1,58 @@
+name: C Release Clover Maven Plugin
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: 'Release version'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: 'clover-maven-plugin-${{ inputs.releaseVersion }}'
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v3
+        with:
+          java-version: 8.0
+          distribution: temurin
+          cache: maven
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.ARTIFACT_SIGNING_GPG_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
+
+      - name: Publish a release
+        run: |
+          mvn --batch-mode deploy -Dgpg.skip=false -DskipTests=true
+          mvn --batch-mode site:site
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          GPG_PASSPHRASE: ${{ secrets.ARTIFACT_SIGNING_GPG_PASSPHRASE }}
+
+      - name: Upload non-Maven artifacts
+        run: |
+          SSH_ID=id_ed25519
+          echo "${{ secrets.sshKey }}" > $SSH_ID
+          chmod 400 $SSH_ID
+          mkdir ~/.ssh
+          echo "[$OPENCLOVER_ORG_HOST]:$SSH_PORT ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDIQZaqssRl7Aifv3rJ28FzCgu0CTUPX4Jo0f1R/Xpru" >> ~/.ssh/known_hosts
+          echo "Uploading maven docs to openclover.org"
+          ssh -i $SSH_ID -p $SSH_PORT $SSH_USERNAME@$OPENCLOVER_ORG_HOST "cd $OPENCLOVER_ORG_DOC_PATH/maven && rm -rf latest"
+          scp -i $SSH_ID -P $SSH_PORT -r target/site $SSH_USERNAME@$OPENCLOVER_ORG_HOST:$OPENCLOVER_ORG_DOC_PATH/maven/$VERSION
+          scp -i $SSH_ID -P $SSH_PORT -r target/site $SSH_USERNAME@$OPENCLOVER_ORG_HOST:$OPENCLOVER_ORG_DOC_PATH/maven/latest
+          rm -f $SSH_ID
+        env:
+          SSH_PORT: ${{ secrets.sshPort }}
+          SSH_USERNAME: ${{ secrets.sshUsername }}
+          OPENCLOVER_ORG_HOST: ${{ secrets.sshHost }}
+          OPENCLOVER_ORG_DOC_PATH: ${{ secrets.sshDomainPath }}/doc
+          VERSION: ${{ inputs.releaseVersion }}

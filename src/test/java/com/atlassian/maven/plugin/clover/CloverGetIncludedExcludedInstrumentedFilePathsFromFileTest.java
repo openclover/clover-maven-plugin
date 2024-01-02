@@ -1,6 +1,5 @@
 package com.atlassian.maven.plugin.clover;
 
-import com.atlassian.maven.plugin.clover.CloverInstrumentMojo;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverInstrumentMojo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,14 +22,15 @@ import static org.junit.Assert.assertEquals;
  * Unit tests for {@link AbstractCloverInstrumentMojo#getExcludes()} and {@link AbstractCloverInstrumentMojo#getIncludes()} ()}
  */
 @RunWith(Parameterized.class)
-public class CloverGetIncludedExcludedInstrumentedFilePathsFromFile {
+public class CloverGetIncludedExcludedInstrumentedFilePathsFromFileTest {
 
     /**
      * Test data for parametrized test run
+     *
      * @return Collection of arrays where,
      * - first element - list of file paths
      * - second element - expected file paths excluded from instrumentation
-     * - third element - expected file paths included included in instrumentation
+     * - third element - expected file paths included in instrumentation
      */
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
@@ -42,14 +42,14 @@ public class CloverGetIncludedExcludedInstrumentedFilePathsFromFile {
         });
     }
 
-    private String file;
-    private Set<String> expectedExcludes;
-    private Set<String> expectedIncludes;
+    private final String file;
+    private final Set<String> expectedExcludes;
+    private final Set<String> expectedIncludes;
 
-    public CloverGetIncludedExcludedInstrumentedFilePathsFromFile(String[] linesInExcludesFile, String[] expectedExcludes, String[] expectedIncludes) throws IOException {
+    public CloverGetIncludedExcludedInstrumentedFilePathsFromFileTest(String[] linesInExcludesFile, String[] expectedExcludes, String[] expectedIncludes) throws IOException {
         this.file = createTempFileWithLines(linesInExcludesFile);
-        this.expectedExcludes = new HashSet<String>(Arrays.asList(expectedExcludes));
-        this.expectedIncludes = new HashSet<String>(Arrays.asList(expectedIncludes));
+        this.expectedExcludes = new HashSet<>(Arrays.asList(expectedExcludes));
+        this.expectedIncludes = new HashSet<>(Arrays.asList(expectedIncludes));
     }
 
     private String createTempFileWithLines(String[] lines) throws IOException {

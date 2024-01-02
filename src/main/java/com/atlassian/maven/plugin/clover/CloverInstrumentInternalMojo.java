@@ -29,7 +29,6 @@ import com.atlassian.maven.plugin.clover.internal.instrumentation.TestInstrument
 import com.atlassian.maven.plugin.clover.internal.scanner.LanguageFileExtensionFilter;
 import com.atlassian.maven.plugin.clover.internal.scanner.MainSourceScanner;
 import com.atlassian.maven.plugin.clover.internal.scanner.TestSourceScanner;
-import com.google.common.annotations.VisibleForTesting;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -218,15 +217,15 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     private List<Artifact> pluginArtifacts;
 
     @Parameter(defaultValue = "${session}", readonly = true)
-    @VisibleForTesting
+    //@TestOnly
     MavenSession mavenSession;
 
     @Component
-    @VisibleForTesting
+    //@TestOnly
     ArtifactResolver artifactResolver;
 
     @Component
-    @VisibleForTesting
+    //@TestOnly
     RepositorySystem repositorySystem;
 
     /**

@@ -3,69 +3,79 @@ package com.atlassian.maven.plugin.clover;
 import com.atlassian.clover.ant.tasks.CloverSnapshotTask;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
-import org.jmock.Expectations;
-import org.jmock.integration.junit3.MockObjectTestCase;
-import org.jmock.lib.legacy.ClassImposteriser;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- */
-public class CloverSnapshotMojoTest extends MockObjectTestCase {
-
-    CloverSnapshotMojo mojo;
-    final MavenProject project = new MavenProject();
-    private TestUtil.RecordingLogger log = new TestUtil.RecordingLogger();
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 
-    protected void setUp() throws Exception {
-        super.setUp();
-        setImposteriser(ClassImposteriser.INSTANCE);
-        project.getBuild().setDirectory("target");
+public class CloverSnapshotMojoTest {
 
+    private final MavenProject project = new MavenProject();
+    private final TestUtil.RecordingLogger log = new TestUtil.RecordingLogger();
+
+    private class CloverSnapshotMojoStub extends CloverSnapshotMojo {
+        private final CloverSnapshotTask snapshotTask;
+
+        CloverSnapshotMojoStub(CloverSnapshotTask snapshotTask) {
+            this.snapshotTask = snapshotTask;
+        }
+
+        @Override
+        public boolean isSingleCloverDatabase() {
+            return true;
+        }
+
+        @Override
+        public List<MavenProject> getReactorProjects() {
+            final ArrayList<MavenProject> list = new ArrayList<>();
+            list.add(project);
+            return list;
+        }
+
+        @Override
+        CloverSnapshotTask createSnapshotTask() {
+            return snapshotTask;
+        }
+
+        @Override
+        protected void execTask(CloverSnapshotTask task) {
+
+        }
     }
 
+    @Before
+    public void setUp() {
+        project.getBuild().setDirectory("target");
+    }
+
+    @Test
     public void testExecuteCloverSnapshotWhenSnapshotDirDoesNotExist() throws MojoExecutionException, IOException {
-
         final CloverSnapshotTask task = mock(CloverSnapshotTask.class);
-        mojo = new CloverSnapshotMojo() {
-            public boolean isSingleCloverDatabase() {
-                return true;
-            }
-
-            public List<MavenProject> getReactorProjects() {
-                final ArrayList<MavenProject> list = new ArrayList<MavenProject>();
-                list.add(project);
-                return list;
-            }
-
-            CloverSnapshotTask createSnapshotTask() {
-                return task;
-            }
-
-            protected void execTask(CloverSnapshotTask task) {
-                
-            }
-        };
+        CloverSnapshotMojo mojo = new CloverSnapshotMojoStub(task);
         mojo.setLog(log);
         mojo.setProject(project);
         final File snapshot = new File("target/clover.snapshot");
 
-        checking(new Expectations(){{
-            oneOf(task).setFile(snapshot);
-            oneOf(task).setInitString("target/clover/clover.db");
-            oneOf(task).setDebug(false);
-        }});
-
-
         TestUtil.setPrivateParentField(CloverSnapshotMojo.class, mojo, "snapshot", snapshot);
         final File db = new File(mojo.resolveCloverDatabase());
         db.getParentFile().mkdirs();
-        db.createNewFile();
+        assertTrue(db.createNewFile());
+
         mojo.execute();
+
+        verify(task, times(1)).setFile(snapshot);
+        verify(task, times(1)).setInitString("target/clover/clover.db");
+        verify(task, times(1)).setDebug(false);
+
         assertTrue(log.contains("Saving snapshot to: target" + File.separator + "clover.snapshot", TestUtil.Level.INFO));
         assertTrue(snapshot.getParentFile().exists());
     }

@@ -7,16 +7,16 @@ import com.atlassian.maven.plugin.clover.MethodWithMetricsContext;
 import com.atlassian.maven.plugin.clover.TestClass;
 import com.atlassian.maven.plugin.clover.TestMethod;
 import com.atlassian.maven.plugin.clover.TestSources;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import org.junit.Test;
+import org.openclover.util.Lists;
+import org.openclover.util.Sets;
 
 import java.util.List;
 import java.util.Set;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItems;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class AbstractInstrumenterTest {
@@ -26,8 +26,8 @@ public class AbstractInstrumenterTest {
         // test that MOJO's configuration is converted to proper arg line for CloverInstr
         final List<String> parameters = Lists.newArrayList("abc");
         final Set<MethodWithMetricsContext> contexts = Sets.newHashSet(
-            new MethodWithMetricsContext("getter", "public .* get\\(\\)", 1, 2, 3, 4),
-            new MethodWithMetricsContext("setter", "public void set\\(.*\\)", 4, 5, 6, 7)
+                new MethodWithMetricsContext("getter", "public .* get\\(\\)", 1, 2, 3, 4),
+                new MethodWithMetricsContext("setter", "public void set\\(.*\\)", 4, 5, 6, 7)
         );
         AbstractInstrumenter.addMethodWithMetricsContexts(parameters, contexts);
 

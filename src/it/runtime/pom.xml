@@ -1,0 +1,70 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.atlassian.maven.plugins</groupId>
+    <artifactId>clover-maven-plugin-sample-runtime</artifactId>
+    <packaging>jar</packaging>
+    <name>Clover Maven Plugin Sample Runtime</name>
+    <description>
+        An integration test checking if it's possible to use org.openclover:clover-runtime artifact
+        in classpath for test execution instead of org.openclover:clover one. The clover-runtime is a stripped-down
+        artifact containing only classes required at runtime for code coverage collection.
+        It's good for memory-limited applications.</description>
+    <version>1.0.0-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openclover</groupId>
+            <artifactId>clover-runtime</artifactId>
+            <version>@cloverVersion@</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>org.openclover</groupId>
+                <artifactId>clover-maven-plugin</artifactId>
+                <version>@project.version@</version>
+                <configuration>
+                    <!-- Verify that we can generate all types of Clover reports -->
+                    <generateHtml>true</generateHtml>
+                    <generatePdf>true</generatePdf>
+                    <generateXml>true</generateXml>
+                    <generateHistorical>true</generateHistorical>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.openclover</groupId>
+                <artifactId>clover-maven-plugin</artifactId>
+                <version>@project.version@</version>
+                <configuration>
+                    <targetPercentage>1%</targetPercentage>
+                    <jdk>1.7</jdk>
+                    <generateHtml>true</generateHtml>
+                    <generatePdf>true</generatePdf>
+                    <generateXml>true</generateXml>
+                    <generateHistorical>true</generateHistorical>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

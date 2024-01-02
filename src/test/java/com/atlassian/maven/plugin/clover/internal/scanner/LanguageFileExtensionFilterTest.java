@@ -10,7 +10,7 @@ import static org.junit.Assert.assertNull;
  * Test for {@link LanguageFileExtensionFilter}
  */
 public class LanguageFileExtensionFilterTest {
-    static final String[] TEST_FILES = new String[] {
+    static final String[] TEST_FILES = new String[]{
             "Foo.java",
             "Goo.groovy",
             "Hoo.other",
@@ -19,7 +19,7 @@ public class LanguageFileExtensionFilterTest {
             "noExtension"
     };
 
-    static final String[] JAVA_TEST_FILES = new String[] {
+    static final String[] JAVA_TEST_FILES = new String[]{
             "Foo.java",
             "Goo.java",
             "Hoo.java"
@@ -62,7 +62,7 @@ public class LanguageFileExtensionFilterTest {
     @Test
     public void testJavaLanguageFilterSomething() {
         final String[] actual = LanguageFileExtensionFilter.JAVA_LANGUAGE.filter(TEST_FILES);
-        final String[] expected = new String[] { "Foo.java" };
+        final String[] expected = new String[]{"Foo.java"};
         assertArrayEquals(expected, actual);
     }
 }

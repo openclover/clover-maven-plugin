@@ -1,7 +1,6 @@
 package com.atlassian.maven.plugin.clover.internal.lifecycle;
 
 import com.atlassian.clover.api.CloverException;
-import com.google.common.collect.Iterables;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.LifecycleExecutor;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
@@ -26,7 +25,7 @@ public class Maven3LifecycleAnalyzer extends MavenLifecycleAnalyzer {
     @Override
     public Set<String> getPhasesToBeExecuted() throws CloverException {
         try {
-            final String[] tasks = Iterables.toArray(mavenSession.getGoals(), String.class);
+            final String[] tasks = mavenSession.getGoals().toArray(new String[0]);
             final MavenExecutionPlan plan = lifecycleExecutor.calculateExecutionPlan(mavenSession, tasks);
             return getPhasesFromMojoExecutions(plan.getMojoExecutions());
         } catch (Exception ex) {
