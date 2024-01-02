@@ -222,6 +222,14 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected Set<MethodWithMetricsContext> methodWithMetricsContexts = new HashSet<MethodWithMetricsContext>();
 
     /**
+     * If set to 'false', test results will not be recorded; instead, results can be added via the
+     * &lt;testResults&gt; fileset at report time. Useful when a test uses a custom
+     * Rule expecting an exception, which OpenClover cannot recognize.
+     */
+    @Parameter(property = "maven.clover.recordTestResults", defaultValue = "true")
+    protected boolean recordTestResults = true;
+
+    /**
      * <p>Try to protect your build from installing instrumented artifacts into local ~/.m2 cache
      * or deploying them to a binaries repository. If this option is enabled, Clover will fail a build whenever
      * it detects that 'install' or 'deploy' phase is about to be called. It will also fail a build if
@@ -479,6 +487,11 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     @Override
     public TestSources getTestSources() {
         return testSources;
+    }
+
+    @Override
+    public boolean isRecordTestResults() {
+        return recordTestResults;
     }
 
     private static final String PROTECTION_ENABLED_MSG = "Clover's repository pollution protection is enabled. ";
