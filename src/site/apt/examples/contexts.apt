@@ -29,7 +29,7 @@
 {Contexts Example}
 
   This example demonstrates how to configure
-  {{{http://openclover.org/doc/manual/latest/ant--using-coverage-contexts.html}Clover filter contexts}}
+  {{{https://openclover.org/doc/manual/latest/ant--using-coverage-contexts.html}Clover filter contexts}}
   using the Clover plugin.
 
 * {Sources}

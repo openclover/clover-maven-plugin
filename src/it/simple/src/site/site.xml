@@ -22,16 +22,16 @@ under the License.
 <project name="Maven Clover Simple Sample">
   <bannerLeft>
     <name>Maven Clover Simple Sample</name>
-    <src>http://maven.apache.org/images/apache-maven-project.png</src>
-    <href>http://maven.apache.org/</href>
+    <src>https://maven.apache.org/images/apache-maven-project.png</src>
+    <href>https://maven.apache.org/</href>
   </bannerLeft>
   <bannerRight>
-    <src>http://maven.apache.org/images/maven-small.gif</src>
+    <src>https://maven.apache.org/images/maven-small.gif</src>
   </bannerRight>
   <publishDate format="dd MMM yyyy" />
   <body>
     <links>
-      <item name="Maven" href="http://maven.apache.org/"/>
+      <item name="Maven" href="https://maven.apache.org/"/>
     </links>
 
     <menu name="Other Reports">
@@ -39,7 +39,7 @@ under the License.
       <item name="Clover XML" href="clover/clover.xml"/>
     </menu>
 
-    ${reports}
+    <menu ref="reports"/>
 
   </body>
 </project>
