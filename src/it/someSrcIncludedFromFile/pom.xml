@@ -15,8 +15,8 @@
         </dependency>
     </dependencies>
     <properties>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <reporting>
         <excludeDefaults>true</excludeDefaults>
@@ -26,7 +26,7 @@
                 <artifactId>clover-maven-plugin</artifactId>
                 <version>@project.version@</version>
                 <configuration>
-                    <jdk>1.7</jdk>
+                    <jdk>1.8</jdk>
                 </configuration>
             </plugin>
         </plugins>
@@ -39,7 +39,7 @@
                 <version>@project.version@</version>
                 <configuration>
                     <includesFile>${project.basedir}/src/main/resources/includes.txt</includesFile>
-                    <jdk>1.7</jdk>
+                    <jdk>1.8</jdk>
                 </configuration>
                 <executions>
                     <execution>

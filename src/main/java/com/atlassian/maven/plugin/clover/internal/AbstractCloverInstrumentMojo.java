@@ -178,12 +178,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     private String instrumentLambda;
 
     /**
-     * <p>Which Java language level Clover shall use to parse sources. Valid values are:</p>
-     * <ul>
-     * <li>1.7 (String in switch, try with resources, binary literals, underscores in literals)</li>
-     * <li>1.8 (lambda expressions, default methods in interfaces)</li>
-     * <li>9 / 1.9 (module-info.java)</li>
-     * </ul>
+     * <p>Which Java language level Clover shall use to parse sources. Valid values are: 8-17.</p>
      * <p>By default Clover instruments using the highest language level supported.</p>
      */
     @Parameter(property = "maven.clover.jdk")

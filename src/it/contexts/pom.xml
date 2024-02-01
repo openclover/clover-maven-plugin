@@ -57,8 +57,8 @@ under the License.
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -100,7 +100,7 @@ under the License.
                     <reportDescriptor>clover-report.xml</reportDescriptor>
                     <!-- Verify that context filters work -->
                     <contextFilters>try,main,log,simple,aggregated,any</contextFilters>
-                    <jdk>1.7</jdk>
+                    <jdk>1.8</jdk>
                 </configuration>
                 <executions>
                     <execution>
