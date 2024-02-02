@@ -7,6 +7,7 @@
 [![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/openclover/clover-maven-plugin/A-test-master-jdk8.yml?label=JDK8)](https://github.com/openclover/clover-maven-plugin/actions/workflows/A-test-master-jdk8.yml)
 [![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/openclover/clover-maven-plugin/A-test-master-jdk11.yml?label=JDK11)](https://github.com/openclover/clover-maven-plugin/actions/workflows/A-test-master-jdk11.yml)
 [![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/openclover/clover-maven-plugin/A-test-master-jdk17.yml?label=JDK17)](https://github.com/openclover/clover-maven-plugin/actions/workflows/A-test-master-jdk17.yml)
+[![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/openclover/clover-maven-plugin/A-test-master-jdk21.yml?label=JDK21)](https://github.com/openclover/clover-maven-plugin/actions/workflows/A-test-master-jdk21.yml)
 
 
 [![GitHub milestone details](https://img.shields.io/github/milestones/progress-percent/openclover/clover/11)](https://github.com/openclover/clover/milestone/11)
