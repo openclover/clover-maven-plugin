@@ -9,7 +9,7 @@ package com.atlassian.maven.plugin.clover.internal;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *   https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -47,7 +47,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     protected String cloverOutputDirectory;
 
     /**
-     * The location of the <a href="http://openclover.org/doc/manual/latest/ant--managing-the-coverage-database.html">Clover database</a>.
+     * The location of the <a href="https://openclover.org/doc/manual/latest/ant--managing-the-coverage-database.html">Clover database</a>.
      */
     @Parameter(property = "maven.clover.cloverDatabase")
     private String cloverDatabase;
@@ -169,7 +169,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * <code>build.xml</code> file if you wanted to use the Clover Ant tasks from Ant.
      *
      * Note: We're defining this method as static because it is also required in the report mojo and reporting mojos
-     * and main mojos cannot share anything right now. See http://jira.codehaus.org/browse/MNG-1886.
+     * and main mojos cannot share anything right now. See <a href="https://jira.codehaus.org/browse/MNG-1886">MNG-1886</a>.
      *
      * @param antProject project
      * @param log logger
@@ -185,7 +185,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     /**
      * Wait 2*'flush interval' milliseconds to ensure that the coverage data have been flushed to the Clover database.
      *
-     * This method should not be static but we need it static here because we cannot share code
+     * This method should not be static, but we need it static here because we cannot share code
      * between non report mojos and main build mojos.
      *
      * @param waitForFlush whether to pause until flush occurs
@@ -194,7 +194,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     public static void waitForFlush(final boolean waitForFlush, final int flushInterval) {
         if (waitForFlush) {
             try {
-                Thread.sleep(2 * flushInterval);
+                Thread.sleep(2L * flushInterval);
             } catch (InterruptedException e) {
                 // Nothing to do... Just go on and try to check for coverage.
             }
@@ -288,8 +288,8 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
                 File moduleBaseDir = new File(parentBaseDir, module);
 
                 try {
-                    // need these to be canonical paths so we can perform a true equality
-                    // operation and remember <module> is a path and for flat multimodule project
+                    // need these to be canonical paths, so we can perform a true equality
+                    // operation and remember <module> is a path and for flat multi-module project
                     // structures they will be like this: <module>../a-project<module>
                     final String lhs = potentialModule.getBasedir().getCanonicalPath();
                     final String rhs = moduleBaseDir.getCanonicalPath();

@@ -29,9 +29,9 @@ public class CloverOptimizerMojoTest {
      * Helper class to define directory structure for tests.
      */
     private static class DirNode {
-        boolean isFile;
-        String name;
-        DirNode[] children;
+        final boolean isFile;
+        final String name;
+        final DirNode[] children;
 
         public DirNode(final String name) {
             this.name = name;
@@ -49,7 +49,7 @@ public class CloverOptimizerMojoTest {
     /**
      * Mojo under test
      */
-    CloverOptimizerMojo mojo = new CloverOptimizerMojo();
+    final CloverOptimizerMojo mojo = new CloverOptimizerMojo();
 
     /**
      * Ant project stub

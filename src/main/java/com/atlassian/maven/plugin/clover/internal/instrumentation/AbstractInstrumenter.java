@@ -9,7 +9,7 @@ package com.atlassian.maven.plugin.clover.internal.instrumentation;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *   https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -49,9 +49,9 @@ import static clover.org.apache.commons.lang3.StringUtils.defaultString;
  * Code common for instrumentation of various source roots (main sources, test sources).
  */
 public abstract class AbstractInstrumenter {
-    private CompilerConfiguration configuration;
+    private final CompilerConfiguration configuration;
 
-    String outputSourceDirectory;
+    final String outputSourceDirectory;
     private static final String PROP_PROJECT_BUILD_SOURCEENCODING = "project.build.sourceEncoding";
 
     public AbstractInstrumenter(final CompilerConfiguration configuration, final String outputSourceDirectory) {
@@ -83,7 +83,7 @@ public abstract class AbstractInstrumenter {
         // find groovy files in all compilation roots and copy them
         //
         // 1) in case when 'src/main/java' (or 'src/test/java') contains *.groovy source files (this is a trick possible
-        // with a groovy-eclipse-plugin, see http://groovy.codehaus.org/Groovy-Eclipse+compiler+plugin+for+Maven
+        // with a groovy-eclipse-plugin, see https://groovy.codehaus.org/Groovy-Eclipse+compiler+plugin+for+Maven
         // "Setting up source folders / Do nothing") we must copy *.groovy files as well
         // reason: 'src/main/java' (or 'src/test/java') will be redirected to 'target/clover/src-instrumented'
         // (or 'target/clover/src-test-instrumented') and Groovy compiler must be able to find these groovy sources
@@ -133,8 +133,8 @@ public abstract class AbstractInstrumenter {
         getConfiguration().getLog().debug("Clover " + getSourceType() + " source directories before change:");
         logSourceDirectories();
 
-        // Maven2 limitation: changing the source directory doesn't change the compile source roots
-        // See http://jira.codehaus.org/browse/MNG-1945
+        // Maven2 limitation: changing the source directory doesn't change the compilation source roots
+        // See https://jira.codehaus.org/browse/MNG-1945
         final List<String> sourceRoots = new ArrayList<>(getCompileSourceRoots());
 
         // Clean all source roots to add them again in order to keep the same original order of source roots.
@@ -212,7 +212,7 @@ public abstract class AbstractInstrumenter {
     /**
      * @return the CLI args to be passed to CloverInstr
      */
-    private String[] createCliArgs(final Map<String, String[]> filesToInstrument, final String outputDir) throws MojoExecutionException {
+    private String[] createCliArgs(final Map<String, String[]> filesToInstrument, final String outputDir) {
         final List<String> parameters = new ArrayList<>();
 
         parameters.add("-p");

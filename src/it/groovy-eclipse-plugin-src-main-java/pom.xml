@@ -10,7 +10,7 @@
         source files are placed in 'src/main/java' and 'src/test/java' folders (these folders can contain Java sources
         as well), so that there is no need to define extra source folders via build-helper-maven-plugin.
 
-        See: http://groovy.codehaus.org/Groovy-Eclipse+compiler+plugin+for+Maven
+        See: https://groovy.codehaus.org/Groovy-Eclipse+compiler+plugin+for+Maven
         chapter "Setting up the source folders / Do nothing"
 
         It is assumed that clover:setup goal will be used. If you'd like to use clover:instrument then

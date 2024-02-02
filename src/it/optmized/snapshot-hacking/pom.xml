@@ -7,7 +7,7 @@
     <artifactId>clover-sample-optimized-snapshot-hacking</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>snapshot-hacking</name>
-    <url>http://maven.apache.org</url>
+    <url>https://maven.apache.org</url>
     <dependencies>
         <dependency>
             <groupId>org.openclover</groupId>

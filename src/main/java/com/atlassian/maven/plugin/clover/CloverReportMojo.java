@@ -9,7 +9,7 @@ package com.atlassian.maven.plugin.clover;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *   https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -73,8 +73,8 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
      * Use a custom report descriptor for generating your Clover Reports.
      * The format for the configuration file is identical to an Ant build file which uses the &lt;clover-report/&gt;
      * task. For a complete reference, please consult the:
-     *  <a href="http://openclover.org/doc/manual/latest/maven--creating-custom-reports.html">Creating custom reports</a> and
-     *  <a href="http://openclover.org/doc/manual/latest/ant--clover-report.html">clover-report documentation</a>
+     *  <a href="https://openclover.org/doc/manual/latest/maven--creating-custom-reports.html">Creating custom reports</a> and
+     *  <a href="https://openclover.org/doc/manual/latest/ant--clover-report.html">clover-report documentation</a>
      */
     @Parameter(property = "maven.clover.reportDescriptor")
     private File reportDescriptor;
@@ -93,7 +93,7 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
     private List<ArtifactRepository> repositories;
 
     /**
-     * The location of the <a href="http://openclover.org/doc/manual/latest/ant--managing-the-coverage-database.html">Clover database</a>.
+     * The location of the <a href="https://openclover.org/doc/manual/latest/ant--managing-the-coverage-database.html">Clover database</a>.
      */
     @Parameter(property = "maven.clover.cloverDatabase")
     private String cloverDatabase;
@@ -158,7 +158,7 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
     private boolean generatePdf;
 
     /**
-     * Decide whether to generate a XML report or not.
+     * Decide whether to generate an XML report or not.
      */
     @Parameter(property = "maven.clover.generateXml", defaultValue = "true")
     private boolean generateXml;
@@ -394,7 +394,7 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
         antProject.setProperty("cloverdb", database);
         antProject.setProperty("output", output);
         antProject.setProperty("history", historyDir);
-        antProject.setProperty("title", nullToEmpty(title)); // empty string will have it be ignore by clover
+        antProject.setProperty("title", nullToEmpty(title)); // empty string will have it be ignored by clover
         antProject.setProperty("titleAnchor", nullToEmpty(titleAnchor));
         final String projectDir = project.getBasedir().getPath();
         antProject.setProperty("projectDir", projectDir);
@@ -531,7 +531,7 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
 
     /**
      * The logic here is taken from AbstractSiteRenderingMojo#resolveSiteDescriptor in the maven-site-plugin.
-     * See also: http://docs.codehaus.org/display/MAVENUSER/Mojo+Developer+Cookbook
+     * See also: <a href="https://docs.codehaus.org/display/MAVENUSER/Mojo+Developer+Cookbook">Mojo+Developer+Cookbook</a>
      *
      * @return the clover report configuration file to use
      * @throws MavenReportException if at least the default file can't be resolved

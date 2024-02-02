@@ -8,8 +8,9 @@ import org.apache.maven.plugins.annotations.Mojo;
  */
 @Mojo(name = "reset")
 public class CloverResetMojo extends CloverInstrumentInternalMojo {
-   
-    public void execute() throws MojoExecutionException {
+
+    @Override
+    public void execute() {
         getLog().info("Resetting directories for artifact: " + getProject().getId());
         CloverInstrumentInternalMojo.resetSrcDirsOriginal(getProject().getArtifact(), this);
     }

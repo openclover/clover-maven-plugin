@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
  * plus:
  *  - recursive calls of the lambda itself
  *
- * JEP126 - http://openjdk.java.net/jeps/126
+ * JEP126 - https://openjdk.java.net/jeps/126
  */
 public class LambdaInContexts {
 

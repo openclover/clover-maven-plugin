@@ -51,7 +51,7 @@ public class CloverCleanMojo extends AbstractCloverMojo {
         removeDir(new File(this.cloverOutputDirectory), project);
     }
 
-    private void removeDir(File dir, Project project) throws MojoExecutionException {
+    private void removeDir(File dir, Project project) {
 
         if (!dir.exists() || dir.isFile()) {
             return;
@@ -77,7 +77,7 @@ public class CloverCleanMojo extends AbstractCloverMojo {
     }
 
 
-    private void removeFile(File file, Project project) throws MojoExecutionException {
+    private void removeFile(File file, Project project) {
 
         if (!file.exists() || file.isDirectory()) {
             return;

@@ -9,7 +9,7 @@ package com.atlassian.maven.plugin.clover;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *   https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -39,8 +39,8 @@ import java.util.List;
 public class CloverAggregateMojo extends AbstractCloverMojo {
     /**
      * Time span that will be used when generating aggregated database. Check
-     * http://openclover.org/doc/manual/latest/ant--using-spans.html and
-     * http://openclover.org/doc/manual/latest/ant--clover-merge.html
+     * <a href="https://openclover.org/doc/manual/latest/ant--using-spans.html">ant--using-spans.html</a> and
+     * <a href="https://openclover.org/doc/manual/latest/ant--clover-merge.html">ant--clover-merge.html</a>
      */
     @Parameter(property = "maven.clover.span")
     private String span = Interval.DEFAULT_SPAN.toString();
@@ -80,14 +80,14 @@ public class CloverAggregateMojo extends AbstractCloverMojo {
 
     private List<String> getChildrenCloverDatabases() {
         // Ideally we'd need to find out where each module stores its Clover
-        // database. However that's not
+        // database. However, that's not
         // currently possible in m2 (see
-        // http://jira.codehaus.org/browse/MNG-2180). Thus we'll assume for now
+        // https://jira.codehaus.org/browse/MNG-2180). Thus, we'll assume for now
         // that all modules use the cloverDatabase configuration from the top
         // level module.
 
         // Find out the location of the clover DB relative to the root module.
-        // Note: This is a pretty buggy algorithm and we really need a proper
+        // Note: This is a pretty buggy algorithm, and we really need a proper
         // solution (see MNG-2180)
         final String resolvedCloverDb = resolveCloverDatabase();
         final String projectBaseDir = getProject().getBasedir().getPath();

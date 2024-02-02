@@ -100,7 +100,7 @@
 
         <!-- ============================================================================================ -->
         <!-- Use this profile to enable Clover instrumentation for server-side code only.                 -->
-        <!-- Client and common code will not be instrumented so it can be translated by GWT to JavaScript -->
+        <!-- Client and common code will not be instrumented, so it can be translated by GWT to JavaScript -->
         <!-- But thanks to this you can perform full tests or your application in a web browser           -->
         <!-- ============================================================================================ -->
         <profile>

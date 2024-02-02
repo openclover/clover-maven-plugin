@@ -9,7 +9,7 @@ package com.atlassian.maven.plugin.clover;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *   https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -29,7 +29,7 @@ import org.apache.tools.ant.Project;
 import java.io.File;
 
 /**
- * Save a <a href="http://openclover.org/doc/manual/latest/ant--tutorial-part-2-historical-reporting.html">Clover history point</a>.
+ * Save a <a href="https://openclover.org/doc/manual/latest/ant--tutorial-part-2-historical-reporting.html">Clover history point</a>.
  */
 @Mojo(name = "save-history")
 public class CloverSaveHistoryMojo extends AbstractCloverMojo

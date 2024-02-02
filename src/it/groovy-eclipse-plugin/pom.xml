@@ -12,7 +12,7 @@
         for Maven 2.x and 3.x) or using the 'extensions=true' feature of the groovy-eclipse-compiler plugin (works
         for Maven 3.x).
 
-        See: http://groovy.codehaus.org/Groovy-Eclipse+compiler+plugin+for+Maven
+        See: https://groovy.codehaus.org/Groovy-Eclipse+compiler+plugin+for+Maven
         chapter "Use the groovy-eclipse-compiler mojo for configuring source folders" and "Use the build-helper-maven-plugin"
 
         It is assumed that clover:setup goal will be used. If you'd like to use clover:instrument then

@@ -76,14 +76,14 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
     private String ordering;
 
     /**
-     * Toggles whether or not build optimization is to be done or not.
+     * Toggles whether build optimization is to be done or not.
      */
     @Parameter(property = "maven.clover.optimize.enabled", defaultValue = "true")
     private boolean enabled;
 
 
     /**
-     * Controls whether or not to exclude tests that do not cover any modified files.
+     * Controls whether to exclude tests that do not cover any modified files.
      *
      * If false, (and ordering is not random or original), Clover will not exclude any of the tests. Instead, they
      * will be run in an optimal order to ensure the build fails as fast as possible. ie - tests that cover modify code
@@ -100,7 +100,8 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
     private static final String REGEX_START = "%regex[";
     private static final String REGEX_END = "]";
 
-    public void execute() throws MojoExecutionException {
+    @Override
+    public void execute() {
         if (skip) {
             getLog().info("Skipping build optimization.");
             return;
@@ -292,8 +293,8 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * For 2a) String.split() is used, for 2b) a directory scan is performed
      *
      * See:
-     * <li>http://ant.apache.org/manual/Types/fileset.html</li>
-     * <li>http://maven.apache.org/plugins/maven-surefire-plugin/examples/inclusion-exclusion.html</li>
+     * <li><a href="https://ant.apache.org/manual/Types/fileset.html">fileset.html</a></li>
+     * <li>https://maven.apache.org/plugins/maven-surefire-plugin/examples/inclusion-exclusion.html</li>
      *
      * @param paths list of paths (single or separated by space or comma)
      * @return List&lt;String&gt;
@@ -356,10 +357,10 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
     private static void splitPathBySeparators(final List<String> outputList, final String path) {
         final String ANT_PATTERN_SEPARATOR = "[, ]";
-        final String splittedPaths[] = path.split(ANT_PATTERN_SEPARATOR);
-        for (String splittedPath : splittedPaths) {
-            if (splittedPath.length() > 0) {
-                outputList.add(splittedPath);
+        final String[] splitPaths = path.split(ANT_PATTERN_SEPARATOR);
+        for (String splitPath : splitPaths) {
+            if (splitPath.length() > 0) {
+                outputList.add(splitPath);
             }
         }
     }

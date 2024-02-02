@@ -83,7 +83,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected String excludesFile = null;
 
     /**
-     * The <a href="http://openclover.org/doc/manual/latest/ant--flush-policy.html">Clover flush policy</a> to use.
+     * The <a href="https://openclover.org/doc/manual/latest/ant--flush-policy.html">Clover flush policy</a> to use.
      * Valid values are <code>directed</code>, <code>interval</code> and <code>threaded</code>.
      */
     @Parameter(property = "maven.clover.flushPolicy", defaultValue = "threaded")
@@ -114,7 +114,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * Defaults are '**&#47;*.java, **&#47;*.groovy' which are overwritten if &lt;includes&gt; is set by the user
      */
     @Parameter
-    protected Set<String> includes = new HashSet<>(Arrays.asList(new String[]{"**/*.java", "**/*.groovy"}));
+    protected Set<String> includes = new HashSet<>(Arrays.asList("**/*.java", "**/*.groovy"));
 
     /**
      * The comma seperated list of files to include in the instrumentation. Patterns are resolved against source roots.
@@ -168,7 +168,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <p>IMPORTANT: Due to Clover's restrictions related with code instrumentation and javac compiler's type inference
      * capabilities, you may get compilation errors when expression-like lambda functions are passed to generic methods
      * or types. In such case disable instrumentation of expression-like form (i.e. use the 'none' or 'block' setting).
-     * See the <a href="http://openclover.org/doc/manual/latest/kb--java-8-code-instrumented-by-clover-fails-to-compile.html">
+     * See the <a href="https://openclover.org/doc/manual/latest/kb--java-8-code-instrumented-by-clover-fails-to-compile.html">
      * Java 8 code instrumented by Clover fails to compile</a> Knowledge Base article for more details.
      * </p>
      *
@@ -333,7 +333,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected TestSources testSources;
 
     /**
-     * Whether or not to include the -clover classifier on artifacts.
+     * Whether to include the -clover classifier on artifacts.
      */
     @Parameter(property = "maven.clover.useCloverClassifier", defaultValue = "true")
     protected boolean useCloverClassifier;
@@ -499,7 +499,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      *
      * @param file path to external file with list of files to exclude/include separated by new line
      * @return set of files to include/exclude
-     * @throws IOException if can't read external file
+     * @throws IOException if it can't read external file
      */
     private Set<String> readPathPatternsFromFile(final String file) throws IOException {
         Set<String> files = new HashSet<>();

@@ -18,12 +18,18 @@ public class MvnLogBuildListener extends DefaultLogger {
 
     public void messageLogged(BuildEvent event) {
         switch (event.getPriority()) {
-            case Project.MSG_DEBUG:
-            case Project.MSG_VERBOSE: log.debug(event.getMessage(), event.getException()); break;
-            case Project.MSG_INFO:    log.info(event.getMessage(), event.getException()); break;
-            case Project.MSG_WARN:    log.warn(event.getMessage(), event.getException()); break;
-            case Project.MSG_ERR:     log.error(event.getMessage(), event.getException()); break;
-            default:                  log.debug(event.getMessage(), event.getException());
+            case Project.MSG_ERR:
+                log.error(event.getMessage(), event.getException());
+                break;
+            case Project.MSG_WARN:
+                log.warn(event.getMessage(), event.getException());
+                break;
+            case Project.MSG_INFO:
+                log.info(event.getMessage(), event.getException());
+                break;
+            default:
+                log.debug(event.getMessage(), event.getException());
+                break;
         }
     }
 }

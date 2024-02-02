@@ -18,11 +18,6 @@ public class Maven3LifecycleAnalyzer extends MavenLifecycleAnalyzer {
     }
 
     @Override
-    public boolean isCompatibleVersion() {
-        return true;
-    }
-
-    @Override
     public Set<String> getPhasesToBeExecuted() throws CloverException {
         try {
             final String[] tasks = mavenSession.getGoals().toArray(new String[0]);
