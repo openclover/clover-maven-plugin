@@ -39,7 +39,7 @@ under the License.
       <item name="Clover XML" href="clover/clover.xml"/>
     </menu>
 
-    ${reports}
+    <menu ref="reports"/>
 
   </body>
 </project>

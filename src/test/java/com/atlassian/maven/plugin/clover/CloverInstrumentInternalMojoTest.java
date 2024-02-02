@@ -111,7 +111,6 @@ public class CloverInstrumentInternalMojoTest {
         final Set<Artifact> resultSet = this.mojo.swizzleCloverDependencies(Collections.singleton(artifact));
 
         verify(cloveredArtifact, atLeastOnce()).setScope("compile");
-        verify(mockExecutionRequest, atLeastOnce()).getUserSettingsFile();
         verify(mockLog, never()).warn(any(String.class));
         verify(mockLog, never()).warn(matches("Using .*, built on .* even though a Clovered version exists but it's older"));
 
@@ -140,7 +139,6 @@ public class CloverInstrumentInternalMojoTest {
         final Set<Artifact> resultSet = this.mojo.swizzleCloverDependencies(Collections.singleton(artifact));
 
         verify(cloveredArtifact, atLeastOnce()).setScope("compile");
-        verify(mockExecutionRequest, atLeastOnce()).getUserSettingsFile();
         verify(mockLog, atLeastOnce()).warn(any(String.class));
         verify(mockLog, atLeastOnce()).warn(matches("Using .*, built on .* even though a Clovered version exists but it's older"));
 
@@ -161,12 +159,11 @@ public class CloverInstrumentInternalMojoTest {
         when(mockArtifactResolver.resolveArtifact(any(ProjectBuildingRequest.class), any(Artifact.class)))
                 .thenReturn(artifactResult);
 
-        final MavenSession mockMavenSession = new MavenSession(null, null, mockExecutionRequest, null) {
-            @Override
-            public ProjectBuildingRequest getProjectBuildingRequest() {
-                return new DefaultProjectBuildingRequest();
-            }
-        };
+        final MavenSession mockMavenSession = mock(MavenSession.class);
+        when(mockMavenSession.getRequest())
+                .thenReturn(mockExecutionRequest);
+        when(mockMavenSession.getProjectBuildingRequest())
+                .thenReturn(new DefaultProjectBuildingRequest());
 
         this.mojo.repositorySystem = mockRepositorySystem;
         this.mojo.artifactResolver = mockArtifactResolver;
