@@ -63,7 +63,7 @@ public class MainSourceScanner extends AbstractSourceScanner {
     }
 
     protected List<String> getCompileSourceRoots() {
-        final List<String> roots = new ArrayList<String>(getConfiguration().getProject().getCompileSourceRoots());
+        final List<String> roots = new ArrayList<>(getConfiguration().getProject().getCompileSourceRoots());
         // add hardcoded SRC_MAIN_GROOVY (clover:setup might be called before the groovy-eclipse-plugin adds it
         // as a compilation root)
         roots.add(SRC_MAIN_GROOVY);

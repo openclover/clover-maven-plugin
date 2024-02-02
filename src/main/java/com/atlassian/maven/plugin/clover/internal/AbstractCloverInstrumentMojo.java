@@ -67,7 +67,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * The list of file to exclude from the instrumentation. Patterns are resolved against source roots.
      */
     @Parameter
-    protected Set<String> excludes = new HashSet<String>();
+    protected Set<String> excludes = new HashSet<>();
 
     /**
      * The comma seperated list of file to exclude from the instrumentation. Patterns are resolved against source roots.
@@ -114,7 +114,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * Defaults are '**&#47;*.java, **&#47;*.groovy' which are overwritten if &lt;includes&gt; is set by the user
      */
     @Parameter
-    protected Set<String> includes = new HashSet<String>(Arrays.asList(new String[]{"**/*.java", "**/*.groovy"}));
+    protected Set<String> includes = new HashSet<>(Arrays.asList(new String[]{"**/*.java", "**/*.groovy"}));
 
     /**
      * The comma seperated list of files to include in the instrumentation. Patterns are resolved against source roots.
@@ -190,7 +190,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <p>will define the context called 'main' which will match all public static void main methods.</p>
      */
     @Parameter
-    protected Map<String, String> methodContexts = new HashMap<String, String>();
+    protected Map<String, String> methodContexts = new HashMap<>();
 
     /**
      * <p>Specifies the custom method contexts to use for filtering specific methods from Clover reports.
@@ -214,7 +214,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * statements.</p>
      */
     @Parameter
-    protected Set<MethodWithMetricsContext> methodWithMetricsContexts = new HashSet<MethodWithMetricsContext>();
+    protected Set<MethodWithMetricsContext> methodWithMetricsContexts = new HashSet<>();
 
     /**
      * If set to 'false', test results will not be recorded; instead, results can be added via the
@@ -283,7 +283,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * defines a statement context called "log" which matches all LOG statements.
      */
     @Parameter
-    protected Map<String, String> statementContexts = new HashMap<String, String>();
+    protected Map<String, String> statementContexts = new HashMap<>();
 
     /**
      * Sets the granularity in milliseconds of the last modification date for testing whether a source needs reinstrumentation.
@@ -430,7 +430,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
                 return Collections.emptySet();
             }
         } else {
-            return new HashSet<String>(Arrays.asList(includesList.split(",")));
+            return new HashSet<>(Arrays.asList(includesList.split(",")));
         }
     }
 
@@ -502,7 +502,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * @throws IOException if can't read external file
      */
     private Set<String> readPathPatternsFromFile(final String file) throws IOException {
-        Set<String> files = new HashSet<String>();
+        Set<String> files = new HashSet<>();
         BufferedReader br = null;
         try {
             String line;

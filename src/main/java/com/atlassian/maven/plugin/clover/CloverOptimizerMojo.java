@@ -120,7 +120,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         antProj.addBuildListener(new MvnLogBuildListener(getLog()));
 
         final List<Resource> optimizedTests = configureOptimisedTestSet(antProj);
-        final StringBuffer testPattern = new StringBuffer();
+        final StringBuilder testPattern = new StringBuilder();
         for (final Resource test : optimizedTests) {
             getLog().debug("Running TEST: " + test.getName());
             testPattern.append(test.getName());
@@ -199,7 +199,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
     static List<String> extractNestedStrings(final String childname, final Xpp3Dom config) {
         final Xpp3Dom subelement = config.getChild(childname);
         if (subelement != null) {
-            final List<String> result = new LinkedList<String>();
+            final List<String> result = new LinkedList<>();
             final Xpp3Dom[] children = subelement.getChildren();
             for (final Xpp3Dom child : children) {
                 result.add(child.getValue());
@@ -299,7 +299,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * @return List&lt;String&gt;
      */
     static List<String> explodePaths(final File directory, final List<String> paths) {
-        final List<String> explodedPaths = new LinkedList<String>();
+        final List<String> explodedPaths = new LinkedList<>();
         for (final String path : paths) {
             if (path.trim().startsWith("%regex[")) {
                 splitPathByRegexp(directory, explodedPaths, path);
@@ -312,7 +312,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
     }
 
     private static List<File> dirTreeMatchingPattern(final File dir, final Pattern pattern) {
-        final List<File> matchedFiles = new LinkedList<File>();
+        final List<File> matchedFiles = new LinkedList<>();
 
         if (dir.isDirectory()) {
             // recursive search
