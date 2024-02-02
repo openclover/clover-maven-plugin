@@ -7,8 +7,8 @@
     <version>1.0-SNAPSHOT</version>
     <description>
         Example how to use Clover with the GMaven Plugin. See:
-         * http://openclover.org/doc/manual/latest/maven--compiling-with-gmaven-plugin.html
-         * http://docs.codehaus.org/display/GMAVEN/Home
+         * https://openclover.org/doc/manual/latest/maven--compiling-with-gmaven-plugin.html
+         * https://docs.codehaus.org/display/GMAVEN/Home
 
         This project contains no java sources, so there is no need to call generateStubs / generateTestStubs,
         and thus it's possible to  use both clover:setup and clover:instrument. In order to use Clover

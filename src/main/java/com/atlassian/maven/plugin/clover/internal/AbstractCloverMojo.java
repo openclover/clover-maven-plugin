@@ -9,7 +9,7 @@ package com.atlassian.maven.plugin.clover.internal;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *   https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -47,7 +47,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     protected String cloverOutputDirectory;
 
     /**
-     * The location of the <a href="http://openclover.org/doc/manual/latest/ant--managing-the-coverage-database.html">Clover database</a>.
+     * The location of the <a href="https://openclover.org/doc/manual/latest/ant--managing-the-coverage-database.html">Clover database</a>.
      */
     @Parameter(property = "maven.clover.cloverDatabase")
     private String cloverDatabase;
@@ -169,7 +169,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * <code>build.xml</code> file if you wanted to use the Clover Ant tasks from Ant.
      *
      * Note: We're defining this method as static because it is also required in the report mojo and reporting mojos
-     * and main mojos cannot share anything right now. See http://jira.codehaus.org/browse/MNG-1886.
+     * and main mojos cannot share anything right now. See <a href="https://jira.codehaus.org/browse/MNG-1886">MNG-1886</a>.
      *
      * @param antProject project
      * @param log logger

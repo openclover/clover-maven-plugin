@@ -23,13 +23,13 @@ This project is open-source, based on the Apache License version 2.0.
 
 # Documentation #
 
-Documentation: http://openclover.org/documentation
+Documentation: https://openclover.org/documentation
 
 Issue tracker: https://github.com/openclover/clover/issues
 
-OpenClover home page: http://openclover.org
+OpenClover home page: https://openclover.org
 
-Developer documentation: http://openclover.org/doc/manual/latest/developer-guide.html
+Developer documentation: https://openclover.org/doc/manual/latest/developer-guide.html
 
 ===================================================
 

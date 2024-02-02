@@ -58,12 +58,12 @@
         <repository>
             <id>fake</id>
             <name>Fake Repository</name>
-            <url>http://localhost</url>
+            <url>https://localhost</url>
         </repository>
         <snapshotRepository>
             <id>fake</id>
             <name>Fake Repository</name>
-            <url>http://localhost</url>
+            <url>https://localhost</url>
         </snapshotRepository>
     </distributionManagement>
 </project>

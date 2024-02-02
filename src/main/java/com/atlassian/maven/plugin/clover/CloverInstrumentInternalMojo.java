@@ -9,7 +9,7 @@ package com.atlassian.maven.plugin.clover;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *   https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -380,7 +380,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
      * @return List&lt;File&gt;
      * @see com.atlassian.maven.plugin.clover.internal.instrumentation.AbstractInstrumenter#instrument()
      * @see #redirectOutputDirectories()
-     * @see <a href="http://groovy.codehaus.org/Groovy-Eclipse+compiler+plugin+for+Maven">Groovy-Eclipse+compiler+plugin+for+Maven</a>
+     * @see <a href="https://groovy.codehaus.org/Groovy-Eclipse+compiler+plugin+for+Maven">Groovy-Eclipse+compiler+plugin+for+Maven</a>
      */
     protected List<File> calcIncludedFilesForGroovy() {
         final MainSourceScanner groovyMainScanner = new MainSourceScanner(this, getProject().getBuild().getOutputDirectory());

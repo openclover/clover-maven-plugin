@@ -9,7 +9,7 @@ package com.atlassian.maven.plugin.clover.internal.instrumentation;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *   https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -83,7 +83,7 @@ public abstract class AbstractInstrumenter {
         // find groovy files in all compilation roots and copy them
         //
         // 1) in case when 'src/main/java' (or 'src/test/java') contains *.groovy source files (this is a trick possible
-        // with a groovy-eclipse-plugin, see http://groovy.codehaus.org/Groovy-Eclipse+compiler+plugin+for+Maven
+        // with a groovy-eclipse-plugin, see https://groovy.codehaus.org/Groovy-Eclipse+compiler+plugin+for+Maven
         // "Setting up source folders / Do nothing") we must copy *.groovy files as well
         // reason: 'src/main/java' (or 'src/test/java') will be redirected to 'target/clover/src-instrumented'
         // (or 'target/clover/src-test-instrumented') and Groovy compiler must be able to find these groovy sources
@@ -134,7 +134,7 @@ public abstract class AbstractInstrumenter {
         logSourceDirectories();
 
         // Maven2 limitation: changing the source directory doesn't change the compilation source roots
-        // See http://jira.codehaus.org/browse/MNG-1945
+        // See https://jira.codehaus.org/browse/MNG-1945
         final List<String> sourceRoots = new ArrayList<>(getCompileSourceRoots());
 
         // Clean all source roots to add them again in order to keep the same original order of source roots.

@@ -293,8 +293,8 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * For 2a) String.split() is used, for 2b) a directory scan is performed
      *
      * See:
-     * <li>http://ant.apache.org/manual/Types/fileset.html</li>
-     * <li>http://maven.apache.org/plugins/maven-surefire-plugin/examples/inclusion-exclusion.html</li>
+     * <li><a href="https://ant.apache.org/manual/Types/fileset.html">fileset.html</a></li>
+     * <li>https://maven.apache.org/plugins/maven-surefire-plugin/examples/inclusion-exclusion.html</li>
      *
      * @param paths list of paths (single or separated by space or comma)
      * @return List&lt;String&gt;

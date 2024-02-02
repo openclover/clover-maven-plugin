@@ -17,7 +17,7 @@
 ~~ "License"); you may not use this file except in compliance
 ~~ with the License.  You may obtain a copy of the License at
 ~~
-~~   http://www.apache.org/licenses/LICENSE-2.0
+~~   https://www.apache.org/licenses/LICENSE-2.0
 ~~
 ~~ Unless required by applicable law or agreed to in writing,
 ~~ software distributed under the License is distributed on an
@@ -27,7 +27,7 @@
 ~~ under the License.
 
 ~~ NOTE: For help with the syntax of this file, see:
-~~ http://maven.apache.org/guides/mini/guide-apt-format.html
+~~ https://maven.apache.org/guides/mini/guide-apt-format.html
 
 {Usage}
 
@@ -61,7 +61,7 @@
 
 * {Getting Started}
 
-  The first thing to do is to create a {{{http://openclover.org/doc/manual/latest/ant--managing-the-coverage-database.html}Clover database}}. To do
+  The first thing to do is to create a {{{https://openclover.org/doc/manual/latest/ant--managing-the-coverage-database.html}Clover database}}. To do
   this, you must either do:
 
 +------+
@@ -222,7 +222,7 @@
 
 ** {Using block contexts}
 
-  Clover allows specifying {{{http://openclover.org/doc/manual/latest/ant--using-coverage-contexts.html}block contexts}}
+  Clover allows specifying {{{https://openclover.org/doc/manual/latest/ant--using-coverage-contexts.html}block contexts}}
   (i.e. elements to be excluded from the Test Percentage Coverage). To configure a block context use
   the <<<contextFilters>>> element in the <<<reporting>>> section. For example to exclude <<<try>>> and <<<static>>>
   block contexts, you would write:
@@ -248,7 +248,7 @@
 ** {Specifying a Clover flush policy}
 
   If you want to specify the Clover
-  {{{http://openclover.org/doc/manual/latest/ant--flush-policy.html}flush policy}} that the
+  {{{https://openclover.org/doc/manual/latest/ant--flush-policy.html}flush policy}} that the
   plugin should use, then specify it in the plugin's configuration. Valid
   policies are <<<threaded>>>, <<<directed>>> and <<<interval>>>.
 
@@ -452,7 +452,7 @@ mvn clover:instrument clover:clover
 +---------
 
   Now this will generate a
-  {{{http://openclover.org/doc/manual/latest/ant--tutorial-part-2-historical-reporting.html}Clover historical report}}
+  {{{https://openclover.org/doc/manual/latest/ant--tutorial-part-2-historical-reporting.html}Clover historical report}}
   only if you have saved Clover historical savepoints. In order to save a Clover
   savepoint, run the <<<clover:save-history>>> goal. It's up to you to decide
   when you want to call this goal.
@@ -506,7 +506,7 @@ mvn clover:instrument clover:clover
 ** {Aggregating Clover Reports}
 
   <Note: There's currently a
-  {{{http://jira.codehaus.org/browse/MCLOVER-34}bug in Maven2}} which results in
+  {{{https://jira.codehaus.org/browse/MCLOVER-34}bug in Maven2}} which results in
   the clover aggregation not working properly. More specifically the >
   <<<aggregate>>> <goal requires an existing Clover database and the first
   time your run> <<<mvn site>>> <it won't find the generated children databases as they'll be produced after it
