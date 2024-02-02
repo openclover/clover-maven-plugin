@@ -56,7 +56,7 @@ under the License.
                     <generatePdf>true</generatePdf>
                     <generateXml>true</generateXml>
 
-                    <!-- We ask the Clover plugin to generate a historical report but we don't have any historical data saved.
+                    <!-- We ask the Clover plugin to generate a historical report, but we don't have any historical data saved.
                          This is to verify it doesn't error out when this is the case. -->
                     <generateHistorical>true</generateHistorical>
                     <!--useFullyQualifiedJavaLang>false</useFullyQualifiedJavaLang-->

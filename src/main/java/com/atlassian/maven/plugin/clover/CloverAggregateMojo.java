@@ -80,14 +80,14 @@ public class CloverAggregateMojo extends AbstractCloverMojo {
 
     private List<String> getChildrenCloverDatabases() {
         // Ideally we'd need to find out where each module stores its Clover
-        // database. However that's not
+        // database. However, that's not
         // currently possible in m2 (see
-        // http://jira.codehaus.org/browse/MNG-2180). Thus we'll assume for now
+        // http://jira.codehaus.org/browse/MNG-2180). Thus, we'll assume for now
         // that all modules use the cloverDatabase configuration from the top
         // level module.
 
         // Find out the location of the clover DB relative to the root module.
-        // Note: This is a pretty buggy algorithm and we really need a proper
+        // Note: This is a pretty buggy algorithm, and we really need a proper
         // solution (see MNG-2180)
         final String resolvedCloverDb = resolveCloverDatabase();
         final String projectBaseDir = getProject().getBasedir().getPath();

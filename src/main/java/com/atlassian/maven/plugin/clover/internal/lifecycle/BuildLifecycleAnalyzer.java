@@ -52,12 +52,7 @@ public class BuildLifecycleAnalyzer {
                         + "pollution protection will not run. ";
         try {
             final Maven3LifecycleAnalyzer maven3Analyzer = new Maven3LifecycleAnalyzer(lifecycleExecutor, mavenProject, mavenSession);
-            if (maven3Analyzer.isCompatibleVersion()) {
-                return maven3Analyzer.getPhasesToBeExecuted();
-            } else {
-                log.warn(FAILED_POLLUTION_PROTECTION);
-                return Collections.emptySet();
-            }
+            return maven3Analyzer.getPhasesToBeExecuted();
         } catch (CloverException ex) {
             log.warn(FAILED_POLLUTION_PROTECTION);
             return Collections.emptySet();

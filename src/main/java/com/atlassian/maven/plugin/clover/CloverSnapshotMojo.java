@@ -41,8 +41,8 @@ public class CloverSnapshotMojo extends AbstractCloverMojo {
     @Parameter(property = "maven.clover.forceSnapshot", defaultValue = "false")
     private boolean forceSnapshot;
 
-    public void execute() throws MojoExecutionException {
-
+    @Override
+    public void execute() {
         // only run the snapshot once, on the very last project.
         if (isSingleCloverDatabase() && !isLastProjectInReactor() && !forceSnapshot) {
             getLog().info("Skipping snapshot until the final project in the reactor.");

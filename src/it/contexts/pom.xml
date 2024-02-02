@@ -66,8 +66,8 @@ under the License.
                 <artifactId>clover-maven-plugin</artifactId>
                 <version>@project.version@</version>
                 <configuration>
-                    <!-- Without the block filter the TPC is 50% and with it it's 57,1%. Thus we check for a TPC above of
-           55% to verify the filter has been applied correctly -->
+                    <!-- Without the block filter the TPC is 50% and with it, it's 57,1%. Thus, we check for a TPC above of
+                    55% to verify the filter has been applied correctly -->
                     <targetPercentage>55%</targetPercentage>
                     <methodContexts>
                         <main>(.* )?public static void main\(String\[\] argv\).*</main>

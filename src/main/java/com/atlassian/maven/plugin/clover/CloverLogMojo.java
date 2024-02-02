@@ -107,7 +107,7 @@ public class CloverLogMojo extends AbstractCloverMojo {
         // take for current project
         setTestSourceRootsForProject(cloverLogTask, getProject());
 
-        // do the same but for sub-modules
+        // do the same but for submodules
         for (MavenProject mavenProject : getDescendantModuleProjects(getProject())) {
             setTestSourceRootsForProject(cloverLogTask, mavenProject);
         }

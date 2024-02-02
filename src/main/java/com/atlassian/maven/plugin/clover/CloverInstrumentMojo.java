@@ -56,15 +56,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 @Mojo(name = "instrument")
 public class CloverInstrumentMojo extends AbstractCloverInstrumentMojo {
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo#execute()
-     */
-    public void execute() throws MojoExecutionException {
-        super.execute();
-    }
-
     @Override
     protected boolean shouldRedirectArtifacts() {
         return true;

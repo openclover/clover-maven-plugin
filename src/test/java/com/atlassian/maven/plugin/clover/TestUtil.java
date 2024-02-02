@@ -1,7 +1,6 @@
 package com.atlassian.maven.plugin.clover;
 
 import org.apache.maven.plugin.logging.SystemStreamLog;
-import org.apache.maven.plugin.logging.Log;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -19,17 +18,13 @@ public class TestUtil {
 
     private static final SystemStreamLog LOG = new SystemStreamLog();
 
-    private static Log getLog() {
-        return LOG;
-    }
-
     public static void setPrivateField(final Class<?> clazz, final Object target, final String fieldName, final Object value) {
         try {
             final Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
             field.set(target, value);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            getLog().error("Could not set: " + fieldName, e);
+            LOG.error("Could not set: " + fieldName, e);
         }
     }
 
@@ -40,7 +35,7 @@ public class TestUtil {
             field.setAccessible(true);
             field.set(target, value);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            getLog().error("Could not set: " + fieldName, e);
+            LOG.error("Could not set: " + fieldName, e);
         }
     }
 
@@ -149,9 +144,9 @@ public class TestUtil {
     }
 
     private static class LogEvent {
-        Throwable e;
-        String msg;
-        int level;
+        final Throwable e;
+        final String msg;
+        final int level;
 
         LogEvent(String msg, Throwable e, int level) {
             this.e = e;

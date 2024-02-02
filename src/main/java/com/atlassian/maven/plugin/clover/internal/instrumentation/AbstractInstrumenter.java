@@ -49,9 +49,9 @@ import static clover.org.apache.commons.lang3.StringUtils.defaultString;
  * Code common for instrumentation of various source roots (main sources, test sources).
  */
 public abstract class AbstractInstrumenter {
-    private CompilerConfiguration configuration;
+    private final CompilerConfiguration configuration;
 
-    String outputSourceDirectory;
+    final String outputSourceDirectory;
     private static final String PROP_PROJECT_BUILD_SOURCEENCODING = "project.build.sourceEncoding";
 
     public AbstractInstrumenter(final CompilerConfiguration configuration, final String outputSourceDirectory) {
@@ -133,7 +133,7 @@ public abstract class AbstractInstrumenter {
         getConfiguration().getLog().debug("Clover " + getSourceType() + " source directories before change:");
         logSourceDirectories();
 
-        // Maven2 limitation: changing the source directory doesn't change the compile source roots
+        // Maven2 limitation: changing the source directory doesn't change the compilation source roots
         // See http://jira.codehaus.org/browse/MNG-1945
         final List<String> sourceRoots = new ArrayList<>(getCompileSourceRoots());
 
@@ -212,7 +212,7 @@ public abstract class AbstractInstrumenter {
     /**
      * @return the CLI args to be passed to CloverInstr
      */
-    private String[] createCliArgs(final Map<String, String[]> filesToInstrument, final String outputDir) throws MojoExecutionException {
+    private String[] createCliArgs(final Map<String, String[]> filesToInstrument, final String outputDir) {
         final List<String> parameters = new ArrayList<>();
 
         parameters.add("-p");

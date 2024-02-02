@@ -27,13 +27,6 @@ public abstract class MavenLifecycleAnalyzer {
     }
 
     /**
-     * Return <code>true</code> if current Maven version is compatible with this analyzer.
-     *
-     * @return boolean
-     */
-    public abstract boolean isCompatibleVersion();
-
-    /**
      * Return list of build phases which will be executed. It may also return goals passed from a command line.
      *
      * @return Set&lt;String&gt;

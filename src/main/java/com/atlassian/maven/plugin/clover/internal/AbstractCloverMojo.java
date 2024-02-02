@@ -185,7 +185,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     /**
      * Wait 2*'flush interval' milliseconds to ensure that the coverage data have been flushed to the Clover database.
      *
-     * This method should not be static but we need it static here because we cannot share code
+     * This method should not be static, but we need it static here because we cannot share code
      * between non report mojos and main build mojos.
      *
      * @param waitForFlush whether to pause until flush occurs
@@ -194,7 +194,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     public static void waitForFlush(final boolean waitForFlush, final int flushInterval) {
         if (waitForFlush) {
             try {
-                Thread.sleep(2 * flushInterval);
+                Thread.sleep(2L * flushInterval);
             } catch (InterruptedException e) {
                 // Nothing to do... Just go on and try to check for coverage.
             }
@@ -288,8 +288,8 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
                 File moduleBaseDir = new File(parentBaseDir, module);
 
                 try {
-                    // need these to be canonical paths so we can perform a true equality
-                    // operation and remember <module> is a path and for flat multimodule project
+                    // need these to be canonical paths, so we can perform a true equality
+                    // operation and remember <module> is a path and for flat multi-module project
                     // structures they will be like this: <module>../a-project<module>
                     final String lhs = potentialModule.getBasedir().getCanonicalPath();
                     final String rhs = moduleBaseDir.getCanonicalPath();

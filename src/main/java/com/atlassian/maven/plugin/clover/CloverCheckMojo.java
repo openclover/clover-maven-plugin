@@ -96,7 +96,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
 
     /**
      * Do we fail the build on a violation? The default is true but there are some edge cases where you want to be
-     * able to check what would fail but without actually failing the build. For example you may want to let the build
+     * able to check what would fail but without actually failing the build. For example, you may want to let the build
      * continue so that you can verify others checks that are executed after the Clover checks.
      */
     @Parameter(property = "maven.clover.failOnViolation", defaultValue = "true")

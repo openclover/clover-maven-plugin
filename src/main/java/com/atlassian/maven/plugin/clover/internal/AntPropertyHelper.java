@@ -24,69 +24,54 @@ import org.codehaus.plexus.util.introspection.ReflectionValueExtractor;
 /**
  * Makes the ${expressions} used in Maven available to Ant as properties.
  */
-public class AntPropertyHelper
-    extends PropertyHelper
-{
-    private Log log;
-    private MavenProject mavenProject;
+public class AntPropertyHelper extends PropertyHelper {
+    private final Log log;
+    private final MavenProject mavenProject;
 
     /**
      * @param project maven project instance
-     * @param l  logger instance
+     * @param l       logger instance
      */
-    public AntPropertyHelper( MavenProject project, Log l )
-    {
+    public AntPropertyHelper(MavenProject project, Log l) {
         mavenProject = project;
         log = l;
     }
 
-    public synchronized Object getPropertyHook( String ns, String name, boolean user )
-    {
-        if ( log.isDebugEnabled() )
-        {
-            log.debug( "getProperty(ns="+ns+", name="+name+", user="+user+")" );
+    public synchronized Object getPropertyHook(String ns, String name, boolean user) {
+        if (log.isDebugEnabled()) {
+            log.debug("getProperty(ns=" + ns + ", name=" + name + ", user=" + user + ")");
         }
 
-        return getPropertyHook( ns, name, user, mavenProject );
+        return getPropertyHook(ns, name, user, mavenProject);
     }
 
-    private Object getPropertyHook( String ns, String name, boolean user, MavenProject mavenProject )
-    {
+    private Object getPropertyHook(String ns, String name, boolean user, MavenProject mavenProject) {
         Object val = null;
-        try
-        {
-            if ( name.startsWith( "project." ) )
-            {
+        try {
+            if (name.startsWith("project.")) {
                 val = ReflectionValueExtractor.evaluate(
-                    name,
-                    mavenProject,
-                    true
+                        name,
+                        mavenProject,
+                        true
+                );
+            } else if (name.equals("basedir")) {
+                val = ReflectionValueExtractor.evaluate(
+                        "basedir.path",
+                        mavenProject,
+                        false
                 );
             }
-            else if ( name.equals("basedir") )
-            {
-                val = ReflectionValueExtractor.evaluate(
-                    "basedir.path",
-                    mavenProject,
-                    false
-                );
-            }
-        }
-        catch ( Exception e )
-        {
-            if ( log.isWarnEnabled() )
-            {
-                log.warn( "Error evaluating expression '" + name + "'", e );
+        } catch (Exception e) {
+            if (log.isWarnEnabled()) {
+                log.warn("Error evaluating expression '" + name + "'", e);
             }
             e.printStackTrace();
         }
 
-        if ( val == null )
-        {
-            val = super.getPropertyHook( ns, name, user );
-            if ( val == null )
-            {
-                val = System.getProperty( name.toString() );
+        if (val == null) {
+            val = super.getPropertyHook(ns, name, user);
+            if (val == null) {
+                val = System.getProperty(name);
             }
         }
 

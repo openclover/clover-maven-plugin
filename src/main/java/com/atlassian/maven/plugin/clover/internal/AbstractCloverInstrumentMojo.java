@@ -114,7 +114,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * Defaults are '**&#47;*.java, **&#47;*.groovy' which are overwritten if &lt;includes&gt; is set by the user
      */
     @Parameter
-    protected Set<String> includes = new HashSet<>(Arrays.asList(new String[]{"**/*.java", "**/*.groovy"}));
+    protected Set<String> includes = new HashSet<>(Arrays.asList("**/*.java", "**/*.groovy"));
 
     /**
      * The comma seperated list of files to include in the instrumentation. Patterns are resolved against source roots.
@@ -333,7 +333,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected TestSources testSources;
 
     /**
-     * Whether or not to include the -clover classifier on artifacts.
+     * Whether to include the -clover classifier on artifacts.
      */
     @Parameter(property = "maven.clover.useCloverClassifier", defaultValue = "true")
     protected boolean useCloverClassifier;
@@ -499,7 +499,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      *
      * @param file path to external file with list of files to exclude/include separated by new line
      * @return set of files to include/exclude
-     * @throws IOException if can't read external file
+     * @throws IOException if it can't read external file
      */
     private Set<String> readPathPatternsFromFile(final String file) throws IOException {
         Set<String> files = new HashSet<>();

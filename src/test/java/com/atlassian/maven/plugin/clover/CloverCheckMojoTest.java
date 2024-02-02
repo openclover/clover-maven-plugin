@@ -109,7 +109,7 @@ public class CloverCheckMojoTest {
                 TestUtil.Level.INFO));
     }
 
-    private CloverCheckMojo createCheckMojo(final CloverPassTask task, final boolean areDbsAvailable) throws Exception {
+    private CloverCheckMojo createCheckMojo(final CloverPassTask task, final boolean areDbsAvailable) {
         CloverCheckMojo mojo = new CloverCheckMojo() {
             CloverPassTask createCloverPassTask(String database, final Project antProject) {
                 return task;

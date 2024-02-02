@@ -161,7 +161,7 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
     private boolean generatePdf;
 
     /**
-     * Decide whether to generate a XML report or not.
+     * Decide whether to generate an XML report or not.
      */
     @Parameter(property = "maven.clover.generateXml", defaultValue = "true")
     private boolean generateXml;
@@ -394,7 +394,7 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
         antProject.setProperty("cloverdb", database);
         antProject.setProperty("output", output);
         antProject.setProperty("history", historyDir);
-        antProject.setProperty("title", nullToEmpty(title)); // empty string will have it be ignore by clover
+        antProject.setProperty("title", nullToEmpty(title)); // empty string will have it be ignored by clover
         antProject.setProperty("titleAnchor", nullToEmpty(titleAnchor));
         final String projectDir = project.getBasedir().getPath();
         antProject.setProperty("projectDir", projectDir);

@@ -235,8 +235,8 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     protected List<ArtifactRepository> repositories;
 
     // HACK: this allows us to reset the source directories to the originals
-    private static Map<String, String> originalSrcMap = new HashMap<>();
-    private static Map<String, String> originalSrcTestMap = new HashMap<>();
+    private static final Map<String, String> originalSrcMap = new HashMap<>();
+    private static final Map<String, String> originalSrcTestMap = new HashMap<>();
 
     public static String getOriginalSrcDir(final String module) {
         return originalSrcMap.get(module);
@@ -317,7 +317,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
 
     /**
      * Sets several properties related with test failures for Surefire, Failsafe, PMD and Checkstyle plugins.
-     * Thanks to this, the build in default or forked lifecycle can continue and we can generate Clover report
+     * Thanks to this, the build in default or forked lifecycle can continue, and we can generate Clover report
      * even in presence of test failures.
      */
     private void configureTestFailureIgnore() {
