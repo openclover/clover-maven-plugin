@@ -235,8 +235,8 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     protected List<ArtifactRepository> repositories;
 
     // HACK: this allows us to reset the source directories to the originals
-    private static Map<String, String> originalSrcMap = new HashMap<String, String>();
-    private static Map<String, String> originalSrcTestMap = new HashMap<String, String>();
+    private static Map<String, String> originalSrcMap = new HashMap<>();
+    private static Map<String, String> originalSrcTestMap = new HashMap<>();
 
     public static String getOriginalSrcDir(final String module) {
         return originalSrcMap.get(module);
@@ -391,13 +391,13 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
                 groovyTestScanner.getSourceFilesToInstrument(LanguageFileExtensionFilter.GROOVY_LANGUAGE, false));
 
         // combine lists
-        final List<File> allSources = new ArrayList<File>(mainGroovyFiles);
+        final List<File> allSources = new ArrayList<>(mainGroovyFiles);
         allSources.addAll(testGroovyFiles);
         return allSources;
     }
 
     private ArrayList<File> extractIncludes(final Map<String, String[]> srcFiles) {
-        final ArrayList<File> includeFiles = new ArrayList<File>();
+        final ArrayList<File> includeFiles = new ArrayList<>();
         for (final String dirName : srcFiles.keySet()) {
             final String[] includes = srcFiles.get(dirName);
             for (final String include : includes) {
@@ -495,7 +495,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     }
 
     protected Set<Artifact> swizzleCloverDependencies(final Set<Artifact> artifacts) {
-        final Set<Artifact> resolvedArtifacts = new LinkedHashSet<Artifact>();
+        final Set<Artifact> resolvedArtifacts = new LinkedHashSet<>();
 
         for (Artifact artifact : artifacts) {
             resolvedArtifacts.add(swizzleCloverDependency(artifact));
@@ -600,7 +600,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     }
 
     private void addArtifactDependency(final Artifact cloverArtifact) {
-        final Set<Artifact> set = new LinkedHashSet<Artifact>(getProject().getDependencyArtifacts());
+        final Set<Artifact> set = new LinkedHashSet<>(getProject().getDependencyArtifacts());
         set.add(cloverArtifact);
         getProject().setDependencyArtifacts(set);
     }

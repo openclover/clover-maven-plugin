@@ -6,6 +6,7 @@ import org.apache.maven.plugin.logging.Log;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Objects;
 
 public class TestUtil {
 
@@ -164,11 +165,9 @@ public class TestUtil {
 
             LogEvent event = (LogEvent) o;
 
-            if (e != null ? !e.equals(event.e) : event.e != null) return false;
+            if (!Objects.equals(e, event.e)) return false;
             if (level != event.level) return false;
-            if (msg != null ? !msg.equals(event.msg) : event.msg != null) return false;
-
-            return true;
+            return Objects.equals(msg, event.msg);
         }
 
         public int hashCode() {

@@ -95,7 +95,7 @@ public class CloverAggregateMojo extends AbstractCloverMojo {
                 + "' against the project base directory '" + projectBaseDir + "'");
         final String relativeCloverDatabasePath = resolvedCloverDb.substring(projectBaseDir.length());
         getLog().debug("Relative path is '" + relativeCloverDatabasePath + "'");
-        final List<String> dbFiles = new ArrayList<String>();
+        final List<String> dbFiles = new ArrayList<>();
         final List<MavenProject> projects = getDescendantModuleProjects(getProject());
 
         for (MavenProject childProject : projects) {
@@ -113,7 +113,7 @@ public class CloverAggregateMojo extends AbstractCloverMojo {
     }
 
     private void mergeCloverDatabases(final List<String> dbFiles) throws MojoExecutionException {
-        final List<String> parameters = new ArrayList<String>();
+        final List<String> parameters = new ArrayList<>();
 
         parameters.add("-s");
         parameters.add(span);

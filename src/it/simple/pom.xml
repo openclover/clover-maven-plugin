@@ -71,8 +71,8 @@ under the License.
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -84,7 +84,7 @@ under the License.
                     <targetPercentage>1%</targetPercentage>
 
                     <!-- Verify that we can specify the JDK version for Clover's instrumentation -->
-                    <jdk>1.7</jdk>
+                    <jdk>1.8</jdk>
 
                     <!-- Verify that we can exclude some files from the instrumentation. Make sure the file we are excluding
                          is referenced by other classes to ensure excluding is only done at the Clover level -->

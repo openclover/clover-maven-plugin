@@ -28,7 +28,7 @@ public class TestClass extends AbstractJavaEntity {
     /** A regex on which to match the test class's annotation. Optional. */
     private String packageName;
 
-    private List<TestMethod> testMethods = new ArrayList<TestMethod>();
+    private List<TestMethod> testMethods = new ArrayList<>();
 
     @SuppressWarnings("unused") // called by Maven when parsing MOJO configuration
     public TestClass() {

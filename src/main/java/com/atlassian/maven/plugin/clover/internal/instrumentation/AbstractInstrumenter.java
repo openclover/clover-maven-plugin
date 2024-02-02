@@ -135,7 +135,7 @@ public abstract class AbstractInstrumenter {
 
         // Maven2 limitation: changing the source directory doesn't change the compile source roots
         // See http://jira.codehaus.org/browse/MNG-1945
-        final List<String> sourceRoots = new ArrayList<String>(getCompileSourceRoots());
+        final List<String> sourceRoots = new ArrayList<>(getCompileSourceRoots());
 
         // Clean all source roots to add them again in order to keep the same original order of source roots.
         getCompileSourceRoots().removeAll(sourceRoots);
@@ -213,7 +213,7 @@ public abstract class AbstractInstrumenter {
      * @return the CLI args to be passed to CloverInstr
      */
     private String[] createCliArgs(final Map<String, String[]> filesToInstrument, final String outputDir) throws MojoExecutionException {
-        final List<String> parameters = new ArrayList<String>();
+        final List<String> parameters = new ArrayList<>();
 
         parameters.add("-p");
         parameters.add(getConfiguration().getFlushPolicy());

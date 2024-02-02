@@ -330,7 +330,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * @return the list of module projects.
      */
     protected List<MavenProject> getModuleProjects(final MavenProject project, final int levels) {
-        final List<MavenProject> projects = new ArrayList<MavenProject>();
+        final List<MavenProject> projects = new ArrayList<>();
         final boolean infinite = (levels == -1);
 
         getLog().debug("getModuleProjects: project=" + project.getId()

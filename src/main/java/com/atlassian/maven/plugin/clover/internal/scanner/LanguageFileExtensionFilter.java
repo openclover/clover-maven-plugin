@@ -17,7 +17,7 @@ public abstract class LanguageFileExtensionFilter implements LanguageFileFilter 
             return null;
         }
 
-        final ArrayList<String> filteredFiles = new ArrayList<String>(inputFiles.length);
+        final ArrayList<String> filteredFiles = new ArrayList<>(inputFiles.length);
         // copy files matching the extension(s)
         for (String inputFile : inputFiles) {
             final int lastDotIndex = inputFile.lastIndexOf('.');

@@ -23,11 +23,11 @@ import java.util.List;
  */
 public class TestSources {
 
-    private List<String> includes = new ArrayList<String>();
+    private List<String> includes = new ArrayList<>();
 
-    private List<String> excludes = new ArrayList<String>();
+    private List<String> excludes = new ArrayList<>();
 
-    private List<TestClass> testClasses = new ArrayList<TestClass>();
+    private List<TestClass> testClasses = new ArrayList<>();
 
     @SuppressWarnings("unused") // called by Maven when parsing MOJO configuration
     public TestSources() {
