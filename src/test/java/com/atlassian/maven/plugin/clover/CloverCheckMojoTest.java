@@ -68,11 +68,7 @@ public class CloverCheckMojoTest {
     public void testWhenHistoryDirIsMissing() throws Exception {
         // ensure this mojo does not failed, if targetPercentage and historyDir parameters are missing
         final boolean[] ran = {false};
-        final CloverPassTask task = new MockCloverPassTask(ran[0], new Runnable() {
-            public void run() {
-                ran[0] = true;
-            }
-        }, antProject);
+        final CloverPassTask task = new MockCloverPassTask(ran[0], () -> ran[0] = true, antProject);
         CloverCheckMojo mojo = createCheckMojo(task, true);
         final File historyDir = new File("some/nonexistent/path/");
         TestUtil.setPrivateField(CloverCheckMojo.class, mojo, "historyDir", historyDir);
@@ -91,11 +87,7 @@ public class CloverCheckMojoTest {
         // ensure this mojo does not failed, if targetPercentage and historyDir parameters are missing
 
         final boolean[] ran = {false};
-        final Runnable closure = new Runnable() {
-            public void run() {
-                ran[0] = true;
-            }
-        };
+        final Runnable closure = () -> ran[0] = true;
 
         final Percentage[] pcSet = {null};
         final CloverPassTask task = new MockCloverPassTask(ran[0], closure, antProject) {

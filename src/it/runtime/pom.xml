@@ -48,8 +48,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -58,7 +58,7 @@
                 <version>@project.version@</version>
                 <configuration>
                     <targetPercentage>1%</targetPercentage>
-                    <jdk>1.7</jdk>
+                    <jdk>1.8</jdk>
                     <generateHtml>true</generateHtml>
                     <generatePdf>true</generatePdf>
                     <generateXml>true</generateXml>

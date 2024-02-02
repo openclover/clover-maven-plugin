@@ -66,8 +66,8 @@ public class TestInstrumenter extends AbstractInstrumenter {
     protected boolean isGeneratedSourcesDirectory(final String sourceRoot) {
         String generatedSrcTestDirDefaultLifecycle = File.separator + "target" + File.separator + "generated-test-sources";
         String generatedSrcTestDirCloverLifecycle = File.separator + "target" + File.separator + "clover" + File.separator + "generated-test-sources";
-        return sourceRoot.indexOf(generatedSrcTestDirDefaultLifecycle) != -1
-               || sourceRoot.indexOf(generatedSrcTestDirCloverLifecycle) != -1;
+        return sourceRoot.contains(generatedSrcTestDirDefaultLifecycle)
+               || sourceRoot.contains(generatedSrcTestDirCloverLifecycle);
     }
 
     @Override
