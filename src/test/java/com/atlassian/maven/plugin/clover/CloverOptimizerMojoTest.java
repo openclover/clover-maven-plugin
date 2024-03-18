@@ -1,6 +1,6 @@
 package com.atlassian.maven.plugin.clover;
 
-import com.atlassian.clover.util.FileUtils;
+import org.openclover.core.util.FileUtils;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;

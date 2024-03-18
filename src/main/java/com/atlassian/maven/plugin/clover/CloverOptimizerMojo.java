@@ -2,12 +2,7 @@ package com.atlassian.maven.plugin.clover;
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
-import com.atlassian.clover.CloverNames;
-import com.atlassian.clover.ant.types.CloverOptimizedTestSet;
-import com.atlassian.clover.ant.types.CloverAlwaysRunTestSet;
-import com.atlassian.clover.util.FileUtils;
 import org.apache.maven.model.Plugin;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -16,6 +11,10 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Resource;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.openclover.runtime.CloverNames;
+import org.openclover.ant.types.CloverOptimizedTestSet;
+import org.openclover.ant.types.CloverAlwaysRunTestSet;
+import org.openclover.core.util.FileUtils;
 
 import java.io.File;
 import java.util.Arrays;

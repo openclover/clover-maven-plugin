@@ -1,10 +1,9 @@
 package com.atlassian.maven.plugin.clover.internal;
 
 import org.apache.maven.project.MavenProject;
+import org.openclover.runtime.CloverNames;
 
 import java.io.File;
-
-import com.atlassian.clover.CloverNames;
 
 /**
  * A helper class to manage configuration of the clover-maven-plugin

@@ -20,12 +20,12 @@ package com.atlassian.maven.plugin.clover;
  */
 
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
-import com.atlassian.clover.CloverMerge;
-import com.atlassian.clover.cfg.Interval;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.openclover.core.CloverMerge;
+import org.openclover.core.cfg.Interval;
 
 import java.io.File;
 import java.util.ArrayList;

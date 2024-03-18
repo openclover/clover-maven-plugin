@@ -1,15 +1,15 @@
 package com.atlassian.maven.plugin.clover.internal.instrumentation;
 
-import com.atlassian.clover.cfg.instr.MethodContextDef;
-import com.atlassian.clover.cfg.instr.java.JavaInstrumentationConfig;
-import com.atlassian.clover.cmdline.CloverInstrArgProcessors;
 import com.atlassian.maven.plugin.clover.MethodWithMetricsContext;
 import com.atlassian.maven.plugin.clover.TestClass;
 import com.atlassian.maven.plugin.clover.TestMethod;
 import com.atlassian.maven.plugin.clover.TestSources;
 import org.junit.Test;
-import org.openclover.util.Lists;
-import org.openclover.util.Sets;
+import org.openclover.core.cfg.instr.MethodContextDef;
+import org.openclover.core.cfg.instr.java.JavaInstrumentationConfig;
+import org.openclover.core.cmdline.CloverInstrArgProcessors;
+import org.openclover.core.util.Lists;
+import org.openclover.core.util.Sets;
 
 import java.util.List;
 import java.util.Set;

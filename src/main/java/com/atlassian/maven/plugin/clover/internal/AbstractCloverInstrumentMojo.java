@@ -1,7 +1,6 @@
 package com.atlassian.maven.plugin.clover.internal;
 
 import clover.org.apache.commons.lang3.StringUtils;
-import com.atlassian.clover.util.IOStreamUtils;
 import com.atlassian.maven.plugin.clover.DistributedCoverage;
 import com.atlassian.maven.plugin.clover.MethodWithMetricsContext;
 import com.atlassian.maven.plugin.clover.TestSources;
@@ -12,6 +11,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.openclover.runtime.util.IOStreamUtils;
 
 import java.io.BufferedReader;
 import java.io.File;

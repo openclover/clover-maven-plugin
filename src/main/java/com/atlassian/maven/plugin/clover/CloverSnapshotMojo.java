@@ -1,27 +1,24 @@
 package com.atlassian.maven.plugin.clover;
 
-import com.atlassian.clover.CloverNames;
-import com.atlassian.clover.Logger;
-import com.atlassian.clover.ant.tasks.CloverSnapshotTask;
-import com.atlassian.clover.optimization.Snapshot;
-import com.atlassian.clover.optimization.SnapshotPrinter;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.atlassian.maven.plugin.clover.internal.ConfigUtil;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.Project;
+import org.openclover.runtime.CloverNames;
+import org.openclover.runtime.Logger;
+import org.openclover.ant.tasks.CloverSnapshotTask;
+import org.openclover.core.optimization.Snapshot;
+import org.openclover.core.optimization.SnapshotPrinter;
 
 import java.io.File;
 import java.util.Date;
 
 /**
  * Saves a Clover snapshot to the filesystem.
- *
  * A clover snapshot must be saved after all tests have been run. It is used by subsequent invocations of clover:optimize
  * to determine which tests get run. Therefore, this file must persist between clean builds.
- *
  * This is possible by using one of the following techniques:
  * 1) set the 'snapshot' (-Dmaven.clover.snapshot) configuration to a location outside the target directory
  * 2) leave the snapshot file in the default location 'target/clover/clover.db.snapshot' and do a clean build with the

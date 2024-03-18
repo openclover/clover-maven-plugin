@@ -19,8 +19,6 @@ package com.atlassian.maven.plugin.clover;
  * under the License.
  */
 
-import com.atlassian.clover.cfg.Percentage;
-import com.atlassian.clover.ant.tasks.CloverPassTask;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -29,6 +27,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
+import org.openclover.core.cfg.Percentage;
+import org.openclover.ant.tasks.CloverPassTask;
 
 import java.io.File;
 import java.util.List;

@@ -1,12 +1,12 @@
 package com.atlassian.maven.plugin.clover;
 
-import com.atlassian.clover.ant.tasks.HistoryPointTask;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openclover.ant.tasks.HistoryPointTask;
 
 import java.io.File;
 import java.util.ArrayList;

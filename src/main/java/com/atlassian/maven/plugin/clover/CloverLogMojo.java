@@ -19,7 +19,6 @@ package com.atlassian.maven.plugin.clover;
  * under the License.
  */
 
-import com.atlassian.clover.ant.tasks.CloverLogTask;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -28,6 +27,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
+import org.openclover.ant.tasks.CloverLogTask;
 
 import java.io.File;
 import java.util.Iterator;

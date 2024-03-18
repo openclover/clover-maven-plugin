@@ -19,9 +19,6 @@ package com.atlassian.maven.plugin.clover;
  * under the License.
  */
 
-import com.atlassian.clover.ant.groovy.GroovycSupport;
-import com.atlassian.clover.cfg.instr.InstrumentationConfig;
-import com.atlassian.clover.remote.DistributedConfig;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverInstrumentMojo;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 import com.atlassian.maven.plugin.clover.internal.instrumentation.MainInstrumenter;
@@ -46,6 +43,9 @@ import org.apache.maven.repository.RepositorySystem;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResult;
+import org.openclover.ant.groovy.GroovycSupport;
+import org.openclover.core.cfg.instr.InstrumentationConfig;
+import org.openclover.runtime.remote.DistributedConfig;
 
 import java.io.File;
 import java.io.IOException;

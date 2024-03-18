@@ -1,6 +1,6 @@
 package com.atlassian.maven.plugin.clover.internal.scanner;
 
-import com.atlassian.clover.spi.lang.Language;
+import org.openclover.core.spi.lang.Language;
 
 import java.util.ArrayList;
 import java.util.Set;

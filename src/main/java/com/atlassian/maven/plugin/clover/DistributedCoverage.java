@@ -1,6 +1,6 @@
 package com.atlassian.maven.plugin.clover;
 
-import com.atlassian.clover.remote.DistributedConfig;
+import org.openclover.runtime.remote.DistributedConfig;
 
 /**
  * Complex configuration objects need to be in the same package as the MOJO that defines them.

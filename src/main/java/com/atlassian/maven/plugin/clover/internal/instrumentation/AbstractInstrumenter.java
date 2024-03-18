@@ -20,10 +20,6 @@ package com.atlassian.maven.plugin.clover.internal.instrumentation;
  */
 
 import clover.org.apache.commons.lang3.StringUtils;
-import com.atlassian.clover.CloverInstr;
-import com.atlassian.clover.Logger;
-import com.atlassian.clover.cfg.instr.java.SourceLevel;
-import com.atlassian.clover.spi.lang.Language;
 import com.atlassian.maven.plugin.clover.MethodWithMetricsContext;
 import com.atlassian.maven.plugin.clover.MvnLogger;
 import com.atlassian.maven.plugin.clover.TestClass;
@@ -35,6 +31,10 @@ import com.atlassian.maven.plugin.clover.internal.scanner.LanguageFileExtensionF
 import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.FileUtils;
 import org.jetbrains.annotations.TestOnly;
+import org.openclover.core.CloverInstr;
+import org.openclover.core.cfg.instr.java.SourceLevel;
+import org.openclover.core.spi.lang.Language;
+import org.openclover.runtime.Logger;
 
 import java.io.File;
 import java.io.IOException;
