@@ -19,7 +19,7 @@ package com.atlassian.maven.plugin.clover.internal.scanner;
  * under the License.
  */
 
-import com.atlassian.clover.spi.lang.Language;
+import org.openclover.core.spi.lang.Language;
 
 import java.util.Map;
 

@@ -19,9 +19,9 @@ package com.atlassian.maven.plugin.clover.internal.scanner;
  * under the License.
  */
 
-import com.atlassian.clover.spi.lang.Language;
 import com.atlassian.maven.plugin.clover.internal.CompilerConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.openclover.core.spi.lang.Language;
 
 import java.io.File;
 import java.util.ArrayList;

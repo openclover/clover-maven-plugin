@@ -1,12 +1,12 @@
 package com.atlassian.maven.plugin.clover;
 
-import com.atlassian.clover.ant.tasks.CloverPassTask;
-import com.atlassian.clover.cfg.Percentage;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 import org.junit.Before;
 import org.junit.Test;
+import org.openclover.ant.tasks.CloverPassTask;
+import org.openclover.core.cfg.Percentage;
 
 import java.io.File;
 import java.io.IOException;

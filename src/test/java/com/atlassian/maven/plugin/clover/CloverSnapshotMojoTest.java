@@ -1,10 +1,10 @@
 package com.atlassian.maven.plugin.clover;
 
-import com.atlassian.clover.ant.tasks.CloverSnapshotTask;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.junit.Before;
 import org.junit.Test;
+import org.openclover.ant.tasks.CloverSnapshotTask;
 
 import java.io.File;
 import java.io.IOException;

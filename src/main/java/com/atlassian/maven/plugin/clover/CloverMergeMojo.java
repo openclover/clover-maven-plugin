@@ -19,18 +19,16 @@ package com.atlassian.maven.plugin.clover;
  * under the License.
  */
 
+import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.BuildException;
-import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
-
+import org.openclover.ant.tasks.CloverMergeTask;
+import org.openclover.core.cfg.Interval;
 
 import java.io.File;
-
-import com.atlassian.clover.cfg.Interval;
-import com.atlassian.clover.ant.tasks.CloverMergeTask;
 
 /**
  * Merge arbitrary number of clover databases into one.

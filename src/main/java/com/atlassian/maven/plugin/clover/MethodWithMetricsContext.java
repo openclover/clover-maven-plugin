@@ -1,6 +1,6 @@
 package com.atlassian.maven.plugin.clover;
 
-import com.atlassian.clover.cfg.instr.MethodContextDef;
+import org.openclover.core.cfg.instr.MethodContextDef;
 
 /**
  * Complex configuration objects need to be in the same package as the MOJO that defines them.

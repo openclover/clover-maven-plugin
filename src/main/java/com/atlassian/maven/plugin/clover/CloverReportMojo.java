@@ -19,7 +19,6 @@ package com.atlassian.maven.plugin.clover;
  * under the License.
  */
 
-import com.atlassian.clover.cfg.Interval;
 import com.atlassian.maven.plugin.clover.internal.AbstractCloverMojo;
 import com.atlassian.maven.plugin.clover.internal.AntPropertyHelper;
 import com.atlassian.maven.plugin.clover.internal.CloverConfiguration;
@@ -42,6 +41,7 @@ import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResult;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 import org.apache.tools.ant.PropertyHelper;
+import org.openclover.core.cfg.Interval;
 
 import java.io.File;
 import java.util.List;

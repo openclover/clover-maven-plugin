@@ -1,11 +1,11 @@
 package com.atlassian.maven.plugin.clover.internal.lifecycle;
 
-import com.atlassian.clover.api.CloverException;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.LifecycleExecutor;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
 import org.apache.maven.project.MavenProject;
 import org.jetbrains.annotations.NotNull;
+import org.openclover.runtime.api.CloverException;
 
 import java.util.Set;
 

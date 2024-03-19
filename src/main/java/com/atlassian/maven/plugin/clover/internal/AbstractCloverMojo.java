@@ -19,7 +19,6 @@ package com.atlassian.maven.plugin.clover.internal;
  * under the License.
  */
 
-import com.atlassian.clover.util.FileUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
@@ -27,6 +26,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Taskdef;
+import org.openclover.core.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
