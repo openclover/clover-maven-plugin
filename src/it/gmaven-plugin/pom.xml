@@ -20,7 +20,7 @@
         See invoker.properties file how goals can be used.
     </description>
     <properties>
-        <groovy.version>2.4.15</groovy.version>
+        <groovy.version>2.4.21</groovy.version>
         <gmaven.version>1.5</gmaven.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
