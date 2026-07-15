@@ -76,15 +76,15 @@
         <!-- Check that we have instrumented java sources -->
         <file>
             <location>target/clover/src-instrumented/org/openclover/maven/samples/JavaExample.java</location>
-            <contains>This file has been instrumented by Clover</contains>
+            <contains>This file has been instrumented by OpenClover</contains>
         </file>
         <file>
             <location>target/clover/src-instrumented/org/openclover/maven/samples/JavaHelper.java</location>
-            <contains>This file has been instrumented by Clover</contains>
+            <contains>This file has been instrumented by OpenClover</contains>
         </file>
         <file>
             <location>target/clover/src-test-instrumented/org/openclover/maven/samples/JavaHelperTest.java</location>
-            <contains>This file has been instrumented by Clover</contains>
+            <contains>This file has been instrumented by OpenClover</contains>
         </file>
     </files>
 </verifications>

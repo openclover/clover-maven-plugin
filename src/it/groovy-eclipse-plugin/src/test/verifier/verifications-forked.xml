@@ -75,15 +75,15 @@
         <!-- Check that we have instrumented java sources -->
         <file>
             <location>target/clover/src/org/openclover/maven/samples/JavaExample.java</location>
-            <contains>This file has been instrumented by Clover</contains>
+            <contains>This file has been instrumented by OpenClover</contains>
         </file>
         <file>
             <location>target/clover/src/org/openclover/maven/samples/JavaHelper.java</location>
-            <contains>This file has been instrumented by Clover</contains>
+            <contains>This file has been instrumented by OpenClover</contains>
         </file>
         <file>
             <location>target/clover/src-test/org/openclover/maven/samples/JavaHelperTest.java</location>
-            <contains>This file has been instrumented by Clover</contains>
+            <contains>This file has been instrumented by OpenClover</contains>
         </file>
         <!-- Check that we have compiled classes in 'default' life cycle -->
         <file>

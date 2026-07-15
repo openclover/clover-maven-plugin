@@ -38,11 +38,11 @@
         <!-- Check that we have instrumented java sources -->
         <file>
             <location>target/clover/src-instrumented/com/atlassian/maven/plugins/Helper.java</location>
-            <contains>This file has been instrumented by Clover</contains>
+            <contains>This file has been instrumented by OpenClover</contains>
         </file>
         <file>
             <location>target/clover/src-test-instrumented/com/atlassian/maven/plugins/HelperTest.java</location>
-            <contains>This file has been instrumented by Clover</contains>
+            <contains>This file has been instrumented by OpenClover</contains>
         </file>
     </files>
 </verifications>
