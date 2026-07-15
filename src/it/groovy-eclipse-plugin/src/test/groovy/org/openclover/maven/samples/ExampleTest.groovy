@@ -1,4 +1,6 @@
 package org.openclover.maven.samples
+
+import groovy.test.GroovyTestCase
 /**
  * Tests for the {@link GroovyExample} class.
  */

@@ -3,32 +3,32 @@
     <files>
         <!-- check that we have reports for the groovy classes -->
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugins/ExampleTest.html</location>
+            <location>target/site/clover/org/openclover/maven/samples/ExampleTest.html</location>
             <contains>File ExampleTest.groovy</contains>
         </file>
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugins/GroovyExample.html</location>
+            <location>target/site/clover/org/openclover/maven/samples/GroovyExample.html</location>
             <contains>File GroovyExample.groovy</contains>
         </file>
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugins/GroovyHelper.html</location>
+            <location>target/site/clover/org/openclover/maven/samples/GroovyHelper.html</location>
             <contains>File GroovyHelper.groovy</contains>
         </file>
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugins/GroovyHelperTest.html</location>
+            <location>target/site/clover/org/openclover/maven/samples/GroovyHelperTest.html</location>
             <contains>File GroovyHelperTest.groovy</contains>
         </file>
         <!-- check that we have reports for the java classes -->
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugins/JavaExample.html</location>
+            <location>target/site/clover/org/openclover/maven/samples/JavaExample.html</location>
             <contains>File JavaExample.java</contains>
         </file>
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugins/JavaHelper.html</location>
+            <location>target/site/clover/org/openclover/maven/samples/JavaHelper.html</location>
             <contains>File JavaHelper.java</contains>
         </file>
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugins/JavaHelperTest.html</location>
+            <location>target/site/clover/org/openclover/maven/samples/JavaHelperTest.html</location>
             <contains>File JavaHelperTest.java</contains>
         </file>
         <!-- Check that we have code coverage -->
@@ -51,39 +51,39 @@
         </file>
         <!-- Check that we have compiled some classes, which were out of scope of instrumentation -->
         <file>
-            <location>target/classes/com/atlassian/maven/plugins/GroovyExcludedFile.class</location>
+            <location>target/classes/org/openclover/maven/samples/GroovyExcludedFile.class</location>
         </file>
         <file>
-            <location>target/classes/com/atlassian/maven/plugins/JavaExcludedFile.class</location>
+            <location>target/classes/org/openclover/maven/samples/JavaExcludedFile.class</location>
         </file>
         <!-- Check that out of scope instrumentation classes were executed -->
         <file>
-            <location>target/surefire-reports/com.atlassian.maven.plugins.JavaExcludedFileTest-output.txt</location>
+            <location>target/surefire-reports/org.openclover.maven.samples.JavaExcludedFileTest-output.txt</location>
             <contains>Executing JavaExcludedFileTest.testExcluded</contains>
         </file>
         <file>
-            <location>target/surefire-reports/com.atlassian.maven.plugins.JavaExcludedFileTest-output.txt</location>
+            <location>target/surefire-reports/org.openclover.maven.samples.JavaExcludedFileTest-output.txt</location>
             <contains>JavaExcludedFile.excluded: this shall not be in the report</contains>
         </file>
         <file>
-            <location>target/surefire-reports/com.atlassian.maven.plugins.GroovyExcludedFileTest-output.txt</location>
+            <location>target/surefire-reports/org.openclover.maven.samples.GroovyExcludedFileTest-output.txt</location>
             <contains>Executing GroovyExcludedFileTest.testExcluded</contains>
         </file>
         <file>
-            <location>target/surefire-reports/com.atlassian.maven.plugins.GroovyExcludedFileTest-output.txt</location>
+            <location>target/surefire-reports/org.openclover.maven.samples.GroovyExcludedFileTest-output.txt</location>
             <contains>GroovyExcludedFile.excluded: this shall not be in the report</contains>
         </file>
         <!-- Check that we have instrumented java sources -->
         <file>
-            <location>target/clover/src-instrumented/com/atlassian/maven/plugins/JavaExample.java</location>
+            <location>target/clover/src-instrumented/org/openclover/maven/samples/JavaExample.java</location>
             <contains>This file has been instrumented by Clover</contains>
         </file>
         <file>
-            <location>target/clover/src-instrumented/com/atlassian/maven/plugins/JavaHelper.java</location>
+            <location>target/clover/src-instrumented/org/openclover/maven/samples/JavaHelper.java</location>
             <contains>This file has been instrumented by Clover</contains>
         </file>
         <file>
-            <location>target/clover/src-test-instrumented/com/atlassian/maven/plugins/JavaHelperTest.java</location>
+            <location>target/clover/src-test-instrumented/org/openclover/maven/samples/JavaHelperTest.java</location>
             <contains>This file has been instrumented by Clover</contains>
         </file>
     </files>

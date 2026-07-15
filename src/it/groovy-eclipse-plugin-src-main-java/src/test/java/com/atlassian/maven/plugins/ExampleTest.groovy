@@ -1,6 +1,6 @@
 package com.atlassian.maven.plugins
 
-import groovy.util.GroovyTestCase
+import groovy.test.GroovyTestCase
 
 /**
  * Tests for the {@link Example} class.

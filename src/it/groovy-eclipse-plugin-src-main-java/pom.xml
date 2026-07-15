@@ -18,9 +18,9 @@
     </description>
     <properties>
         <maven.compiler>3.7.0</maven.compiler>
-        <groovy.all>2.4.15</groovy.all>
-        <groovy.eclipse.batch>2.5.14-02</groovy.eclipse.batch>
-        <groovy.eclipse.compiler>2.9.2-01</groovy.eclipse.compiler>
+        <groovy.all>4.0.32</groovy.all>
+        <groovy.eclipse.batch>3.0.8-01</groovy.eclipse.batch>
+        <groovy.eclipse.compiler>3.7.0</groovy.eclipse.compiler>
         <junit.version>4.13.1</junit.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -32,9 +32,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.groovy</groupId>
+            <groupId>org.apache.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>${groovy.all}</version>
+            <type>pom</type>
         </dependency>
     </dependencies>
     <build>
