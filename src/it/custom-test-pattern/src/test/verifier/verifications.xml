@@ -22,34 +22,34 @@ under the License.
     <files>
         <!--com.atlassian.maven.plugin.clover.samples.testsources.classic.ExampleThree-->
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/testsources/classic/ExampleThree.html</location>
+            <location>target/site/clover/org/openclover/maven/samples/testsources/classic/ExampleThree.html</location>
             <contains>ExampleThree\.testExampleThree</contains>
         </file>
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/testsources/classic/ExampleThree.html</location>
+            <location>target/site/clover/org/openclover/maven/samples/testsources/classic/ExampleThree.html</location>
             <contains>(?!ExampleThree\.testNotExampleThree)</contains>
         </file>
         <!--com.atlassian.maven.plugin.clover.samples.testsources.excluded.ExcludedOne-->
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/testsources/excluded/ExcludedOne.html</location>
+            <location>target/site/clover/org/openclover/maven/samples/testsources/excluded/ExcludedOne.html</location>
             <contains>No tests hitting this source file were found</contains>
         </file>
         <!--com.atlassian.maven.plugin.clover.samples.testsources.ExampleOne-->
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/testsources/ExampleOne.html</location>
+            <location>target/site/clover/org/openclover/maven/samples/testsources/ExampleOne.html</location>
             <contains>ExampleOne\.testExampleOne</contains>
         </file>
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/testsources/ExampleOne.html</location>
+            <location>target/site/clover/org/openclover/maven/samples/testsources/ExampleOne.html</location>
             <contains>(?!ExampleOne\.notTestExampleOne)</contains>
         </file>
         <!--com.atlassian.maven.plugin.clover.samples.testsources.ExampleTwoIT-->
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/testsources/ExampleTwoIT.html</location>
+            <location>target/site/clover/org/openclover/maven/samples/testsources/ExampleTwoIT.html</location>
             <contains>ExampleTwoIT\.getRequest</contains>
         </file>
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/testsources/ExampleTwoIT.html</location>
+            <location>target/site/clover/org/openclover/maven/samples/testsources/ExampleTwoIT.html</location>
             <contains>ExampleTwoIT\.postRequest</contains>
         </file>
         <!-- TODO uncomment when OC-96 is implemented -->
@@ -59,12 +59,12 @@ under the License.
         </file>-->
         <!--com.atlassian.maven.plugin.clover.samples.testsources.NoTestSuiteSoNotOne-->
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/testsources/NoTestSuiteSoNotOne.html</location>
+            <location>target/site/clover/org/openclover/maven/samples/testsources/NoTestSuiteSoNotOne.html</location>
             <contains>No tests hitting this source file were found</contains>
         </file>
         <!--com.atlassian.maven.plugin.clover.samples.testsources.NotExampleThree-->
         <file>
-            <location>target/site/clover/com/atlassian/maven/plugin/clover/samples/testsources/NotExampleThree.html</location>
+            <location>target/site/clover/org/openclover/maven/samples/testsources/NotExampleThree.html</location>
             <contains>No tests hitting this source file were found</contains>
         </file>
     </files>

@@ -1,10 +1,11 @@
 package com.atlassian.maven.plugins.sample.optimized;
 
-import com.atlassian.clover.api.CloverException;
-import com.atlassian.clover.CloverDatabase;
-import com.atlassian.clover.CoverageDataSpec;
-import com.atlassian.clover.registry.entities.TestCaseInfo;
-import com.atlassian.clover.optimization.Snapshot;
+import org.openclover.runtime.api.CloverException;
+import org.openclover.core.CloverDatabase;
+import org.openclover.core.CoverageDataSpec;
+import org.openclover.core.api.registry.TestCaseInfo;
+import org.openclover.core.optimization.Snapshot;
+import org.openclover.core.registry.entities.FullTestCaseInfo;
 
 import java.io.IOException;
 import java.util.Set;
@@ -39,8 +40,8 @@ public class SnapshotHacking {
             if (tci.getQualifiedName().equals(failedTestCase)) {
                 // our test lasted 1 milisecond (it's used for ordering tests)
                 long duration = 1;
-                // our test has failed
-                tci.setFailure(true);
+                // our test has failed; TestCaseInfo is read-only, mutation needs the concrete type
+                ((FullTestCaseInfo) tci).setFailure(true);
                 // update snapshot
                 snapshot.updatePerTestInfo(db, tci, duration);
             }

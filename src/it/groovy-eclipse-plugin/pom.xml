@@ -21,9 +21,9 @@
         This sample is also an integration test checking binary compatibility with ASM v3, ASM v4, Groovy v1, Groovy v2.
     </description>
     <properties>
-        <groovy.all>2.4.15</groovy.all>
-        <groovy.eclipse.batch>2.5.14-02</groovy.eclipse.batch>
-        <groovy.eclipse.compiler>2.9.2-01</groovy.eclipse.compiler>
+        <groovy.all>4.0.32</groovy.all>
+        <groovy.eclipse.batch>3.0.8-01</groovy.eclipse.batch>
+        <groovy.eclipse.compiler>3.7.0</groovy.eclipse.compiler>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
@@ -34,9 +34,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.groovy</groupId>
+            <groupId>org.apache.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>${groovy.all}</version>
+            <type>pom</type>
         </dependency>
     </dependencies>
     <build>
