@@ -39,6 +39,6 @@ under the License.
       <item name="Report Goal" href="/architecture/clover-report.html"/>
     </menu>
 
-    ${reports}
+    <menu ref="reports"/>
   </body>
 </project>

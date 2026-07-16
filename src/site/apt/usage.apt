@@ -33,29 +33,29 @@
 
 * Table Of Contents
 
- * {{{usage.html#Getting Started}Getting Started}}
+ * {{{#usage.htmlGetting_Started}Getting Started}}
 
-   * {{{usage.html#Controlling files to instrument}Controlling files to instrument}}
+   * {{{#usage.htmlControlling_files_to_instrument}Controlling files to instrument}}
 
- * {{{usage.html#Checking test coverage}Checking test coverage}}
+ * {{{#usage.html#Checking_test_coverage}Checking test coverage}}
 
-   * {{{usage.html#Using block contexts}Using block contexts}}
+   * {{{#usage.htmlUsing_block_contexts}Using block contexts}}
 
-   * {{{usage.html#Using Clover with different JDK versions}Using Clover with different JDK versions}}
+   * {{{#usage.htmlUsing_Clover_with_different_JDK_versions}Using Clover with different JDK versions}}
 
-   * {{{usage.html#Specifying a Clover flush policy}Specifying a Clover flush policy}}
+   * {{{#usage.htmlSpecifying_a_Clover_flush_policy}Specifying a Clover flush policy}}
 
- * {{{usage.html#Generating a Clover report}Generating a Clover report}}
+ * {{{#usage.htmlGenerating_a_Clover_report}Generating a Clover report}}
 
-   * {{{usage.html#Specifying report formats}Specifying report formats}}
+   * {{{#usage.htmlSpecifying_report_formats}Specifying report formats}}
 
-   * {{{usage.html#Generating historical reports}Generating historical reports}}
+   * {{{#usage.htmlGenerating_historical_reports}Generating historical reports}}
 
-   * {{{usage.html#Aggregating Clover Reports}Aggregating Clover Reports}}
+   * {{{#usage.htmlAggregating_Clover_Reports}Aggregating Clover Reports}}
 
- * {{{usage.html#Getting information on an existing Clover database}Getting information on an existing Clover database}}
+ * {{{#usage.htmlGetting_information_on_an_existing_Clover_database}Getting information on an existing Clover database}}
 
- * {{{usage.html#Specifying a custom license file}Specifying a custom license file}}
+ * {{{#usage.htmlSpecifying_a_custom_license_file}Specifying a custom license file}}
 
  []
 
@@ -102,7 +102,7 @@
   with main production sources and artifacts. This is the reason why you may see your tests executed twice: once
   for the production sources and once for the Clover-instrumented sources.
 
-  <Back to {{{usage.html}top}}.>
+  <Back to {{{./usage.html}top}}.>
 
 ** {Controlling files to instrument}
 
@@ -127,7 +127,7 @@
 [...]
 +---------
 
-  <Back to {{{usage.html}top}}.>
+  <Back to {{{./usage.html}top}}.>
 
 * {Checking test coverage}
 
@@ -218,7 +218,7 @@
   mvn clover:instrument clover:check -Dmaven.clover.targetPercentage=50% -Dmaven.clover.failOnViolation=false
 +------+
 
-  <Back to {{{usage.html}top}}.>
+  <Back to {{{./usage.html}top}}.>
 
 ** {Using block contexts}
 
@@ -243,7 +243,7 @@
   Note that the <<<contextFilters>>> element has to be specified within the <<<reporting>>> section and will not
   work if you specify it in the <<<build>>> section.
 
-  <Back to {{{usage.html}top}}.>
+  <Back to {{{./usage.html}top}}.>
 
 ** {Specifying a Clover flush policy}
 
@@ -267,7 +267,7 @@
 [...]
 +---------
 
-  <Back to {{{usage.html}top}}.>
+  <Back to {{{./usage.html}top}}.>
 
 * {Generating a Clover report}
 
@@ -351,7 +351,7 @@ mvn clover:instrument clover:clover
   <<<pre-site>>> phase. This is done to ensure that a Clover database is
   generated before the report executes.
 
-  <Back to {{{usage.html}top}}.>
+  <Back to {{{./usage.html}top}}.>
 
 ** {Specifying report formats}
 
@@ -423,7 +423,7 @@ mvn clover:instrument clover:clover
 [...]
 +---------
 
-  <Back to {{{usage.html}top}}.>
+  <Back to {{{./usage.html}top}}.>
 
 ** {Generating historical reports}
 
@@ -501,7 +501,7 @@ mvn clover:instrument clover:clover
 [...]
 +---------
 
-  <Back to {{{usage.html}top}}.>
+  <Back to {{{./usage.html}top}}.>
 
 ** {Aggregating Clover Reports}
 
@@ -581,7 +581,7 @@ mvn clover:instrument clover:aggregate clover:clover
   Note that you can control the location of the merged Clover database by using
   the <<<cloverMergeDatabase>>> configuration property.
 
-  <Back to {{{usage.html}top}}.>
+  <Back to {{{./usage.html}top}}.>
 
 * {Getting information on an existing Clover database}
 
@@ -603,4 +603,4 @@ Coverage Overview -
         TOTAL: 62,5%
 +---------
 
-  <Back to {{{usage.html}top}}.>
+  <Back to {{{./usage.html}top}}.>

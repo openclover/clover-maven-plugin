@@ -32,10 +32,10 @@ Architecture
   not need to read those docments to be able to use the plugin. However they do provide some
   insight about the implementation and may help code contributors.
 
-  {{{clover-check.html}Clover check goal architecture}}:
+  {{{./clover-check.html}Clover check goal architecture}}:
 
 [../images/clover-check-achitecture-small.jpg] Clover check goal architecture
 
-  {{{clover-report.html}Clover report goal architecture}}:
+  {{{./clover-report.html}Clover report goal architecture}}:
 
 [../images/clover-report-architecture-small.jpg] Clover report goal architecture
