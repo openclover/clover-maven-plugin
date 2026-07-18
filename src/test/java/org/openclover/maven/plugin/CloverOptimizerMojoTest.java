@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -62,7 +63,7 @@ public class CloverOptimizerMojoTest {
     protected DirNode testLayout;
 
     /**
-     * Helper map (file -> platfrom specific path)
+     * Helper map (file -> platform specific path)
      */
     protected Map<String, String> path;
 
@@ -418,7 +419,7 @@ public class CloverOptimizerMojoTest {
         FileUtils.deltree(emptyDir);
         emptyDir.mkdirs();
         assertTrue(emptyDir.isDirectory());
-        assertEquals(0, emptyDir.list().length);
+        assertEquals(0, requireNonNull(emptyDir.list()).length);
         return emptyDir;
     }
 

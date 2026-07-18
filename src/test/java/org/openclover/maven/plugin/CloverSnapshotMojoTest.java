@@ -1,6 +1,5 @@
 package org.openclover.maven.plugin;
 
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,7 +57,7 @@ public class CloverSnapshotMojoTest {
     }
 
     @Test
-    public void testExecuteCloverSnapshotWhenSnapshotDirDoesNotExist() throws MojoExecutionException, IOException {
+    public void testExecuteCloverSnapshotWhenSnapshotDirDoesNotExist() throws IOException {
         final CloverSnapshotTask task = mock(CloverSnapshotTask.class);
         CloverSnapshotMojo mojo = new CloverSnapshotMojoStub(task);
         mojo.setLog(log);

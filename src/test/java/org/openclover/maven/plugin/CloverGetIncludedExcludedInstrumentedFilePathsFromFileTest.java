@@ -19,7 +19,7 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Unit tests for {@link AbstractCloverInstrumentMojo#getExcludes()} and {@link AbstractCloverInstrumentMojo#getIncludes()} ()}
+ * Unit tests for {@link AbstractCloverInstrumentMojo#getExcludes()} and {@link AbstractCloverInstrumentMojo#getIncludes()}
  */
 @RunWith(Parameterized.class)
 public class CloverGetIncludedExcludedInstrumentedFilePathsFromFileTest {
