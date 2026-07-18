@@ -31,4 +31,5 @@ jobs:
 
       - name: Run tests
         run: |
+          mvn -version
           mvn -B -ntp clean verify -Pintegration-tests
