@@ -24,7 +24,7 @@ import org.codehaus.plexus.util.introspection.ReflectionValueExtractor;
 /**
  * Makes the ${expressions} used in Maven available to Ant as properties.
  * <p>
- * Registered with Ant's {@link PropertyHelper} via {@link PropertyHelper#add(PropertyHelper.PropertyEvaluator)};
+ * Registered with Ant's PropertyHelper via PropertyHelper.add(PropertyHelper.PropertyEvaluator);
  * returning {@code null} lets Ant's own property resolution (including system properties) take over.
  */
 public class AntPropertyHelper implements PropertyHelper.PropertyEvaluator {
