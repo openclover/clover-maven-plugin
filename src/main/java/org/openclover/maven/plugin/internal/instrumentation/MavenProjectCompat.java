@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
  * Helper for calling {@link MavenProject} methods that are not available on all supported Maven versions.
  * <p>
  * Maven 4.0.0 forbids modifying the compile source roots through the list returned by
- * {@link MavenProject#getCompileSourceRoots()} (or {@code getTestCompileSourceRoots()}) - doing so via
+ * {@code getCompileSourceRoots()} (or {@code getTestCompileSourceRoots()}) - doing so via
  * {@code iterator.remove()} triggers a deprecation warning and stops working. Instead it exposes dedicated
  * {@code removeCompileSourceRoot(String)} / {@code removeTestCompileSourceRoot(String)} methods.
  * <p>

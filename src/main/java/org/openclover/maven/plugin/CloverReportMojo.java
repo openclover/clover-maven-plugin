@@ -200,7 +200,7 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
      * Whether to show inner functions, i.e. functions declared inside methods in the report. This applies to Java8
      * lambda functions for instance. If set to <code>false</code> then they are hidden on the list of methods, but
      * code metrics still include them.
-     *
+     * <p>
      * Note: if you will use showLambdaFunctions=true and showInnerFunctions=false then only lambda functions declared
      * as a class field will be listed.
      *
@@ -213,7 +213,7 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
      * Whether to show lambda functions in the report. Lambda functions can be either declared inside method body
      * or as a class field. If set to <code>false</code> then they are hidden on the list of methods, but code
      * metrics still include them.
-     *
+     * <p>
      * Note: if you will use showLambdaFunctions=true and showInnerFunctions=false then only lambda functions declared
      * as a class field will be listed.
      *
@@ -263,13 +263,13 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
     private List<MavenProject> reactorProjects;
 
     /**
-     * @see AbstractCloverMojo#licenseLocation
+     * Same as {@code licenseLocation} in {@link AbstractCloverMojo}.
      */
     @Parameter(property = "maven.clover.licenseLocation")
     private String licenseLocation;
 
     /**
-     * @see AbstractCloverMojo#license
+     * Same as {@code license} in {@link AbstractCloverMojo}.
      */
     @Parameter(property = "maven.clover.license")
     private String license;

@@ -65,10 +65,10 @@ public abstract class AbstractInstrumenter {
     }
 
     /**
+     * See also {@link CloverInstrumentInternalMojo} - {@code calcIncludedFilesForGroovy()}
+     * and {@code redirectOutputDirectories()}.
      *
      * @throws MojoExecutionException when instrumentation fails
-     * @see CloverInstrumentInternalMojo#calcIncludedFilesForGroovy()
-     * @see CloverInstrumentInternalMojo#redirectOutputDirectories()
      */
     public void instrument() throws MojoExecutionException {
         final CloverSourceScanner scanner = getSourceScanner();

@@ -8,8 +8,6 @@ import javax.servlet.ServletConfig;
 import java.io.IOException;
 import java.util.Enumeration;
 
-/**
- */
 public class RemoteServlet extends HttpServlet {
 
 

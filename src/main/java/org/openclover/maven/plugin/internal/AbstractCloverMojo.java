@@ -166,7 +166,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
      * Register the Clover Ant tasks against a fake Ant {{@link Project}} object so that we can the tasks later on.
      * This is the Java equivalent of the <code>taskdef</code> call that you would need in your Ant
      * <code>build.xml</code> file if you wanted to use the Clover Ant tasks from Ant.
-     *
+     * <p>
      * Note: We're defining this method as static because it is also required in the report mojo and reporting mojos
      * and main mojos cannot share anything right now. See <a href="https://jira.codehaus.org/browse/MNG-1886">MNG-1886</a>.
      *
@@ -183,7 +183,7 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
 
     /**
      * Wait 2*'flush interval' milliseconds to ensure that the coverage data have been flushed to the Clover database.
-     *
+     * <p>
      * This method should not be static, but we need it static here because we cannot share code
      * between non report mojos and main build mojos.
      *
@@ -313,13 +313,13 @@ public abstract class AbstractCloverMojo extends AbstractMojo implements CloverC
     /**
      * Returns all the projects that are modules, or modules of modules, of the
      * specified project found within the reactor.
-     *
+     * <p>
      * The searchLevel parameter controls how many descendent levels of modules
      * are returned. With a searchLevels equals to 1, only the immediate modules
      * of the specified project are returned.
-     *
+     * <p>
      * A searchLevel equals to 2 returns those module's modules as well.
-     *
+     * <p>
      * A searchLevel equals to -1 returns the entire module hierarchy beneath the
      * specified project. Note that this is simply the equivalent to the entire reactor
      * if the specified project is the root execution project.
