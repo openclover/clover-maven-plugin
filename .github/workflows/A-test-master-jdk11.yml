@@ -33,7 +33,7 @@ jobs:
         cache: maven
 
     - name: Run basic tests and install artifacts locally
-      run: mvn clean install
+      run: mvn -ntp clean install
 
     - name: Run integration tests
-      run: mvn clean verify -Pintegration-tests
+      run: mvn -ntp clean verify -Pintegration-tests
