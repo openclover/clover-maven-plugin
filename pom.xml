@@ -260,6 +260,44 @@ under the License.
         </pluginManagement>
     </build>
     <profiles>
+        <!--
+            Spotless with Palantir Java Format. Palantir requires the build JVM to be Java 11+,
+            so this profile is auto-activated only on JDK 11 or newer; JDK 8 builds skip it.
+            Formats src/main/java and src/test/java, but not integration-test projects in src/it.
+        -->
+        <profile>
+            <id>spotless</id>
+            <activation>
+                <jdk>[11,)</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <version>2.43.0</version>
+                        <configuration>
+                            <java>
+                                <includes>
+                                    <include>src/main/java/**/*.java</include>
+                                    <include>src/test/java/**/*.java</include>
+                                </includes>
+                                <palantirJavaFormat>
+                                    <version>2.47.0</version>
+                                </palantirJavaFormat>
+                            </java>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>integration-tests</id>
             <reporting>
