@@ -1,4 +1,4 @@
-name: B Prepare release
+name: C Prepare release
 
 on:
   workflow_dispatch:
@@ -18,10 +18,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: Set up JDK 1.8
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v5
         with:
           java-version: 8.0
           distribution: temurin
