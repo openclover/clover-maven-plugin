@@ -353,8 +353,8 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
         config.setIncludedFiles(includeFiles);
         config.setEnabled(true);
         config.setEncoding(getEncoding());
-        //Don't pass in an instance of DistributedCoverage because it can't be deserialised
-        //by Grover (ClassNotFoundException within the groovyc compiler)
+        //Don't pass in an instance of DistributedCoverage because it can't be deserialized
+        //by Grover (ClassNotFoundException within the Groovyc compiler)
         config.setDistributedConfig(getDistributedCoverage() == null ? null : new DistributedConfig(getDistributedCoverage().getConfigString()));
 
 
@@ -479,7 +479,7 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
 
     /**
      * Browse through all project dependencies and try to find a clovered version of the dependency. If found
-     * replace the main depedencency by the clovered version.
+     * replace the main dependency by the clovered version.
      */
     private void swizzleCloverDependencies() {
         final Set<Artifact> swizzledDependencyArtifacts = swizzleCloverDependencies(getProject().getDependencyArtifacts());

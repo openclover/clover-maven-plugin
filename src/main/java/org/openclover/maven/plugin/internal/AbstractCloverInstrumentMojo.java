@@ -75,7 +75,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected Set<String> excludes = new HashSet<>();
 
     /**
-     * The comma seperated list of file to exclude from the instrumentation. Patterns are resolved against source roots.
+     * The comma separated list of file to exclude from the instrumentation. Patterns are resolved against source roots.
      */
     @Parameter(property = "maven.clover.excludesList")
     protected String excludesList = null;
@@ -101,7 +101,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * directory.</p>
      * <p>By setting this parameter you can:</p>
      * <p> a) specify constant file name for generated artifact,</p>
-     * <p> b) choose location different than ${java.io.tmpdir}.</p>
+     * <p> b) choose location different from ${java.io.tmpdir}.</p>
      * <p>However, you must ensure that:</p>
      * <p> a) grover.jar will not be deleted till end of the build (for example don't put into ./target directory
      * and next run <code>mvn clover:setup clean</code>)</p>
@@ -122,7 +122,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     protected Set<String> includes = new HashSet<>(Arrays.asList("**/*.java", "**/*.groovy"));
 
     /**
-     * The comma seperated list of files to include in the instrumentation. Patterns are resolved against source roots.
+     * The comma separated list of files to include in the instrumentation. Patterns are resolved against source roots.
      * Defaults are **.java which are overwritten if &lt;includes&gt; is set by the user
      */
     @Parameter(property = "maven.clover.includesList")
@@ -184,7 +184,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     /**
      * <p>Which Java language level Clover shall use to parse sources. Valid values are: 8-17.</p>
-     * <p>By default Clover instruments using the highest language level supported.</p>
+     * <p>By default, Clover instruments using the highest language level supported.</p>
      */
     @Parameter(property = "maven.clover.jdk")
     protected String jdk;
@@ -258,7 +258,7 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * <li>maven-checkstyle-plugin (checkstyle.failOnViolation=false)</li>
      * <li>maven-pmd-plugin (pmd.failOnViolation=false)</li>
      * </ul>
-     * <p>Thanks to this, build continues despite test failures or code validation failures and thus
+     * <p>Thanks to this, build continues despite test failures or code validation failures, and thus
      * it is possible to generate a Clover coverage report for failed tests at the end of the build.</p>
      * <p>Note: before version 3.1.9 the <i>testFailureIgnore</i> property was set to <i>true</i> for
      * the forked Clover lifecycle ('instrument' goal) for 'test' and 'integration-test' phases. Since

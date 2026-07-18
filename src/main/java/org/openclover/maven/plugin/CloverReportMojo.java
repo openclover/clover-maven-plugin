@@ -358,18 +358,18 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
      */
     private void createAllReportTypes(final String database, final String titlePrefix) {
 
-        final String outpath = outputDirectory.getAbsolutePath();
+        final String outPath = outputDirectory.getAbsolutePath();
         if (this.generateHtml) {
-            createReport(database, "html", titlePrefix, outpath, outpath, false);
+            createReport(database, "html", titlePrefix, outPath, outPath, false);
         }
         if (this.generatePdf) {
-            createReport(database, "pdf", titlePrefix, outpath + "/clover.pdf", outpath + "/historical.pdf", true);
+            createReport(database, "pdf", titlePrefix, outPath + "/clover.pdf", outPath + "/historical.pdf", true);
         }
         if (this.generateXml) {
-            createReport(database, "xml", titlePrefix, outpath + "/clover.xml", null, false);
+            createReport(database, "xml", titlePrefix, outPath + "/clover.xml", null, false);
         }
         if (this.generateJson) {
-            createReport(database, "json", titlePrefix, outpath, null, false);
+            createReport(database, "json", titlePrefix, outPath, null, false);
         }
     } 
 

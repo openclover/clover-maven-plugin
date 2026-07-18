@@ -64,7 +64,6 @@ public class AntPropertyHelper implements PropertyHelper.PropertyEvaluator {
             if (log.isWarnEnabled()) {
                 log.warn("Error evaluating expression '" + property + "'", e);
             }
-            e.printStackTrace();
         }
 
         // let Ant's own property resolution (chained evaluators, system properties, ...) handle it

@@ -57,7 +57,7 @@ public class CloverAggregateMojo extends AbstractCloverMojo {
         }
 
         // If we're in a module with children modules, then aggregate the children clover databases.
-        if (getProject().getModules() != null && getProject().getModules().size() > 0) {
+        if (getProject().getModules() != null && !getProject().getModules().isEmpty()) {
             super.execute();
             getLog().debug("Project " + getProject().getId() + " (" + getProject().getBasedir()
                     + ") has " + getProject().getModules().size() + " child modules");
@@ -66,7 +66,7 @@ public class CloverAggregateMojo extends AbstractCloverMojo {
             AbstractCloverMojo.waitForFlush(getWaitForFlush(), getFlushInterval());
 
             final List<String> childrenDatabases = getChildrenCloverDatabases();
-            if (childrenDatabases.size() > 0) {
+            if (!childrenDatabases.isEmpty()) {
                 // Ensure the merged database output directory exists
                 new File(getCloverMergeDatabase()).getParentFile().mkdirs();
 

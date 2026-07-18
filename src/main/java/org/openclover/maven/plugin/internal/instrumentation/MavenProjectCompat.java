@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
  * <p>
  * Maven 4.0.0 forbids modifying the compile source roots through the list returned by
  * {@code getCompileSourceRoots()} (or {@code getTestCompileSourceRoots()}) - doing so via
- * {@code iterator.remove()} triggers a deprecation warning and stops working. Instead it exposes dedicated
+ * {@code iterator.remove()} triggers a deprecation warning and stops working. Instead, it exposes dedicated
  * {@code removeCompileSourceRoot(String)} / {@code removeTestCompileSourceRoot(String)} methods.
  * <p>
  * Since the plugin is compiled against the Maven 3.x API (which does not declare those methods), we invoke them
