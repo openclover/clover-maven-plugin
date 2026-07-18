@@ -10,9 +10,8 @@ import java.util.Enumeration;
 
 public class RemoteServlet extends HttpServlet {
 
-
-    public void init(ServletConfig servletConfig) throws ServletException {
-        Enumeration names = servletConfig.getInitParameterNames();
+    public void init(ServletConfig servletConfig) {
+        Enumeration<?> names = servletConfig.getInitParameterNames();
         while (names.hasMoreElements()) {
             String name = (String) names.nextElement();
             System.out.println(name + " = " + servletConfig.getInitParameter(name));
@@ -23,7 +22,6 @@ public class RemoteServlet extends HttpServlet {
         System.out.println("Hello, Server World! " + request.getServletPath());
         request.getRequestDispatcher("/my.jsp").forward(request, response);
     }
-
 
     private void noTestsComeHere() {
         String msg = "No tests reach me";
