@@ -123,6 +123,8 @@ public abstract class AbstractInstrumenter {
 
     protected abstract void addCompileSourceRoot(final String sourceRoot);
 
+    protected abstract void removeCompileSourceRoot(final String sourceRoot);
+
     protected abstract boolean isGeneratedSourcesDirectory(final String sourceRoot);
 
     private String redirectSourceDirectories(final String targetDirectory) {
@@ -139,7 +141,9 @@ public abstract class AbstractInstrumenter {
         final List<String> sourceRoots = new ArrayList<>(getCompileSourceRoots());
 
         // Clean all source roots to add them again in order to keep the same original order of source roots.
-        getCompileSourceRoots().removeAll(sourceRoots);
+        for (final String sourceRoot : sourceRoots) {
+            removeCompileSourceRoot(sourceRoot);
+        }
 
         final CloverSourceScanner scanner = getSourceScanner();
         for (final String sourceRoot : sourceRoots) {

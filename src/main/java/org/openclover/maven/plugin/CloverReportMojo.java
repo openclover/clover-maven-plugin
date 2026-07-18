@@ -384,7 +384,7 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
 
         PropertyHelper propertyHelper = PropertyHelper.getPropertyHelper( antProject );
 
-        propertyHelper.setNext( new AntPropertyHelper( project, getLog() ) );
+        propertyHelper.add( new AntPropertyHelper( project, getLog() ) );
 
         antProject.setUserProperty("ant.file", reportDescriptor.getAbsolutePath());
         antProject.setCoreLoader(getClass().getClassLoader());
