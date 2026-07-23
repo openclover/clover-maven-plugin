@@ -3,6 +3,7 @@ package org.openclover.maven.plugin;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
 import java.util.Date;
@@ -26,7 +27,8 @@ import java.util.Date;
  * explanatory message. Run the build up to the <code>verify</code> phase, or set the flag to <code>false</code>
  * if the installation of instrumented artifacts is intentional.</p>
  */
-@Mojo(name = "setup", defaultPhase = LifecyclePhase.PROCESS_SOURCES)
+@Mojo(name = "setup", defaultPhase = LifecyclePhase.PROCESS_SOURCES,
+        requiresDependencyResolution = ResolutionScope.TEST)
 public class CloverSetupMojo extends CloverInstrumentInternalMojo {
 
     static Date START_DATE; 
