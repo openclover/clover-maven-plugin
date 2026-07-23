@@ -15,6 +15,16 @@ import java.util.Date;
  * <p>This mojo should certainly *not* be called during a release build. This mojo instruments your source and test files
  * to ${build.directory}/clover/src-instrumented and test-src-instrumented respectively. These directories are then set as the
  * project's source and test source directories that subsequently get compiled by the compiler MOJO.</p>
+ *
+ * <p>This is the recommended (and, on Maven 4, the only) way to instrument sources - the <code>instrument</code>
+ * goal and its forked lifecycle are supported on Maven 3 only.</p>
+ *
+ * <p><b>Note: since version 5.1.0 the repository pollution protection is enabled by default</b>
+ * (<code>maven.clover.repositoryPollutionProtection</code> now defaults to <code>true</code>). Because this goal
+ * instruments sources in the main lifecycle, running the <code>install</code> or <code>deploy</code> phase would
+ * put instrumented classes into your local cache or a binaries repository; such a build now fails with an
+ * explanatory message. Run the build up to the <code>verify</code> phase, or set the flag to <code>false</code>
+ * if the installation of instrumented artifacts is intentional.</p>
  */
 @Mojo(name = "setup", defaultPhase = LifecyclePhase.PROCESS_SOURCES)
 public class CloverSetupMojo extends CloverInstrumentInternalMojo {

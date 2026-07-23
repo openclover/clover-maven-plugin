@@ -65,10 +65,10 @@ public abstract class AbstractInstrumenter {
     }
 
     /**
+     * See also {@link CloverInstrumentInternalMojo} - {@code calcIncludedFilesForGroovy()}
+     * and {@code redirectOutputDirectories()}.
      *
      * @throws MojoExecutionException when instrumentation fails
-     * @see CloverInstrumentInternalMojo#calcIncludedFilesForGroovy()
-     * @see CloverInstrumentInternalMojo#redirectOutputDirectories()
      */
     public void instrument() throws MojoExecutionException {
         final CloverSourceScanner scanner = getSourceScanner();
@@ -81,15 +81,15 @@ public abstract class AbstractInstrumenter {
             instrumentSources(javaFilesToInstrument, outputSourceDirectory);
         }
 
-        // find groovy files in all compilation roots and copy them
+        // find Groovy files in all compilation roots and copy them
         //
         // 1) in case when 'src/main/java' (or 'src/test/java') contains *.groovy source files (this is a trick possible
         // with a groovy-eclipse-plugin, see https://groovy.codehaus.org/Groovy-Eclipse+compiler+plugin+for+Maven
         // "Setting up source folders / Do nothing") we must copy *.groovy files as well
         // reason: 'src/main/java' (or 'src/test/java') will be redirected to 'target/clover/src-instrumented'
-        // (or 'target/clover/src-test-instrumented') and Groovy compiler must be able to find these groovy sources
+        // (or 'target/clover/src-test-instrumented') and Groovy compiler must be able to find these Groovy sources
         //
-        // 2) however we shall not copy groovy files from 'src/(main|test)/groovy' because these source roots are not
+        // 2) however we shall not copy Groovy files from 'src/(main|test)/groovy' because these source roots are not
         // being redirected to 'target/clover/src-(test-)instrumented'; furthermore groovy-eclipse-plugin has
         // 'src/(main|test)/groovy' location hardcoded, so copying files would end up with 'duplicate class' build error
         final Map<String, String[]> groovyFilesToInstrument = scanner.getSourceFilesToInstrument(LanguageFileExtensionFilter.GROOVY_LANGUAGE, true);
@@ -123,6 +123,8 @@ public abstract class AbstractInstrumenter {
 
     protected abstract void addCompileSourceRoot(final String sourceRoot);
 
+    protected abstract void removeCompileSourceRoot(final String sourceRoot);
+
     protected abstract boolean isGeneratedSourcesDirectory(final String sourceRoot);
 
     private String redirectSourceDirectories(final String targetDirectory) {
@@ -139,7 +141,9 @@ public abstract class AbstractInstrumenter {
         final List<String> sourceRoots = new ArrayList<>(getCompileSourceRoots());
 
         // Clean all source roots to add them again in order to keep the same original order of source roots.
-        getCompileSourceRoots().removeAll(sourceRoots);
+        for (final String sourceRoot : sourceRoots) {
+            removeCompileSourceRoot(sourceRoot);
+        }
 
         final CloverSourceScanner scanner = getSourceScanner();
         for (final String sourceRoot : sourceRoots) {

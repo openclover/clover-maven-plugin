@@ -45,10 +45,9 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>main</id>
-                        <phase>verify</phase>
+                        <id>setup</id>
                         <goals>
-                            <goal>instrument</goal>
+                            <goal>setup</goal>
                         </goals>
                     </execution>
                 </executions>

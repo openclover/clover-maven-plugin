@@ -46,26 +46,14 @@ public class TestUtil {
 
         final List<TestUtil.LogEvent> buffer = new LinkedList<>();
 
-        public boolean contains(String msg, Throwable e, int level) {
-            // look for a log event matching the parameter in the log buffer
-            return buffer.contains(new TestUtil.LogEvent(msg, e, level));
-        }
-
-        public boolean contains(Throwable e, int level) {
-            // look for a log event matching the parameter in the log buffer
-            return buffer.contains(new TestUtil.LogEvent(null, e, level));
-        }
-
         public boolean contains(String msg, int level) {
             // look for a log event matching the parameter in the log buffer
             return buffer.contains(new TestUtil.LogEvent(msg, null, level));
         }
 
-
         public void debug(CharSequence content) {
             super.debug(content);
             buffer.add(new TestUtil.LogEvent(content.toString(), null, Level.DEBUG));
-
         }
 
         public void debug(CharSequence content, Throwable error) {
@@ -76,7 +64,6 @@ public class TestUtil {
         public void debug(Throwable error) {
             super.debug(error);
             buffer.add(new TestUtil.LogEvent(null, error, Level.DEBUG));
-
         }
 
         public void info(CharSequence content) {
@@ -101,7 +88,6 @@ public class TestUtil {
         public void warn(CharSequence content) {
             super.warn(content);
             buffer.add(new TestUtil.LogEvent(content.toString(), null, Level.WARN));
-
         }
 
         public void warn(CharSequence content, Throwable error) {
@@ -116,13 +102,11 @@ public class TestUtil {
         public void warn(Throwable error) {
             super.warn(error);
             buffer.add(new TestUtil.LogEvent(null, error, Level.WARN));
-
         }
 
         public void error(CharSequence content) {
             super.error(content);
             buffer.add(new TestUtil.LogEvent(content.toString(), null, Level.ERROR));
-
         }
 
         public void error(CharSequence content, Throwable error) {
@@ -132,13 +116,11 @@ public class TestUtil {
                 super.error(content);
             }
             buffer.add(new TestUtil.LogEvent(content.toString(), error, Level.ERROR));
-
         }
 
         public void error(Throwable error) {
             super.error(error);
             buffer.add(new TestUtil.LogEvent(null, error, Level.ERROR));
-
         }
 
     }

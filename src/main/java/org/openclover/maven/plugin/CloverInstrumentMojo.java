@@ -25,6 +25,12 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.openclover.maven.plugin.internal.AbstractCloverInstrumentMojo;
 
 /**
+ * <p><b>Attention: this goal requires Maven 3 and fails on Maven 4.</b> It forks a build
+ * lifecycle and mutates the project model at runtime. Maven 4 treats the project model as immutable during the build, so these
+ * mutations are not visible to the plugins running in the forked lifecycle and the build would silently produce
+ * wrong results. Therefore the goal fails fast with an explanatory message instead. On Maven 4 use the
+ * <code>setup</code> goal instead.</p>
+ *
  * <p>Fork a custom build lifecycle in which all sources will be instrumented by Clover and next execute this
  * lifecycle till the <code>install</code> phase. All instrumented classes will be stored in a separate directory. Similarly,
  * artifacts produced will have the 'clover' classifier.</p>

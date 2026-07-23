@@ -59,10 +59,15 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>setup</id>
+                        <goals>
+                            <goal>setup</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <id>main</id>
                         <phase>verify</phase>
                         <goals>
-                            <goal>instrument</goal>
                             <goal>aggregate</goal>
                             <goal>check</goal>
                             <goal>log</goal>
@@ -72,7 +77,6 @@
                         <id>site</id>
                         <phase>pre-site</phase>
                         <goals>
-                            <goal>instrument</goal>
                             <goal>aggregate</goal>
                             <!-- We save a history point in order to have data to generate a historical report -->
                             <goal>save-history</goal>

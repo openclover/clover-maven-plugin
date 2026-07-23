@@ -266,7 +266,7 @@ public class CloverCheckMojo extends AbstractCloverMojo
             addTestSrcDir(cloverPassTask, originalSrcTestDir);
         }
         final List<String> testSourceRoots = getProject().getTestCompileSourceRoots();
-        getLog().warn("has test file source dir = " + (testSourceRoots.size() > 0));
+        getLog().warn("has test file source dir = " + (!testSourceRoots.isEmpty()));
         for (String testDir : testSourceRoots) {
             getLog().warn("test file source dir = " + testDir);
             addTestSrcDir(cloverPassTask, testDir);

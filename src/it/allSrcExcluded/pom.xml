@@ -49,10 +49,15 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>setup</id>
+                        <goals>
+                            <goal>setup</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <id>main</id>
                         <phase>verify</phase>
                         <goals>
-                            <goal>instrument</goal>
                             <goal>check</goal>
                         </goals>
                     </execution>

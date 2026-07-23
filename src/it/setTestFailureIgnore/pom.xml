@@ -123,18 +123,10 @@ under the License.
                         </goals>
                     </execution>
                     <execution>
-                        <id>default-install</id>
-                        <phase>install</phase>
+                        <id>default-verify</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>clover</goal>
-                        </goals>
-                    </execution>
-                    <!-- Test clover:instrument in the site lifecycle -->
-                    <execution>
-                        <id>site</id>
-                        <phase>pre-site</phase>
-                        <goals>
-                            <goal>instrument</goal>
                         </goals>
                     </execution>
                 </executions>

@@ -43,5 +43,22 @@ jobs:
           case "${{ matrix.maven }}" in
             3.0.*|3.1.*|3.2.*|3.3.*|3.4.*|3.5.*|3.6.0) NTP="" ;;
           esac
+          # 'clover:instrument' forks a build lifecycle and works on Maven 3 only, so its integration
+          # tests live in a separate profile which we activate for Maven 3 versions only
+          PROFILES="integration-tests"
+          case "${{ matrix.maven }}" in
+            3.*) PROFILES="integration-tests,integration-tests-maven3" ;;
+          esac
           mvn -version
-          mvn -B $NTP clean verify -Pintegration-tests
+          mvn -B $NTP clean verify -P"$PROFILES"
+
+      - name: Collect integration test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: it-build-logs-maven-${{ matrix.maven }}
+          path: |
+            target/it/**/build.log
+            target/it/**/surefire-reports/*.txt
+          if-no-files-found: ignore
+          retention-days: 14

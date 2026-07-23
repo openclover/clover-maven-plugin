@@ -61,6 +61,18 @@
 
 * {Getting Started}
 
+  <<Maven 4 note>> use the <<<clover:setup>>> goal - it works on both Maven 3 and Maven 4.
+  The <<<clover:instrument>>> and <<<clover:instrument-test>>> goals fork a build lifecycle and mutate the
+  project model at runtime, which is supported on Maven 3 only; on Maven 4 they fail with an explanatory
+  message. Also note that since 5.1.0 the repository pollution protection is <enabled by default>, so do not
+  run the <<<install>>> or <<<deploy>>> phase together with <<<clover:setup>>> (run the build up to
+  <<<verify>>>, or pass <<<-Dmaven.clover.repositoryPollutionProtection=false>>>). The examples below use
+  <<<clover:instrument>>>; replace it with <<<clover:setup>>> when running on Maven 4:
+
++------+
+  mvn clover:setup verify clover:clover
++------+
+
   The first thing to do is to create a {{{https://openclover.org/doc/manual/latest/ant--managing-the-coverage-database.html}Clover database}}. To do
   this, you must either do:
 

@@ -63,6 +63,11 @@ public class MainInstrumenter extends AbstractInstrumenter {
     }
 
     @Override
+    protected void removeCompileSourceRoot(final String sourceRoot) {
+        MavenProjectCompat.removeCompileSourceRoot(getConfiguration().getProject(), sourceRoot);
+    }
+
+    @Override
     protected boolean isGeneratedSourcesDirectory(final String sourceRoot) {
         String generatedSrcDirDefaultLifecycle = File.separator + "target" + File.separator + "generated-sources";
         String generatedSrcDirCloverLifecycle = File.separator + "target" + File.separator + "clover" + File.separator + "generated-sources";

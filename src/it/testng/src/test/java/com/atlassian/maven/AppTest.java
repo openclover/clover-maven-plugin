@@ -4,20 +4,15 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class AppTest {
-
-
     @Test
     public void testAdd() {
         Arithmetic math = new Arithmetic();
-        Assert.assertEquals(2, math.add(1, 1));
+        Assert.assertEquals(math.add(1, 1), 2);
     }
 
     @Test
     public void testSubtract() {
         Arithmetic math = new Arithmetic();
-        Assert.assertEquals(0, math.subtract(1, 1));
-
+        Assert.assertEquals(math.subtract(1, 1), 0);
     }
-
-
 }

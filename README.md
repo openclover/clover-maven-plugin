@@ -17,9 +17,30 @@
 
 # About #
 
-Clover Maven Plugin is an OpenClover integration with Maven 3.x.
+Clover Maven Plugin is an OpenClover integration with Maven 3.x and Maven 4.x.
 
 This project is open-source, based on the Apache License version 2.0.
+
+# Maven 4 compatibility (since 5.1.0) #
+
+* Use the **`clover:setup`** goal to instrument your code. It works on both Maven 3 and Maven 4:
+
+  ```
+  mvn clover:setup verify clover:clover
+  ```
+
+* The **`clover:instrument`** and **`clover:instrument-test`** goals work on **Maven 3 only**. They fork
+  a build lifecycle and mutate the project model at runtime. Maven 4 treats the project model as immutable during
+  the build, so these mutations no longer reach the plugins running in the forked lifecycle. Instead of
+  silently producing a wrong build, both goals now **fail on Maven 4** with a message pointing to
+  `clover:setup`.
+
+* **Repository pollution protection is now enabled by default**
+  (`maven.clover.repositoryPollutionProtection` changed from `false` to `true`). Because `clover:setup`
+  instruments sources in the main lifecycle, running `install` or `deploy` together with it would put
+  instrumented classes into your local `~/.m2` cache or into a binaries repository - such a build now
+  fails with an explanatory message. Run your build up to the `verify` phase, or set
+  `-Dmaven.clover.repositoryPollutionProtection=false` if installing instrumented artifacts is intentional.
 
 # Documentation #
 
@@ -38,5 +59,5 @@ Developer documentation: https://openclover.org/doc/manual/latest/developer-guid
 Useful Maven targets:
 
 ```
-mvn integration-test -Pintegration-tests # runs the integration tests
+mvn integration-test -Pintegration-tests,integration-tests-maven3
 ```

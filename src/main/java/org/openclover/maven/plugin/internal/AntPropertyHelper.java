@@ -23,8 +23,11 @@ import org.codehaus.plexus.util.introspection.ReflectionValueExtractor;
 
 /**
  * Makes the ${expressions} used in Maven available to Ant as properties.
+ * <p>
+ * Registered with Ant's PropertyHelper via PropertyHelper.add(PropertyHelper.PropertyEvaluator);
+ * returning {@code null} lets Ant's own property resolution (including system properties) take over.
  */
-public class AntPropertyHelper extends PropertyHelper {
+public class AntPropertyHelper implements PropertyHelper.PropertyEvaluator {
     private final Log log;
     private final MavenProject mavenProject;
 
@@ -37,25 +40,21 @@ public class AntPropertyHelper extends PropertyHelper {
         log = l;
     }
 
-    public synchronized Object getPropertyHook(String ns, String name, boolean user) {
+    @Override
+    public Object evaluate(String property, PropertyHelper propertyHelper) {
         if (log.isDebugEnabled()) {
-            log.debug("getProperty(ns=" + ns + ", name=" + name + ", user=" + user + ")");
+            log.debug("evaluate(property=" + property + ")");
         }
 
-        return getPropertyHook(ns, name, user, mavenProject);
-    }
-
-    private Object getPropertyHook(String ns, String name, boolean user, MavenProject mavenProject) {
-        Object val = null;
         try {
-            if (name.startsWith("project.")) {
-                val = ReflectionValueExtractor.evaluate(
-                        name,
+            if (property.startsWith("project.")) {
+                return ReflectionValueExtractor.evaluate(
+                        property,
                         mavenProject,
                         true
                 );
-            } else if (name.equals("basedir")) {
-                val = ReflectionValueExtractor.evaluate(
+            } else if (property.equals("basedir")) {
+                return ReflectionValueExtractor.evaluate(
                         "basedir.path",
                         mavenProject,
                         false
@@ -63,19 +62,12 @@ public class AntPropertyHelper extends PropertyHelper {
             }
         } catch (Exception e) {
             if (log.isWarnEnabled()) {
-                log.warn("Error evaluating expression '" + name + "'", e);
-            }
-            e.printStackTrace();
-        }
-
-        if (val == null) {
-            val = super.getPropertyHook(ns, name, user);
-            if (val == null) {
-                val = System.getProperty(name);
+                log.warn("Error evaluating expression '" + property + "'", e);
             }
         }
 
-        return val;
+        // let Ant's own property resolution (chained evaluators, system properties, ...) handle it
+        return null;
     }
 
 }

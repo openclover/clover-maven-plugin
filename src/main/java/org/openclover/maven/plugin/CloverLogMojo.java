@@ -101,7 +101,7 @@ public class CloverLogMojo extends AbstractCloverMojo {
     /**
      * Configures test source roots for clover log task. It takes original test directory,
      * directories from maven compilation and directories from all submodules (aggregation).
-     * @param cloverLogTask
+     * @param cloverLogTask the Clover log task to configure
      */
     private void setTestSourceRoots(final CloverLogTask cloverLogTask) {
         // take for current project
@@ -116,8 +116,8 @@ public class CloverLogMojo extends AbstractCloverMojo {
     /**
      * Configures test source roots for clover log task for a single maven project.
      * It takes original test directory and  directories from maven compilation.
-     * @param cloverLogTask
-     * @param project
+     * @param cloverLogTask the Clover log task to configure
+     * @param project the Maven project whose test source roots are added
      */
     private void setTestSourceRootsForProject(final CloverLogTask cloverLogTask, final MavenProject project) {
         // original src/test directory
@@ -133,7 +133,7 @@ public class CloverLogMojo extends AbstractCloverMojo {
 
     /**
      * Adds a list of test source directories as an Ant's fileset to clover log task.
-     * @param cloverLogTask
+     * @param cloverLogTask the Clover log task to configure
      * @param iterator Iterator<String>
      * @see CloverLogTask#addTestSources(org.apache.tools.ant.types.FileSet)
      */
@@ -146,8 +146,8 @@ public class CloverLogMojo extends AbstractCloverMojo {
 
     /**
      * Adds new test source directory as an Ant's fileset to clover log task.
-     * @param cloverLogTask
-     * @param originalSrcTestDir
+     * @param cloverLogTask the Clover log task to configure
+     * @param originalSrcTestDir path of the test source directory to add
      * @see CloverLogTask#addTestSources(org.apache.tools.ant.types.FileSet)
      */
     private void addTestSrcDir(final CloverLogTask cloverLogTask, final String originalSrcTestDir) {

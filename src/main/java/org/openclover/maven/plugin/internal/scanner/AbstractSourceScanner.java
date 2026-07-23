@@ -91,11 +91,11 @@ public abstract class AbstractSourceScanner implements CloverSourceScanner {
      *
      * This method can handle a special case: don't return excludes from native Groovy source directory (src/main/groovy
      * or src/test/groovy) because such files shall not be copied to instrumented sources directory
-     * (target/clover/src-instrumented or target/clover/src-test/instrumented); a reason is that gmaven and
+     * (target/clover/src-instrumented or target/clover/src-test/instrumented); a reason is that GMaven and
      * groovy-eclipse-plugin have the src/(main|test)/groovy location hardcoded, and they will compile this source root
      * no matter what other compilation source roots or source directory are provided; it means that we would end
      * up with a 'duplicate class' build error if files would be copied.
-     *
+     * <p>
      * Please note however than in case when Groovy sources are located in a native Java source directory (src/main/java
      * or src/test/java) then such files must be copied. A reason is that source roots will be redirected to the
      * Clover's instrumented directory (target/clover/src-instrumented or target/clover/src-test/instrumented) and the

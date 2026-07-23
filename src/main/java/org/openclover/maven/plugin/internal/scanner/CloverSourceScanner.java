@@ -37,12 +37,12 @@ public interface CloverSourceScanner {
 
     /**
      * Returns the list of source files to instrument taking into account the includes and excludes specified by
-     * the user and additionaly taking into account a programming language. The Map is indexed on source roots.
+     * the user and additionally taking into account a programming language. The Map is indexed on source roots.
      *
      *
      * @param languageFileFilter extra filter (in addition to includes/excludes) based on programming language
      * @param skipGroovySourceDirectory if <code>true</code> then don't list source files which are located in the
-     *                                  source directory 'native' for groovy language
+     *                                  source directory 'native' for Groovy language
      * @return Map&lt;String, String[]&gt; = Map(source root, files)
      */
     Map<String, String[]> getSourceFilesToInstrument(LanguageFileFilter languageFileFilter, boolean skipGroovySourceDirectory);

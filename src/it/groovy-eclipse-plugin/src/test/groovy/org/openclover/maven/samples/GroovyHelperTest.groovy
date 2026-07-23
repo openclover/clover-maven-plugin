@@ -1,9 +1,7 @@
 package org.openclover.maven.samples
 
 import groovy.test.GroovyTestCase
-/**
- * Tests for the {@link GroovyHelper} class.
- */
+
 class GroovyHelperTest extends GroovyTestCase {
     void testGroovyExampleHelp() {
         new GroovyHelper().help(new GroovyExample())

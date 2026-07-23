@@ -5,12 +5,10 @@ import junit.framework.TestCase;
 public class ModuleBAppTest extends TestCase {
 
     public void testGetName() {
-        assertEquals(ModuleBApp.getApp().getName(), "ModuleBApp");
+        assertEquals("ModuleBApp", ModuleBApp.getApp().getName());
     }
-
 
     public void testGetNumber() {
-        assertEquals(ModuleBApp.getApp().getNumber(), 0);
+        assertEquals(0, ModuleBApp.getApp().getNumber());
     }
-
 }

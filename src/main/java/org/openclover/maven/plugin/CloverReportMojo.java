@@ -200,7 +200,7 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
      * Whether to show inner functions, i.e. functions declared inside methods in the report. This applies to Java8
      * lambda functions for instance. If set to <code>false</code> then they are hidden on the list of methods, but
      * code metrics still include them.
-     *
+     * <p>
      * Note: if you will use showLambdaFunctions=true and showInnerFunctions=false then only lambda functions declared
      * as a class field will be listed.
      *
@@ -213,7 +213,7 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
      * Whether to show lambda functions in the report. Lambda functions can be either declared inside method body
      * or as a class field. If set to <code>false</code> then they are hidden on the list of methods, but code
      * metrics still include them.
-     *
+     * <p>
      * Note: if you will use showLambdaFunctions=true and showInnerFunctions=false then only lambda functions declared
      * as a class field will be listed.
      *
@@ -263,13 +263,13 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
     private List<MavenProject> reactorProjects;
 
     /**
-     * @see AbstractCloverMojo#licenseLocation
+     * Same as {@code licenseLocation} in {@link AbstractCloverMojo}.
      */
     @Parameter(property = "maven.clover.licenseLocation")
     private String licenseLocation;
 
     /**
-     * @see AbstractCloverMojo#license
+     * Same as {@code license} in {@link AbstractCloverMojo}.
      */
     @Parameter(property = "maven.clover.license")
     private String license;
@@ -358,18 +358,18 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
      */
     private void createAllReportTypes(final String database, final String titlePrefix) {
 
-        final String outpath = outputDirectory.getAbsolutePath();
+        final String outPath = outputDirectory.getAbsolutePath();
         if (this.generateHtml) {
-            createReport(database, "html", titlePrefix, outpath, outpath, false);
+            createReport(database, "html", titlePrefix, outPath, outPath, false);
         }
         if (this.generatePdf) {
-            createReport(database, "pdf", titlePrefix, outpath + "/clover.pdf", outpath + "/historical.pdf", true);
+            createReport(database, "pdf", titlePrefix, outPath + "/clover.pdf", outPath + "/historical.pdf", true);
         }
         if (this.generateXml) {
-            createReport(database, "xml", titlePrefix, outpath + "/clover.xml", null, false);
+            createReport(database, "xml", titlePrefix, outPath + "/clover.xml", null, false);
         }
         if (this.generateJson) {
-            createReport(database, "json", titlePrefix, outpath, null, false);
+            createReport(database, "json", titlePrefix, outPath, null, false);
         }
     } 
 
@@ -384,7 +384,7 @@ public class CloverReportMojo extends AbstractMojo implements MavenReport, Clove
 
         PropertyHelper propertyHelper = PropertyHelper.getPropertyHelper( antProject );
 
-        propertyHelper.setNext( new AntPropertyHelper( project, getLog() ) );
+        propertyHelper.add( new AntPropertyHelper( project, getLog() ) );
 
         antProject.setUserProperty("ant.file", reportDescriptor.getAbsolutePath());
         antProject.setCoreLoader(getClass().getClassLoader());

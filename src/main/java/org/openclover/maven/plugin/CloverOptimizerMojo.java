@@ -62,13 +62,13 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
     /**
      * <b>NOTE:</b> This currently has no effect, because the maven-surefire-plugin re-orders the tests alphabetically.
-     *
+     * <p>
      * This controls how Clover optimizes your tests.
-     *
+     * <p>
      * By default - clover excludes any test case it deems as irrelevant to any changes made to your source code.
-     *
+     * <p>
      * "failfast" - (default) ensures your build FAILs fast ie: tests relevant to code changes are run first
-     *
+     * <p>
      * "random" - tests will be shuffled before run. Can be used to determine inter-test-dependencies.
      */
     @Parameter(property = "maven.clover.ordering")
@@ -83,7 +83,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
     /**
      * Controls whether to exclude tests that do not cover any modified files.
-     *
+     * <p>
      * If false, (and ordering is not random or original), Clover will not exclude any of the tests. Instead, they
      * will be run in an optimal order to ensure the build fails as fast as possible. ie - tests that cover modify code
      * first, then ascending by test time.
@@ -131,10 +131,10 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         //Always set this to true because we can't be sure if the filtered list we have will result in no tests being run
         //because we matched classes under src/test/ which aren't unit tests
         getProject().getProperties().put("failIfNoTests", "false");
-        if (optimizedTests.size() == 0) {
+        if (optimizedTests.isEmpty()) {
             // empty -Dtest values cause all tests to be run so let's put a dummy value
             getProject().getProperties().put("test", "clover/optimized/test/PlaceHolder.java");
-            // ensure surefire wont fail if we run no tests
+            // ensure surefire won't fail if we run no tests
         } else {
             getProject().getProperties().put("test", testPattern.toString());
         }
@@ -193,14 +193,14 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
     /**
      * Extracts nested values from the given config object into a List.
      *
-     * @param childname the name of the first subelement that contains the list
+     * @param childName the name of the first sub-element that contains the list
      * @param config    the actual config object
      */
-    static List<String> extractNestedStrings(final String childname, final Xpp3Dom config) {
-        final Xpp3Dom subelement = config.getChild(childname);
-        if (subelement != null) {
+    static List<String> extractNestedStrings(final String childName, final Xpp3Dom config) {
+        final Xpp3Dom subElement = config.getChild(childName);
+        if (subElement != null) {
             final List<String> result = new LinkedList<>();
-            final Xpp3Dom[] children = subelement.getChildren();
+            final Xpp3Dom[] children = subElement.getChildren();
             for (final Xpp3Dom child : children) {
                 result.add(child.getValue());
             }
@@ -240,10 +240,10 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      * Creates a FileSet for <code>antProject</code> and base <code>directory</code> having a list of files
      * to be included and excluded, according to <code>includes / excludes</code> wildcard patterns.
      *
-     * @param antProject
-     * @param directory
-     * @param includes
-     * @param excludes
+     * @param antProject the Ant project the file set is created for
+     * @param directory  base directory to scan
+     * @param includes   wildcard patterns of files to include
+     * @param excludes   wildcard patterns of files to exclude
      * @return FileSet
      */
     FileSet createFileSet(final Project antProject, final File directory, final List<String> includes, final List<String> excludes) {
@@ -288,9 +288,9 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
      *  1) we can have multiple 'includes' tags in Ant FileSet and
      *  2a) we can have multiple comma- or space-separated patterns in one 'includes'
      *  2b) we can have regular expression entered (surefire specific feature)
-     *
+     * <p>
      * For 2a) String.split() is used, for 2b) a directory scan is performed
-     *
+     * <p>
      * See:
      * <li><a href="https://ant.apache.org/manual/Types/fileset.html">fileset.html</a></li>
      * <li>https://maven.apache.org/plugins/maven-surefire-plugin/examples/inclusion-exclusion.html</li>
@@ -316,8 +316,11 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
 
         if (dir.isDirectory()) {
             // recursive search
-            for (String fileName : dir.list()) {
-                matchedFiles.addAll(dirTreeMatchingPattern(new File(dir, fileName), pattern));
+            final String[] entries = dir.list();
+            if (entries != null) {
+                for (String fileName : entries) {
+                    matchedFiles.addAll(dirTreeMatchingPattern(new File(dir, fileName), pattern));
+                }
             }
         } else {
             // add a file
@@ -358,7 +361,7 @@ public class CloverOptimizerMojo extends AbstractCloverMojo {
         final String ANT_PATTERN_SEPARATOR = "[, ]";
         final String[] splitPaths = path.split(ANT_PATTERN_SEPARATOR);
         for (String splitPath : splitPaths) {
-            if (splitPath.length() > 0) {
+            if (!splitPath.isEmpty()) {
                 outputList.add(splitPath);
             }
         }

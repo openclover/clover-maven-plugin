@@ -1,7 +1,7 @@
 package org.openclover.maven.plugin.internal.configuration;
 
 /**
- * Something which has a name, annotations and javadocs. Such as a class or a method.
+ * Something which has a name, annotations and Javadocs. Such as a class or a method.
  */
 public class AbstractJavaEntity {
 
@@ -11,7 +11,7 @@ public class AbstractJavaEntity {
     /** A regex on which to match the annotation. Optional. */
     private String annotation;
 
-    /** A regex on which to match the javadoc tags. Optional. */
+    /** A regex on which to match the Javadoc tags. Optional. */
     private String tag;
 
     public String getName() {

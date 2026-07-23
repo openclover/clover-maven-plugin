@@ -58,7 +58,7 @@ under the License.
     </prerequisites>
     <properties>
         <!-- Clover Core version -->
-        <cloverVersion>5.0.2-SNAPSHOT</cloverVersion>
+        <cloverVersion>5.0.1</cloverVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <gpg.skip>true</gpg.skip>
     </properties>
@@ -260,6 +260,46 @@ under the License.
         </pluginManagement>
     </build>
     <profiles>
+        <!--
+            Spotless with Palantir Java Format. Palantir requires the build JVM to be Java 11+,
+            so this profile is auto-activated only on JDK 11 or newer; JDK 8 builds skip it.
+            Formats src/main/java and src/test/java, but not integration-test projects in src/it.
+        -->
+        <profile>
+            <id>spotless</id>
+            <activation>
+                <jdk>[11,)</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <version>2.43.0</version>
+                        <configuration>
+                            <!-- TODO temporarily disabled until sources are reformatted (run: mvn spotless:apply) -->
+                            <skip>true</skip>
+                            <java>
+                                <includes>
+                                    <include>src/main/java/**/*.java</include>
+                                    <include>src/test/java/**/*.java</include>
+                                </includes>
+                                <palantirJavaFormat>
+                                    <version>2.47.0</version>
+                                </palantirJavaFormat>
+                            </java>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>integration-tests</id>
             <reporting>
@@ -307,35 +347,35 @@ under the License.
                             <debug>true</debug>
                             <projectsDirectory>src/it</projectsDirectory>
                             <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+                            <!-- Integration tests which run on both Maven 3 and Maven 4. -->
                             <pomIncludes>
-                                <pomInclude>**/allSrcExcluded/pom.xml</pomInclude>
                                 <pomInclude>**/build-helper/pom.xml</pomInclude>
-                                <pomInclude>**/contexts/pom.xml</pomInclude>
                                 <pomInclude>**/custom-test-pattern/pom.xml</pomInclude>
                                 <pomInclude>**/generated-sources/pom.xml</pomInclude>
                                 <pomInclude>**/groovy-eclipse-plugin/pom.xml</pomInclude>
                                 <pomInclude>**/groovy-eclipse-plugin-src-main-java/pom.xml</pomInclude>
                                 <pomInclude>**/groovy-eclipse-plugin-src-main-groovy/pom.xml</pomInclude>
                                 <pomInclude>**/gwt/pom.xml</pomInclude>
-                                <pomInclude>**/instrument-tests/pom.xml</pomInclude>
                                 <pomInclude>**/jaxb/pom.xml</pomInclude>
                                 <pomInclude>**/java8/pom.xml</pomInclude>
-                                <pomInclude>**/multiproject/pom.xml</pomInclude>
                                 <pomInclude>**/optmized/pom.xml</pomInclude>
+                                <pomInclude>**/pollutionProtection/pom.xml</pomInclude>
                                 <pomInclude>**/pollutionProtectionRoot/pom.xml</pomInclude>
                                 <pomInclude>**/reportLogPassMatch/pom.xml</pomInclude>
                                 <pomInclude>**/runtime/pom.xml</pomInclude>
                                 <pomInclude>**/setTestFailureIgnore/pom.xml</pomInclude>
-                                <pomInclude>**/simple/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcExcluded/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcExcludedFromFile/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcIncluded/pom.xml</pomInclude>
                                 <pomInclude>**/someSrcIncludedFromFile/pom.xml</pomInclude>
+                                <pomInclude>**/allSrcExcluded/pom.xml</pomInclude>
+                                <pomInclude>**/contexts/pom.xml</pomInclude>
+                                <pomInclude>**/multiproject/pom.xml</pomInclude>
+                                <pomInclude>**/simple/pom.xml</pomInclude>
                                 <!--<pomInclude>**/surefire-and-failsafe-plugins/pom.xml</pomInclude>-->
                                 <!--<pomInclude>**/testng/pom.xml</pomInclude>-->
                                 <!--<pomInclude>**/tutorial/pom.xml</pomInclude>-->
                                 <!--<pomInclude>**/webapp/pom.xml</pomInclude>-->
-                                <pomInclude>**/xdoclet/pom.xml</pomInclude>
                             </pomIncludes>
                         </configuration>
                         <executions>
@@ -346,6 +386,27 @@ under the License.
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <!-- Integration tests of the 'clover:instrument' / 'clover:instrument-test' goals. These goals fork
+            a build lifecycle and mutate the project model at runtime, which is supported on Maven 3 only -->
+            <id>integration-tests-maven3</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-invoker-plugin</artifactId>
+                        <version>3.6.0</version>
+                        <configuration>
+                            <pomIncludes combine.children="append">
+                                <pomInclude>**/instrument-tests/pom.xml</pomInclude>
+                                <pomInclude>**/pollutionProtectionInstrument/pom.xml</pomInclude>
+                                <pomInclude>**/xdoclet/pom.xml</pomInclude>
+                            </pomIncludes>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
