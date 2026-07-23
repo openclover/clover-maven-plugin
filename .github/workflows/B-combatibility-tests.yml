@@ -51,3 +51,14 @@ jobs:
           esac
           mvn -version
           mvn -B $NTP clean verify -P"$PROFILES"
+
+      - name: Collect integration test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: it-build-logs-maven-${{ matrix.maven }}
+          path: |
+            target/it/**/build.log
+            target/it/**/surefire-reports/*.txt
+          if-no-files-found: ignore
+          retention-days: 14
