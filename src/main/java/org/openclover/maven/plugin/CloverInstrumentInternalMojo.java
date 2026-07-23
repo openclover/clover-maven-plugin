@@ -553,6 +553,15 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
         //   version between the original A version and the clovered version.
         //
         // We provide a 'fudge-factor' of 2 seconds, as the clover artifact is created first.
+        //
+        // Both files may be missing - e.g. when dependencies were not resolved for the current goal or when the
+        // dependency is a reactor module which has not been packaged yet. In such case we cannot
+        // compare timestamps, so keep the original artifact.
+        if (resolvedCloveredArtifact.getFile() == null || artifact.getFile() == null) {
+            getLog().debug("Skipped dependency [" + artifact.getId() + "] as it has no file attached");
+            return artifact;
+        }
+
         if (resolvedCloveredArtifact.getFile().lastModified() + cloveredArtifactExpiryInMillis < artifact.getFile().lastModified()) {
             getLog().warn("Using [" + artifact.getId() + "], built on " + new Date(artifact.getFile().lastModified()) +
                     " even though a Clovered version exists "
