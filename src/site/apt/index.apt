@@ -89,6 +89,11 @@ Clover Maven Plugin
   * {{{./instrument-mojo.html}clover:instrument}} - Instrument all sources using Clover and forks a custom lifecycle to
     execute project's tests on the instrumented code so that a Clover database is created.
 
+    <<Attention: this goal requires Maven 3. It fails on Maven 4 - use
+    {{{./setup-mojo.html}clover:setup}} instead.>> The forked lifecycle relies on mutating the project model at
+    runtime (redirecting the build directory and replacing the main artifact with a '-clover' classified one),
+    which Maven 4 no longer supports.
+
     Note: We're forking a lifecycle because we don't want the Clover instrumentation to affect the main lifecycle build.
     This will prevent instrumented sources to be put in production by error. Thus running mvn install on a project where
     this instrument goal has been specified will run the build twice: once for building the project as usual and another

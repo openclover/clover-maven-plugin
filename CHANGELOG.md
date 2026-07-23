@@ -9,6 +9,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Versions and dates are taken from Git tags. Issue keys (e.g. `OC-nnn`, `CLOV-nnn`,
 `CLMVN-nnn`) refer to the project's issue trackers.
 
+## [Unreleased 5.1.0]
+
+### Changed
+- **OC-309**: Maven 4 compatibility. The `clover:setup` goal is now the recommended (and, on Maven 4,
+  the only) way to instrument sources - it runs in the main lifecycle and does not mutate the project
+  model.
+- **OC-309**: `maven.clover.repositoryPollutionProtection` now defaults to `true` (it used to be
+  `false`). Running the `install` or `deploy` phase while instrumentation is active fails the build.
+  Set the flag to `false` to restore the previous behaviour.
+
+### Fixed
+- **OC-309**: The repository pollution protection never actually ran. `AbstractCloverInstrumentMojo`
+  and `CloverInstrumentInternalMojo` both declared a `mavenSession` parameter, so the subclass field
+  shadowed the superclass one and the latter stayed `null` - the build lifecycle analysis always failed
+  with "Failed to call Maven's internals via reflections" and the protection was silently skipped.
+  The duplicate declaration is gone and the underlying exception is now logged with the warning.
+
+### Deprecated
+- **OC-309**: The `clover:instrument` and `clover:instrument-test` goals fail on Maven 4. They fork
+  a build lifecycle and mutate the project model at runtime; Maven 4 treats the project model as
+  immutable at execution time, so these mutations are not visible to the plugins running in the forked
+  lifecycle. Both goals keep working on Maven 3.
+
 ## [5.0.0] - 2026-07-16
 
 ### Changed

@@ -167,7 +167,7 @@ public class CloverInstrumentInternalMojoTest {
 
         this.mojo.repositorySystem = mockRepositorySystem;
         this.mojo.artifactResolver = mockArtifactResolver;
-        this.mojo.mavenSession = mockMavenSession;
+        this.mojo.setMavenSession(mockMavenSession);
     }
 
     private static Artifact setUpMockArtifact(final String groupId, final String artifactId,

@@ -1,1 +1,1 @@
-clean install site verifier:verify
+clean verify site verifier:verify

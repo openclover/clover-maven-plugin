@@ -36,4 +36,4 @@ jobs:
       run: mvn -ntp clean install
 
     - name: Run integration tests
-      run: mvn -ntp clean verify -Pintegration-tests
+      run: mvn -ntp clean verify -Pintegration-tests,integration-tests-maven3

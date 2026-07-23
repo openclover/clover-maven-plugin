@@ -257,3 +257,44 @@ minimises long-term maintenance; choose 2a for a gentler transition or 2b for a 
 - [x] Root-caused both categories (runtime probe + decompilation + Maven 4 docs).
 - [x] Temporary `[CLOVER-PROBE]` logging removed from `CloverInstrumentInternalMojo`.
 - [ ] Fixes not yet implemented (awaiting go-ahead on the chosen strategy).
+
+---
+
+## IMPLEMENTED (branch OC-309-maven4-api-migration)
+
+Chosen: **sub-variant 1** - keep `clover:instrument` on Maven 3, hard-fail on Maven 4; standardise
+on `clover:setup`; enable repository pollution protection by default.
+
+### Code
+- New `internal/MavenVersionUtil` - reads `maven.version` from the session's system properties.
+- `AbstractCloverInstrumentMojo.failIfForkedLifecycleOnMaven4()` - called from
+  `CloverInstrumentInternalMojo.execute()` when `shouldRedirectArtifacts() || shouldRedirectOutputDirectories()`
+  (true for `instrument` / `instrument-test` / `instrumentInternal`, false for `setup`). Fires at the very
+  start of the forked lifecycle.
+- `maven.clover.repositoryPollutionProtection` default flipped `false` -> `true`.
+- **Bug found & fixed:** `mavenSession` was declared *twice* (`AbstractCloverInstrumentMojo` and
+  `CloverInstrumentInternalMojo`). The subclass field shadowed the superclass one, so the superclass field
+  was always `null` and `BuildLifecycleAnalyzer` always failed ("Failed to call Maven's internals via
+  reflections") - i.e. pollution protection had been a silent no-op. Duplicate removed, field is now
+  `protected` with a `setMavenSession()` test hook, and the exception is logged with the warning.
+
+### Integration tests
+- `integration-tests` profile: `clover:setup`-based ITs, run on Maven 3 **and** 4 (23 ITs).
+- New `integration-tests-maven3` profile (appends via `combine.children="append"`): `instrument-tests`,
+  `xdoclet`, `pollutionProtectionInstrument` - the forked-lifecycle ones.
+- Migrated to `setup` + `verify` (no `install`, which the protection now blocks): `allSrcExcluded`,
+  `contexts`, `multiproject`, `simple`, `someSrc*` (4), `setTestFailureIgnore`, plus goals-only changes in
+  `custom-test-pattern`, `gwt`, `jaxb`.
+- `pollutionProtection` split: setup cases stay (and it is now actually in `pomIncludes`), instrument cases
+  moved to the new `pollutionProtectionInstrument` IT.
+- groovy-eclipse ITs: dropped the `-Pwith-clover-instr` invoker variants.
+- CI: `B-combatibility-tests.yml` activates `integration-tests-maven3` for `3.*` matrix entries only.
+
+### Verified
+- Maven 3.9.16: 26/26 ITs pass. Maven 4.0.0-rc-5: 23/23 ITs pass. 41 unit tests pass.
+- `mvn clover:instrument` on Maven 4 fails with the actionable message.
+
+### Known gap (pre-existing, not fixed)
+- `pollutionProtectionCycles` and `pollutionProtectionClassifier` are still not in `pomIncludes` (they need
+  `fork-maven-plugin` installed first; `pollutionProtectionRoot` only `package`s its modules). The
+  `-Pwith-fork` case was therefore removed from `pollutionProtection/invoker.properties`.

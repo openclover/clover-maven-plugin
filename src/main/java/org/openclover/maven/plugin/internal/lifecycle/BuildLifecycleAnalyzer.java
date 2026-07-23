@@ -54,7 +54,7 @@ public class BuildLifecycleAnalyzer {
             final Maven3LifecycleAnalyzer maven3Analyzer = new Maven3LifecycleAnalyzer(lifecycleExecutor, mavenProject, mavenSession);
             return maven3Analyzer.getPhasesToBeExecuted();
         } catch (CloverException ex) {
-            log.warn(FAILED_POLLUTION_PROTECTION);
+            log.warn(FAILED_POLLUTION_PROTECTION, ex);
             return Collections.emptySet();
         }
     }

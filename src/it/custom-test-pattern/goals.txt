@@ -1,1 +1,1 @@
-clean install verifier:verify
+clean verify verifier:verify

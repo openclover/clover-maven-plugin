@@ -218,10 +218,6 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     @Parameter(defaultValue = "${plugin.artifacts}", required = true)
     private List<Artifact> pluginArtifacts;
 
-    @Parameter(defaultValue = "${session}", readonly = true)
-    //@TestOnly
-    MavenSession mavenSession;
-
     @Component
     //@TestOnly
     ArtifactResolver artifactResolver;
@@ -258,6 +254,12 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
         if (skip) {
             getLog().info("Skipping clover instrumentation.");
             return;
+        }
+
+        // 'instrument' / 'instrument-test' run this mojo in a forked lifecycle and rely on runtime mutation
+        // of the project model, which is not supported on Maven 4
+        if (shouldRedirectArtifacts() || shouldRedirectOutputDirectories()) {
+            failIfForkedLifecycleOnMaven4();
         }
 
         super.execute();

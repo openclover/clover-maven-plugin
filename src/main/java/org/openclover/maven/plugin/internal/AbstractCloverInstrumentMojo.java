@@ -237,9 +237,11 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
      * Maven, is about to be installed under original name (e.g. "-tests.jar").</p>
      * <p>Please note that this flag may not protect from all possible cases.</p>
      *
+     * <p><b>Note: since version 5.1.0 this option is enabled by default</b> (it used to be disabled before).</p>
+     *
      * @since 4.0.4
      */
-    @Parameter(property = "maven.clover.repositoryPollutionProtection", defaultValue = "false")
+    @Parameter(property = "maven.clover.repositoryPollutionProtection", defaultValue = "true")
     protected boolean repositoryPollutionProtection;
 
     /**
@@ -358,27 +360,48 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     private LifecycleExecutor lifecycleExecutor;
 
     /**
-     * Used to learn about current build session.
+     * <p>Used to learn about the current build session.</p>
+     * <p>Note: This is passed by Maven and must not be configured by the user.</p>
      */
-    @Parameter(defaultValue = "${session}", readonly = true)
-    private MavenSession mavenSession;
-
-    /**
-     */
-    @Parameter(defaultValue = "${project}", readonly = true)
-    private MavenProject mavenProject;
+    @Parameter(defaultValue = "${session}", required = true)
+    protected MavenSession mavenSession;
 
     ///////////////////////////////////////////////////////////////////////////
+
+    //@TestOnly
+    public void setMavenSession(final MavenSession mavenSession) {
+        this.mavenSession = mavenSession;
+    }
 
     @Override
     public void execute() throws MojoExecutionException {
         super.execute();
         if (repositoryPollutionProtection) {
             final BuildLifecycleAnalyzer lifecycleAnalyzer = new BuildLifecycleAnalyzer(
-                    getLog(), lifecycleExecutor, mavenProject, mavenSession);
+                    getLog(), lifecycleExecutor, getProject(), mavenSession);
             failIfDeployPhaseIsPresent(lifecycleAnalyzer);
             failIfInstallPhaseIsPresent(lifecycleAnalyzer);
             failIfCustomClassifierIsPresent();
+        }
+    }
+
+    /**
+     * On Maven 4, instead of silently producing a broken build, fail fast and point the user to the <code>setup</code> goal.
+     */
+    protected void failIfForkedLifecycleOnMaven4() throws MojoExecutionException {
+        if (mavenSession != null && MavenVersionUtil.isMaven4OrLater(mavenSession)) {
+            throw new MojoExecutionException(
+                    "The 'clover:instrument' and 'clover:instrument-test' goals are not supported on Maven 4 "
+                            + "(detected Maven " + MavenVersionUtil.getMavenVersion(mavenSession) + "). "
+                            + "They fork a build lifecycle and mutate the project model at runtime, which Maven 4 "
+                            + "no longer supports - the redirected build directory and the '-clover' classified "
+                            + "artifact are not visible to the plugins executed in the forked lifecycle.\n"
+                            + "In order to fix this, use the 'clover:setup' goal instead, for example:\n"
+                            + "    mvn clover:setup verify clover:clover\n"
+                            + "Note that 'clover:setup' instruments sources in the main lifecycle, therefore do not "
+                            + "run the 'install' or 'deploy' phase together with it (Clover's repository pollution "
+                            + "protection is enabled by default and will fail such a build).\n"
+                            + "The 'clover:instrument' goal remains available on Maven 3.");
         }
     }
 

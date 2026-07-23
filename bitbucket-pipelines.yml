@@ -9,4 +9,4 @@ pipelines:
           - # build, run quick unit tests and install a jar locally
           - mvn install -Dgpg.skip=true
           - # run integration tests
-          - mvn verify -Pintegration-tests
+          - mvn verify -Pintegration-tests,integration-tests-maven3
