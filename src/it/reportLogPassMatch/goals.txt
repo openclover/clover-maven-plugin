@@ -1,1 +1,0 @@
-clean clover:setup test clover:aggregate clover:clover clover:check clover:log
