@@ -90,7 +90,7 @@ under the License.
                             <!-- Example #3: classes with @test javadoc tag and void methods-->
                             <testClass>
                                 <tag>test</tag>
-                                <package>.*testsources\.classic.*</package>
+                                <package>.*\.classic.*</package>
                                 <testMethods>
                                     <testMethod>
                                         <returnType>void</returnType>

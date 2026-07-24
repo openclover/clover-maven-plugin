@@ -16,7 +16,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <gwt.version>2.10.0</gwt.version>
+        <gwt.version>2.13.1</gwt.version>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -24,7 +24,7 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.google.gwt</groupId>
+                <groupId>org.gwtproject</groupId>
                 <artifactId>gwt</artifactId>
                 <version>${gwt.version}</version>
                 <type>pom</type>
@@ -35,17 +35,17 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.google.gwt</groupId>
+            <groupId>org.gwtproject</groupId>
             <artifactId>gwt-servlet</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.gwt</groupId>
+            <groupId>org.gwtproject</groupId>
             <artifactId>gwt-user</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.gwt</groupId>
+            <groupId>org.gwtproject</groupId>
             <artifactId>gwt-dev</artifactId>
             <scope>provided</scope>
         </dependency>
@@ -89,9 +89,9 @@
                             <runTarget>GwtExample.html</runTarget>
                             <hostedWebapp>${webappDirectory}</hostedWebapp>
                             <i18nMessagesBundle>com.atlassian.client.Messages</i18nMessagesBundle>
-                            <!-- Use htmlunit framework simulating Internet Explorer 11 -->
+                            <!-- Run GWTTestCase in HtmlUnit simulating Firefox (valid RunStyleHtmlUnit nicknames: FF, Chrome, Edge, IE) -->
                             <mode>htmlunit</mode>
-                            <htmlunit>IE11</htmlunit>
+                            <htmlunit>FF</htmlunit>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -127,9 +127,9 @@
                             <runTarget>GwtExample.html</runTarget>
                             <hostedWebapp>${webappDirectory}</hostedWebapp>
                             <i18nMessagesBundle>com.atlassian.client.Messages</i18nMessagesBundle>
-                            <!-- Use htmlunit framework simulating Internet Explorer 11 -->
+                            <!-- Run GWTTestCase in HtmlUnit simulating Firefox (valid RunStyleHtmlUnit nicknames: FF, Chrome, Edge, IE) -->
                             <mode>htmlunit</mode>
-                            <htmlunit>IE11</htmlunit>
+                            <htmlunit>FF</htmlunit>
                             <validateOnly>true</validateOnly>
                         </configuration>
                     </plugin>
