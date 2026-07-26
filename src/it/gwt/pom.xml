@@ -19,6 +19,9 @@
         <gwt.version>2.13.1</gwt.version>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- JVM args for the forked GWT test process. -->
+        <gwt.extraJvmArgs>-Xmx512m</gwt.extraJvmArgs>
     </properties>
 
     <dependencyManagement>
@@ -59,6 +62,18 @@
 
 
     <profiles>
+        <!-- Open java.lang for GWT dev mode's reflection on JDK 9+ (activated for every JDK except 1.8, on
+             which the add-opens flag is an unrecognized option). -->
+        <profile>
+            <id>add-opens-jdk9plus</id>
+            <activation>
+                <jdk>!1.8</jdk>
+            </activation>
+            <properties>
+                <gwt.extraJvmArgs>-Xmx512m --add-opens=java.base/java.lang=ALL-UNNAMED</gwt.extraJvmArgs>
+            </properties>
+        </profile>
+
         <!-- Default profile. The reason why we use a default profile, instead of adding the gwt-maven-plugin in the
         top-level <build> tag, is that if we would do so, configuration of gwt-maven-plugin in with.clover.serveronly
         / with.clover.everything profiles would not overwrite the default setting (and we have to disable two goals) -->
@@ -92,6 +107,7 @@
                             <!-- Run GWTTestCase in HtmlUnit simulating Firefox (valid RunStyleHtmlUnit nicknames: FF, Chrome, Edge, IE) -->
                             <mode>htmlunit</mode>
                             <htmlunit>FF</htmlunit>
+                            <extraJvmArgs>${gwt.extraJvmArgs}</extraJvmArgs>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -130,6 +146,7 @@
                             <!-- Run GWTTestCase in HtmlUnit simulating Firefox (valid RunStyleHtmlUnit nicknames: FF, Chrome, Edge, IE) -->
                             <mode>htmlunit</mode>
                             <htmlunit>FF</htmlunit>
+                            <extraJvmArgs>${gwt.extraJvmArgs}</extraJvmArgs>
                             <validateOnly>true</validateOnly>
                         </configuration>
                     </plugin>
