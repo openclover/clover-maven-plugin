@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This is the Doxia 2.0.0 site model, understood by maven-site-plugin 3.20+ (i.e. the version bound by
+default in Maven 4).
+-->
+<site xmlns="http://maven.apache.org/SITE/2.0.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd"
+      name="Maven Clover Simple Sample">
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-fluido-skin</artifactId>
+    <version>2.0.0-M9</version>
+  </skin>
+  <bannerLeft name="Maven Clover Simple Sample" href="https://maven.apache.org/">
+    <image src="https://maven.apache.org/images/apache-maven-project.png"/>
+  </bannerLeft>
+  <bannerRight name="Maven">
+    <image src="https://maven.apache.org/images/maven-small.gif"/>
+  </bannerRight>
+  <publishDate format="dd MMM yyyy"/>
+  <body>
+    <links>
+      <item name="Maven" href="https://maven.apache.org/"/>
+    </links>
+
+    <menu name="Other Reports">
+      <item name="Clover PDF" href="clover/clover.pdf"/>
+      <item name="Clover XML" href="clover/clover.xml"/>
+    </menu>
+
+    <menu ref="reports"/>
+  </body>
+</site>

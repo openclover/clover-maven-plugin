@@ -25,6 +25,12 @@ under the License.
     <name>Clover Maven Plugin Simple Sample</name>
     <description>Clover Maven Plugin Simple Sample</description>
     <version>1.0-SNAPSHOT</version>
+    <properties>
+        <!-- Doxia's pre-2.0.0 site model, used by the maven-site-plugin which Maven 3 binds by default.
+             Maven 4 binds maven-site-plugin 3.20+ (Doxia 2.0.0), which rejects that model - the
+             'maven4-site-descriptor' profile below switches to src/site-maven4 in such a case. -->
+        <it.siteDirectory>${project.basedir}/src/site</it.siteDirectory>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -76,6 +82,13 @@ under the License.
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <siteDirectory>${it.siteDirectory}</siteDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
                 <version>@project.version@</version>
@@ -110,4 +123,19 @@ under the License.
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <!-- 'maven.version.major' is defined by Maven 4 only, so this profile is a Maven 4 detector. -->
+            <id>maven4-site-descriptor</id>
+            <activation>
+                <property>
+                    <name>maven.version.major</name>
+                    <value>4</value>
+                </property>
+            </activation>
+            <properties>
+                <it.siteDirectory>${project.basedir}/src/site-maven4</it.siteDirectory>
+            </properties>
+        </profile>
+    </profiles>
 </project>

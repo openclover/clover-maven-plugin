@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<verifications>
+    <files>
+        <!-- The Clover report is a part of the site documentation - HTML, PDF and XML formats. -->
+        <file>
+            <location>target/site/clover/index.html</location>
+        </file>
+        <file>
+            <location>target/site/clover/pkg-summary.html</location>
+            <contains>Simple</contains>
+        </file>
+        <file>
+            <location>target/site/clover/clover.pdf</location>
+        </file>
+        <file>
+            <location>target/site/clover/clover.xml</location>
+            <contains>Simple.java</contains>
+        </file>
+
+        <!-- The site descriptor (src/site or src/site-maven4, depending on the Maven version) is picked
+             up: the Clover report is listed among the generated reports and the hand-written
+             'Other Reports' menu links to the PDF and XML files. -->
+        <file>
+            <location>target/site/project-reports.html</location>
+            <contains>clover/index.html</contains>
+        </file>
+        <file>
+            <location>target/site/project-reports.html</location>
+            <contains>clover/clover.pdf</contains>
+        </file>
+        <file>
+            <location>target/site/project-reports.html</location>
+            <contains>clover/clover.xml</contains>
+        </file>
+    </files>
+</verifications>

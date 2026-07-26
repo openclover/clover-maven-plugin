@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Versions and dates are taken from Git tags. Issue keys (e.g. `OC-nnn`, `CLOV-nnn`,
 `CLMVN-nnn`) refer to the project's issue trackers.
 
-## [Unreleased 5.1.0]
+## [Unreleased]
+### Changed
+### Fixed
+### Deprecated
+
+## [5.1.0] - 2026-07-26
 
 ### Changed
 - **OC-309**: Maven 4 compatibility. The `clover:setup` goal is now the recommended (and, on Maven 4,
@@ -20,6 +25,11 @@ Versions and dates are taken from Git tags. Issue keys (e.g. `OC-nnn`, `CLOV-nnn
   Set the flag to `false` to restore the previous behaviour.
 
 ### Fixed
+- **OC-30**: Improved handling of instrumented module dependencies. Prior to the fix, a dependency on
+  a module of the same build was resolved to a `-clover` artifact from the local repository, which could
+  come from some earlier build and not match current sources. Such a dependency now uses instrumented
+  classes produced by that module in the current build - both a plain jar dependency (main classes) and
+  a `test-jar` dependency (test classes) are resolved from the reactor.
 - **OC-309**: The repository pollution protection never actually ran. `AbstractCloverInstrumentMojo`
   and `CloverInstrumentInternalMojo` both declared a `mavenSession` parameter, so the subclass field
   shadowed the superclass one and the latter stayed `null` - the build lifecycle analysis always failed

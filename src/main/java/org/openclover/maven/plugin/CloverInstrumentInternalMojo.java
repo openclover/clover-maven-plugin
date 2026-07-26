@@ -31,6 +31,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.DefaultProjectBuildingRequest;
+import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.repository.RepositorySystem;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
@@ -60,6 +61,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /*
  * TRICKY PART HOW JAVA AND GROOVY SOURCE FOLDERS ARE HANDLED
@@ -236,6 +238,29 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
     private static final Map<String, String> originalSrcMap = new HashMap<>();
     private static final Map<String, String> originalSrcTestMap = new HashMap<>();
 
+    /**
+     * Modules of the current build which were already instrumented by Clover, mapped to the location of their
+     * instrumented classes. Keyed by "groupId:artifactId:version". Thanks to this a module can use instrumented
+     * classes of its sibling modules instead of looking for a (possibly stale) '-clover' artifact in the local
+     * repository. See {@link #swizzleCloverDependency(Artifact)}.
+     */
+    private static final Map<String, InstrumentedModule> instrumentedModules = new ConcurrentHashMap<>();
+
+    /**
+     * Instrumented output of a single module. A module has (at least) two independent output directories - one for
+     * the main classes and one for the test classes - and a dependency on that module may target either of them
+     * (a plain jar dependency vs. a {@code test-jar} dependency).
+     */
+    private static final class InstrumentedModule {
+        private final String mainOutputDir;
+        private final String testOutputDir;
+
+        InstrumentedModule(final String mainOutputDir, final String testOutputDir) {
+            this.mainOutputDir = mainOutputDir;
+            this.testOutputDir = testOutputDir;
+        }
+    }
+
     public static String getOriginalSrcDir(final String module) {
         return originalSrcMap.get(module);
     }
@@ -305,6 +330,9 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
 
         redirectOutputDirectories();
         redirectArtifact();
+
+        // remember where instrumented classes of this module are, so that other modules of this build can use them
+        registerInstrumentedOutputDirectory();
 
         logArtifacts("after changes");
     }
@@ -508,7 +536,124 @@ public class CloverInstrumentInternalMojo extends AbstractCloverInstrumentMojo {
         return resolvedArtifacts;
     }
 
+    //@TestOnly
+    static void clearInstrumentedOutputDirectories() {
+        instrumentedModules.clear();
+    }
+
+    /**
+     * Store the location of instrumented classes of the current module in {@link #instrumentedModules}, so that
+     * modules built later in the same session can compile and run against them. Both the main and the test output
+     * directories are recorded, as a dependency on this module may target either of them.
+     */
+    //@TestOnly
+    void registerInstrumentedOutputDirectory() {
+        if (!"pom".equals(getProject().getPackaging())) {
+            instrumentedModules.put(
+                    moduleKey(getProject().getGroupId(), getProject().getArtifactId(), getProject().getVersion()),
+                    new InstrumentedModule(
+                            getProject().getBuild().getOutputDirectory(),
+                            getProject().getBuild().getTestOutputDirectory()));
+        }
+    }
+
+    private static String moduleKey(final String groupId, final String artifactId, final String version) {
+        return groupId + ":" + artifactId + ":" + version;
+    }
+
+    /**
+     * If the dependency is a module of the current build which was already instrumented by Clover, make the build
+     * use instrumented classes of that module instead of any artifact from the local repository and return the
+     * dependency artifact. Otherwise, return <code>null</code>.
+     * <p>
+     * Rationale: the <code>instrument</code> goal runs a forked lifecycle and Maven drops all changes made to a
+     * module's model (including the location of the artifact it has produced) once the fork is finished. Because of
+     * this, a dependency on a sibling module is resolved from the local repository. If a '-clover' artifact of that
+     * module happens to be there from some earlier build, it is silently used, even though it does not match current
+     * sources.
+     * <p>
+     * In order to fix this, we re-apply the instrumented output directories on the sibling's project (they were
+     * dropped when the forked lifecycle finished) and point its project artifact to the instrumented classes.
+     * Thanks to this Maven's reactor resolution serves instrumented classes for every scope - both a plain jar
+     * dependency (main classes) and a {@code test-jar} dependency (test classes) - and they are up to date with
+     * current sources. Note that setting the file on the dependency artifact alone would not be sufficient, because
+     * dependencies are resolved again before every mojo requiring them.
+     */
+    private Artifact swizzleReactorDependency(final Artifact artifact) {
+        final InstrumentedModule module = instrumentedModules.get(
+                moduleKey(artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion()));
+        if (module == null) {
+            return null; // not a module instrumented in this build
+        }
+
+        // Pick the output directory matching what the dependency targets. Only the main and test classes are
+        // instrumented; any other classifier/type (e.g. a war/ear, an attached artifact registered by some other
+        // plugin) has no instrumented counterpart, so leave it to the standard '-clover' resolution.
+        final String outputDirectory;
+        if (isTestJarDependency(artifact)) {
+            outputDirectory = module.testOutputDir;
+        } else if (!artifact.hasClassifier() && "jar".equals(artifact.getType())) {
+            outputDirectory = module.mainOutputDir;
+        } else {
+            getLog().debug("Skipped reactor dependency [" + artifact.getId() + "] as its classifier/type has no "
+                    + "instrumented classes directory");
+            return null;
+        }
+
+        if (outputDirectory == null) {
+            return null;
+        }
+
+        final File instrumentedClasses = new File(outputDirectory);
+        if (!instrumentedClasses.isDirectory()) {
+            getLog().debug("Module [" + artifact.getId() + "] was instrumented in this build, but its output "
+                    + "directory [" + instrumentedClasses + "] does not exist");
+            return null;
+        }
+
+        final MavenProject reactorProject = findReactorProject(artifact);
+        if (reactorProject != null) {
+            // re-apply the instrumented output directories discarded when the forked lifecycle finished, so that
+            // Maven's reactor resolution serves instrumented classes for every scope
+            reactorProject.getBuild().setOutputDirectory(module.mainOutputDir);
+            reactorProject.getBuild().setTestOutputDirectory(module.testOutputDir);
+
+            final Artifact projectArtifact = reactorProject.getArtifact();
+            final File projectFile = projectArtifact.getFile();
+            if (projectFile == null || !projectFile.exists()) {
+                projectArtifact.setFile(new File(module.mainOutputDir));
+            }
+        }
+
+        getLog().debug("Using instrumented classes of the [" + artifact.getId() + "] module from this build: "
+                + instrumentedClasses);
+        artifact.setFile(instrumentedClasses);
+        return artifact;
+    }
+
+    private static boolean isTestJarDependency(final Artifact artifact) {
+        return "test-jar".equals(artifact.getType()) || "tests".equals(artifact.getClassifier());
+    }
+
+    private MavenProject findReactorProject(final Artifact artifact) {
+        for (final MavenProject project : mavenSession.getProjects()) {
+            if (project.getGroupId().equals(artifact.getGroupId())
+                    && project.getArtifactId().equals(artifact.getArtifactId())
+                    && project.getVersion().equals(artifact.getVersion())) {
+                return project;
+            }
+        }
+        return null;
+    }
+
     private Artifact swizzleCloverDependency(final Artifact artifact) {
+        // A module of the current build always wins over any artifact from the local repository - it's instrumented
+        // and it's up to date with current sources.
+        final Artifact reactorArtifact = swizzleReactorDependency(artifact);
+        if (reactorArtifact != null) {
+            return reactorArtifact;
+        }
+
         // Do not try to find Clovered versions for artifacts with classifiers. This is because Maven only
         // supports a single classifier per artifact and thus if we replace the original classifier with
         // a Clover classifier the artifact will fail to perform properly as intended originally. This is a
