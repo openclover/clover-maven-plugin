@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Versions and dates are taken from Git tags. Issue keys (e.g. `OC-nnn`, `CLOV-nnn`,
 `CLMVN-nnn`) refer to the project's issue trackers.
 
-## [Unreleased 5.1.0]
+## [Unreleased]
+### Changed
+### Fixed
+### Deprecated
+
+## [5.1.0] - 2026-07-26
 
 ### Changed
 - **OC-309**: Maven 4 compatibility. The `clover:setup` goal is now the recommended (and, on Maven 4,
