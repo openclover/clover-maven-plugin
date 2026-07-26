@@ -50,6 +50,7 @@ under the License.
                 <artifactId>clover-maven-plugin</artifactId>
                 <version>@project.version@</version>
                 <configuration>
+                    <jdk>1.8</jdk>
                     <generateHtml>true</generateHtml>
                 </configuration>
             </plugin>
@@ -82,6 +83,7 @@ under the License.
                 <artifactId>clover-maven-plugin</artifactId>
                 <version>@project.version@</version>
                 <configuration>
+                    <jdk>1.8</jdk>
                     <!-- instrument both the main and the test source folders -->
                     <includesTestSourceRoots>true</includesTestSourceRoots>
                 </configuration>
