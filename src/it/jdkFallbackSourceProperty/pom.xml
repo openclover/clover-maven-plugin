@@ -1,0 +1,41 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.atlassian.maven.plugins.sample</groupId>
+    <artifactId>clover-sample-jdk-fallback-source-property</artifactId>
+    <packaging>jar</packaging>
+    <name>Clover Maven Plugin JDK Fallback (maven.compiler.source) Sample</name>
+    <description>Verifies that Clover takes the source level from the maven.compiler.source property when
+        neither the &lt;jdk&gt; parameter nor the compiler's &lt;release&gt; is defined.</description>
+    <version>1.0-SNAPSHOT</version>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Clover shall pick this value up as its source level; note that there's no <release> defined -->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.openclover</groupId>
+                <artifactId>clover-maven-plugin</artifactId>
+                <version>@project.version@</version>
+                <configuration>
+                    <!-- Note: no <jdk> on purpose - the value shall be taken from the maven.compiler.source property -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>setup</id>
+                        <goals>
+                            <goal>setup</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

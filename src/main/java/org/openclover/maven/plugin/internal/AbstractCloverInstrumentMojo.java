@@ -3,10 +3,11 @@ package org.openclover.maven.plugin.internal;
 import clover.org.apache.commons.lang3.StringUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.lifecycle.LifecycleExecutor;
+import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.openclover.maven.plugin.DistributedCoverage;
 import org.openclover.maven.plugin.MethodWithMetricsContext;
 import org.openclover.maven.plugin.TestSources;
@@ -28,6 +29,10 @@ import java.util.Set;
  * Common settings for clover:instr / clover:setup MOJOs.
  */
 public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo implements CompilerConfiguration {
+
+    private static final String MAVEN_COMPILER_PLUGIN_KEY = "org.apache.maven.plugins:maven-compiler-plugin";
+    private static final String PROP_MAVEN_COMPILER_RELEASE = "maven.compiler.release";
+    private static final String PROP_MAVEN_COMPILER_SOURCE = "maven.compiler.source";
 
     /**
      * <p>The difference (in milliseconds) that a -clover classified artifact can have to a non-clover classified artifact.</p>
@@ -183,8 +188,13 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
     private String instrumentLambda;
 
     /**
-     * <p>Which Java language level Clover shall use to parse sources. Valid values are: 8-17.</p>
-     * <p>By default, Clover instruments using the highest language level supported.</p>
+     * <p>Which Java language level Clover shall use to parse sources. Valid values are: 8-25.</p>
+     * <p>If not defined, the value is taken from the maven-compiler-plugin configuration, in the following order:</p>
+     * <ul>
+     * <li>the <code>&lt;release&gt;</code> element (or the <code>maven.compiler.release</code> property)</li>
+     * <li>the <code>&lt;source&gt;</code> element (or the <code>maven.compiler.source</code> property)</li>
+     * </ul>
+     * <p>If none of them is defined, Clover auto-detects the language level from the JVM running the build.</p>
      */
     @Parameter(property = "maven.clover.jdk")
     protected String jdk;
@@ -474,7 +484,46 @@ public abstract class AbstractCloverInstrumentMojo extends AbstractCloverMojo im
 
     @Override
     public String getJdk() {
-        return this.jdk;
+        if (StringUtils.isNotBlank(jdk)) {
+            return jdk;
+        }
+
+        // fall back to the maven-compiler-plugin settings; <release> wins over <source>
+        final String release = getCompilerSetting("release", PROP_MAVEN_COMPILER_RELEASE);
+        if (release != null) {
+            getLog().debug("No <jdk> defined, using the compiler's release level: " + release);
+            return release;
+        }
+
+        final String source = getCompilerSetting("source", PROP_MAVEN_COMPILER_SOURCE);
+        if (source != null) {
+            getLog().debug("No <jdk> defined, using the compiler's source level: " + source);
+            return source;
+        }
+
+        // nothing found - return null so that Clover auto-detects the language level from the current JVM
+        return null;
+    }
+
+    /**
+     * Returns a maven-compiler-plugin setting, looking at its <code>&lt;configuration&gt;</code> element first
+     * and at the related project property next.
+     *
+     * @param elementName  name of the element in the maven-compiler-plugin configuration, e.g. "release"
+     * @param propertyName name of the project property, e.g. "maven.compiler.release"
+     * @return String setting value or <code>null</code> if not defined
+     */
+    private String getCompilerSetting(final String elementName, final String propertyName) {
+        final Plugin compilerPlugin = getProject().getPlugin(MAVEN_COMPILER_PLUGIN_KEY);
+        if (compilerPlugin != null && compilerPlugin.getConfiguration() instanceof Xpp3Dom) {
+            final Xpp3Dom element = ((Xpp3Dom) compilerPlugin.getConfiguration()).getChild(elementName);
+            if (element != null && StringUtils.isNotBlank(element.getValue())) {
+                return element.getValue().trim();
+            }
+        }
+
+        final Object property = getProject().getProperties().get(propertyName);
+        return property != null && StringUtils.isNotBlank(property.toString()) ? property.toString().trim() : null;
     }
 
     @Override
