@@ -14,6 +14,13 @@ Versions and dates are taken from Git tags. Issue keys (e.g. `OC-nnn`, `CLOV-nnn
 ### Fixed
 ### Deprecated
 
+## [5.1.0.1] - 2026-07-29
+
+### Changed
+- **OC-323**: When `<jdk>` is not defined, the source level now falls back to the `<release>`
+  (`maven.compiler.release`) and `<source>` (`maven.compiler.source`) properties before falling back
+  to auto-detection (based on runtime JVM).
+
 ## [5.1.0] - 2026-07-26
 
 ### Changed
