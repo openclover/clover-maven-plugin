@@ -14,6 +14,11 @@ Versions and dates are taken from Git tags. Issue keys (e.g. `OC-nnn`, `CLOV-nnn
 ### Fixed
 ### Deprecated
 
+## [5.1.1] - 2026-10-01
+
+### Changed
+- Updated OpenClover core to 5.1.1 (code instrumentation fix for Java 25)
+
 ## [5.1.0.1] - 2026-07-29
 
 ### Changed
